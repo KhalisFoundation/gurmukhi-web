@@ -3,12 +3,16 @@
 
 ### Pre-requisitie
 1. Node Version 18
-2. NPM Version 9.8.1
+2. NPM Version 9.8.1 or Yarn 1.22.19
 
 First, run the development server:
 
 ```bash
-npm run start
+$npm run start
+```
+or 
+```bash
+$yarn start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
