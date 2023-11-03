@@ -3,6 +3,7 @@
 import React, { FormEvent, useState } from 'react';
 import InputWithIcon from '../input/InputWithIcon';
 import SignUp from './SignUp';
+import Image from 'next/image';
 
 export default function SignIn() {
   const [isNewUser, setIsNewUser] = useState(false);
@@ -50,13 +51,13 @@ export default function SignIn() {
 
       <form action="/dashboard" className="flex flex-col w-full gap-4 mt-4 ease-in-out duration-200 delay-100" >
         {isNewUser ? (
-            <SignUp />
-          )
-        : (
+          <SignUp />
+        )
+          : (
             <div className='appear-from-below'>
-             <InputWithIcon id="username" placeholder="Username" type="text" icon="user" />
-             <InputWithIcon id="signin-pwd" placeholder="Password" type="password" />
-             <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white font-bold text-lg" type='submit' >Sign In</button>
+              <InputWithIcon id="username" placeholder="Username" type="text" icon="user" />
+              <InputWithIcon id="signin-pwd" placeholder="Password" type="password" />
+              <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white font-bold text-lg" type='submit' >Sign In</button>
             </div>
           )
         }
@@ -70,7 +71,7 @@ export default function SignIn() {
           className="w-full flex p-4 rounded-lg bg-transparent hover:bg-slate-100 text-black text-lg items-center justify-center gap-4 border border-gray-300"
           onClick={(e) => handleGoogleSignIn(e)}
         >
-          <img className="w-6 h-6" src="/icons/google.svg" alt="google" />
+          <Image className="w-6 h-6" src="/icons/google.svg" alt="google" />
           Sign In with Google
         </button>
       </form>

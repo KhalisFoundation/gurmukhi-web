@@ -5,7 +5,7 @@ import Questions from './Questions';
 import Header from '@/components/header/Header'; // Import the Header component
 
 // Mock the Header component since we only want to test Questions in isolation
-jest.mock('@/components/header/Header', () => () => <div data-testid="mocked-header" />);
+jest.mock('@/components/header/Header', () => <div data-testid="mocked-header" />);
 
 describe('Questions Component', () => {
   it('renders without errors', () => {

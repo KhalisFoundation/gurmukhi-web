@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
 defaults:
   run:
-    working-directory: ./shabadkosh
+    working-directory: ./
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,7 +37,4 @@ jobs:
 
     - name: ESlint Runner Action
       run: |
-        yarn run lint
-      # uses: tinovyatkin/action-eslint@v1
-      # with:
-      #   repo-token: ${{ secrets.GITHUB_TOKEN }}
+        yarn run lint --strict
