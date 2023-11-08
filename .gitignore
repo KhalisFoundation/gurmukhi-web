@@ -132,3 +132,4 @@ dist
 /build
 
 .firebase
+gurmukhi-dev-firebase-*.json
