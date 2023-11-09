@@ -34,6 +34,7 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
+          target: dev
 
   STAGING:
     runs-on: ubuntu-latest
@@ -57,6 +58,7 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
+          target: staging
 
   PROD:
     runs-on: ubuntu-latest
@@ -80,3 +82,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
+          target: prod
