@@ -57,7 +57,7 @@ export default function SignIn() {
             <div className='appear-from-below'>
               <InputWithIcon id="username" placeholder="Username" type="text" icon="user" />
               <InputWithIcon id="signin-pwd" placeholder="Password" type="password" />
-              <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white font-bold text-lg" type='submit' >Sign In</button>
+              <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white text-lg brandon-grotesque" type='submit' >Sign In</button>
             </div>
           )
         }
@@ -71,7 +71,7 @@ export default function SignIn() {
           className="w-full flex p-4 rounded-lg bg-transparent hover:bg-slate-100 text-black text-lg items-center justify-center gap-4 border border-gray-300"
           onClick={(e) => handleGoogleSignIn(e)}
         >
-          <Image className="w-6 h-6" src="/icons/google.svg" alt="google" />
+          <Image height={6} width={6} className="w-6 h-6" src="/icons/google.svg" alt="google" />
           Sign In with Google
         </button>
       </form>

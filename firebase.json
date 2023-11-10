@@ -6,30 +6,39 @@
   "hosting": [
     {
       "target": "dev",
-      "public": "public",
+      "source": ".",
       "ignore": [
         "firebase.json",
         "**/.*",
         "**/node_modules/**"
-      ]
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      }
     },
     {
       "target": "staging",
-      "public": "public",
+      "source": ".",
       "ignore": [
         "firebase.json",
         "**/.*",
         "**/node_modules/**"
-      ]
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      }
     },
     {
       "target": "prod",
-      "public": "public",
+      "source": ".",
       "ignore": [
         "firebase.json",
         "**/.*",
         "**/node_modules/**"
-      ]
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      }
     }
   ],
   "storage": {
@@ -43,7 +52,7 @@
       "port": 8080
     },
     "hosting": {
-      "port": 5000
+      "port": 8000
     },
     "storage": {
       "port": 9199
@@ -51,6 +60,9 @@
     "ui": {
       "enabled": true
     },
-    "singleProjectMode": true
+    "singleProjectMode": true,
+    "functions": {
+      "port": 5001
+    }
   }
 }

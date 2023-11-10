@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import Shabadavali from '@/assets/icons/Shabadavali'
+import Shabadavali from '@/icons/Shabadavali'
 import Image from 'next/image';
 
 interface PropTypes {
