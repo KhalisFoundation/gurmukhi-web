@@ -35,6 +35,8 @@ jobs:
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
           target: dev
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
 
   STAGING:
     runs-on: ubuntu-latest
@@ -59,6 +61,8 @@ jobs:
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
           target: staging
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
 
   PROD:
     runs-on: ubuntu-latest
@@ -83,3 +87,5 @@ jobs:
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
           target: prod
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
