@@ -30,13 +30,13 @@ export default function Header({...props}: PropTypes) {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#31D95E] opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#31D95E]"></span>
                 </span>
-                <Image src='/icons/bell.svg' className={`h-4 w-4`} alt='notifications' />
+                <Image height={4} width={4} src='/icons/bell.svg' className={`h-4 w-4`} alt='notifications' />
               </div>
             </li>
             <li>
               <div className={`flex bg-[#f9f9f9] h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1`}>
                 <span className="text-[1.125rem] pl-2">13</span>
-                <Image src='/icons/coin.svg' className={`h-8 w-8`} alt='coins' />
+                <Image height={8} width={8} src='/icons/coin.svg' className={`h-8 w-8`} alt='coins' />
               </div>
             </li>
             <li>
@@ -45,7 +45,7 @@ export default function Header({...props}: PropTypes) {
                   className="outline-none focus:outline-none px-3 py-1 flex items-center min-w-32"
                 >
                   <div className={`flex bg-[#f9f9f9] h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1`}>
-                    <Image src='/icons/profile.svg' className={`h-8 w-8`} alt='profile' />
+                    <Image height={8} width={8} src='/icons/profile.svg' className={`h-8 w-8`} alt='profile' />
                   </div>
                   <span>
                     <svg
