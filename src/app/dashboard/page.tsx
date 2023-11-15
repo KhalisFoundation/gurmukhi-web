@@ -6,7 +6,7 @@ export default function Dashboard() {
   return (
     <div>
       <div>Dashboard</div>
-      <LevelsFooter />
+      <LevelsFooter nextUrl="/word/definition?id=1"/>
     </div>
   )
 }

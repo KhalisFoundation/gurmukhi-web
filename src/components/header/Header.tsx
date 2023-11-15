@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Shabadavali from '@/assets/icons/Shabadavali'
+import ChevronArrow from '@/assets/icons/ChevronArrow';
 
 interface PropTypes {
   loggedIn?: boolean
@@ -11,7 +12,7 @@ export default function Header({...props}: PropTypes) {
   const [loggedIn, setLoggedIn] = React.useState(props.loggedIn ?? false);
 
   return (
-    <header className="flex bg-gradient-to-r from-transparent items-center justify-between p-4 z-10">
+    <header className="flex bg-gradient-to-r absolute inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10">
       <a href="/">
         <main className="flex items-center justify-between">
           <Shabadavali />
@@ -47,16 +48,7 @@ export default function Header({...props}: PropTypes) {
                     <img src='/icons/profile.svg' className={`h-8 w-8`} />
                   </div>
                   <span>
-                    <svg
-                      className="fill-current h-4 w-4 transform group-hover:-rotate-180
-                      transition duration-150 ease-in-out"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                      />
-                    </svg>
+                    <ChevronArrow />
                   </span>
                 </button>
                 <ul
