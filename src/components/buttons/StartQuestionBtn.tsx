@@ -1,6 +1,7 @@
-import Diamond from '@/assets/icons/Diamond';
-import Link from 'next/link';
 import React from 'react';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiamond } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   urlString: string;
@@ -10,7 +11,7 @@ interface Props {
 const StartQuestionBtn = ({urlString, text}: Props) => {
   return (
     <Link href={urlString} className='flex flex-row items-center justify-between gap-2 min-w-60' passHref>
-      <Diamond height={16} width={16} />
+      <FontAwesomeIcon icon={faDiamond} className="w-2 h-2" color='#D6E9F3' />
       <button
         className='bg-[#D6E9F3] text-[#255C7A] rounded-lg p-4 w-60 text-center'
         color="secondary"
@@ -20,7 +21,7 @@ const StartQuestionBtn = ({urlString, text}: Props) => {
         }}>
           {text?.toUpperCase()}
       </button>
-      <Diamond height={16} width={16} />
+      <FontAwesomeIcon icon={faDiamond} className="w-2 h-2" color='#D6E9F3' />
     </Link>
   );
 };

@@ -4,6 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation';
 import TextToSpeechBtn from '@/components/buttons/TextToSpeechBtn';
+import CONSTANTS from '@/constants';
 
 interface WordData {
   [key: number]: {
@@ -41,7 +42,7 @@ export default function Defintion() {
 
   if (!currentWord.word) {
     // Handle case when word is not found
-    return <div>Word not found</div>
+    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>
   }
 
   return (

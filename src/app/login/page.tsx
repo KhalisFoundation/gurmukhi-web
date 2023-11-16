@@ -1,7 +1,6 @@
-import Gurfateh from '@/components/gurfateh/Gurfateh'
-import Header from '@/components/header/Header'
-import SignIn from '@/components/signin/SignIn'
 import React from 'react'
+import Gurfateh from '@/components/gurfateh/Gurfateh'
+import SignIn from '@/components/signin/SignIn'
 
 export default function Login() {
   return (

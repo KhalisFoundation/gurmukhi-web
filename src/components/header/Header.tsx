@@ -2,7 +2,9 @@
 
 import React from 'react'
 import Shabadavali from '@/assets/icons/Shabadavali'
-import ChevronArrow from '@/assets/icons/ChevronArrow';
+import CONSTANTS from '@/constants';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 interface PropTypes {
   loggedIn?: boolean
@@ -16,14 +18,14 @@ export default function Header({...props}: PropTypes) {
       <a href="/">
         <main className="flex items-center justify-between">
           <Shabadavali />
-          <h1 className="title">Shabadavali.</h1>
+          <h1 className="title">{CONSTANTS.APP_TITLE}</h1>
         </main>
       </a>
       <nav>
         {loggedIn ? (
           <ul className="flex items-center justify-between gap-4 brandon-grotesque dull-blue">
-            <li><a href='/settings'>Settings</a></li>
-            <li><a href='/dashboard'>Dashboard</a></li>
+            <li><a href='/settings'>{CONSTANTS.SETTINGS}</a></li>
+            <li><a href='/dashboard'>{CONSTANTS.DASHBOARD}</a></li>
             <li>
               <div className={`flex bg-[#f9f9f9] h-10 w-10 rounded-full shadow items-center justify-evenly gap-2 p-1`}>
                 <span className="absolute flex h-2 w-2 ml-2.5 mb-3.5">
@@ -35,7 +37,7 @@ export default function Header({...props}: PropTypes) {
             </li>
             <li>
               <div className={`flex bg-[#f9f9f9] h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1`}>
-                <span className="text-[1.125rem] pl-2">13</span>
+                <span className="text-[1.125rem] pl-2">{CONSTANTS.NUM_COINS}</span>
                 <img src='/icons/coin.svg' className={`h-8 w-8`} />
               </div>
             </li>
@@ -48,15 +50,15 @@ export default function Header({...props}: PropTypes) {
                     <img src='/icons/profile.svg' className={`h-8 w-8`} />
                   </div>
                   <span>
-                    <ChevronArrow />
+                    <FontAwesomeIcon icon={faChevronDown} className="w-3 h-3 fill-current transform group-hover:-rotate-180 transition duration-150 ease-in-out" />
                   </span>
                 </button>
                 <ul
                   className="bg-[#f9f9f9] border rounded-md transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 right-8"
                 >
-                  <li><a href="/profile" className='block px-3 py-2 hover:bg-gray-200'>Profile</a></li>
-                  <li><a href="/settings" className='block px-3 py-2 hover:bg-gray-200'>Settings</a></li>
-                  <li><a href="/login" className='block px-3 py-2 hover:bg-gray-200'>Sign Out</a></li>
+                  <li><a href="/profile" className='block px-3 py-2 hover:bg-gray-200'>{CONSTANTS.PROFILE}</a></li>
+                  <li><a href="/settings" className='block px-3 py-2 hover:bg-gray-200'>{CONSTANTS.SETTINGS}</a></li>
+                  <li><a href="/login" className='block px-3 py-2 hover:bg-gray-200'>{CONSTANTS.SIGN_OUT}</a></li>
                 </ul>
               </div>
             </li>
