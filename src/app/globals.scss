@@ -45,19 +45,35 @@ body {
     rgb(var(--background-start-rgb));
 
   .background-layer {
-    // show a background layer of image with 30% opacity without affecting the text
+    position: relative;
+  }
+
+  .background-layer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     background-image: url('/images/background.png');
+    opacity: 0.3;
+    z-index: -1;
+    mix-blend-mode: multiply;
   }
 
   .gurmukhi {
     font-family: 'Baloo Paaji 2';
     font-weight: 500;
+    * {
+      font-family: 'Baloo Paaji 2';
+      font-weight: 500;
+    }
   }
 
   .brandon-grotesque {
-    font-family: HvDTrial Brandon Grotesque, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif !important;
+    font-family: 'HvDTrial Brandon Grotesque' !important;
     * {
-      font-family: HvDTrial Brandon Grotesque, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif !important;
+      font-family: 'HvDTrial Brandon Grotesque' !important;
     }
   }
 

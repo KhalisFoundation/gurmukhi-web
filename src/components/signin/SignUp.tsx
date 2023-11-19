@@ -1,5 +1,6 @@
 import React from 'react'
 import InputWithIcon from '../input/InputWithIcon'
+import CONSTANTS from '@/constants'
 
 export default function SignUp() {
   return (
@@ -8,7 +9,7 @@ export default function SignUp() {
       <InputWithIcon id="email" placeholder="Email" type="email" icon="email" />
       <InputWithIcon id="pwd" placeholder="Password" type="password" />
       <InputWithIcon id="confirm-pwd" placeholder="Confirm Password" type="password" />
-      <button type='submit' className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white text-lg brandon-grotesque">Sign Up</button>
+      <button type='submit' className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white text-lg">{CONSTANTS.SIGN_UP}</button>
     </div>
   )
 }

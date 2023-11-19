@@ -20,6 +20,13 @@ const nextConfig = {
   // Optional: Change the output directory `out` -> `dist`
   // distDir: 'dist',
   // reactStrictMode: true
+
+  images: {
+    domains: [
+      'images.unsplash.com',
+      'images.pexels.com'
+    ],
+  },
 }
 
 module.exports = nextConfig
