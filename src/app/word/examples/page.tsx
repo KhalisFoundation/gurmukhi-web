@@ -77,9 +77,9 @@ const highlightWord = (sentence: string, lang: string, word: string) => {
   }
   const splitSentence = sentence.split(word);
   return (
-    <span className="text-[#333] gurmukhi">
+    <span className="text-black gurmukhi">
       {splitSentence[0]}
-      <span className="text-[#333] font-bold">{word}</span>
+      <span className="text-black font-bold">{word}</span>
       {addEndingPunctuation(splitSentence[1], lang)}
     </span>
   );
@@ -99,37 +99,35 @@ export default function Examples() {
   }
 
   return (
-    <div className="flex flex-col static items-center justify-center text-center gap-5 p-12 brandon-grotesque">
+    <div className="flex flex-col static h-screen items-center justify-between">
       <BackBtn />
-
-      <div className="flex flex-col">
-        <h1 className="text-4xl gurmukhi text-[#333]">{currentWord.word}</h1>
-        <h2 className="text-2xl italic text-[#4e4e4e]">{currentWord.translation}</h2>
-      </div>
-      <Image className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
-      <div className="flex flex-col items-center justify-between gap-5">
-        <span className="tracking-widest">{CONSTANTS.EXAMPLES.toUpperCase()}</span>
-        <div className="flex flex-col items-left text-left justify-evenly p-8 gap-5 bran">
-          {
-            currentWord.sentences?.map((sentence, index) => {
-              const highlightedSentence = highlightWord(sentence.sentence, 'gurmukhi', currentWord.word ?? "")
-              return (
-              <div key={index} className="flex flex-col text-xl">
-                <span className="text-[#111]">
-                  {highlightedSentence}
-                </span>
-                <span className="text-[#333]">
-                  {sentence.sentenceEnglish.endsWith(".") || sentence.sentence.endsWith("?") ? 
-                    sentence.sentenceEnglish : sentence.sentenceEnglish + "."}
-                </span>
-              </div>
-            )})
-          }
+      <div className='flex flex-col h-full justify-center items-center gap-5 pb-12 brandon-grotesque'>
+        <h1 className="text-4xl gurmukhi text-black">{currentWord.word}</h1>
+        <h2 className="text-2xl italic text-gray-e4">{currentWord.translation}</h2>
+        <Image className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
+        <div className="flex flex-col items-center justify-between gap-5">
+          <span className="tracking-widest">{CONSTANTS.EXAMPLES.toUpperCase()}</span>
+          <div className="flex flex-col items-left text-left justify-evenly p-8 gap-5">
+            {
+              currentWord.sentences?.map((sentence, index) => {
+                const highlightedSentence = highlightWord(sentence.sentence, 'gurmukhi', currentWord.word ?? "")
+                return (
+                <div key={index} className="flex flex-col text-xl">
+                  <span className="text-black-111">
+                    {highlightedSentence}
+                  </span>
+                  <span className="text-black">
+                    {sentence.sentenceEnglish.endsWith(".") || sentence.sentence.endsWith("?") ? 
+                      sentence.sentenceEnglish : sentence.sentenceEnglish + "."}
+                  </span>
+                </div>
+              )})
+            }
+          </div>
         </div>
+        <Image className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
       </div>
-      <Image className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
-
-      <LevelsFooter nextUrl={`/word/semantics?id=${wordId}`} nextText='Next'/>
+      <LevelsFooter nextUrl={`/word/semantics?id=${wordId}`} nextText='Next' absolute={true}/>
     </div>
   )
 }

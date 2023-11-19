@@ -4,7 +4,8 @@ const CONSTANTS = {
   DASHBOARD: 'Dashboard',
   EXAMPLES: 'Examples',
   GURFATEH_PUNJABI: 'ਵਾਹਿਗੁਰੂ ਜੀ ਕਾ ਖਾਲਸਾ ॥ ਵਾਹਿਗੁਰੂ ਜੀ ਕੀ ਫਤਿਹ ॥',
-  LOGIN_INFO: 'Before you start adding new words to your vocabulary, we just need some information from you.',
+  LOGIN_INFO: `Before you start adding new words to your 
+    vocabulary, we just need some information from you.`,
   NUM_COINS: 13,
   ENTER_DETAILS: 'Please enter your details',
   OR: 'or',

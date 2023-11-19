@@ -30,7 +30,7 @@ body {
     rgb(var(--background-start-rgb));
 
   .background-layer {
-    position: relative;
+    // position: relative;
   }
 
   .background-layer::before {
@@ -57,6 +57,13 @@ body {
     font-family: 'HvDTrial Brandon Grotesque' !important;
     * {
       font-family: 'HvDTrial Brandon Grotesque' !important;
+    }
+  }
+
+  .recoleta {
+    font-family: 'Recoleta';
+    * {
+      font-family: 'Recoleta';
     }
   }
 

@@ -1,13 +1,20 @@
 import React from 'react'
 import CONSTANTS from '@/constants'
+import Image from 'next/image'
 
 export default function Gurfateh() {
 
   return (
-    <main className="flex bg-slate-100/75 shadow rounded-3xl flex-col text-left p-14 gap-4">
-      <h1 className="text-xl font-bold text-left gurmukhi">{CONSTANTS.GURFATEH_PUNJABI}</h1>
-      <p>{CONSTANTS.LOGIN_INFO}</p>
-      <img className='absolute w-24 h-24 md:w-20 md:h-auto md:rounded-none rounded-full mx-auto left-2 mt-12' src={'/images/singhFateh.png'} />
+    <main className='relative flex '>
+      <div className="bg-slate-100/75 shadow rounded-3xl flex-col text-left p-14 gap-4 overflow-hidden">
+        <div className="flex-grow">
+          <h1 className="text-xl font-medium text-black text-left gurmukhi">{CONSTANTS.GURFATEH_PUNJABI}</h1>
+          <p className='whitespace-pre-line'>{CONSTANTS.LOGIN_INFO}</p>
+        </div>
+      </div>
+      <div className="absolute -left-10 -bottom-1">
+        <Image className='w-24 h-24 md:w-20 md:h-auto md:rounded-none rounded-full mx-auto' src={'/images/singhFateh.png'} alt="Singh Fateh" width={100} height={100} />
+      </div>
     </main>
   )
 }

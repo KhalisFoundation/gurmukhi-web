@@ -10,8 +10,8 @@ export default function WordsPageLayout({
 }) {
   // check if children contains 
   return (
-    <section className="flex flex-col static items-center justify-between gap-5 p-12">
+    <div className="flex flex-col items-center justify-between gap-5 p-12 pb-0">
       {children}
-    </section>
+    </div>
   )
 }

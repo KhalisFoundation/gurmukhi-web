@@ -56,7 +56,7 @@ export default function InputWithIcon({...props}: InputWithIconProps) {
           }
         </div>
       )}
-      <input type={props.type} className="w-full p-4 rounded-lg bg-[#eee]" id={props.id} placeholder={props.placeholder} />
+      <input type={props.type} className="w-full p-4 rounded-lg bg-gray-eee" id={props.id} placeholder={props.placeholder} />
     </div>
   )
 }
