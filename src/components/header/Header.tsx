@@ -39,7 +39,7 @@ export default function Header({...props}: PropTypes) {
             <li>
               <div className={`flex bg-[#f9f9f9] h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1`}>
                 <span className="text-[1.125rem] pl-2">{CONSTANTS.NUM_COINS}</span>
-                <img src='/icons/coin.svg' className={`h-8 w-8`} />
+                <Image height={8} width={8} src='/icons/coin.svg' className={`h-8 w-8`} alt='coin'/>
               </div>
             </li>
             <li>

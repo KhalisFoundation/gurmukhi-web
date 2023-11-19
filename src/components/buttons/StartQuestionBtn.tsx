@@ -19,7 +19,7 @@ const StartQuestionBtn = ({urlString, text}: Props) => {
           fontFamily: "HvDTrial Brandon Grotesque, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif",
           letterSpacing: ".1rem",
         }}>
-          {text?.toUpperCase()}
+        {text?.toUpperCase()}
       </button>
       <FontAwesomeIcon icon={faDiamond} className="w-2 h-2" color='#D6E9F3' />
     </Link>

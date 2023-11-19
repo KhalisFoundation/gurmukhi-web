@@ -4,6 +4,7 @@ import React, { FormEvent, useState } from 'react';
 import InputWithIcon from '../input/InputWithIcon';
 import SignUp from './SignUp';
 import CONSTANTS from '@/constants';
+import Image from 'next/image';
 
 export default function SignIn() {
   const [isNewUser, setIsNewUser] = useState(false);
@@ -55,22 +56,22 @@ export default function SignIn() {
         )
           : (
             <div className='appear-from-below'>
-             <InputWithIcon id="username" placeholder="Username" type="text" icon="user" />
-             <InputWithIcon id="signin-pwd" placeholder="Password" type="password" />
-             <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white text-lg" type='submit'>{CONSTANTS.SIGN_IN}</button>
+              <InputWithIcon id="username" placeholder="Username" type="text" icon="user" />
+              <InputWithIcon id="signin-pwd" placeholder="Password" type="password" />
+              <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white text-lg" type='submit'>{CONSTANTS.SIGN_IN}</button>
             </div>
           )
         }
         <div className="flex justify-center items-center grey">
           <div className="w-1/4 h-[1px] bg-stone-950/[.2] mr-1"></div>
-            {CONSTANTS.OR.toUpperCase()}
+          {CONSTANTS.OR.toUpperCase()}
           <div className="w-1/4 h-[1px] bg-stone-950/[.2] ml-1"></div>
         </div>
         <button 
           className="w-full flex p-4 rounded-lg bg-transparent hover:bg-slate-100 text-black text-lg items-center justify-center gap-4 border border-gray-300"
           onClick={(e) => handleGoogleSignIn(e)}
         >
-          <img className="w-6 h-6" src="/icons/google.svg" alt="google" />
+          <Image height={6} width={6} className="w-6 h-6" src="/icons/google.svg" alt="google" />
           {CONSTANTS.SIGN_IN_WITH_GOOGLE}
         </button>
       </form>
