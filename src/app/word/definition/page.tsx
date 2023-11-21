@@ -7,32 +7,7 @@ import TextToSpeechBtn from '@/components/buttons/TextToSpeechBtn';
 import CONSTANTS from '@/constants';
 import LevelsFooter from '@/components/levels-footer/LevelsFooter';
 import BackBtn from '@/components/buttons/BackBtn';
-
-interface WordData {
-  [key: number]: {
-    word?: string;
-    translation?: string;
-    meaning?: string;
-    meaningEnglish?: string;
-    image?: string;
-  };
-}
-
-const wordData: WordData = {
-  1: {
-    word: 'ਉਸਾਰੀ',
-    translation: 'to build',
-    meaning: 'ਕਿਸੇ ਚੀਜ਼ ਦੀ ਉਸਾਰੀ ਕਰਨ ਦਾ ਮਤਲਬ ਹੈ ਕਿ ਉਸ ਨੂੰ ਬਨਾਉਣਾ',
-    meaningEnglish: 'To "ਉਸਾਰ" something means to build or construct it',
-    image: 'https://images.unsplash.com/photo-1531834685032-c34bf0d84c77',
-  },
-  2: {
-    word: 'ਪ੍ਰਭੂ',
-    translation: 'God',
-    meaning: 'ਪ੍ਰਭੂ ਦਾ ਮਤਲਬ ਹੈ ਰੱਬ',
-    meaningEnglish: 'God',
-  }
-}
+import { wordData } from '@/constants/wordsData';
 
 export default function Defintion() {
   // get the word id from the url
