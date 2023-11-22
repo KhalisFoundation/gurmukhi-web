@@ -57,16 +57,17 @@ export default function Examples() {
               currentWord.sentences?.map((sentence, index) => {
                 const highlightedSentence = highlightWord(sentence.sentence, 'gurmukhi', currentWord.word ?? "")
                 return (
-                <div key={index} className="flex flex-col text-xl">
-                  <span className="text-black-111">
-                    {highlightedSentence}
-                  </span>
-                  <span className="text-black">
-                    {sentence.sentenceEnglish.endsWith(".") || sentence.sentence.endsWith("?") ? 
-                      sentence.sentenceEnglish : sentence.sentenceEnglish + "."}
-                  </span>
-                </div>
-              )})
+                  <div key={index} className="flex flex-col text-xl">
+                    <span className="text-black-111">
+                      {highlightedSentence}
+                    </span>
+                    <span className="text-black">
+                      {sentence.sentenceEnglish.endsWith(".") || sentence.sentence.endsWith("?") ? 
+                        sentence.sentenceEnglish : sentence.sentenceEnglish + "."}
+                    </span>
+                  </div>
+                )
+              })
             }
           </div>
         </div>
