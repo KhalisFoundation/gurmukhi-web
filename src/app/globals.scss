@@ -45,7 +45,7 @@ body {
     rgb(var(--background-start-rgb));
 
   .background-layer {
-    position: relative;
+    // position: relative;
   }
 
   .background-layer::before {
@@ -63,10 +63,8 @@ body {
 
   .gurmukhi {
     font-family: 'Baloo Paaji 2';
-    font-weight: 500;
     * {
       font-family: 'Baloo Paaji 2';
-      font-weight: 500;
     }
   }
 
@@ -74,6 +72,13 @@ body {
     font-family: 'HvDTrial Brandon Grotesque' !important;
     * {
       font-family: 'HvDTrial Brandon Grotesque' !important;
+    }
+  }
+
+  .recoleta {
+    font-family: 'Recoleta';
+    * {
+      font-family: 'Recoleta';
     }
   }
 

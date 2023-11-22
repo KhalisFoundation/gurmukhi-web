@@ -34,18 +34,20 @@ export default function SignIn() {
   }
 
   return (
-    <main className="flex bg-[#f9f9f9] h-full w-1/2 rounded-3xl flex-col justify-center items-center p-12 gap-5 brandon-grotesque">
-      <h1 className='fs-rem-2'>{CONSTANTS.WELCOME}</h1>
-      <h3 className='grey text-lg'>{CONSTANTS.ENTER_DETAILS}</h3>
+    <main className="flex bg-white h-full w-[45rem] rounded-3xl flex-col justify-center items-center py-20 px-32 gap-5 brandon-grotesque">
+      <div className='text-center'>
+        <h1 className='fs-rem-2 recoleta'>{CONSTANTS.WELCOME}</h1>
+        <h3 className='grey text-lg'>{CONSTANTS.ENTER_DETAILS}</h3>
+      </div>
 
-      <div className="w-60 mx-8 rounded-full h-10 mt-4 flex p-5 relative items-center justify-between gap-4 bg-[#eee]">
+      <div className="w-60 mx-8 rounded-full h-12 mt-4 flex p-5 relative items-center justify-between gap-4 bg-gray-eee">
         <div className="w-full flex justify-center grey">
           <button className='signin' onClick={(e) => signToggle(e)}>{CONSTANTS.SIGN_IN}</button>
         </div>
         <div className="w-full flex justify-center grey">
           <button className='signup' onClick={(e) => signToggle(e)}>{CONSTANTS.SIGN_UP}</button>
         </div>
-        <span className="switch bg-white shadow text-black flex items-center justify-center w-1/2 rounded-full h-8 transition-all top-[4px] absolute left-[4px]">
+        <span className="switch bg-white shadow text-black flex items-center justify-center w-1/2 rounded-full h-10 transition-all top-[4px] absolute left-[4px]">
           {isNewUser ? CONSTANTS.SIGN_UP : CONSTANTS.SIGN_IN}
         </span>
       </div>
