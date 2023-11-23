@@ -8,8 +8,6 @@ import LevelsFooter from '@/components/levels-footer/LevelsFooter';
 import BackBtn from '@/components/buttons/BackBtn';
 import { wordData } from '@/constants/wordsData';
 
-
-
 const addEndingPunctuation = (sentence: string, lang: string) => {
   const punctuation = lang === 'gurmukhi' ? "।" : ".";
   return sentence.endsWith(punctuation) || sentence.endsWith("?") ? sentence : sentence + punctuation;
