@@ -12,7 +12,7 @@ defaults:
     working-directory: ./
 
 jobs:
-  DEV:
+  dev:
     runs-on: ubuntu-latest
     environment: dev
     env:
@@ -23,22 +23,21 @@ jobs:
       REACT_APP_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_MESSAGING_SENDER_ID }}
       REACT_APP_APP_ID: ${{ secrets.REACT_APP_APP_ID }}
       REACT_APP_MEASUREMENT_ID: ${{ secrets.REACT_APP_MEASUREMENT_ID }}
-
     steps:
       - uses: actions/checkout@v3
       - run: yarn install --frozen-lockfile && yarn run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          entryPoint: ./
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_DEV }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
+          entryPoint: ./
           target: dev
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
 
-  STAGING:
+  staging:
     runs-on: ubuntu-latest
     environment: staging
     env:
@@ -49,22 +48,21 @@ jobs:
       REACT_APP_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_MESSAGING_SENDER_ID }}
       REACT_APP_APP_ID: ${{ secrets.REACT_APP_APP_ID }}
       REACT_APP_MEASUREMENT_ID: ${{ secrets.REACT_APP_MEASUREMENT_ID }}
-
     steps:
       - uses: actions/checkout@v3
       - run: yarn install --frozen-lockfile && yarn run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          entryPoint: ./
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_DEV }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
+          entryPoint: ./
           target: staging
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
 
-  PROD:
+  prod:
     runs-on: ubuntu-latest
     environment: prod
     env:
@@ -75,17 +73,16 @@ jobs:
       REACT_APP_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_MESSAGING_SENDER_ID }}
       REACT_APP_APP_ID: ${{ secrets.REACT_APP_APP_ID }}
       REACT_APP_MEASUREMENT_ID: ${{ secrets.REACT_APP_MEASUREMENT_ID }}
-
     steps:
       - uses: actions/checkout@v3
       - run: yarn install --frozen-lockfile && yarn run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          entryPoint: ./
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_DEV }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
+          entryPoint: ./
           target: prod
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
