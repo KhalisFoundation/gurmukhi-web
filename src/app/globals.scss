@@ -17,7 +17,7 @@
 }
 
 * {
-  font-family: 'Recoleta';
+  font-family: 'HvDTrial Brandon Grotesque';
 }
 
 body {
@@ -47,9 +47,9 @@ body {
   }
 
   .gurmukhi {
-    font-family: 'Baloo Paaji 2';
+    font-family: 'Baloo Paaji 2' !important;
     * {
-      font-family: 'Baloo Paaji 2';
+      font-family: 'Baloo Paaji 2' !important;
     }
   }
 
@@ -58,6 +58,24 @@ body {
     * {
       font-family: 'HvDTrial Brandon Grotesque' !important;
     }
+  }
+
+  .card-bg::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('/images/card.png');
+    mix-blend-mode: screen;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+  }
+
+  .card-bg {
+    position: relative;
   }
 
   .recoleta {
@@ -127,6 +145,37 @@ body {
 
   .fade-to-complete {
     animation: fadeIn 0.5s ease-in-out;
+  }
+
+  @keyframes jump {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-30px);
+    }
+    60% {
+      transform: translateY(-15px);
+    }
+  }
+
+  /* Define a keyframe animation */
+  @keyframes shake {
+    0%, 100% {
+      transform: translateX(0) rotate(0deg);
+    }
+    10%, 30%, 50%, 70%, 90% {
+      transform: rotate(-5deg);
+    }
+    20%, 40%, 60%, 80% {
+      transform: rotate(5deg);
+    }
+  }
+
+  
+  .jump-box {
+    position: relative;
+    animation: shake 2s infinite ease-in-out;
   }
 
   .level {

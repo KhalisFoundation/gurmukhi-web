@@ -10,11 +10,13 @@ export interface WordData {
     sentenceEnglish: string;
   }[];
   synonyms?: (number|string)[];
-  antonyms?: (number|string)[];         
+  antonyms?: (number|string)[];
+  type?: string;
 };
 
 
 export const wordData: WordData[] = [
+  {},
   {
     id: 1,
     word: 'ਉਸਾਰੀ',

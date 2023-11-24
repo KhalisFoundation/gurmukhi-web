@@ -1,4 +1,6 @@
 const CONSTANTS = {
+  ANTONYM: 'antonym',
+  ANTONYMS: 'Antonyms',
   APP_TITLE: 'Shabadavali.',
   BACK: 'Back',
   DASHBOARD: 'Dashboard',
@@ -17,6 +19,8 @@ const CONSTANTS = {
   SIGN_IN_WITH_GOOGLE: 'Sign In with Google',
   SIGN_OUT: 'Sign Out',
   SIGN_UP: 'Sign Up',
+  SYNONYM: 'synonym',
+  SYNONYMS: 'Synonyms',
   SHASHA: 'ਸ਼',
   TOTAL_NUM_QUESTIONS: 13,
   WELCOME: 'Welcome',
