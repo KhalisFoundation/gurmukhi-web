@@ -19,9 +19,9 @@
     "@testing-library/react": "^14.0.0",
     "anvaad-js": "^1.4.3",
     "firebase": "^10.5.2",
-    "firebase-tools": "^12.8.0",
+    "firebase-tools": "12.6.2",
     "jest": "^29.7.0",
-    "next": "latest",
+    "next": "13.4.7",
     "react": "latest",
     "react-dom": "latest",
     "sharp": "^0.32.6"
