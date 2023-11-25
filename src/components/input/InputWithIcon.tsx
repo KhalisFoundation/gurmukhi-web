@@ -14,18 +14,18 @@ export default function InputWithIcon({...props}: InputWithIconProps) {
   const [viewPassword, setViewPassword] = React.useState(false);
   const getIcon = () => {
     switch (props.icon) {
-    case 'eye':
-      return faEye;
-    case 'eye-slash':
-      return faEyeSlash;
-    case 'user':
-      return faUser;
-    case "email":
-      return faEnvelope;
-    case "name":
-      return faSignature;
-    default:
-      return faEye;
+      case 'eye':
+        return faEye;
+      case 'eye-slash':
+        return faEyeSlash;
+      case 'user':
+        return faUser;
+      case "email":
+        return faEnvelope;
+      case "name":
+        return faSignature;
+      default:
+        return faEye;
     }
   }
   let action = (e: FormEvent) => {
