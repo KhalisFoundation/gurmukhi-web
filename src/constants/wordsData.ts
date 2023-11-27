@@ -32,7 +32,7 @@ export const wordData: WordData = {
         sentence: 'ਗੁਰੂ ਰਾਮਦਾਸ ਜੀ ਨੇ ਦਰਬਾਰ ਸਾਹਿਬ ਦੀ ਉਸਾਰੀ ੧੫੮੮ ਵਿੱਚ ਸ਼ੁਰੂ ਕੀਤੀ ਸੀ',
         sentenceEnglish: 'Guru Ram Das Ji began constructing Darbar Sahib in 1588',
       },
-    ]
+    ],
   },
   2: {
     word: 'ਅਭਿਆਸ',
@@ -46,12 +46,12 @@ export const wordData: WordData = {
       },
       {
         sentence: 'ਮੈਂ ਤੇ ਗੁਰਵਿੰਦਰ ਕੁਸ਼ਤੀ ਦੇ ਅਭਿਆਸ ਲਈ ਹਰ ਰੋਜ਼ ਅਖਾੜੇ ਜਾਂਦੇ ਹਾਂ।',
-        sentenceEnglish: 'Gurvinder and I go to the ring every day to practice wrestling.'
+        sentenceEnglish: 'Gurvinder and I go to the ring every day to practice wrestling.',
       },
       {
         sentence:'ਜਦੋਂ ਸਿਮਰਨ ਨੇ ੧੫ ਦਿਨ ਕੀਰਤਨ ਦਾ ਅਭਿਆਸ ਕੀਤਾ, ਉਸ ਦੇ ਪਿਤਾ ਜੀ ਉਸ ਨੂੰ ਡਿਜ਼ਨੀਲੈਂਡ ਲੈ ਗਏ।',
         sentenceEnglish: 'After Simran practiced kirtan for 15 days, her dad took her to Disneyland.',
       },
-    ]
-  }
-}
+    ],
+  },
+};

@@ -1,7 +1,7 @@
-import React from 'react'
-import Header from '@/components/header/Header'
-import CONSTANTS from '@/constants'
-import './globals.scss'
+import React from 'react';
+import Header from '@/components/header/Header';
+import CONSTANTS from '@/constants';
+import './globals.scss';
 
 export default function RootLayout({
   children,
@@ -22,5 +22,5 @@ export default function RootLayout({
         </main>
       </body>
     </html>
-  )
+  );
 }

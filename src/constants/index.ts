@@ -23,6 +23,6 @@ const CONSTANTS = {
   TOTAL_NUM_QUESTIONS: 13,
   WELCOME: 'Welcome',
   WORD_NOT_FOUND: 'Word not found',
-}
+};
 
-export default CONSTANTS
+export default CONSTANTS;
