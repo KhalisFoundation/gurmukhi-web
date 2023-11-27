@@ -1,5 +1,3 @@
-"use client"
-
 import React from 'react'
 import Shabadavali from '@/assets/icons/Shabadavali'
 import CONSTANTS from '@/constants';

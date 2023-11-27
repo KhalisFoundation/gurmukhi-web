@@ -1,5 +1,3 @@
-"use client"
-
 import React, { FormEvent, useState } from 'react';
 import InputWithIcon from '../input/InputWithIcon';
 import SignUp from './SignUp';

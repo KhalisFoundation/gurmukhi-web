@@ -7,16 +7,16 @@
 1. Node Version 18
 2. NPM Version 9.8.1 or Yarn 1.22.19
 
-First, run the development server:
+First, run the web server:
 
 ```bash
-$npm run dev
+$npm start
 ```
 
 or
 
 ```bash
-$yarn dev
+$yarn start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

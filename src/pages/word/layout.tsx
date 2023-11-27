@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 import BackBtn from '@/components/buttons/BackBtn'
 import LevelsFooter from '@/components/levels-footer/LevelsFooter'
 

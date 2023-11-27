@@ -1,8 +1,4 @@
-"use client"
-
 import React from 'react'
-import Image from 'next/image'
-import { useSearchParams } from 'next/navigation';
 import TextToSpeechBtn from '@/components/buttons/TextToSpeechBtn';
 import CONSTANTS from '@/constants';
 import LevelsFooter from '@/components/levels-footer/LevelsFooter';
@@ -12,7 +8,7 @@ import { wordData } from '@/constants/wordsData';
 export default function Defintion() {
   // get the word id from the url
   // e.g. /word/definition/1
-  const wordId = useSearchParams().get('id');
+  const wordId = 1;// useSearchParams().get('id');
 
   // fetch word from state using wordId
   const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
@@ -26,9 +22,9 @@ export default function Defintion() {
     <div className="flex flex-col static h-screen items-center justify-around gap-5">
       <BackBtn />
       <div className='flex flex-col h-3/4 justify-center items-center gap-5'>
-        <Image className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
+        <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
         <div className="flex flex-row items-center justify-between gap-5">
-          <Image
+          <img
             alt='word-image'
             height={296}
             width={524}
@@ -49,7 +45,7 @@ export default function Defintion() {
             </div>
           </div>
         </div>
-        <Image className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
+        <img className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
       </div>
       <LevelsFooter nextUrl={`/word/examples?id=${wordId}`} nextText='Next'/>
     </div>

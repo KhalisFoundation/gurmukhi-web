@@ -1,14 +1,8 @@
-"use client"
-
 import React from 'react'
-import Image from 'next/image'
-import { useSearchParams } from 'next/navigation';
 import CONSTANTS from '@/constants';
 import LevelsFooter from '@/components/levels-footer/LevelsFooter';
 import BackBtn from '@/components/buttons/BackBtn';
 import { wordData } from '@/constants/wordsData';
-
-
 
 const addEndingPunctuation = (sentence: string, lang: string) => {
   const punctuation = lang === 'gurmukhi' ? "।" : ".";
@@ -33,7 +27,7 @@ const highlightWord = (sentence: string, lang: string, word: string) => {
 export default function Examples() {
   // get the word id from the url
   // e.g. /word/examples?id=1
-  const wordId = useSearchParams().get('id');
+  const wordId = 1;// useSearchParams().get('id');
 
   // fetch word from state using wordId
   const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
@@ -49,7 +43,7 @@ export default function Examples() {
       <div className='flex flex-col h-full justify-center items-center gap-5 pb-12 brandon-grotesque'>
         <h1 className="text-4xl gurmukhi text-black">{currentWord.word}</h1>
         <h2 className="text-2xl italic text-gray-e4">{currentWord.translation}</h2>
-        <Image className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
+        <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
         <div className="flex flex-col items-center justify-between gap-5">
           <span className="tracking-widest">{CONSTANTS.EXAMPLES.toUpperCase()}</span>
           <div className="flex flex-col items-left text-left justify-evenly p-8 gap-5">
@@ -70,7 +64,7 @@ export default function Examples() {
             }
           </div>
         </div>
-        <Image className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
+        <img className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
       </div>
       <LevelsFooter nextUrl={`/word/semantics?id=${wordId}`} nextText='Next' absolute={true}/>
     </div>

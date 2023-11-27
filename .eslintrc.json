@@ -1,0 +1,54 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "react",
+      "@typescript-eslint",
+      "jest",
+      "react-hooks",
+      "import"
+    ],
+    "extends": [
+      "airbnb-typescript",
+      "airbnb/hooks",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:jest/recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended"
+    ],
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "ecmaVersion": 11,
+      "sourceType": "module"
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true
+    },
+    "rules": {
+      "indent": ["error", 2],
+      "react/jsx-filename-extension": [0],
+      "react/no-array-index-key": [0],
+      "no-console": "off",
+      "no-alert": "off",
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "never",
+          "jsx": "never",
+          "ts": "never",
+          "tsx": "never"
+        }
+      ],
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-explicit-any": "off"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "ignorePatterns": ["webpack.config.js", "postcss.config.js", "tailwind.config.js"]
+}
+  

@@ -2,6 +2,7 @@ const CONSTANTS = {
   APP_TITLE: 'Shabadavali.',
   BACK: 'Back',
   DASHBOARD: 'Dashboard',
+  DESCRIPTION: 'Made by Khalis Foundation',
   EXAMPLES: 'Examples',
   GURFATEH_PUNJABI: 'ਵਾਹਿਗੁਰੂ ਜੀ ਕਾ ਖਾਲਸਾ ॥ ਵਾਹਿਗੁਰੂ ਜੀ ਕੀ ਫਤਿਹ ॥',
   LOGIN_INFO: `Before you start adding new words to your 
@@ -18,6 +19,7 @@ const CONSTANTS = {
   SIGN_OUT: 'Sign Out',
   SIGN_UP: 'Sign Up',
   SHASHA: 'ਸ਼',
+  TITLE: 'Shabadavali',
   TOTAL_NUM_QUESTIONS: 13,
   WELCOME: 'Welcome',
   WORD_NOT_FOUND: 'Word not found',

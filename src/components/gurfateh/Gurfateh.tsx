@@ -1,6 +1,5 @@
 import React from 'react'
 import CONSTANTS from '@/constants'
-import Image from 'next/image'
 
 export default function Gurfateh() {
 
@@ -13,7 +12,7 @@ export default function Gurfateh() {
         </div>
       </div>
       <div className="absolute -left-10 -bottom-1">
-        <Image className='w-24 h-24 md:w-20 md:h-auto md:rounded-none rounded-full mx-auto' src={'/images/singhFateh.png'} alt="Singh Fateh" width={100} height={100} />
+        <img className='w-24 h-24 md:w-20 md:h-auto md:rounded-none rounded-full mx-auto' src={'/images/singhFateh.png'} alt="Singh Fateh" width={100} height={100} />
       </div>
     </main>
   )

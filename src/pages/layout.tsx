@@ -1,14 +1,7 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import React from 'react'
 import Header from '@/components/header/Header'
+import CONSTANTS from '@/constants'
 import './globals.scss'
-
-const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'Shabadavali',
-  description: 'Made by Khalis Foundation',
-}
 
 export default function RootLayout({
   children,
@@ -17,7 +10,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <head>
+        <title>{CONSTANTS.TITLE}</title>
+        <meta name="description" content={CONSTANTS.DESCRIPTION} />
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body>
         <main className="flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer">
           <Header loggedIn={true}/>
           {children}
