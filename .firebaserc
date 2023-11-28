@@ -8,13 +8,21 @@
   "targets": {
     "gurmukhi-dev": {
       "hosting": {
-        "dev": [
+        "default": [
           "shabadavali-dev"
-        ],
-        "staging": [
+        ]
+      }
+    },
+    "gurmukhi-staging": {
+      "hosting": {
+        "default": [
           "shabadavali-staging"
-        ],
-        "prod": [
+        ]
+      }
+    },
+    "gurmukhi-5f8f5": {
+      "hosting": {
+        "default": [
           "shabadavali"
         ]
       }
