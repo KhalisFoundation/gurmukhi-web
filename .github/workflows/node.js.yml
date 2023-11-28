@@ -32,9 +32,9 @@ jobs:
     - name: Install dependencies
       run: |
         yarn install --frozen-lockfile
-      # yarn run build --if-present
+        yarn run build --if-present
       # yarn test # FIXME
 
     - name: ESlint Runner Action
       run: |
-        yarn run lint --strict
+        yarn run lint --max-warnings 0
