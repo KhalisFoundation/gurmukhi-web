@@ -1,5 +1,5 @@
-import React from 'react'
-import CONSTANTS from '@/constants'
+import React from 'react';
+import CONSTANTS from '@/constants';
 
 export default function Gurfateh() {
 
@@ -15,5 +15,5 @@ export default function Gurfateh() {
         <img className='w-24 h-24 md:w-20 md:h-auto md:rounded-none rounded-full mx-auto' src={'/images/singhFateh.png'} alt="Singh Fateh" width={100} height={100} />
       </div>
     </main>
-  )
+  );
 }

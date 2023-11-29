@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react'
+import React, { FormEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignature } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope, faEye, faEyeSlash, faUser } from '@fortawesome/free-regular-svg-icons';
@@ -10,7 +10,7 @@ interface InputWithIconProps {
   icon?: string;
 }
 
-export default function InputWithIcon({...props}: InputWithIconProps) {
+export default function InputWithIcon({ ...props }: InputWithIconProps) {
   const [viewPassword, setViewPassword] = React.useState(false);
   const getIcon = () => {
     switch (props.icon) {
@@ -20,17 +20,17 @@ export default function InputWithIcon({...props}: InputWithIconProps) {
         return faEyeSlash;
       case 'user':
         return faUser;
-      case "email":
+      case 'email':
         return faEnvelope;
-      case "name":
+      case 'name':
         return faSignature;
       default:
         return faEye;
     }
-  }
-  let action = (e: FormEvent) => {
+  };
+  const action = (e: FormEvent) => {
     e.preventDefault();
-    if (props.type === "password") {
+    if (props.type === 'password') {
       const password = document.getElementById(props.id);
       if (password?.getAttribute('type') === 'password') {
         setViewPassword(!viewPassword);
@@ -40,13 +40,13 @@ export default function InputWithIcon({...props}: InputWithIconProps) {
       }
       setViewPassword(!viewPassword);
     }
-  }
+  };
   return (
     <div className="relative mb-6">
-      {props.icon === "" ? null : (
+      {props.icon === '' ? null : (
         <div className="absolute inset-y-0 right-0 flex items-center pr-3.5" >
           {
-            props.type === "password" ? (
+            props.type === 'password' ? (
               viewPassword ? (
                 <FontAwesomeIcon icon={faEye} className="text-gray-400 cursor-pointer" onClick={(e) => action(e)}/>
               ) : (
@@ -58,5 +58,5 @@ export default function InputWithIcon({...props}: InputWithIconProps) {
       )}
       <input type={props.type} className="w-full p-4 rounded-lg bg-gray-eee" id={props.id} placeholder={props.placeholder} />
     </div>
-  )
+  );
 }

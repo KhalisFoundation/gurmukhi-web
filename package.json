@@ -24,7 +24,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "lint": "eslint src/**/*.ts{,x}",
+    "lint": "eslint src/**/*.ts{,x} --max-warnings 0",
     "start": "yarn build:css && react-scripts start",
     "build": "yarn build:css && react-scripts build",
     "test": "CI=true react-scripts test --env=jsdom",

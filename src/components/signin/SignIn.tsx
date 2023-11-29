@@ -15,7 +15,7 @@ export default function SignIn() {
       switchElement.classList.toggle('translate-x-[94%]');
     }
     setIsNewUser(!isNewUser);
-  }
+  };
 
   const handleGoogleSignIn = async (event: React.MouseEvent) => {
     event.preventDefault();
@@ -28,7 +28,7 @@ export default function SignIn() {
     } catch (error: any) {
       console.log(error.message);
     }
-  }
+  };
 
   return (
     <main className="flex bg-white h-full w-[45rem] rounded-3xl flex-col justify-center items-center py-20 px-32 gap-5 brandon-grotesque">
@@ -51,19 +51,19 @@ export default function SignIn() {
 
       <form action="/dashboard" className="flex flex-col w-full gap-4 mt-4 ease-in-out duration-200 delay-100" >
         {isNewUser ? (
-            <SignUp />
-          )
-        : (
+          <SignUp />
+        )
+          : (
             <div className='appear-from-below'>
-             <InputWithIcon id="username" placeholder="Username" type="text" icon="user" />
-             <InputWithIcon id="signin-pwd" placeholder="Password" type="password" />
-             <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white text-lg" type='submit'>{CONSTANTS.SIGN_IN}</button>
+              <InputWithIcon id="username" placeholder="Username" type="text" icon="user" />
+              <InputWithIcon id="signin-pwd" placeholder="Password" type="password" />
+              <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white text-lg" type='submit'>{CONSTANTS.SIGN_IN}</button>
             </div>
           )
         }
         <div className="flex justify-center items-center grey">
           <div className="w-1/4 h-[1px] bg-stone-950/[.2] mr-1"></div>
-            {CONSTANTS.OR.toUpperCase()}
+          {CONSTANTS.OR.toUpperCase()}
           <div className="w-1/4 h-[1px] bg-stone-950/[.2] ml-1"></div>
         </div>
         <button 
@@ -76,5 +76,5 @@ export default function SignIn() {
       </form>
 
     </main>
-  )
+  );
 }

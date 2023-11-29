@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 import CONSTANTS from '@/constants';
 import LevelsFooter from '@/components/levels-footer/LevelsFooter';
 import BackBtn from '@/components/buttons/BackBtn';
 import { wordData } from '@/constants/wordsData';
 
 const addEndingPunctuation = (sentence: string, lang: string) => {
-  const punctuation = lang === 'gurmukhi' ? "।" : ".";
-  return sentence.endsWith(punctuation) || sentence.endsWith("?") ? sentence : sentence + punctuation;
+  const punctuation = lang === 'gurmukhi' ? '।' : '.';
+  return sentence.endsWith(punctuation) || sentence.endsWith('?') ? sentence : sentence + punctuation;
 };
 
 const highlightWord = (sentence: string, lang: string, word: string) => {
@@ -22,7 +22,7 @@ const highlightWord = (sentence: string, lang: string, word: string) => {
       {addEndingPunctuation(splitSentence[1], lang)}
     </span>
   );
-}
+};
 
 export default function Examples() {
   // get the word id from the url
@@ -34,7 +34,7 @@ export default function Examples() {
 
   if (!currentWord.word) {
     // Handle case when word is not found
-    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>
+    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>;
   }
 
   return (
@@ -49,18 +49,19 @@ export default function Examples() {
           <div className="flex flex-col items-left text-left justify-evenly p-8 gap-5">
             {
               currentWord.sentences?.map((sentence, index) => {
-                const highlightedSentence = highlightWord(sentence.sentence, 'gurmukhi', currentWord.word ?? "")
+                const highlightedSentence = highlightWord(sentence.sentence, 'gurmukhi', currentWord.word ?? '');
                 return (
-                <div key={index} className="flex flex-col text-xl">
-                  <span className="text-black-111">
-                    {highlightedSentence}
-                  </span>
-                  <span className="text-black">
-                    {sentence.sentenceEnglish.endsWith(".") || sentence.sentence.endsWith("?") ? 
-                      sentence.sentenceEnglish : sentence.sentenceEnglish + "."}
-                  </span>
-                </div>
-              )})
+                  <div key={index} className="flex flex-col text-xl">
+                    <span className="text-black-111">
+                      {highlightedSentence}
+                    </span>
+                    <span className="text-black">
+                      {sentence.sentenceEnglish.endsWith('.') || sentence.sentence.endsWith('?') ? 
+                        sentence.sentenceEnglish : sentence.sentenceEnglish + '.'}
+                    </span>
+                  </div>
+                );
+              })
             }
           </div>
         </div>
@@ -68,5 +69,5 @@ export default function Examples() {
       </div>
       <LevelsFooter nextUrl={`/word/semantics?id=${wordId}`} nextText='Next' absolute={true}/>
     </div>
-  )
+  );
 }

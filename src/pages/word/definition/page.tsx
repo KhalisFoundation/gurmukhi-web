@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import TextToSpeechBtn from '@/components/buttons/TextToSpeechBtn';
 import CONSTANTS from '@/constants';
 import LevelsFooter from '@/components/levels-footer/LevelsFooter';
@@ -15,7 +15,7 @@ export default function Defintion() {
 
   if (!currentWord.word) {
     // Handle case when word is not found
-    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>
+    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>;
   }
 
   return (
@@ -28,20 +28,20 @@ export default function Defintion() {
             alt='word-image'
             height={296}
             width={524}
-            src={currentWord.image? currentWord.image : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'}
+            src={currentWord.image ? currentWord.image : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'}
             className='object-cover rounded-xl'
           />
           <div className="flex flex-col h-[296px] items-left justify-evenly p-8">
             <div className="flex flex-row items-center justify-between gap-5">
               <div className="flex flex-col">
-                <h1 className={`text-5xl gurmukhi text-black`}>{currentWord.word}</h1>
+                <h1 className={'text-5xl gurmukhi text-black'}>{currentWord.word}</h1>
                 <h2 className="text-2xl brandon-grotesque italic text-gray-4e4">{currentWord.translation}</h2>
               </div>
               <TextToSpeechBtn />
             </div>
             <div className="flex flex-col text-lg">
-              <span className={`text-black-111`}>{currentWord.meaningEnglish}</span>
-              <span className={`text-black`}>{currentWord.meaning}</span>
+              <span className={'text-black-111'}>{currentWord.meaningEnglish}</span>
+              <span className={'text-black'}>{currentWord.meaning}</span>
             </div>
           </div>
         </div>
@@ -49,8 +49,8 @@ export default function Defintion() {
       </div>
       <LevelsFooter nextUrl={`/word/examples?id=${wordId}`} nextText='Next'/>
     </div>
-  )
+  );
 }
 
-Defintion.propTypes = {}
+Defintion.propTypes = {};
 

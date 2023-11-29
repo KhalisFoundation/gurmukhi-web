@@ -1,9 +1,7 @@
-import React from 'react'
-import BackBtn from '@/components/buttons/BackBtn'
-import LevelsFooter from '@/components/levels-footer/LevelsFooter'
+import React from 'react';
 
 export default function WordsPageLayout({
-  children
+  children,
 }: {
   children: React.ReactNode
 }) {
@@ -12,5 +10,5 @@ export default function WordsPageLayout({
     <div className="flex flex-col items-center justify-between gap-5 p-12 pb-0">
       {children}
     </div>
-  )
+  );
 }

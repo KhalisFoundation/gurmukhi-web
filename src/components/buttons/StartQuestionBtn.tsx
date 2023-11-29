@@ -7,7 +7,7 @@ interface Props {
   text?: string;
 }
 
-const StartQuestionBtn = ({urlString, text}: Props) => {
+const StartQuestionBtn = ({ urlString, text }: Props) => {
   return (
     <a href={urlString} className='flex flex-row items-center justify-between gap-2 min-w-60'>
       <FontAwesomeIcon icon={faDiamond} className="w-2 h-2" color='#D6E9F3' />
@@ -16,9 +16,9 @@ const StartQuestionBtn = ({urlString, text}: Props) => {
         color="secondary"
         style={{
           fontFamily: "HvDTrial Brandon Grotesque, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif",
-          letterSpacing: ".1rem",
+          letterSpacing: '.1rem',
         }}>
-          {text?.toUpperCase()}
+        {text?.toUpperCase()}
       </button>
       <FontAwesomeIcon icon={faDiamond} className="w-2 h-2" color='#D6E9F3' />
     </a>
