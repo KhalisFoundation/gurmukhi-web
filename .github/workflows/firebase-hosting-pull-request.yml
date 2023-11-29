@@ -16,9 +16,9 @@ jobs:
           npm install -g firebase-tools
       - name: Deploy with Firebase CLI
         run: |
-          branchName=$(echo "${{ github.ref }}" | sed -e "s/refs\/heads\///g")
+          branchName=$(echo "${{ github.ref_name }}" | sed -e "s/refs\/heads\///g")
           echo "Branch Name: $branchName"
-          firebase hosting:channel:deploy $branchName --only default --token ${{ secrets.FIREBASE_TOKEN }}
+          firebase hosting:channel:deploy $branchName --only default --project ${{ secrets.REACT_APP_PROJECT_ID }} --token ${{ secrets.FIREBASE_TOKEN }}
       # - uses: FirebaseExtended/action-hosting-deploy@v0
       #   with:
       #     repoToken: '${{ secrets.GITHUB_TOKEN }}'
