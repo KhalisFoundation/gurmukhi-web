@@ -1,8 +1,8 @@
 import React from 'react';
-import Shabadavali from '@/assets/icons/Shabadavali';
-import CONSTANTS from '@/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import Shabadavali from '@/assets/icons/Shabadavali';
+import CONSTANTS from '@/constants';
 
 interface PropTypes {
   loggedIn?: boolean

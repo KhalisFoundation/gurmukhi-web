@@ -9,6 +9,7 @@ const CONSTANTS = {
     vocabulary, we just need some information from you.`,
   NUM_COINS: 13,
   ENTER_DETAILS: 'Please enter your details',
+  LOADING: 'Loading...',
   OR: 'or',
   PROFILE: 'Profile',
   QUESTIONS: 'Questions',

@@ -1,13 +1,10 @@
 import React from 'react';
 import Header from '@/components/header/Header';
 import CONSTANTS from '@/constants';
-import './globals.scss';
+import '@/styles/globals.scss';
+import { Outlet } from 'react-router-dom';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout() {
   return (
     <html lang="en">
       <head>
@@ -18,7 +15,7 @@ export default function RootLayout({
       <body>
         <main className="flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer">
           <Header loggedIn={true}/>
-          {children}
+          <Outlet />
         </main>
       </body>
     </html>

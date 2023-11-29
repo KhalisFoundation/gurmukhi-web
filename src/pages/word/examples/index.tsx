@@ -3,6 +3,7 @@ import CONSTANTS from '@/constants';
 import LevelsFooter from '@/components/levels-footer/LevelsFooter';
 import BackBtn from '@/components/buttons/BackBtn';
 import { wordData } from '@/constants/wordsData';
+import { useLocation } from 'react-router-dom';
 
 const addEndingPunctuation = (sentence: string, lang: string) => {
   const punctuation = lang === 'gurmukhi' ? '।' : '.';
@@ -25,9 +26,12 @@ const highlightWord = (sentence: string, lang: string, word: string) => {
 };
 
 export default function Examples() {
-  // get the word id from the url
-  // e.g. /word/examples?id=1
-  const wordId = 1;// useSearchParams().get('id');
+  // Use useLocation to get the search parameters from the URL
+  const location = useLocation();
+
+  // Extract the "id" parameter from the search string in the URL
+  const searchParams = new URLSearchParams(location.search);
+  const wordId = searchParams.get('id');
 
   // fetch word from state using wordId
   const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
