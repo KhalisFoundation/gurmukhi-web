@@ -1,4 +1,7 @@
 const CONSTANTS = {
+  allWords: 'allWords',
+  ANTONYM: 'antonym',
+  ANTONYMS: 'Antonyms',
   APP_TITLE: 'Shabadavali.',
   BACK: 'Back',
   DASHBOARD: 'Dashboard',
@@ -20,6 +23,8 @@ const CONSTANTS = {
   SIGN_OUT: 'Sign Out',
   SIGN_UP: 'Sign Up',
   SHASHA: 'ਸ਼',
+  SYNONYM: 'synonym',
+  SYNONYMS: 'Synonyms',
   TITLE: 'Shabadavali',
   TOTAL_NUM_QUESTIONS: 13,
   WELCOME: 'Welcome',

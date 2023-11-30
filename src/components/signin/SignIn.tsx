@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import InputWithIcon from '../input/InputWithIcon';
 import SignUp from './SignUp';
 import CONSTANTS from '@/constants';
+import { ROUTES } from '@/constants/routes';
 
 export default function SignIn() {
   const [isNewUser, setIsNewUser] = useState(false);
@@ -49,7 +50,7 @@ export default function SignIn() {
         </span>
       </div>
 
-      <form action="/dashboard" className="flex flex-col w-full gap-4 mt-4 ease-in-out duration-200 delay-100" >
+      <form action={ROUTES.DASHBOARD} className="flex flex-col w-full gap-4 mt-4 ease-in-out duration-200 delay-100" >
         {isNewUser ? (
           <SignUp />
         )

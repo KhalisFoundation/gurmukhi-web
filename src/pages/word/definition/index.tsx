@@ -5,6 +5,7 @@ import LevelsFooter from '@/components/levels-footer/LevelsFooter';
 import BackBtn from '@/components/buttons/BackBtn';
 import { wordData } from '@/constants/wordsData';
 import { useLocation } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 
 export default function Defintion() {
   // Use useLocation to get the search parameters from the URL
@@ -51,7 +52,7 @@ export default function Defintion() {
         </div>
         <img className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
       </div>
-      <LevelsFooter nextUrl={`/word/examples?id=${wordId}`} nextText='Next'/>
+      <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.EXAMPLES}?id=${wordId}`} nextText='Next'/>
     </div>
   );
 }

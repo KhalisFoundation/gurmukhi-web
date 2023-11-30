@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import Header from './components/header/Header';
 import Login from './pages/login';
-import routes from './constants/routes';
+import { PAGES } from './constants/routes';
 import Dashboard from './pages/dashboard';
 import Profile from './pages/profile';
 import Settings from './pages/settings';
@@ -18,19 +18,21 @@ import RootLayout from './pages/layout';
 import WordsPageLayout from './pages/word/layout';
 import NotFound from './pages/not-found';
 import Home from './pages/page';
+import Semantics from './pages/word/semantics';
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path={routes.ROOT} element={<RootLayout />}>
+      <Route path={PAGES.ROOT} element={<RootLayout />}>
         <Route path='' element={<Home />} />
-        <Route path={routes.DASHBOARD} element={<Dashboard />} />
-        <Route path={routes.LOGIN} element={<Login />} />
-        <Route path={routes.PROFILE} element={<Profile />} />
-        <Route path={routes.SETTINGS} element={<Settings />} />
-        <Route path={routes.WORD + '/*'} element={<WordsPageLayout />} >
-          <Route path={routes.DEFINITION} element={<Defintion />} />
-          <Route path={routes.EXAMPLES} element={<Examples />} />
+        <Route path={PAGES.DASHBOARD} element={<Dashboard />} />
+        <Route path={PAGES.LOGIN} element={<Login />} />
+        <Route path={PAGES.PROFILE} element={<Profile />} />
+        <Route path={PAGES.SETTINGS} element={<Settings />} />
+        <Route path={PAGES.WORDS} element={<WordsPageLayout />} >
+          <Route path={PAGES.DEFINITION} element={<Defintion />} />
+          <Route path={PAGES.EXAMPLES} element={<Examples />} />
+          <Route path={PAGES.SEMANTICS} element={<Semantics />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Route>,

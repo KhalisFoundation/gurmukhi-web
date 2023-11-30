@@ -4,6 +4,7 @@ import LevelsFooter from '@/components/levels-footer/LevelsFooter';
 import BackBtn from '@/components/buttons/BackBtn';
 import { wordData } from '@/constants/wordsData';
 import { useLocation } from 'react-router-dom';
+import { ROUTES } from '@/constants/routes';
 
 const addEndingPunctuation = (sentence: string, lang: string) => {
   const punctuation = lang === 'gurmukhi' ? '।' : '.';
@@ -71,7 +72,7 @@ export default function Examples() {
         </div>
         <img className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
       </div>
-      <LevelsFooter nextUrl={`/word/semantics?id=${wordId}`} nextText='Next' absolute={true}/>
+      <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.SEMANTICS}?id=${wordId}`} nextText='Next' absolute={true}/>
     </div>
   );
 }
