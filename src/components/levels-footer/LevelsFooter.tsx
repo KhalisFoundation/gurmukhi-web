@@ -7,9 +7,10 @@ interface Props {
   nextUrl: string;
   nextText?: string;
   absolute?: boolean;
+  completed?: boolean;
 }
 
-export default function LevelsFooter({ nextUrl, nextText = 'Start Learning', absolute = false }: Props) {
+export default function LevelsFooter({ nextUrl, nextText = 'Start Learning', absolute = false, completed=false }: Props) {
   const totalNumQuestions = CONSTANTS.TOTAL_NUM_QUESTIONS;
   const currentQuestion = 5;
   const numQuestionsLeft = totalNumQuestions - currentQuestion;
@@ -30,7 +31,7 @@ export default function LevelsFooter({ nextUrl, nextText = 'Start Learning', abs
           })}
         </div>
       </div>
-      <StartQuestionBtn urlString={nextUrl} text={nextText} />
+      <StartQuestionBtn urlString={nextUrl} text={nextText} active={completed}/>
     </footer>
   );
 }

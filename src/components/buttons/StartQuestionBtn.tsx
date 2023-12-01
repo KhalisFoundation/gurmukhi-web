@@ -5,11 +5,14 @@ import { faDiamond } from '@fortawesome/free-solid-svg-icons';
 interface Props {
   urlString: string;
   text?: string;
+  active?: boolean;
 }
 
-const StartQuestionBtn = ({ urlString, text }: Props) => {
+const StartQuestionBtn = ({ urlString, text, active=true }: Props) => {
+  const isActive = active ? '' : ' disabled';
+  const linkClass = 'flex flex-row items-center justify-between gap-2 min-w-60' + isActive;
   return (
-    <a href={urlString} className='flex flex-row items-center justify-between gap-2 min-w-60'>
+    <a href={urlString} className={linkClass}>
       <FontAwesomeIcon icon={faDiamond} className="w-2 h-2" color='#D6E9F3' />
       <button
         className='bg-[#D6E9F3] text-[#255C7A] rounded-lg p-4 w-60 text-center'

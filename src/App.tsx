@@ -19,6 +19,7 @@ import WordsPageLayout from './pages/word/layout';
 import NotFound from './pages/not-found';
 import Home from './pages/page';
 import Semantics from './pages/word/semantics';
+import Information from './pages/word/information';
 
 function App() {
   const router = createBrowserRouter(
@@ -33,6 +34,7 @@ function App() {
           <Route path={PAGES.DEFINITION} element={<Defintion />} />
           <Route path={PAGES.EXAMPLES} element={<Examples />} />
           <Route path={PAGES.SEMANTICS} element={<Semantics />} />
+          <Route path={PAGES.INFORMATION} element={<Information />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Route>,

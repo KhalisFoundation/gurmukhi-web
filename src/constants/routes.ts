@@ -10,6 +10,7 @@ export const PAGES = {
   WORD: 'word',
   DEFINITION: 'definition',
   EXAMPLES: 'examples',
+  INFORMATION: 'information',
   SEMANTICS: 'semantics',
 };
 // dynamically add / in front of every route in above const and keep the same key name

@@ -5,9 +5,10 @@ import CONSTANTS from '@/constants';
 import LevelsFooter from '@/components/levels-footer/LevelsFooter';
 import BackBtn from '@/components/buttons/BackBtn';
 import { WordData, wordData } from '@/constants/wordsData';
-import { DragDropContext, Draggable, DraggableStateSnapshot, Droppable, DroppableProvided, DroppableStateSnapshot, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useLocation } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
+import { convertToTitleCase, createSemanticDraggables, getDraggedItemBackgroundColor } from '@/utils/words';
 
 export default function Semantics() {
   // Use useLocation to get the search parameters from the URL
@@ -108,87 +109,6 @@ export default function Semantics() {
       else if (source.droppableId === CONSTANTS.ANTONYMS.toLowerCase()) setAntonyms(newData);
       else setWords(newData);
     }
-  };
-
-  const convertToTitleCase = (word: string) => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  };
-
-  const createSemanticDraggables = (provided: DroppableProvided, wordList: WordData[], snapshot: DroppableStateSnapshot, type: string) => {
-    const droppableId = type;
-    const heading = type === CONSTANTS.SYNONYMS.toLowerCase() ? CONSTANTS.SYNONYMS : CONSTANTS.ANTONYMS;
-    return (
-      <div
-        className='card-bg shadow-lg rounded-lg w-1/3 h-80 p-4'
-        ref={provided.innerRef}
-        {...provided.droppableProps}>
-        <h2 className='text-center text-black tracking-widest'>{heading.toUpperCase()}</h2>
-        <div className='grid grid-cols-2 gap-4 h-full w-full'>
-          {wordList?.map((word, index) => {
-            return (
-              <Draggable 
-                key={droppableId + word.id?.toString()}
-                draggableId={droppableId + word.id?.toString()}
-                index={index}>
-                {(dragProvided, dragSnapshot) => {
-                  const isDragging = dragSnapshot.isDragging ?? false;
-                  const draggingOver = dragSnapshot.draggingOver ?? '';
-                  let bgColor = 'bg-[#1F4860]';
-                  let color = 'grey';
-                  if (isDragging) {
-                    bgColor = 'bg-[#1F4860]';
-                    if (draggingOver === CONSTANTS.SYNONYMS.toLowerCase()) {
-                      bgColor = 'bg-green-500';
-                      color = 'green';
-                    } else if (draggingOver === CONSTANTS.ANTONYMS.toLowerCase()) {
-                      bgColor = 'bg-red-500';
-                      color = 'red';
-                    }
-                  }
-                  return (
-                    <div
-                      draggable
-                      className={'flex h-min w-max m-4 p-4 text-white text-sm rounded-lg z-10 ' + bgColor}
-                      style={{ backgroundColor: color }}
-                      {...dragProvided.draggableProps}
-                      {...dragProvided.dragHandleProps}
-                      ref={(el) => {
-                        dragProvided.innerRef(el);
-                        jumpBoxRef.current = el;
-                      }}>
-                      {word.word} ({convertToTitleCase(word.translation ?? '')})
-                    </div>
-                  );
-                }}
-              </Draggable>
-            );
-          })}
-        </div>
-        {provided.placeholder}
-      </div>
-    );
-  };
-
-  const getDraggedItemBackgroundColor = (dragSnapshot: DraggableStateSnapshot, word: WordData) => {
-    const isDragging = dragSnapshot.isDragging ?? false;
-    const draggingOver = dragSnapshot.draggingOver ?? '';
-  
-    if (isDragging) {
-      switch (draggingOver) {
-        case CONSTANTS.SYNONYMS.toLowerCase():
-          if (word.type === 'synonym') return 'bg-green-500';
-          if (word.type === 'antonym') return 'bg-red-500';
-          break;
-        case CONSTANTS.ANTONYMS.toLowerCase():
-          if (word.type === 'antonym') return 'bg-green-500';
-          if (word.type === 'synonym') return 'bg-red-500';
-          break;
-        default:
-          return 'bg-[#1F4860]';
-      }
-    }
-  
-    return 'bg-[#1F4860]';
   };
 
   useEffect(() => {
@@ -297,24 +217,21 @@ export default function Semantics() {
                 droppableId={CONSTANTS.SYNONYMS.toLowerCase()}
                 type="COLUMN">
                 {(provided, snapshot) => (
-                  createSemanticDraggables(provided, synonyms, snapshot, CONSTANTS.SYNONYMS.toLowerCase())
+                  createSemanticDraggables(provided, synonyms, snapshot, CONSTANTS.SYNONYMS.toLowerCase(), jumpBoxRef)
                 )}
               </Droppable>
               <Droppable
                 droppableId={CONSTANTS.ANTONYMS.toLowerCase()}
                 type="COLUMN">
                 {(provided, snapshot) => (
-                  createSemanticDraggables(provided, antonyms, snapshot, CONSTANTS.ANTONYMS.toLowerCase())
+                  createSemanticDraggables(provided, antonyms, snapshot, CONSTANTS.ANTONYMS.toLowerCase(), jumpBoxRef)
                 )}
               </Droppable>
             </div>
           </div>
         </div>
       </DragDropContext>
-      { Number(wordId) >= wordData.length - 1 ?
-        <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' absolute={true}/>
-        : <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.DEFINITION}?id=${(Number(wordId) ?? 0) + 1}`} nextText='Next' absolute={true}/>
-      }
+      <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.INFORMATION}?id=${wordId}`} nextText='Next' absolute={true}/>
     </div>
   );
 }

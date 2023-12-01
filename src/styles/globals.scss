@@ -64,7 +64,7 @@ body {
     bottom: 0;
     left: 0;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     background-image: url('../../public/images/card.png');
     mix-blend-mode: screen;
     box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);

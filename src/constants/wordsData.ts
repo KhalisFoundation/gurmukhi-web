@@ -66,7 +66,7 @@ export const wordData: WordData[] = [
       },
     ],
     synonyms: [
-      1, 4,
+      1, 4, 6,
     ],
     antonyms: [
       3, 5,

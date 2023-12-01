@@ -1,10 +1,10 @@
 import React from 'react';
-import TextToSpeechBtn from '@/components/buttons/TextToSpeechBtn';
+import { useLocation } from 'react-router-dom';
 import CONSTANTS from '@/constants';
+import TextToSpeechBtn from '@/components/buttons/TextToSpeechBtn';
 import LevelsFooter from '@/components/levels-footer/LevelsFooter';
 import BackBtn from '@/components/buttons/BackBtn';
 import { wordData } from '@/constants/wordsData';
-import { useLocation } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
 
 export default function Defintion() {

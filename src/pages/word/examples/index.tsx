@@ -5,26 +5,7 @@ import BackBtn from '@/components/buttons/BackBtn';
 import { wordData } from '@/constants/wordsData';
 import { useLocation } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
-
-const addEndingPunctuation = (sentence: string, lang: string) => {
-  const punctuation = lang === 'gurmukhi' ? '।' : '.';
-  return sentence.endsWith(punctuation) || sentence.endsWith('?') ? sentence : sentence + punctuation;
-};
-
-const highlightWord = (sentence: string, lang: string, word: string) => {
-  // check if word in sentence
-  if (!sentence.includes(word)) {
-    return sentence;
-  }
-  const splitSentence = sentence.split(word);
-  return (
-    <span className="text-black gurmukhi">
-      {splitSentence[0]}
-      <span className="text-black font-bold">{word}</span>
-      {addEndingPunctuation(splitSentence[1], lang)}
-    </span>
-  );
-};
+import { highlightWord } from '@/utils/words';
 
 export default function Examples() {
   // Use useLocation to get the search parameters from the URL
