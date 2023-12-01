@@ -32,6 +32,7 @@
       "no-console": "off",
       "no-alert": "off",
       "import/extensions": "off",
+      "react-hooks/exhaustive-deps": "off",
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-explicit-any": "off"
     },

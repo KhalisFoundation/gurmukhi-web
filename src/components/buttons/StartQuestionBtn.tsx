@@ -8,7 +8,7 @@ interface Props {
   active?: boolean;
 }
 
-const StartQuestionBtn = ({ urlString, text, active=true }: Props) => {
+const StartQuestionBtn = ({ urlString, text, active = true }: Props) => {
   const isActive = active ? '' : ' disabled';
   const linkClass = 'flex flex-row items-center justify-between gap-2 min-w-60' + isActive;
   return (
