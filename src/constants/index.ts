@@ -6,6 +6,7 @@ const CONSTANTS = {
   BACK: 'Back',
   DASHBOARD: 'Dashboard',
   DESCRIPTION: 'Made by Khalis Foundation',
+  EMAIL_VERIFICATION_SENT: 'Email verification sent to your inbox!',
   EXAMPLES: 'Examples',
   GURFATEH_PUNJABI: 'ਵਾਹਿਗੁਰੂ ਜੀ ਕਾ ਖਾਲਸਾ ॥ ਵਾਹਿਗੁਰੂ ਜੀ ਕੀ ਫਤਿਹ ॥',
   LOGIN_INFO: `Before you start adding new words to your 

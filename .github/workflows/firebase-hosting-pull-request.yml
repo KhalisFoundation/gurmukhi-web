@@ -18,5 +18,3 @@ jobs:
           channelId: 'pr-${{ github.event.number }}'
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
           target: default
-        env:
-          FIREBASE_CLI_PREVIEWS: hostingchannels
