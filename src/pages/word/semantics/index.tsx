@@ -50,7 +50,7 @@ export default function Semantics() {
     if (source.droppableId !== destination.droppableId) {
       const sourceId = source.droppableId;
       const destinationId = destination.droppableId;
-      if (sourceId === CONSTANTS.allWords) {
+      if (sourceId === CONSTANTS.ALL_WORDS) {
         const newWordLists = newWords.filter((word) => word.id !== foundItem.id);
         switch (destinationId) {
           case CONSTANTS.SYNONYMS.toLowerCase():
@@ -74,7 +74,7 @@ export default function Semantics() {
         }
       } else {
         switch (destinationId) {
-          case CONSTANTS.allWords:
+          case CONSTANTS.ALL_WORDS:
             if (sourceId === CONSTANTS.SYNONYMS.toLowerCase()) {
               newSynonyms = synonyms.filter((synonym) => synonym.id !== foundItem.id);
               setSynonyms(newSynonyms);
@@ -177,14 +177,13 @@ export default function Semantics() {
           <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" />
           <div className="flex flex-col items-center justify-between w-full my-10 mx-5 gap-5">
             <Droppable 
-              droppableId={CONSTANTS.allWords}
+              droppableId={CONSTANTS.ALL_WORDS}
               type="COLUMN"
               direction="horizontal"
             >
               {(provided) => (
                 <div
                   className='flex flex-row justify-between items-center p-4 w-max'
-                  // style={{ backgroundColor: snapshot.isDraggingOver ? 'blue' : 'grey' }}
                   {...provided.droppableProps}
                   ref={provided.innerRef}>
                   {words.map((word, index) => {

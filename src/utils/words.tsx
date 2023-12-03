@@ -33,11 +33,11 @@ const createSemanticDraggables = (provided: DroppableProvided, wordList: WordDat
   const heading = type === CONSTANTS.SYNONYMS.toLowerCase() ? CONSTANTS.SYNONYMS : CONSTANTS.ANTONYMS;
   return (
     <div
-      className='card-bg shadow-lg rounded-lg w-1/3 h-80 p-4'
+      className='card-bg shadow-lg rounded-lg h-72 w-80 p-4'
       ref={provided.innerRef}
       {...provided.droppableProps}>
       <h2 className='text-center text-black tracking-widest'>{heading.toUpperCase()}</h2>
-      <div className='grid grid-cols-2 gap-4 h-full w-full'>
+      <div className='grid grid-cols-2 gap-4 h-60 w-72'>
         {wordList?.map((word, index) => {
           return (
             <Draggable 
