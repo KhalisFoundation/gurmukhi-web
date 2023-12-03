@@ -9,14 +9,14 @@
     "gurmukhi-dev": {
       "hosting": {
         "default": [
-          "shabadavali-dev"
+          "dev-shabadavali"
         ]
       }
     },
     "gurmukhi-staging": {
       "hosting": {
         "default": [
-          "shabadavali-staging"
+          "staging-shabadavali"
         ]
       }
     },
