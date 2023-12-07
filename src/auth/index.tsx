@@ -1,4 +1,4 @@
-import React, { ReactElement, createContext, useContext, useEffect, useState } from "react";
+import React, { ReactElement, createContext, useContext, useEffect, useState } from 'react';
 import {
   signOut,
   signInWithEmailAndPassword,
@@ -9,13 +9,13 @@ import {
   GoogleAuthProvider,
 } from 'firebase/auth';
 import {
-  Timestamp, doc, setDoc, query, where, documentId, getDocs,
+  Timestamp, doc, setDoc, // query, where, documentId, getDocs,
 } from 'firebase/firestore';
-import { auth, firestore } from "@/firebase";
-import { checkUser, getUser } from "@/utils/users";
-import { firebaseErrorCodes as errors } from "@/constants/errors";
-import roles from "@/constants/roles";
-import CONSTANTS from "@/constants";
+import { auth, firestore } from '@/firebase';
+import { checkUser, getUser } from '@/utils/users';
+import { firebaseErrorCodes as errors } from '@/constants/errors';
+import roles from '@/constants/roles';
+import CONSTANTS from '@/constants';
 
 const userAuthContext = createContext<any>(null);
 
@@ -57,18 +57,22 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
 
   const signUp = async (
     name: string,
-    role: string,
     email: string,
     password: string,
+    confirmPassword: string,
   ) => {
     try {
+      if (password !== confirmPassword) {
+        alert(CONSTANTS.PASSWORDS_DONT_MATCH);
+        return false;
+      }
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userData = userCredential.user;
       const { uid, displayName } = userData;
       const localUser = doc(firestore, `users/${uid}`);
       await setDoc(localUser, {
         name,
-        role,
+        role: roles.student,
         email,
         displayName: displayName ?? name,
         created_at: Timestamp.now(),

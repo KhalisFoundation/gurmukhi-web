@@ -15,6 +15,7 @@ const CONSTANTS = {
   ENTER_DETAILS: 'Please enter your details',
   LOADING: 'Loading...',
   OR: 'or',
+  PASSWORDS_DONT_MATCH: 'Passwords do not match!',
   PROFILE: 'Profile',
   QUESTIONS: 'Questions',
   QUESTIONS_TO_GO: 'QUESTIONS TO GO TO YOUR NEXT NANAK COIN!!',

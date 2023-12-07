@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from '@/components/header/Header';
-import CONSTANTS from '@/constants';
-import '@/styles/globals.scss';
 import { Outlet } from 'react-router-dom';
+import CONSTANTS from '@/constants';
+import Header from '@/components/header/Header';
+import '@/styles/globals.scss';
 
 export default function RootLayout() {
   return (
@@ -14,7 +14,7 @@ export default function RootLayout() {
       </head>
       <body>
         <main className="flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer">
-          <Header loggedIn={true}/>
+          <Header />
           <Outlet />
         </main>
       </body>

@@ -3,9 +3,14 @@ import InputWithIcon from '../input/InputWithIcon';
 import SignUp from './SignUp';
 import CONSTANTS from '@/constants';
 import { ROUTES } from '@/constants/routes';
+import { useUserAuth } from '@/auth';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
+  const { logIn, signUp, signInWithGoogle } = useUserAuth();
+
   const signToggle = (e: FormEvent) => {
     e.preventDefault();
     const switchElement = document.getElementsByClassName('switch')[0];
@@ -18,14 +23,42 @@ export default function SignIn() {
     setIsNewUser(!isNewUser);
   };
 
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      if (isNewUser) {
+        const name = (document.getElementById('name') as HTMLInputElement).value;
+        const email = (document.getElementById('email') as HTMLInputElement).value;
+        const password = (document.getElementById('password') as HTMLInputElement).value;
+        const cpassword = (document.getElementById('cpassword') as HTMLInputElement).value;
+        if (password === cpassword) {
+          const success = await signUp(name, email, password);
+          if (success) {
+            navigate(ROUTES.DASHBOARD);
+          } 
+        } else {
+          alert('Passwords do not match');
+        }
+      } else {
+        const email = (document.getElementById('username') as HTMLInputElement).value;
+        const password = (document.getElementById('spassword') as HTMLInputElement).value;
+        const success = await logIn(email, password);
+        if (success) {
+          navigate(ROUTES.DASHBOARD);
+        }
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+
   const handleGoogleSignIn = async (event: React.MouseEvent) => {
     event.preventDefault();
     try {
-      // left with getting confirmation of logging to navigate to homepage
-      // const success = await signInWithGoogle();
-      // if (success) {
-      //   navigate(routes.words);
-      // }
+      const success = await signInWithGoogle();
+      if (success) {
+        navigate(ROUTES.DASHBOARD);
+      }
     } catch (error: any) {
       console.log(error.message);
     }
@@ -50,14 +83,14 @@ export default function SignIn() {
         </span>
       </div>
 
-      <form action={ROUTES.DASHBOARD} className="flex flex-col w-full gap-4 mt-4 ease-in-out duration-200 delay-100" >
+      <form onSubmit={handleSubmit} className="flex flex-col w-full gap-4 mt-4 ease-in-out duration-200 delay-100" >
         {isNewUser ? (
           <SignUp />
         )
           : (
             <div className='appear-from-below'>
               <InputWithIcon id="username" placeholder="Username" type="text" icon="user" />
-              <InputWithIcon id="signin-pwd" placeholder="Password" type="password" />
+              <InputWithIcon id="spassword" placeholder="Password" type="password" />
               <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white text-lg" type='submit'>{CONSTANTS.SIGN_IN}</button>
             </div>
           )

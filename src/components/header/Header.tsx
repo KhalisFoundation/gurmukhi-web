@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import Shabadavali from '@/assets/icons/Shabadavali';
 import CONSTANTS from '@/constants';
 import { PAGES, ROUTES } from '@/constants/routes';
+import { AuthContext } from '@/auth/context';
+import { useNavigate } from 'react-router-dom';
+import { useUserAuth } from '@/auth';
 
-interface PropTypes {
-  loggedIn?: boolean
-}
+export default function Header() {
+  const { currentUser } = useContext(AuthContext);
+  const { logOut } = useUserAuth();
+  const navigate = useNavigate();
+  let loggedIn = !!currentUser;
 
-export default function Header({ ...props }: PropTypes) {
-  const loggedIn = props.loggedIn ?? false;
+  // Check if currentUser exists on initial render
+  useEffect(() => {
+    loggedIn = !!currentUser;
+    if (!loggedIn) {
+      navigate(ROUTES.LOGIN);
+    }
+  }, [currentUser]);
 
   return (
     <header className="flex bg-gradient-to-r absolute inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10">
@@ -57,7 +67,12 @@ export default function Header({ ...props }: PropTypes) {
                 >
                   <li><a href={ROUTES.PROFILE} className='block px-3 py-2 hover:bg-gray-200'>{CONSTANTS.PROFILE}</a></li>
                   <li><a href={ROUTES.SETTINGS} className='block px-3 py-2 hover:bg-gray-200'>{CONSTANTS.SETTINGS}</a></li>
-                  <li><a href={ROUTES.LOGIN} className='block px-3 py-2 hover:bg-gray-200'>{CONSTANTS.SIGN_OUT}</a></li>
+                  <li><button onClick={
+                    () => {
+                      logOut();
+                      navigate(ROUTES.LOGIN);
+                    }
+                  } className='block px-3 py-2 hover:bg-gray-200'>{CONSTANTS.SIGN_OUT}</button></li>
                 </ul>
               </div>
             </li>
