@@ -1,21 +1,27 @@
 import React from 'react';
-import TextToSpeechBtn from '@/components/buttons/TextToSpeechBtn';
-import CONSTANTS from '@/constants';
-import LevelsFooter from '@/components/levels-footer/LevelsFooter';
-import BackBtn from '@/components/buttons/BackBtn';
-import { wordData } from '@/constants/wordsData';
+import { useLocation } from 'react-router-dom';
+import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
+import LevelsFooter from 'components/levels-footer/LevelsFooter';
+import BackBtn from 'components/buttons/BackBtn';
+import { wordData } from 'constants/wordsData';
+import { ROUTES } from 'constants/routes';
+import { useTranslation } from 'react-i18next';
 
 export default function Defintion() {
-  // get the word id from the url
-  // e.g. /word/definition/1
-  const wordId = 1;// useSearchParams().get('id');
+  const { t: text } = useTranslation();
+  // Use useLocation to get the search parameters from the URL
+  const location = useLocation();
+
+  // Extract the "id" parameter from the search string in the URL
+  const searchParams = new URLSearchParams(location.search);
+  const wordId = searchParams.get('id');
 
   // fetch word from state using wordId
   const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
 
   if (!currentWord.word) {
     // Handle case when word is not found
-    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>;
+    return <div>{text('WORD_NOT_FOUND')}</div>;
   }
 
   return (
@@ -47,7 +53,7 @@ export default function Defintion() {
         </div>
         <img className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
       </div>
-      <LevelsFooter nextUrl={`/word/examples?id=${wordId}`} nextText='Next'/>
+      <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.EXAMPLES}?id=${wordId}`} nextText='Next'/>
     </div>
   );
 }

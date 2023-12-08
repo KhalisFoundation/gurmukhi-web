@@ -1,40 +1,38 @@
 import React from 'react';
-import CONSTANTS from '@/constants';
-import LevelsFooter from '@/components/levels-footer/LevelsFooter';
-import BackBtn from '@/components/buttons/BackBtn';
-import { wordData } from '@/constants/wordsData';
-
-const addEndingPunctuation = (sentence: string, lang: string) => {
-  const punctuation = lang === 'gurmukhi' ? '।' : '.';
-  return sentence.endsWith(punctuation) || sentence.endsWith('?') ? sentence : sentence + punctuation;
-};
-
-const highlightWord = (sentence: string, lang: string, word: string) => {
-  // check if word in sentence
-  if (!sentence.includes(word)) {
-    return sentence;
-  }
-  const splitSentence = sentence.split(word);
-  return (
-    <span className="text-black gurmukhi">
-      {splitSentence[0]}
-      <span className="text-black font-bold">{word}</span>
-      {addEndingPunctuation(splitSentence[1], lang)}
-    </span>
-  );
-};
+import LevelsFooter from 'components/levels-footer/LevelsFooter';
+import BackBtn from 'components/buttons/BackBtn';
+import { wordData } from 'constants/wordsData';
+import { useLocation } from 'react-router-dom';
+import { ROUTES } from 'constants/routes';
+import { highlightWord } from 'utils/words';
+import { useTranslation } from 'react-i18next';
 
 export default function Examples() {
-  // get the word id from the url
-  // e.g. /word/examples?id=1
-  const wordId = 1;// useSearchParams().get('id');
+  const { t: text } = useTranslation();
+  // Use useLocation to get the search parameters from the URL
+  const location = useLocation();
+
+  // Extract the "id" parameter from the search string in the URL
+  const searchParams = new URLSearchParams(location.search);
+  const wordId = searchParams.get('id');
 
   // fetch word from state using wordId
   const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
 
+  const hasNoSynonymsOrAntonyms = !currentWord.synonyms?.length && !currentWord.antonyms?.length;
+  const nextUrl = ROUTES.WORD + (hasNoSynonymsOrAntonyms
+    ? `${ROUTES.INFORMATION}?id=${wordId}`
+    : `${ROUTES.SEMANTICS}?id=${wordId}`);
+
+  const LevelsFooterProps = {
+    nextUrl,
+    nextText: 'Next',
+    absolute: true,
+  };
+
   if (!currentWord.word) {
     // Handle case when word is not found
-    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>;
+    return <div>{text('WORD_NOT_FOUND')}</div>;
   }
 
   return (
@@ -45,7 +43,7 @@ export default function Examples() {
         <h2 className="text-2xl italic text-gray-e4">{currentWord.translation}</h2>
         <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
         <div className="flex flex-col items-center justify-between gap-5">
-          <span className="tracking-widest">{CONSTANTS.EXAMPLES.toUpperCase()}</span>
+          <span className="tracking-widest">{text('EXAMPLES').toUpperCase()}</span>
           <div className="flex flex-col items-left text-left justify-evenly p-8 gap-5">
             {
               currentWord.sentences?.map((sentence, index) => {
@@ -67,7 +65,7 @@ export default function Examples() {
         </div>
         <img className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
       </div>
-      <LevelsFooter nextUrl={`/word/semantics?id=${wordId}`} nextText='Next' absolute={true}/>
+      <LevelsFooter {...LevelsFooterProps} />
     </div>
   );
 }
