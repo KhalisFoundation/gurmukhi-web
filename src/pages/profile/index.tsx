@@ -1,5 +1,4 @@
 import React from 'react';
-import CONSTANTS from 'constants';
 import { useTranslation } from 'react-i18next';
 
 export default function Profile() {

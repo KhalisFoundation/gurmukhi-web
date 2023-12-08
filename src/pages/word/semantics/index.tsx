@@ -1,7 +1,4 @@
-'use client';
-
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import CONSTANTS from 'constants';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import BackBtn from 'components/buttons/BackBtn';
 import { WordData, wordData } from 'constants/wordsData';
