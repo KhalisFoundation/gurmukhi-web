@@ -1,10 +1,10 @@
 import React, { FormEvent, useState } from 'react';
-import InputWithIcon from '../input/InputWithIcon';
-import SignUp from './SignUp';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
+import SignUp from './SignUp';
 import { useUserAuth } from 'auth';
+import InputWithIcon from '../input/InputWithIcon';
 
 export default function SignIn() {
   const { t: text } = useTranslation();

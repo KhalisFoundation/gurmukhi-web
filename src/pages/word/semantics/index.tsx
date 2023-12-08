@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import BackBtn from 'components/buttons/BackBtn';
 import { WordData, wordData } from 'constants/wordsData';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { ROUTES } from 'constants/routes';
 import { convertToTitleCase, createSemanticDraggables, getDraggedItemBackgroundColor } from 'utils/words';
 
@@ -16,6 +16,8 @@ export default function Semantics() {
   // Extract the "id" parameter from the search string in the URL
   const searchParams = new URLSearchParams(location.search);
   const wordId = searchParams.get('id');
+  const synonymsText = text('SYNONYMS');
+  const antonymsText = text('ANTONYMS');
 
   // Create a ref to store the reference to the HTML element
   const jumpBoxRef = useRef<any>(null);
@@ -23,8 +25,6 @@ export default function Semantics() {
   // fetch word from state using wordId
   const currentWord = useMemo(() => wordData.find((word) => word.id === Number(wordId)) ?? {}, [wordId]);
   const [words, setWords] = useState<WordData[]>([]);
-  const synonymsText = text('SYNONYMS');
-  const antonymsText = text('ANTONYMS');
   const [synonyms, setSynonyms] = useState<WordData[]>([]);
   const [antonyms, setAntonyms] = useState<WordData[]>([]);
 
@@ -51,7 +51,7 @@ export default function Semantics() {
     if (source.droppableId !== destination.droppableId) {
       const sourceId = source.droppableId;
       const destinationId = destination.droppableId;
-      if (sourceId === text('allWords')) {
+      if (sourceId === text('ALL_WORDS')) {
         const newWordLists = newWords.filter((word) => word.id !== foundItem.id);
         switch (destinationId) {
           case synonymsText.toLowerCase():
@@ -75,7 +75,7 @@ export default function Semantics() {
         }
       } else {
         switch (destinationId) {
-          case text('allWords'):
+          case text('ALL_WORDS'):
             if (sourceId === synonymsText.toLowerCase()) {
               newSynonyms = synonyms.filter((synonym) => synonym.id !== foundItem.id);
               setSynonyms(newSynonyms);
@@ -178,14 +178,13 @@ export default function Semantics() {
           <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" />
           <div className="flex flex-col items-center justify-between w-full my-10 mx-5 gap-5">
             <Droppable 
-              droppableId={text('allWords')}
+              droppableId={text('ALL_WORDS')}
               type="COLUMN"
               direction="horizontal"
             >
               {(provided) => (
                 <div
                   className='flex flex-row justify-between items-center p-4 w-max'
-                  // style={{ backgroundColor: snapshot.isDraggingOver ? 'blue' : 'grey' }}
                   {...provided.droppableProps}
                   ref={provided.innerRef}>
                   {words.map((word, index) => {

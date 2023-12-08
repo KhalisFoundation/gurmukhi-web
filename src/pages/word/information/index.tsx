@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import BackBtn from 'components/buttons/BackBtn';
 import { WordData, wordData } from 'constants/wordsData';
@@ -90,7 +90,7 @@ export default function Information() {
             </div>
             <div className="flex items-center justify-around my-10 gap-5 w-full">
               <div
-                className='card-bg shadow-lg rounded-lg w-2/5 h-64 p-5'>
+                className={`card-bg shadow-lg rounded-lg w-2/5 h-64 p-5 ${(synonyms.length == 0) ? 'hidden' : ''}`}>
                 <h2 className='text-black tracking-widest ms-2'>{text('SYNONYMS').toUpperCase()}</h2>
                 <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
                   {
@@ -107,7 +107,7 @@ export default function Information() {
                 </div>
               </div>
               <div
-                className='card-bg shadow-lg rounded-lg w-2/5 h-64 p-5'>
+                className={`card-bg shadow-lg rounded-lg w-2/5 h-64 p-5 ${(antonyms.length == 0) ? 'hidden' : ''}`}>
                 <h2 className='text-black tracking-widest ms-2'>{text('ANTONYMS').toUpperCase()}</h2>
                 <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
                   {

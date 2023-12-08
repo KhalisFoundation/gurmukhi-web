@@ -1,5 +1,5 @@
 const CONSTANTS = {
-  allWords: 'allWords',
+  ALL_WORDS: 'allWords',
   ANTONYM: 'antonym',
   ANTONYMS: 'Antonyms',
   APP_TITLE: 'Shabadavali.',

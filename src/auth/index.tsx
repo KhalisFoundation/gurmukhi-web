@@ -20,8 +20,8 @@ import { useTranslation } from 'react-i18next';
 const userAuthContext = createContext<any>(null);
 
 export const UserAuthContextProvider = ({ children }: { children:ReactElement }) => {
-  const { t: text } = useTranslation();
   const [user, setUser] = useState({});
+  const { t: text } = useTranslation();
 
   const logIn = (
     email: string,

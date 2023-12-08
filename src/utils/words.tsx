@@ -1,9 +1,7 @@
-import React from 'react';
-
-import { WordData } from 'constants/wordsData';
-import { MutableRefObject } from 'react';
+import React, { MutableRefObject } from 'react';
 import { Draggable, DraggableStateSnapshot, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd';
 import { TFunction } from 'i18next';
+import { WordData } from 'constants/wordsData';
 
 const convertToTitleCase = (word: string) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
@@ -36,11 +34,11 @@ const createSemanticDraggables = (provided: DroppableProvided, wordList: WordDat
   const heading = type === synonymsText.toLowerCase() ? synonymsText : antonymsText;
   return (
     <div
-      className='card-bg shadow-lg rounded-lg w-1/3 h-80 p-4'
+      className='card-bg shadow-lg rounded-lg h-72 w-80 p-4'
       ref={provided.innerRef}
       {...provided.droppableProps}>
       <h2 className='text-center text-black tracking-widest'>{heading.toUpperCase()}</h2>
-      <div className='grid grid-cols-2 gap-4 h-full w-full'>
+      <div className='grid grid-cols-2 gap-4 h-60 w-72'>
         {wordList?.map((word, index) => {
           return (
             <Draggable 

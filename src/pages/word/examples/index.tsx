@@ -19,6 +19,17 @@ export default function Examples() {
   // fetch word from state using wordId
   const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
 
+  const hasNoSynonymsOrAntonyms = !currentWord.synonyms?.length && !currentWord.antonyms?.length;
+  const nextUrl = ROUTES.WORD + (hasNoSynonymsOrAntonyms
+    ? `${ROUTES.INFORMATION}?id=${wordId}`
+    : `${ROUTES.SEMANTICS}?id=${wordId}`);
+
+  const LevelsFooterProps = {
+    nextUrl,
+    nextText: 'Next',
+    absolute: true,
+  };
+
   if (!currentWord.word) {
     // Handle case when word is not found
     return <div>{text('WORD_NOT_FOUND')}</div>;
@@ -54,7 +65,7 @@ export default function Examples() {
         </div>
         <img className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
       </div>
-      <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.SEMANTICS}?id=${wordId}`} nextText='Next' absolute={true}/>
+      <LevelsFooter {...LevelsFooterProps} />
     </div>
   );
 }
