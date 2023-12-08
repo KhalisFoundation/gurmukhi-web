@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import TextToSpeechBtn from '@/components/buttons/TextToSpeechBtn';
-import CONSTANTS from '@/constants';
-import LevelsFooter from '@/components/levels-footer/LevelsFooter';
-import BackBtn from '@/components/buttons/BackBtn';
-import { WordData, wordData } from '@/constants/wordsData';
 import { useLocation } from 'react-router-dom';
-import { ROUTES } from '@/constants/routes';
-import { convertToTitleCase, highlightWord } from '@/utils/words';
+import { useTranslation } from 'react-i18next';
+import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
+import LevelsFooter from 'components/levels-footer/LevelsFooter';
+import BackBtn from 'components/buttons/BackBtn';
+import { WordData, wordData } from 'constants/wordsData';
+import { ROUTES } from 'constants/routes';
+import { convertToTitleCase, highlightWord } from 'utils/words';
 
 export default function Information() {
+  const { t: text } = useTranslation();
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -37,7 +38,7 @@ export default function Information() {
 
   if (!currentWord.word) {
     // Handle case when word is not found
-    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>;
+    return <div>{text('WORD_NOT_FOUND')}</div>;
   }
 
   return (
@@ -69,7 +70,7 @@ export default function Information() {
           </div>,
           <div className="flex flex-col items-left justify-evenly w-3/4">
             <div className="flex flex-col items-left text-left justify-between gap-6">
-              <span className="tracking-widest">{CONSTANTS.EXAMPLES.toUpperCase()}</span>
+              <span className="tracking-widest">{text('EXAMPLES').toUpperCase()}</span>
               {
                 currentWord.sentences?.map((sentence, index) => {
                   const highlightedSentence = highlightWord(sentence.sentence, 'gurmukhi', currentWord.word ?? '');
@@ -89,8 +90,8 @@ export default function Information() {
             </div>
             <div className="flex items-center justify-around my-10 gap-5 w-full">
               <div
-                className='card-bg shadow-lg rounded-lg w-2/5 h-64 p-5'>
-                <h2 className='text-black tracking-widest ms-2'>{CONSTANTS.SYNONYMS.toUpperCase()}</h2>
+                className={`card-bg shadow-lg rounded-lg w-2/5 h-64 p-5 ${(synonyms.length == 0) ? 'hidden' : ''}`}>
+                <h2 className='text-black tracking-widest ms-2'>{text('SYNONYMS').toUpperCase()}</h2>
                 <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
                   {
                     synonyms.map((word) => {
@@ -106,8 +107,8 @@ export default function Information() {
                 </div>
               </div>
               <div
-                className='card-bg shadow-lg rounded-lg w-2/5 h-64 p-5'>
-                <h2 className='text-black tracking-widest ms-2'>{CONSTANTS.ANTONYMS.toUpperCase()}</h2>
+                className={`card-bg shadow-lg rounded-lg w-2/5 h-64 p-5 ${(antonyms.length == 0) ? 'hidden' : ''}`}>
+                <h2 className='text-black tracking-widest ms-2'>{text('ANTONYMS').toUpperCase()}</h2>
                 <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
                   {
                     antonyms.map((word) => {

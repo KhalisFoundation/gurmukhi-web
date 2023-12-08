@@ -5,23 +5,41 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import Header from './components/header/Header';
-import Login from './pages/login';
-import { PAGES } from './constants/routes';
-import Dashboard from './pages/dashboard';
-import Profile from './pages/profile';
-import Settings from './pages/settings';
-import Defintion from './pages/word/definition';
-import Examples from './pages/word/examples';
-import CONSTANTS from './constants';
-import RootLayout from './pages/layout';
-import WordsPageLayout from './pages/word/layout';
-import NotFound from './pages/not-found';
-import Home from './pages/page';
-import Semantics from './pages/word/semantics';
-import Information from './pages/word/information';
+import i18n from 'i18next';
+import { initReactI18next, useTranslation } from 'react-i18next';
+import CONSTANTS from 'constants';
+import Header from 'components/header/Header';
+import Login from 'pages/login';
+import { PAGES } from 'constants/routes';
+import Dashboard from 'pages/dashboard';
+import Profile from 'pages/profile';
+import Settings from 'pages/settings';
+import Defintion from 'pages/word/definition';
+import Examples from 'pages/word/examples';
+import RootLayout from 'pages/layout';
+import WordsPageLayout from 'pages/word/layout';
+import NotFound from 'pages/not-found';
+import Home from 'pages/page';
+import Semantics from 'pages/word/semantics';
+import Information from 'pages/word/information';
+
+i18n.use(initReactI18next).init({
+  resources: {
+    en: {
+      translation: {
+        ...CONSTANTS,
+      },
+    },
+  },
+  lng: 'en',
+  fallbackLng: 'en',
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 function App() {
+  const { t: text } = useTranslation();
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path={PAGES.ROOT} element={<RootLayout />}>
@@ -41,7 +59,7 @@ function App() {
     ),
   );
   return (
-    <Suspense fallback={<div>{CONSTANTS.LOADING}</div>}>
+    <Suspense fallback={<div>{text('LOADING')}</div>}>
       <div className="App">
         <Header loggedIn={true} />
         <main className="flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer">

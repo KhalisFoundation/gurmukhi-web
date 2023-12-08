@@ -1,14 +1,15 @@
 import React from 'react';
-import CONSTANTS from '@/constants';
+import { useTranslation } from 'react-i18next';
 
 export default function Gurfateh() {
+  const { t: text } = useTranslation();
 
   return (
     <main className='relative flex '>
       <div className="bg-slate-100/75 shadow rounded-3xl flex-col text-left p-14 gap-4 overflow-hidden">
         <div className="flex-grow">
-          <h1 className="text-xl font-medium text-black text-left gurmukhi">{CONSTANTS.GURFATEH_PUNJABI}</h1>
-          <p className='whitespace-pre-line'>{CONSTANTS.LOGIN_INFO}</p>
+          <h1 className="text-xl font-medium text-black text-left gurmukhi">{text('GURFATEH_PUNJABI')}</h1>
+          <p className='whitespace-pre-line'>{text('LOGIN_INFO')}</p>
         </div>
       </div>
       <div className="absolute -left-10 -bottom-1">
