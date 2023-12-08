@@ -1,15 +1,16 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import CONSTANTS from '@/constants';
-import Header from '@/components/header/Header';
-import '@/styles/globals.scss';
+import { useTranslation } from 'react-i18next';
+import Header from 'components/header/Header';
+import 'styles/globals.scss';
 
 export default function RootLayout() {
+  const { t: text } = useTranslation();
   return (
     <html lang="en">
       <head>
-        <title>{CONSTANTS.TITLE}</title>
-        <meta name="description" content={CONSTANTS.DESCRIPTION} />
+        <title>{text('TITLE')}</title>
+        <meta name="description" content={text('DESCRIPTION')} />
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>

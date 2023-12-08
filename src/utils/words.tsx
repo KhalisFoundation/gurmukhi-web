@@ -1,8 +1,9 @@
 import React from 'react';
-import CONSTANTS from '@/constants';
-import { WordData } from '@/constants/wordsData';
+
+import { WordData } from 'constants/wordsData';
 import { MutableRefObject } from 'react';
 import { Draggable, DraggableStateSnapshot, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd';
+import { TFunction } from 'i18next';
 
 const convertToTitleCase = (word: string) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
@@ -28,9 +29,11 @@ const highlightWord = (sentence: string, lang: string, word: string) => {
   );
 };
 
-const createSemanticDraggables = (provided: DroppableProvided, wordList: WordData[], snapshot: DroppableStateSnapshot, type: string, boxRef?: MutableRefObject<any>) => {
+const createSemanticDraggables = (provided: DroppableProvided, wordList: WordData[], snapshot: DroppableStateSnapshot, type: string, text: TFunction<'translation', undefined>, boxRef?: MutableRefObject<any>) => {
   const droppableId = type;
-  const heading = type === CONSTANTS.SYNONYMS.toLowerCase() ? CONSTANTS.SYNONYMS : CONSTANTS.ANTONYMS;
+  const synonymsText = text('SYNONYMS');
+  const antonymsText = text('ANTONYMS');
+  const heading = type === synonymsText.toLowerCase() ? synonymsText : antonymsText;
   return (
     <div
       className='card-bg shadow-lg rounded-lg w-1/3 h-80 p-4'
@@ -51,10 +54,10 @@ const createSemanticDraggables = (provided: DroppableProvided, wordList: WordDat
                 let color = 'grey';
                 if (isDragging) {
                   bgColor = 'bg-[#1F4860]';
-                  if (draggingOver === CONSTANTS.SYNONYMS.toLowerCase()) {
+                  if (draggingOver === synonymsText.toLowerCase()) {
                     bgColor = 'bg-green-500';
                     color = 'green';
-                  } else if (draggingOver === CONSTANTS.ANTONYMS.toLowerCase()) {
+                  } else if (draggingOver === antonymsText.toLowerCase()) {
                     bgColor = 'bg-red-500';
                     color = 'red';
                   }
@@ -83,17 +86,19 @@ const createSemanticDraggables = (provided: DroppableProvided, wordList: WordDat
   );
 };
 
-const getDraggedItemBackgroundColor = (dragSnapshot: DraggableStateSnapshot, word: WordData) => {
+const getDraggedItemBackgroundColor = (dragSnapshot: DraggableStateSnapshot, word: WordData, text: TFunction<'translation', undefined>) => {
   const isDragging = dragSnapshot.isDragging ?? false;
   const draggingOver = dragSnapshot.draggingOver ?? '';
+  const synonymsText = text('SYNONYMS');
+  const antonymsText = text('ANTONYMS');
 
   if (isDragging) {
     switch (draggingOver) {
-      case CONSTANTS.SYNONYMS.toLowerCase():
+      case synonymsText.toLowerCase():
         if (word.type === 'synonym') return 'bg-green-500';
         if (word.type === 'antonym') return 'bg-red-500';
         break;
-      case CONSTANTS.ANTONYMS.toLowerCase():
+      case antonymsText.toLowerCase():
         if (word.type === 'antonym') return 'bg-green-500';
         if (word.type === 'synonym') return 'bg-red-500';
         break;

@@ -11,15 +11,16 @@ import {
 import {
   Timestamp, doc, setDoc, // query, where, documentId, getDocs,
 } from 'firebase/firestore';
-import { auth, firestore } from '@/firebase';
-import { checkUser, getUser } from '@/utils/users';
-import { firebaseErrorCodes as errors } from '@/constants/errors';
-import roles from '@/constants/roles';
-import CONSTANTS from '@/constants';
+import { auth, firestore } from 'firebase';
+import { checkUser, getUser } from 'utils/users';
+import { firebaseErrorCodes as errors } from 'constants/errors';
+import roles from 'constants/roles';
+import { useTranslation } from 'react-i18next';
 
 const userAuthContext = createContext<any>(null);
 
 export const UserAuthContextProvider = ({ children }: { children:ReactElement }) => {
+  const { t: text } = useTranslation();
   const [user, setUser] = useState({});
 
   const logIn = (
@@ -63,7 +64,7 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
   ) => {
     try {
       if (password !== confirmPassword) {
-        alert(CONSTANTS.PASSWORDS_DONT_MATCH);
+        alert(text('PASSWORDS_DONT_MATCH'));
         return false;
       }
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -81,7 +82,7 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
       setUser(userData);
 
       sendEmailVerification(auth.currentUser ?? userData).then(() => {
-        alert(CONSTANTS.EMAIL_VERIFICATION_SENT);
+        alert(text('EMAIL_VERIFICATION_SENT'));
       });
       return true;
     } catch (error: any) {

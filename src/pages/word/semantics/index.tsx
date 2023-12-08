@@ -1,16 +1,15 @@
-'use client';
-
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import CONSTANTS from '@/constants';
-import LevelsFooter from '@/components/levels-footer/LevelsFooter';
-import BackBtn from '@/components/buttons/BackBtn';
-import { WordData, wordData } from '@/constants/wordsData';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useLocation } from 'react-router-dom';
-import { ROUTES } from '@/constants/routes';
-import { convertToTitleCase, createSemanticDraggables, getDraggedItemBackgroundColor } from '@/utils/words';
+import { useTranslation } from 'react-i18next';
+import LevelsFooter from 'components/levels-footer/LevelsFooter';
+import BackBtn from 'components/buttons/BackBtn';
+import { WordData, wordData } from 'constants/wordsData';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { ROUTES } from 'constants/routes';
+import { convertToTitleCase, createSemanticDraggables, getDraggedItemBackgroundColor } from 'utils/words';
 
 export default function Semantics() {
+  const { t: text } = useTranslation();
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -24,6 +23,8 @@ export default function Semantics() {
   // fetch word from state using wordId
   const currentWord = useMemo(() => wordData.find((word) => word.id === Number(wordId)) ?? {}, [wordId]);
   const [words, setWords] = useState<WordData[]>([]);
+  const synonymsText = text('SYNONYMS');
+  const antonymsText = text('ANTONYMS');
   const [synonyms, setSynonyms] = useState<WordData[]>([]);
   const [antonyms, setAntonyms] = useState<WordData[]>([]);
 
@@ -35,10 +36,10 @@ export default function Semantics() {
 
     let newData = Array.from(words);
     switch (source.droppableId) {
-      case CONSTANTS.SYNONYMS.toLowerCase():
+      case synonymsText.toLowerCase():
         newData = newSynonyms;
         break;
-      case CONSTANTS.ANTONYMS.toLowerCase():
+      case antonymsText.toLowerCase():
         newData = newAntonyms;
         break;
       default:
@@ -50,14 +51,14 @@ export default function Semantics() {
     if (source.droppableId !== destination.droppableId) {
       const sourceId = source.droppableId;
       const destinationId = destination.droppableId;
-      if (sourceId === CONSTANTS.allWords) {
+      if (sourceId === text('allWords')) {
         const newWordLists = newWords.filter((word) => word.id !== foundItem.id);
         switch (destinationId) {
-          case CONSTANTS.SYNONYMS.toLowerCase():
+          case synonymsText.toLowerCase():
             setSynonyms([...synonyms, foundItem]);
             setWords(newWordLists);
             break;
-          case CONSTANTS.ANTONYMS.toLowerCase():
+          case antonymsText.toLowerCase():
             setAntonyms([...antonyms, foundItem]);
             setWords(newWordLists);
             // check if word is already in antonyms for current word
@@ -74,26 +75,26 @@ export default function Semantics() {
         }
       } else {
         switch (destinationId) {
-          case CONSTANTS.allWords:
-            if (sourceId === CONSTANTS.SYNONYMS.toLowerCase()) {
+          case text('allWords'):
+            if (sourceId === synonymsText.toLowerCase()) {
               newSynonyms = synonyms.filter((synonym) => synonym.id !== foundItem.id);
               setSynonyms(newSynonyms);
               setWords([...newWords, foundItem]);
-            } else if (sourceId === CONSTANTS.ANTONYMS.toLowerCase()) {
+            } else if (sourceId === antonymsText.toLowerCase()) {
               newAntonyms = antonyms.filter((antonym) => antonym.id !== foundItem.id);
               setAntonyms(newAntonyms);
               setWords([...newWords, foundItem]);
             }
             break;
-          case CONSTANTS.SYNONYMS.toLowerCase():
-            if (sourceId === CONSTANTS.ANTONYMS.toLowerCase()) {
+          case synonymsText.toLowerCase():
+            if (sourceId === antonymsText.toLowerCase()) {
               newAntonyms = antonyms.filter((antonym) => antonym.id !== foundItem.id);
               setAntonyms(newAntonyms);
               setSynonyms([...newSynonyms, foundItem]);
             }
             break;
-          case CONSTANTS.ANTONYMS.toLowerCase():
-            if (sourceId === CONSTANTS.SYNONYMS.toLowerCase()) {
+          case antonymsText.toLowerCase():
+            if (sourceId === synonymsText.toLowerCase()) {
               newSynonyms = synonyms.filter((synonym) => synonym.id !== foundItem.id);
               setSynonyms(newSynonyms);
               setAntonyms([...newAntonyms, foundItem]);
@@ -105,8 +106,8 @@ export default function Semantics() {
       }
     } else {
       newData.splice(destination.index, 0, foundItem);
-      if (source.droppableId === CONSTANTS.SYNONYMS.toLowerCase()) setSynonyms(newData);
-      else if (source.droppableId === CONSTANTS.ANTONYMS.toLowerCase()) setAntonyms(newData);
+      if (source.droppableId === synonymsText.toLowerCase()) setSynonyms(newData);
+      else if (source.droppableId === antonymsText.toLowerCase()) setAntonyms(newData);
       else setWords(newData);
     }
   };
@@ -164,7 +165,7 @@ export default function Semantics() {
 
   if (!currentWord.word) {
     // Handle case when word is not found
-    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>;
+    return <div>{text('WORD_NOT_FOUND')}</div>;
   }
   return (
     <div className="flex flex-col static h-screen items-center justify-between">
@@ -177,7 +178,7 @@ export default function Semantics() {
           <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" />
           <div className="flex flex-col items-center justify-between w-full my-10 mx-5 gap-5">
             <Droppable 
-              droppableId={CONSTANTS.allWords}
+              droppableId={text('allWords')}
               type="COLUMN"
               direction="horizontal"
             >
@@ -191,7 +192,7 @@ export default function Semantics() {
                     return (
                       <Draggable key={word.id} draggableId={(word.id ?? '').toString()} index={index}>
                         {(dragProvided, dragSnapshot) => {
-                          const bgColor = getDraggedItemBackgroundColor(dragSnapshot, word);
+                          const bgColor = getDraggedItemBackgroundColor(dragSnapshot, word, text);
                           return (
                             <div
                               draggable
@@ -214,17 +215,17 @@ export default function Semantics() {
 
             <div className="flex items-center justify-around my-10 mx-5 gap-5 w-full">
               <Droppable
-                droppableId={CONSTANTS.SYNONYMS.toLowerCase()}
+                droppableId={synonymsText.toLowerCase()}
                 type="COLUMN">
                 {(provided, snapshot) => (
-                  createSemanticDraggables(provided, synonyms, snapshot, CONSTANTS.SYNONYMS.toLowerCase(), jumpBoxRef)
+                  createSemanticDraggables(provided, synonyms, snapshot, synonymsText.toLowerCase(), text, jumpBoxRef)
                 )}
               </Droppable>
               <Droppable
-                droppableId={CONSTANTS.ANTONYMS.toLowerCase()}
+                droppableId={antonymsText.toLowerCase()}
                 type="COLUMN">
                 {(provided, snapshot) => (
-                  createSemanticDraggables(provided, antonyms, snapshot, CONSTANTS.ANTONYMS.toLowerCase(), jumpBoxRef)
+                  createSemanticDraggables(provided, antonyms, snapshot, antonymsText.toLowerCase(), text, jumpBoxRef)
                 )}
               </Droppable>
             </div>

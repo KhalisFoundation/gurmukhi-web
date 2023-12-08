@@ -2,7 +2,7 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { SignOutUser, userStateListener } from '@/firebase';
+import { SignOutUser, userStateListener } from 'firebase';
 
 interface Props {
   children?: ReactNode

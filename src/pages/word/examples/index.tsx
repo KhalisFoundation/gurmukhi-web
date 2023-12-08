@@ -1,13 +1,14 @@
 import React from 'react';
-import CONSTANTS from '@/constants';
-import LevelsFooter from '@/components/levels-footer/LevelsFooter';
-import BackBtn from '@/components/buttons/BackBtn';
-import { wordData } from '@/constants/wordsData';
 import { useLocation } from 'react-router-dom';
-import { ROUTES } from '@/constants/routes';
-import { highlightWord } from '@/utils/words';
+import { useTranslation } from 'react-i18next';
+import LevelsFooter from 'components/levels-footer/LevelsFooter';
+import BackBtn from 'components/buttons/BackBtn';
+import { wordData } from 'constants/wordsData';
+import { ROUTES } from 'constants/routes';
+import { highlightWord } from 'utils/words';
 
 export default function Examples() {
+  const { t: text } = useTranslation();
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -20,7 +21,7 @@ export default function Examples() {
 
   if (!currentWord.word) {
     // Handle case when word is not found
-    return <div>{CONSTANTS.WORD_NOT_FOUND}</div>;
+    return <div>{text('WORD_NOT_FOUND')}</div>;
   }
 
   return (
@@ -31,7 +32,7 @@ export default function Examples() {
         <h2 className="text-2xl italic text-gray-e4">{currentWord.translation}</h2>
         <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
         <div className="flex flex-col items-center justify-between gap-5">
-          <span className="tracking-widest">{CONSTANTS.EXAMPLES.toUpperCase()}</span>
+          <span className="tracking-widest">{text('EXAMPLES').toUpperCase()}</span>
           <div className="flex flex-col items-left text-left justify-evenly p-8 gap-5">
             {
               currentWord.sentences?.map((sentence, index) => {

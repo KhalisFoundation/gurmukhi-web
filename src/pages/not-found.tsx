@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from '@/components/header/Header';
+import Header from 'components/header/Header';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '@/constants/routes';
+import { ROUTES } from 'constants/routes';
 
 export default function NotFound() {
   const navigate = useNavigate();
