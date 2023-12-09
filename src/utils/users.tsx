@@ -1,8 +1,8 @@
 import {
   DocumentReference, collection, doc, documentId, getDoc, getDocs, query, setDoc, where,
 } from 'firebase/firestore';
-import { firestore as db } from 'firebase';
 import { UserProfile } from 'firebase/auth';
+import { firestore as db } from '../firebase';
 
 export const usersCollection = collection(db, 'users');
 

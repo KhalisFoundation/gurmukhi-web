@@ -14,6 +14,7 @@ const CONSTANTS = {
   NUM_COINS: 13,
   ENTER_DETAILS: 'Please enter your details',
   LOADING: 'Loading...',
+  LOGGING_OUT: 'Logging out...',
   OR: 'or',
   PASSWORDS_DONT_MATCH: 'Passwords do not match!',
   PROFILE: 'Profile',

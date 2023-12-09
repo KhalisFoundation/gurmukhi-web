@@ -6,21 +6,18 @@ import { useTranslation } from 'react-i18next';
 import Shabadavali from 'assets/icons/Shabadavali';
 import { PAGES, ROUTES } from 'constants/routes';
 import { AuthContext } from 'auth/context';
-import { useUserAuth } from 'auth';
 
 export default function Header() {
   const { t: text } = useTranslation();
   const { currentUser } = useContext(AuthContext);
-  const { logOut } = useUserAuth();
   const navigate = useNavigate();
   let loggedIn = !!currentUser;
 
   // Check if currentUser exists on initial render
   useEffect(() => {
+    // await till currentUser is set
+    if (currentUser === undefined) return;
     loggedIn = !!currentUser;
-    if (!loggedIn) {
-      navigate(ROUTES.LOGIN);
-    }
   }, [currentUser]);
 
   return (
@@ -70,8 +67,7 @@ export default function Header() {
                   <li><a href={ROUTES.SETTINGS} className='block px-3 py-2 hover:bg-gray-200'>{text('SETTINGS')}</a></li>
                   <li><button onClick={
                     () => {
-                      logOut();
-                      navigate(ROUTES.LOGIN);
+                      navigate(ROUTES.LOG_OUT);
                     }
                   } className='block px-3 py-2 hover:bg-gray-200'>{text('SIGN_OUT')}</button></li>
                 </ul>

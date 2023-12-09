@@ -1,10 +1,9 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import Header from 'components/header/Header';
 import 'styles/globals.scss';
 
-export default function RootLayout() {
+export default function RootLayout({ children }: { children: ReactElement }) {
   const { t: text } = useTranslation();
   return (
     <html lang="en">
@@ -16,7 +15,7 @@ export default function RootLayout() {
       <body>
         <main className="flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer">
           <Header />
-          <Outlet />
+          {children}
         </main>
       </body>
     </html>

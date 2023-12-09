@@ -1,6 +1,7 @@
 export const PAGES = {
   ROOT: '/',
   LOGIN: 'login',
+  LOG_OUT: 'logout',
   SIGN_OUT: 'signout',
   DASHBOARD: 'dashboard',
   PROFILE: 'profile',

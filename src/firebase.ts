@@ -28,7 +28,7 @@ export const userStateListener = (
   callback:NextOrObserver<User>,
 ) => onAuthStateChanged(auth, callback);
 
-export const SignOutUser = async () => signOut(auth);
+export const logOut = async () => signOut(auth);
 
 export const passwordReset = async (email: string) => sendPasswordResetEmail(auth, email);
 

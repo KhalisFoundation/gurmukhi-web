@@ -29,10 +29,10 @@
   },
   "scripts": {
     "lint": "eslint src/**/*.ts{,x} --max-warnings 0",
-    "start": "yarn build:css && craco start",
-    "build": "yarn build:css && craco build",
-    "test": "CI=true craco test --env=jsdom",
-    "eject": "craco eject",
+    "start": "yarn build:css && react-scripts start",
+    "build": "yarn build:css && react-scripts build",
+    "test": "CI=true react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
     "build:css": "postcss src/styles/*.scss -o src/styles/style.css"
   },
   "eslintConfig": {

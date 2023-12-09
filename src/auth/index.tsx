@@ -7,17 +7,18 @@ import {
   sendEmailVerification,
   signInWithPopup,
   GoogleAuthProvider,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import {
   Timestamp, doc, setDoc, // query, where, documentId, getDocs,
 } from 'firebase/firestore';
-import { auth, firestore } from 'firebase';
+import { useTranslation } from 'react-i18next';
+import { auth, firestore } from '../firebase';
 import { checkUser, getUser } from 'utils/users';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
-import { useTranslation } from 'react-i18next';
 
-const userAuthContext = createContext<any>(null);
+const UserAuthContext = createContext<any>(null);
 
 export const UserAuthContextProvider = ({ children }: { children:ReactElement }) => {
   const [user, setUser] = useState({});
@@ -95,6 +96,8 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
 
   const logOut = () => signOut(auth);
 
+  const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentuser: any) => {
       if (currentuser !== null) {
@@ -121,13 +124,15 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
   }, []);
 
   return (
-    <userAuthContext.Provider value={{
-      user, logIn, signUp, logOut, signInWithGoogle,
+    <UserAuthContext.Provider value={{
+      user, logIn, signUp, logOut, signInWithGoogle, resetPassword,
     }}
     >
       {children}
-    </userAuthContext.Provider>
+    </UserAuthContext.Provider>
   );
 };
 
-export const useUserAuth = () => useContext(userAuthContext);
+export const useUserAuth = () => {
+  return useContext(UserAuthContext);
+};
