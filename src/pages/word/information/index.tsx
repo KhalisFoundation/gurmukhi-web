@@ -130,7 +130,7 @@ export default function Information() {
       </div>
       { Number(wordId) >= wordData.length - 1 ?
         <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' absolute={true}/>
-        : <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.DEFINITION}?id=${(Number(wordId) ?? 0) + 1}`} nextText='Next'/>
+        : <LevelsFooter nextUrl={`${ROUTES.QUESTION}?id=${(Number(wordId) ?? 0)}&qid=0`} nextText='Next'/>
       }
     </div>
   );

@@ -43,7 +43,7 @@ export default function Defintion() {
                 <h1 className={'text-5xl gurmukhi text-black'}>{currentWord.word}</h1>
                 <h2 className="text-2xl brandon-grotesque italic text-gray-4e4">{currentWord.translation}</h2>
               </div>
-              <TextToSpeechBtn />
+              <TextToSpeechBtn backgroundColor='white' />
             </div>
             <div className="flex flex-col text-lg">
               <span className={'text-black-111'}>{currentWord.meaningEnglish}</span>

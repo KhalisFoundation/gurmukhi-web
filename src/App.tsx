@@ -22,6 +22,8 @@ import NotFound from 'pages/not-found';
 import Home from 'pages/page';
 import Semantics from 'pages/word/semantics';
 import Information from 'pages/word/information';
+import QuestionsPageLayout from 'pages/questions/layout';
+import MultipleChoiceQuestionPage from 'pages/questions/multiple-choice';
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -53,6 +55,9 @@ function App() {
           <Route path={PAGES.EXAMPLES} element={<Examples />} />
           <Route path={PAGES.SEMANTICS} element={<Semantics />} />
           <Route path={PAGES.INFORMATION} element={<Information />} />
+        </Route>
+        <Route path={PAGES.QUESTION} element={<QuestionsPageLayout/>}>
+          <Route path={''} element={<MultipleChoiceQuestionPage />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Route>,
