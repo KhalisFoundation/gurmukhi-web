@@ -24,7 +24,6 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_DEV }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
-          target: default
 
   staging:
     runs-on: ubuntu-latest
@@ -35,10 +34,9 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_DEV }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_STAGING }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
-          target: default
 
   prod:
     runs-on: ubuntu-latest
@@ -49,7 +47,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_DEV }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_5F8F5 }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
-          target: default
