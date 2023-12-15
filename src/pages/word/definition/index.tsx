@@ -25,7 +25,7 @@ export default function Defintion() {
   }
 
   return (
-    <div className="flex flex-col static h-screen items-center justify-around gap-5">
+    <div className="flex flex-col h-screen items-center gap-5">
       <BackBtn />
       <div className='flex flex-col h-3/4 justify-center items-center gap-5'>
         <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
@@ -43,7 +43,7 @@ export default function Defintion() {
                 <h1 className={'text-5xl gurmukhi text-black'}>{currentWord.word}</h1>
                 <h2 className="text-2xl brandon-grotesque italic text-gray-4e4">{currentWord.translation}</h2>
               </div>
-              <TextToSpeechBtn backgroundColor='white' />
+              <TextToSpeechBtn backgroundColor='bg-white-150' />
             </div>
             <div className="flex flex-col text-lg">
               <span className={'text-black-111'}>{currentWord.meaningEnglish}</span>

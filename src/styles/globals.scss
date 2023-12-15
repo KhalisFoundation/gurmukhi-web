@@ -38,8 +38,11 @@ body {
     left: 0;
     background-image: url('../../public/images/background.png');
     opacity: 0.3;
-    z-index: -1;
     mix-blend-mode: multiply;
+  }
+  
+  .cardImage{
+    background-image: url('../../public/images/card.png');
   }
 
   .gurmukhi {

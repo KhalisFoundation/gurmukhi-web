@@ -7,11 +7,11 @@ interface Props {
 }
 
 export default function LevelHexagon({ ...props }: Props) {
-  const dimensions = 'w-16 h-16';
+  const dimensions = 'w-12 h-12';
   switch (props.type) {
     case 'completed':
       return (
-        <div className="flex justify-center items-center drop-shadow-[0_4px_15px_#fbbc054d] level-completed">
+        <div className="flex justify-center items-center drop-shadow-[0_4px_15px_#fbbc054d] level-completed hover:relative hover:bottom-2">
           <img src={'/icons/doneLevel.svg'} alt="level" className={dimensions} />
           <div className="absolute flex justify-center items-center">
             <p className="text-zinc-950/40 text-xl">{Anvaad.unicode(props.number.toString())}</p>
@@ -20,7 +20,7 @@ export default function LevelHexagon({ ...props }: Props) {
       );
     case 'current':
       return (
-        <div className="flex justify-center items-center drop-shadow-[0_4px_15px_#0567fb80] level-current">
+        <div className="flex relative bottom-2 hover:bottom-0 justify-center items-center drop-shadow-[0_4px_15px_#0567fb80] level-current">
           <img src={'/icons/currentLevel.svg'} alt="level" className={dimensions} />
           <div className="absolute flex justify-center items-center">
             <p className="text-white text-xl">{props.number}</p>

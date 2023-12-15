@@ -6,7 +6,7 @@ export default function QuestionsPageLayout() {
   // check if children contains 
   return (
     <div className="flex flex-col items-center justify-between gap-5 p-12 pb-0">
-      <div className="flex flex-col static h-screen items-center justify-around gap-5">
+      <div className="flex flex-col h-max relative items-center justify-around gap-5">
         <BackBtn />
         <Outlet />
       </div>

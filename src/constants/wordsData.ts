@@ -78,6 +78,27 @@ export const wordData: WordData[] = [
         answer: 0,
         word_id: '1',
       },
+      {
+        question: 'ਲੋਕੀ ____ ਕਰ ਰਹੇ ਹਨ।',
+        translation: 'people are doing ____',
+        type: 'image',
+        answer: 3,
+        options: [
+          {
+            word: 'ਤੋੜਨਾ।',
+          },
+          {
+            word: 'ਅਰਾਮ',
+          },
+          {
+            word: 'ਅਪਮਾਨ',
+          },
+          {
+            word: 'ਉਸਾਰੀ',
+          },
+        ],
+        word_id: '1',
+      },
     ],
     synonyms: [
       6,

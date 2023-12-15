@@ -168,8 +168,8 @@ export default function Semantics() {
     return <div>{text('WORD_NOT_FOUND')}</div>;
   }
   return (
-    <div className="flex flex-col static h-screen items-center justify-between">
-      <BackBtn />
+    <div className="flex flex-col h-screen items-center justify-between">
+      <BackBtn navlink={-1} />
       <DragDropContext
         onDragEnd={onDragEnd}>
         <div className='flex flex-col h-full justify-center items-center gap-5 pb-12'>

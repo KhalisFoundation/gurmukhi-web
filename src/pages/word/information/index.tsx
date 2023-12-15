@@ -20,6 +20,21 @@ export default function Information() {
   // fetch word from state using wordId
   const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
 
+  const renderFooter = (word_id: number) => {
+    if (word_id <= wordData.length - 1) {
+      if (currentWord.questions && currentWord.questions.length > 0) {
+        return <LevelsFooter nextUrl={`${ROUTES.QUESTION}?id=${word_id}&qid=0`} nextText='Next'/>;
+      } else {
+        if (word_id == wordData.length - 1) {
+          return <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' absolute={true}/>;
+        }
+        return <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.DEFINITION}?id=${word_id + 1}`} nextText='Next'/>;
+      }
+    } else {
+      return <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' absolute={true}/>;
+    }
+  };
+
   const [synonyms, setSynonyms] = useState<WordData[]>([]);
   const [antonyms, setAntonyms] = useState<WordData[]>([]);
   
@@ -42,8 +57,8 @@ export default function Information() {
   }
 
   return (
-    <div className="flex flex-col static h-screen items-center justify-around gap-5">
-      <BackBtn />
+    <div className="flex flex-col items-center gap-5">
+      <BackBtn navlink={-1}/>
       <div className='flex flex-col h-3/4 justify-center items-center gap-5'>
         <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
         <div className="flex flex-row items-center justify-between gap-5">
@@ -73,7 +88,7 @@ export default function Information() {
               <span className="tracking-widest">{text('EXAMPLES').toUpperCase()}</span>
               {
                 currentWord.sentences?.map((sentence, index) => {
-                  const highlightedSentence = highlightWord(sentence.sentence, 'gurmukhi', currentWord.word ?? '');
+                  const highlightedSentence = highlightWord(sentence.sentence, currentWord.word ?? '', 'gurmukhi');
                   return (
                     <div key={index} className="flex flex-col text-xl">
                       <span className="text-black-111">
@@ -90,7 +105,7 @@ export default function Information() {
             </div>
             <div className="flex items-center justify-around my-10 gap-5 w-full">
               <div
-                className={`card-bg shadow-lg rounded-lg w-2/5 h-64 p-5 ${(synonyms.length == 0) ? 'hidden' : ''}`}>
+                className={`w-2/5 h-64 p-5 cardImage bg-cover bg-sky-100 bg-blend-soft-light border-2 border-sky-200 shadow-lg rounded-lg ${(synonyms.length == 0) ? 'hidden' : ''}`}>
                 <h2 className='text-black tracking-widest ms-2'>{text('SYNONYMS').toUpperCase()}</h2>
                 <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
                   {
@@ -107,7 +122,7 @@ export default function Information() {
                 </div>
               </div>
               <div
-                className={`card-bg shadow-lg rounded-lg w-2/5 h-64 p-5 ${(antonyms.length == 0) ? 'hidden' : ''}`}>
+                className={`w-2/5 h-64 p-5 cardImage bg-cover bg-sky-100 bg-blend-soft-light border-2 border-sky-200 shadow-lg rounded-lg ${(antonyms.length == 0) ? 'hidden' : ''}`}>
                 <h2 className='text-black tracking-widest ms-2'>{text('ANTONYMS').toUpperCase()}</h2>
                 <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
                   {
@@ -128,10 +143,7 @@ export default function Information() {
         </div>
         <img className="w-3/5 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
       </div>
-      { Number(wordId) >= wordData.length - 1 ?
-        <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' absolute={true}/>
-        : <LevelsFooter nextUrl={`${ROUTES.QUESTION}?id=${(Number(wordId) ?? 0)}&qid=0`} nextText='Next'/>
-      }
+      {renderFooter(Number(wordId))}
     </div>
   );
 }

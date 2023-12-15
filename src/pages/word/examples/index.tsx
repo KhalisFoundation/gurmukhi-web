@@ -36,8 +36,8 @@ export default function Examples() {
   }
 
   return (
-    <div className="flex flex-col static h-screen items-center justify-between">
-      <BackBtn />
+    <div className="flex flex-col h-screen items-center gap-5">
+      <BackBtn navlink={-1} />
       <div className='flex flex-col h-full justify-center items-center gap-5 pb-12 brandon-grotesque'>
         <h1 className="text-4xl gurmukhi text-black">{currentWord.word}</h1>
         <h2 className="text-2xl italic text-gray-e4">{currentWord.translation}</h2>
@@ -47,9 +47,9 @@ export default function Examples() {
           <div className="flex flex-col items-left text-left justify-evenly p-8 gap-5">
             {
               currentWord.sentences?.map((sentence, index) => {
-                const highlightedSentence = highlightWord(sentence.sentence, 'gurmukhi', currentWord.word ?? '');
+                const highlightedSentence = highlightWord(sentence.sentence, currentWord.word ?? '', 'gurmukhi');
                 return (
-                  <div key={index} className="flex flex-col text-xl">
+                  <div key={index} className="flex flex-col text-xl gap-1">
                     <span className="text-black-111">
                       {highlightedSentence}
                     </span>

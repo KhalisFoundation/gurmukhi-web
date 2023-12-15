@@ -8,7 +8,6 @@ import {
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 import CONSTANTS from 'constants';
-import Header from 'components/header/Header';
 import Login from 'pages/login';
 import { PAGES } from 'constants/routes';
 import Dashboard from 'pages/dashboard';
@@ -23,7 +22,7 @@ import Home from 'pages/page';
 import Semantics from 'pages/word/semantics';
 import Information from 'pages/word/information';
 import QuestionsPageLayout from 'pages/questions/layout';
-import MultipleChoiceQuestionPage from 'pages/questions/multiple-choice';
+import Question from 'pages/questions';
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -57,7 +56,7 @@ function App() {
           <Route path={PAGES.INFORMATION} element={<Information />} />
         </Route>
         <Route path={PAGES.QUESTION} element={<QuestionsPageLayout/>}>
-          <Route path={''} element={<MultipleChoiceQuestionPage />} />
+          <Route path={''} element={<Question />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Route>,
@@ -66,7 +65,6 @@ function App() {
   return (
     <Suspense fallback={<div>{text('LOADING')}</div>}>
       <div className="App">
-        <Header loggedIn={true} />
         <main className="flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer">
           <RouterProvider router={router}></RouterProvider>
         </main>

@@ -14,7 +14,7 @@ export default function Header({ ...props }: PropTypes) {
   const loggedIn = props.loggedIn ?? false;
 
   return (
-    <header className="flex bg-gradient-to-r absolute inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10">
+    <header className="flex bg-gradient-to-r sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10">
       <a href={PAGES.ROOT}>
         <main className="flex items-center justify-between">
           <Shabadavali />

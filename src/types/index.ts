@@ -5,7 +5,7 @@ export interface Option {
   value?: string;
   option?: string;
   translation?: string;
-  word?: string;
+  word: string;
 }
 
 export interface QuestionData {
@@ -24,8 +24,10 @@ export interface NewQuestionType {
   question: string,
   translation: string,
   type: string,
-  options: string[],
+  options: MiniWord[],
   answer: number,
+  word: string
+  image?: string,
   word_id?: string
 }
 

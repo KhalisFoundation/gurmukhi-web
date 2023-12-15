@@ -14,9 +14,11 @@ export default function RootLayout() {
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <main className="flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer">
-          <Header loggedIn={true}/>
-          <Outlet />
+        <main className="flex flex-col background-layer">
+          <div className="flex flex-col h-screen justify-start overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg z-[1]">
+            <Header loggedIn={true}/>
+            <Outlet />
+          </div>
         </main>
       </body>
     </html>
