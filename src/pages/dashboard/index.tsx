@@ -1,14 +1,14 @@
 import React from 'react';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import { ROUTES } from 'constants/routes';
-import Ssa from "components/ssa";
-import WordsSnippetBox from "./components/wordsSnippetBox";
-import WordBox from "./components/wordBox";
-import CoinBox from "./components/coinbox";
+import Ssa from 'components/ssa';
+import WordsSnippetBox from './components/wordsSnippetBox';
+import WordBox from './components/wordBox';
+import CoinBox from './components/coinbox';
 
 export default function Dashboard() {
   const commonStyle =
-    "w-3/12 h-100 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200";
+    'w-3/12 h-100 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   return (
     <div className="h-full">
       <div className="flex flex-col text-center recoleta justify-center gap-10 h-4/5">
