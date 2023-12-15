@@ -29,6 +29,9 @@ const CONSTANTS = {
   TOTAL_NUM_QUESTIONS: 13,
   WELCOME: 'Welcome',
   WORD_NOT_FOUND: 'Word not found',
+  GET_ONE_MORE: 'GET ONE MORE',
+  GREAT_JOB: 'Great Job! ਵਧਾਇਆਂ',
+  NANAK_COIN_DESC: 'You got your 14th Nanak coin!',
 };
 
 export default CONSTANTS;

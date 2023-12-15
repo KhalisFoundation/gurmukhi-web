@@ -7,15 +7,15 @@ import { useTranslation } from 'react-i18next';
 export default function RootLayout() {
   const { t: text } = useTranslation();
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
         <title>{text('TITLE')}</title>
-        <meta name="description" content={text('DESCRIPTION')} />
-        <link rel="icon" href="/favicon.ico" />
+        <meta name='description' content={text('DESCRIPTION')} />
+        <link rel='icon' href='/favicon.ico' />
       </head>
       <body>
-        <main className="flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer">
-          <Header loggedIn={true}/>
+        <main className='flex h-screen flex-col justify-center bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer'>
+          <Header loggedIn={true} />
           <Outlet />
         </main>
       </body>

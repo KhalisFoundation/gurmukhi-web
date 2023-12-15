@@ -22,6 +22,7 @@ import NotFound from 'pages/not-found';
 import Home from 'pages/page';
 import Semantics from 'pages/word/semantics';
 import Information from 'pages/word/information';
+import WinCoin from 'pages/wincoin';
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -48,7 +49,8 @@ function App() {
         <Route path={PAGES.LOGIN} element={<Login />} />
         <Route path={PAGES.PROFILE} element={<Profile />} />
         <Route path={PAGES.SETTINGS} element={<Settings />} />
-        <Route path={PAGES.WORDS} element={<WordsPageLayout />} >
+        <Route path={PAGES.WINCOIN} element={<WinCoin />} />
+        <Route path={PAGES.WORDS} element={<WordsPageLayout />}>
           <Route path={PAGES.DEFINITION} element={<Defintion />} />
           <Route path={PAGES.EXAMPLES} element={<Examples />} />
           <Route path={PAGES.SEMANTICS} element={<Semantics />} />
@@ -60,9 +62,9 @@ function App() {
   );
   return (
     <Suspense fallback={<div>{text('LOADING')}</div>}>
-      <div className="App">
+      <div className='App'>
         <Header loggedIn={true} />
-        <main className="flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer">
+        <main className='flex h-screen flex-col justify-center bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer'>
           <RouterProvider router={router}></RouterProvider>
         </main>
       </div>
