@@ -33,7 +33,7 @@ export default function Question() {
 
   const renderFooter = (word_id: number) => {
     if (word_id >= wordData.length - 1) {
-      return <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' absolute={true} />;
+      return <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' />;
     } else {
       const nextQuestionId = questionId + 1;
       if (currentWord.questions && nextQuestionId <= currentWord.questions.length - 1) {
@@ -50,11 +50,13 @@ export default function Question() {
   }
 
   return (
-    <div>
-      <div className='flex flex-col justify-center items-center gap-5'>
-        <img className="w-1/3 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
-        {getQuestionElement(currentWord.questions[questionId])}
-        <img className="w-1/3 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
+    <div className='flex flex-col h-screen'>
+      <div className='flex-1 flex-col overflow-y-auto'>
+        <div className='flex flex-col items-center justify-center gap-5'>
+          <img className="w-1/3 h-6" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
+          {getQuestionElement(currentWord.questions[questionId])}
+          <img className="w-1/3 h-6 rotate-180" src="/icons/pointy_border.svg" alt="border-top" width={200} height={200} />
+        </div>
       </div>
       {renderFooter(Number(wordId))}
     </div>

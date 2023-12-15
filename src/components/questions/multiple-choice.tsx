@@ -18,6 +18,8 @@ export default function MultipleChoiceQuestion({ question, hasImage }: { questio
     }
   }, [selectedOption]);
 
+  const optionsClass = `flex flex-col text-lg grid ${hasImage ? 'grid-cols-2' : 'grid-cols-1'} m-2 gap-2`;
+
   if (!question) {
     // Handle case when word is not found
     return <div>{text('QUESTION_NOT_FOUND')}</div>;
@@ -36,7 +38,7 @@ export default function MultipleChoiceQuestion({ question, hasImage }: { questio
           className='h-60 object-cover rounded-xl'
         />
       }
-      <div className="flex flex-col text-lg grid grid-cols-1 m-2 gap-2">
+      <div className={optionsClass}>
         {question.options.map((option, idx) => {
           if (selectedOption && option === selectedOption) {
             return (<OptionBtn key={option.id ?? idx} option={option as Option} text={text} selector={setSelectedOption} word_id={question.word_id} isCorrect={question.options[question.answer] === selectedOption} disabled={!!selectedOption} />);
