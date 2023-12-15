@@ -1167,6 +1167,9 @@ video {
 .opacity-75 {
   opacity: 0.75;
 }
+.bg-blend-soft-light {
+  background-blend-mode: soft-light;
+}
 .shadow {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
@@ -1250,6 +1253,9 @@ body .background-layer::before {
     opacity: 0.3;
     z-index: -1;
     mix-blend-mode: multiply;
+  }
+body .cardImage{
+    background-image: url('../../public/images/card.png');
   }
 body .gurmukhi {
     font-family: 'Baloo Paaji 2' !important;

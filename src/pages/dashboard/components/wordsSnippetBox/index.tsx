@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { wordData } from "constants/wordsData";
-function WordsSnipetBox({ commonStyle }: { commonStyle: string }) {
+function WordsSnippetBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
   return (
     <div className={commonStyle}>
@@ -14,4 +14,4 @@ function WordsSnipetBox({ commonStyle }: { commonStyle: string }) {
     </div>
   );
 }
-export default WordsSnipetBox;
+export default WordsSnippetBox;

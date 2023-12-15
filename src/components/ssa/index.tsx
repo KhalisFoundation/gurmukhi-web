@@ -7,7 +7,7 @@ export default function Ssa({ name }: { name: string }) {
   return (
     <div>
       <p className="text-3xl">
-        <span className="font-medium">{text("SSA_PUNJABI")}</span>{" "}
+        <span className="font-medium gurmukhi">{text("SSA_PUNJABI")}</span>{" "}
         <span className="text-3xl text-slate-500 font-serif">
           <a href={ROUTES.PROFILE}>{name}</a>
         </span>

@@ -2,7 +2,7 @@ import React from 'react';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import { ROUTES } from 'constants/routes';
 import Ssa from "components/ssa";
-import WordsSnipetBox from "./components/wordsSnippetBox";
+import WordsSnippetBox from "./components/wordsSnippetBox";
 import WordBox from "./components/wordBox";
 import CoinBox from "./components/coinbox";
 
@@ -11,10 +11,10 @@ export default function Dashboard() {
     "w-3/12 h-100 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200";
   return (
     <div className="h-full">
-      <div className="flex flex-col text-center justify-center gap-10 h-4/5">
+      <div className="flex flex-col text-center recoleta justify-center gap-10 h-4/5">
         <Ssa name="Amitoj Singh" />
         <div className="flex flex-row text-center justify-center gap-6 h-2/5">
-          <WordsSnipetBox commonStyle={commonStyle} />
+          <WordsSnippetBox commonStyle={commonStyle} />
           <CoinBox commonStyle={commonStyle} />
           <WordBox commonStyle={commonStyle} />
         </div>
