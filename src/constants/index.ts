@@ -16,7 +16,7 @@ const CONSTANTS = {
   OR: 'or',
   PROFILE: 'Profile',
   QUESTIONS: 'Questions',
-  QUESTIONS_TO_GO: 'QUESTIONS TO GO TO YOUR NEXT NANAK COIN!!',
+  QUESTIONS_TO_GO: 'QUESTIONS TO GO FOR YOUR NEXT NANAK COIN!!',
   SETTINGS: 'Settings',
   SIGN_IN: 'Sign In',
   SIGN_IN_WITH_GOOGLE: 'Sign In with Google',
@@ -29,6 +29,9 @@ const CONSTANTS = {
   TOTAL_NUM_QUESTIONS: 13,
   WELCOME: 'Welcome',
   WORD_NOT_FOUND: 'Word not found',
+  GREAT_JOB: 'Great Job!',
+  PUNJABI_5: '੫',
+  FIFTH_QUESTION: 'You completed your 5th question!',
 };
 
 export default CONSTANTS;
