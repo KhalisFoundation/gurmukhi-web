@@ -23,6 +23,7 @@ import Semantics from 'pages/word/semantics';
 import Information from 'pages/word/information';
 import QuestionsPageLayout from 'pages/questions/layout';
 import Question from 'pages/questions';
+import Win from 'pages/win';
 import WinCoin from 'pages/wincoin';
 
 i18n.use(initReactI18next).init({
@@ -50,6 +51,7 @@ function App() {
         <Route path={PAGES.LOGIN} element={<Login />} />
         <Route path={PAGES.PROFILE} element={<Profile />} />
         <Route path={PAGES.SETTINGS} element={<Settings />} />
+        <Route path={PAGES.WIN} element={<Win />} />
         <Route path={PAGES.WINCOIN} element={<WinCoin />} />
         <Route path={PAGES.WORDS} element={<WordsPageLayout />}>
           <Route path={PAGES.DEFINITION} element={<Defintion />} />

@@ -15,6 +15,7 @@ export const PAGES = {
   QUESTION: 'question',
   IMAGE: 'image',
   MEANING: 'meaning',
+  WIN: 'win',
   WINCOIN: 'wincoin',
 };
 // dynamically add / in front of every route in above const and keep the same key name
