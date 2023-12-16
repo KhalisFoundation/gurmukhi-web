@@ -25,6 +25,8 @@ import QuestionsPageLayout from 'pages/questions/layout';
 import Question from 'pages/questions';
 import Win from 'pages/win';
 import WinCoin from 'pages/wincoin';
+import Meta from 'components/meta';
+import metaTags from 'constants/meta';
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -43,6 +45,7 @@ i18n.use(initReactI18next).init({
 
 function App() {
   const { t: text } = useTranslation();
+  const { title, description } = metaTags.ROOT;
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path={PAGES.ROOT} element={<RootLayout />}>
@@ -59,7 +62,7 @@ function App() {
           <Route path={PAGES.SEMANTICS} element={<Semantics />} />
           <Route path={PAGES.INFORMATION} element={<Information />} />
         </Route>
-        <Route path={PAGES.QUESTION} element={<QuestionsPageLayout/>}>
+        <Route path={PAGES.QUESTION} element={<QuestionsPageLayout />}>
           <Route path={''} element={<Question />} />
         </Route>
         <Route path='*' element={<NotFound />} />
@@ -69,6 +72,7 @@ function App() {
   return (
     <Suspense fallback={<div>{text('LOADING')}</div>}>
       <div className='App'>
+        <Meta title={title} description={description} />
         <main className='flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer'>
           <RouterProvider router={router}></RouterProvider>
         </main>

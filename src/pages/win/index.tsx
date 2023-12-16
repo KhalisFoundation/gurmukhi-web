@@ -1,11 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { wordData } from 'constants/wordsData';
+import Meta from 'components/meta';
+import metaTags from 'constants/meta';
 
 function Win() {
   const { t: text } = useTranslation();
+  const { title, description } = metaTags.WIN;
   return (
     <div className='h-full'>
+      <Meta title={title} description={description} />
       <div className='flex flex-col text-center justify-evenly h-4/5 recoleta'>
         <div>
           <div className='flex justify-center items-center m-auto winbadge bg-no-repeat w-full bg-center'>
