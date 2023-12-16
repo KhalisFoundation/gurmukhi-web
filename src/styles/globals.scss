@@ -33,7 +33,11 @@ body {
     opacity: 0.3;
     mix-blend-mode: multiply;
   }
-  
+
+  .nanakback{
+    background-image: url('../../public/images/coinback.png');
+  }
+
   .cardImage{
     background-image: url('../../public/images/card.png');
   }
