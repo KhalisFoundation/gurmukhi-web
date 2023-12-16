@@ -50,10 +50,10 @@ const createSemanticDraggables = (provided: DroppableProvided, wordList: WordDat
               {(dragProvided, dragSnapshot) => {
                 const isDragging = dragSnapshot.isDragging ?? false;
                 const draggingOver = dragSnapshot.draggingOver ?? '';
-                let bgColor = 'bg-[#1F4860]';
+                let bgColor = 'bg-darkBlue';
                 let color = 'grey';
                 if (isDragging) {
-                  bgColor = 'bg-[#1F4860]';
+                  bgColor = 'bg-darkBlue';
                   if (draggingOver === synonyms.toLowerCase()) {
                     bgColor = 'bg-green-500';
                     color = 'green';
@@ -103,10 +103,10 @@ const getDraggedItemBackgroundColor = (dragSnapshot: DraggableStateSnapshot, wor
         if (word.type === 'synonym') return 'bg-red-500';
         break;
       default:
-        return 'bg-[#1F4860]';
+        return 'bg-darkBlue';
     }
   }
-  return 'bg-[#1F4860]';
+  return 'bg-darkBlue';
 };
 
 export { 

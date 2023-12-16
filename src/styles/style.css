@@ -791,6 +791,9 @@ video {
 .w-screen {
   width: 100vw;
 }
+.flex-1 {
+  flex: 1 1 0%;
+}
 .flex-grow {
   flex-grow: 1;
 }
@@ -873,6 +876,9 @@ video {
 }
 .overflow-hidden {
   overflow: hidden;
+}
+.overflow-y-auto {
+  overflow-y: auto;
 }
 .overflow-y-scroll {
   overflow-y: scroll;

@@ -29,8 +29,8 @@ export default function Header({ ...props }: PropTypes) {
             <li>
               <div className={'flex bg-white h-10 w-10 rounded-full shadow items-center justify-evenly gap-2 p-1'}>
                 <span className="absolute flex h-2 w-2 ml-2.5 mb-3.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#31D95E] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#31D95E]"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brightGreen opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brightGreen"></span>
                 </span>
                 <img src='/icons/bell.svg' className={'h-4 w-4'} />
               </div>

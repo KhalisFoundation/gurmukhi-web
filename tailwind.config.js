@@ -33,14 +33,18 @@ module.exports = {
       slate: colors.slate,
       maroon: '#630505',
       lightGreen: '#AFF0C0',
+      brightGreen: '#31D95E',
       brightRed: '#C51E1E',
       lightRed: '#FFA8A8',
       lightBlue: '#E5F4FD',
+      brightBlue: '#4285F4',
+      softBlue: '#61A9D1',
       skyBlue: '#9CC9E2',
       brightWhite: '#FFF',
       lightGray: '#EEE',
       mustard: '#FBBC05',
       darkBlue: '#1F4860',
+      lightAzure: '#D6E9F3'
     },
     extend: {
       backgroundImage: {
