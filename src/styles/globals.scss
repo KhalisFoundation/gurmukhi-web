@@ -34,6 +34,11 @@ body {
     z-index: -1;
     mix-blend-mode: multiply;
   }
+
+  .nanakback{
+    background-image: url('../../public/images/coinback.png');
+  }
+
   .cardImage{
     background-image: url('../../public/images/card.png');
   }

@@ -33,6 +33,8 @@ const CONSTANTS = {
   GREAT_JOB: 'Great Job!',
   PUNJABI_5: '੫',
   FIFTH_QUESTION: 'You completed your 5th question!',
+  GET_ONE_MORE: 'GET ONE MORE',
+  NANAK_COIN_DESC: 'You got your 14th Nanak coin!',
   WORDS_YOU_LEARNT: 'Words you learnt',
   COINS_DESC: 'Total number of Nanak Coins',
   COINS_DESC2: 'WORDS TO GO FOR YOUR NEXT COIN!!',
