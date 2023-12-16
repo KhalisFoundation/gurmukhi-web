@@ -45,7 +45,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path={PAGES.ROOT} element={<RootLayout />}>
-        <Route path="" element={<Home />} />
+        <Route path='' element={<Home />} />
         <Route path={PAGES.DASHBOARD} element={<Dashboard />} />
         <Route path={PAGES.LOGIN} element={<Login />} />
         <Route path={PAGES.PROFILE} element={<Profile />} />
@@ -58,7 +58,7 @@ function App() {
           <Route path={PAGES.SEMANTICS} element={<Semantics />} />
           <Route path={PAGES.INFORMATION} element={<Information />} />
         </Route>
-        <Route path="*" element={<NotFound />} />
+        <Route path='*' element={<NotFound />} />
       </Route>,
     ),
   );
