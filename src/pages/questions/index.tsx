@@ -11,6 +11,7 @@ import metaTags from 'constants/meta';
 
 export default function Question() {
   const { t: text } = useTranslation();
+  const { title, description } = metaTags.QUESTION;
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -61,7 +62,6 @@ export default function Question() {
     return <div>{text('WORD_NOT_FOUND')}</div>;
   }
 
-  const { title, description } = metaTags.QUESTION;
 
   return (
     <div className='flex flex-col h-screen'>

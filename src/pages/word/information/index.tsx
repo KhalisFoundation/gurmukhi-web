@@ -12,6 +12,7 @@ import metaTags from 'constants/meta';
 
 export default function Information() {
   const { t: text } = useTranslation();
+  const { title, description } = metaTags.INFORMATION;
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -66,7 +67,6 @@ export default function Information() {
     // Handle case when word is not found
     return <div>{text('WORD_NOT_FOUND')}</div>;
   }
-  const { title, description } = metaTags.INFORMATION;
 
   return (
     <div className='flex flex-col items-center gap-5'>

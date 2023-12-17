@@ -8,16 +8,12 @@ import metaTags from 'constants/meta';
 export default function RootLayout() {
   const { title, description } = metaTags.ROOT;
   return (
-    <html lang='en'>
+    <main className='flex flex-col background-layer'>
       <Meta title={title} description={description} />
-      <body>
-        <main className='flex flex-col background-layer'>
-          <div className='flex flex-col h-screen justify-start overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg z-[1]'>
-            <Header loggedIn={true} />
-            <Outlet />
-          </div>
-        </main>
-      </body>
-    </html>
+      <div className='flex flex-col h-screen justify-start overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg z-[1]'>
+        <Header loggedIn={true} />
+        <Outlet />
+      </div>
+    </main>
   );
 }

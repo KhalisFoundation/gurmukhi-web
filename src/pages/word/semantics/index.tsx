@@ -12,6 +12,7 @@ import metaTags from 'constants/meta';
 
 export default function Semantics() {
   const { t: text } = useTranslation();
+  const { title, description } = metaTags.SEMANTICS;
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -171,7 +172,7 @@ export default function Semantics() {
     // Handle case when word is not found
     return <div>{text('WORD_NOT_FOUND')}</div>;
   }
-  const { title, description } = metaTags.SEMANTICS;
+
   return (
     <div className='flex flex-col h-screen items-center justify-between'>
       <Meta title={title} description={description} />
