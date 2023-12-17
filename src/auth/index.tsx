@@ -133,6 +133,4 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
   );
 };
 
-export const useUserAuth = () => {
-  return useContext(UserAuthContext);
-};
+export const useUserAuth = () => useContext(UserAuthContext);

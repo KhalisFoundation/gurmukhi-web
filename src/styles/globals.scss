@@ -8,13 +8,6 @@
   --background-end-rgb: 156, 201, 226;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
 
 * {
   font-family: 'HvDTrial Brandon Grotesque';
@@ -38,8 +31,15 @@ body {
     left: 0;
     background-image: url('../../public/images/background.png');
     opacity: 0.3;
-    z-index: -1;
     mix-blend-mode: multiply;
+  }
+
+  .nanakback{
+    background-image: url('../../public/images/coinback.png');
+  }
+
+  .cardImage{
+    background-image: url('../../public/images/card.png');
   }
 
   .gurmukhi {
@@ -47,6 +47,10 @@ body {
     * {
       font-family: 'Baloo Paaji 2' !important;
     }
+  }
+  .winbadge{
+    background-image: url('../../public/images/winShape.png');
+    height:25vh;
   }
 
   .brandon-grotesque {

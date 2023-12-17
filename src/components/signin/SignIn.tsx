@@ -1,9 +1,9 @@
 import React, { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useUserAuth } from 'auth';
 import { ROUTES } from 'constants/routes';
 import SignUp from './SignUp';
-import { useUserAuth } from 'auth';
 import InputWithIcon from '../input/InputWithIcon';
 
 export default function SignIn() {
@@ -84,7 +84,7 @@ export default function SignIn() {
         </span>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col w-full gap-4 mt-4 ease-in-out duration-200 delay-100" >
+      <form onSubmit={handleSubmit} className='flex flex-col w-full gap-4 mt-4 ease-in-out duration-200 delay-100' >
         {isNewUser ? (
           <SignUp />
         )
@@ -92,7 +92,7 @@ export default function SignIn() {
             <div className='appear-from-below'>
               <InputWithIcon id="username" placeholder="Username" type="text" icon="user" />
               <InputWithIcon id="spassword" placeholder="Password" type="password" />
-              <button className="w-full p-4 rounded-lg bg-gradient-to-r from-[#4285F4] to-[#61A9D1] text-white text-lg" type='submit'>{text('SIGN_IN')}</button>
+              <button className="w-full p-4 rounded-lg bg-gradient-to-r from-brightBlue to-softBlue text-white text-lg" type='submit'>{text('SIGN_IN')}</button>
             </div>
           )
         }

@@ -1,3 +1,5 @@
+import { QuestionData } from 'types';
+
 export interface WordData {
   id?: number | string;
   word?: string;
@@ -9,6 +11,7 @@ export interface WordData {
     sentence: string;
     sentenceEnglish: string;
   }[];
+  questions?: QuestionData[];
   synonyms?: (number | string)[];
   antonyms?: (number | string)[];
   type?: string;
@@ -36,6 +39,65 @@ export const wordData: WordData[] = [
       {
         sentence: 'ਗੁਰੂ ਰਾਮਦਾਸ ਜੀ ਨੇ ਦਰਬਾਰ ਸਾਹਿਬ ਦੀ ਉਸਾਰੀ ੧੫੮੮ ਵਿੱਚ ਸ਼ੁਰੂ ਕੀਤੀ ਸੀ',
         sentenceEnglish: 'Guru Ram Das Ji began constructing Darbar Sahib in 1588',
+      },
+    ],
+    questions: [
+      {
+        question: 'ਆਦਮੀ ਉਸਾਰੀ ਕਦੋਂ ਕਰਦਾ ਹੈ?',
+        translation: 'When does a man do construction?',
+        type: 'meaning',
+        options: [
+          {
+            word: 'ਜਦੋਂ ਸਕੂਲ ਜਾਵੇ।',
+          },
+          {
+            word: 'ਜਦੋਂ ਘਰ ਬਣਾਵੇ।',
+          },
+          {
+            word: 'ਜਦੋਂ ਰੋਟੀ ਬਣਾਵੇ',
+          },
+        ],
+        answer: 1,
+        word_id: '1',
+      },
+      {
+        question: 'ਨਵਾਂ ਘਰ ਦੀ __ ਵਾਸਤੇ ਬੜਾ ਸਮਾ ਲਗਦਾ ਹੈ',
+        translation: 'It takes a lot of time to ____ a new house',
+        type: 'context',
+        options: [
+          {
+            word: 'ਉਸਾਰੀ',
+          },
+          {
+            word: 'ਤੋੜਨਾ।',
+          },
+          {
+            word: 'ਆਦਰ',
+          },
+        ],
+        answer: 0,
+        word_id: '1',
+      },
+      {
+        question: 'ਲੋਕੀ ____ ਕਰ ਰਹੇ ਹਨ।',
+        translation: 'people are doing ____',
+        type: 'image',
+        answer: 3,
+        options: [
+          {
+            word: 'ਤੋੜਨਾ।',
+          },
+          {
+            word: 'ਅਰਾਮ',
+          },
+          {
+            word: 'ਅਪਮਾਨ',
+          },
+          {
+            word: 'ਉਸਾਰੀ',
+          },
+        ],
+        word_id: '1',
       },
     ],
     synonyms: [

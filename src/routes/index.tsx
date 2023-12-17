@@ -14,25 +14,37 @@ import Semantics from 'pages/word/semantics';
 import Information from 'pages/word/information';
 import LogOut from 'components/signin/LogOut';
 import RequireAuth from 'auth/require-auth';
+import RootLayout from 'pages/layout';
+import Win from 'pages/win';
+import WinCoin from 'pages/wincoin';
+import QuestionsPageLayout from 'pages/questions/layout';
+import Question from 'pages/questions';
 
 export const requireAuth = (children: JSX.Element) => <RequireAuth>{children}</RequireAuth>;
 
 export function AppRouter() {
   return (
     <Routes>
-      <Route path={ROUTES.ROOT} element={<Home />} />
-      <Route path={PAGES.DASHBOARD} element={requireAuth(<Dashboard />)} />
-      <Route path={PAGES.LOGIN} element={<Login />} />
-      <Route path={PAGES.LOG_OUT} element={<LogOut />} />
-      <Route path={PAGES.PROFILE} element={requireAuth(<Profile />)} />
-      <Route path={PAGES.SETTINGS} element={requireAuth(<Settings />)} />
-      <Route path={PAGES.WORDS} element={requireAuth(<WordsPageLayout />)} >
-        <Route path={PAGES.DEFINITION} element={<Defintion />} />
-        <Route path={PAGES.EXAMPLES} element={<Examples />} />
-        <Route path={PAGES.SEMANTICS} element={<Semantics />} />
-        <Route path={PAGES.INFORMATION} element={<Information />} />
+      <Route path={PAGES.ROOT} element={<RootLayout />}>
+        <Route path={''} element={<Home />} />
+        <Route path={PAGES.DASHBOARD} element={<Dashboard />} />
+        <Route path={PAGES.LOGIN} element={<Login />} />
+        <Route path={PAGES.LOG_OUT} element={<LogOut />} />
+        <Route path={PAGES.PROFILE} element={<Profile />} />
+        <Route path={PAGES.SETTINGS} element={<Settings />} />
+        <Route path={PAGES.WIN} element={<Win />} />
+        <Route path={PAGES.WINCOIN} element={<WinCoin />} />
+        <Route path={PAGES.WORDS} element={<WordsPageLayout />}>
+          <Route path={PAGES.DEFINITION} element={<Defintion />} />
+          <Route path={PAGES.EXAMPLES} element={<Examples />} />
+          <Route path={PAGES.SEMANTICS} element={<Semantics />} />
+          <Route path={PAGES.INFORMATION} element={<Information />} />
+        </Route>
+        <Route path={PAGES.QUESTION} element={<QuestionsPageLayout />}>
+          <Route path={''} element={<Question />} />
+        </Route>
+        <Route path='*' element={<NotFound />} />
       </Route>
-      <Route path='*' element={<NotFound />} />
     </Routes>
   )
 }

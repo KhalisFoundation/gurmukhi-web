@@ -1,27 +1,22 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Shabadavali from 'assets/icons/Shabadavali';
 import { PAGES, ROUTES } from 'constants/routes';
-import { AuthContext } from 'auth/context';
+import { useNavigate } from 'react-router-dom';
 
-export default function Header() {
+interface PropTypes {
+  loggedIn?: boolean
+}
+
+export default function Header({ ...props }: PropTypes) {
   const { t: text } = useTranslation();
-  const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  let loggedIn = !!currentUser;
-
-  // Check if currentUser exists on initial render
-  useEffect(() => {
-    // await till currentUser is set
-    if (currentUser === undefined) return;
-    loggedIn = !!currentUser;
-  }, [currentUser]);
+  const loggedIn = props.loggedIn ?? false;
 
   return (
-    <header className="flex bg-gradient-to-r absolute inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10">
+    <header className="flex bg-gradient-to-r sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10">
       <a href={PAGES.ROOT}>
         <main className="flex items-center justify-between">
           <Shabadavali />
@@ -36,8 +31,8 @@ export default function Header() {
             <li>
               <div className={'flex bg-white h-10 w-10 rounded-full shadow items-center justify-evenly gap-2 p-1'}>
                 <span className="absolute flex h-2 w-2 ml-2.5 mb-3.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#31D95E] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#31D95E]"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brightGreen opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brightGreen"></span>
                 </span>
                 <img src='/icons/bell.svg' className={'h-4 w-4'} />
               </div>

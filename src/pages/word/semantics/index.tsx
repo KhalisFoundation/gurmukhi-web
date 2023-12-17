@@ -7,9 +7,12 @@ import BackBtn from 'components/buttons/BackBtn';
 import { WordData, wordData } from 'constants/wordsData';
 import { ROUTES } from 'constants/routes';
 import { convertToTitleCase, createSemanticDraggables, getDraggedItemBackgroundColor } from 'utils/words';
+import Meta from 'components/meta';
+import metaTags from 'constants/meta';
 
 export default function Semantics() {
   const { t: text } = useTranslation();
+  const { title, description } = metaTags.SEMANTICS;
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -23,7 +26,10 @@ export default function Semantics() {
   const jumpBoxRef = useRef<any>(null);
 
   // fetch word from state using wordId
-  const currentWord = useMemo(() => wordData.find((word) => word.id === Number(wordId)) ?? {}, [wordId]);
+  const currentWord = useMemo(
+    () => wordData.find((word) => word.id === Number(wordId)) ?? {},
+    [wordId],
+  );
   const [words, setWords] = useState<WordData[]>([]);
   const [synonyms, setSynonyms] = useState<WordData[]>([]);
   const [antonyms, setAntonyms] = useState<WordData[]>([]);
@@ -46,7 +52,6 @@ export default function Semantics() {
         break;
     }
     const [foundItem] = newData.splice(source.index, 1);
-      
     if (!destination) return;
     if (source.droppableId !== destination.droppableId) {
       const sourceId = source.droppableId;
@@ -128,10 +133,10 @@ export default function Semantics() {
       // save all to words state
       setWords(newWordsData);
     };
-  
+
     // Call the function unconditionally
     updateWordsData();
-  }, [wordId, currentWord]);  
+  }, [wordId, currentWord]);
 
   useEffect(() => {
     const processWords = (wordList: WordData[], type: keyof WordData) => {
@@ -142,13 +147,11 @@ export default function Semantics() {
           jumpBoxRef.current.classList.add('bg-red-500');
           setTimeout(() => {
             jumpBoxRef.current?.classList.remove('jump-box');
-  
             if (type === 'synonyms') {
               setSynonyms(synonyms.filter((synonym) => synonym.id !== Number(word.id)));
             } else if (type === 'antonyms') {
               setAntonyms(antonyms.filter((antonym) => antonym.id !== Number(word.id)));
             }
-  
             setWords([...words, word]);
           }, 1000);
         } else {
@@ -157,39 +160,40 @@ export default function Semantics() {
         }
       });
     };
-  
+
     processWords(synonyms, 'synonyms');
     processWords(antonyms, 'antonyms');
-  }, [synonyms, antonyms, words, currentWord]);  
-  
+  }, [synonyms, antonyms, words, currentWord]);
 
   if (!currentWord.word) {
     // Handle case when word is not found
     return <div>{text('WORD_NOT_FOUND')}</div>;
   }
+
   return (
-    <div className="flex flex-col static h-screen items-center justify-between">
-      <BackBtn />
-      <DragDropContext
-        onDragEnd={onDragEnd}>
+    <div className='flex flex-col h-screen items-center justify-between'>
+      <Meta title={title} description={description} />
+      <BackBtn navlink={-1} />
+      <DragDropContext onDragEnd={onDragEnd}>
         <div className='flex flex-col h-full justify-center items-center gap-5 pb-12'>
-          <h1 className="text-4xl gurmukhi text-black">{currentWord.word}</h1>
-          <h2 className="text-2xl italic text-gray-e4">{currentWord.translation}</h2>
-          <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" />
-          <div className="flex flex-col items-center justify-between w-full my-10 mx-5 gap-5">
-            <Droppable 
-              droppableId={text('ALL_WORDS')}
-              type="COLUMN"
-              direction="horizontal"
-            >
+          <h1 className='text-4xl gurmukhi text-black'>{currentWord.word}</h1>
+          <h2 className='text-2xl italic text-gray-e4'>{currentWord.translation}</h2>
+          <img className='w-3/5 h-6' src='/icons/pointy_border.svg' alt='border-top' />
+          <div className='flex flex-col items-center justify-between w-full my-10 mx-5 gap-5'>
+            <Droppable droppableId={text('ALL_WORDS')} type='COLUMN' direction='horizontal'>
               {(provided) => (
                 <div
                   className='flex flex-row justify-between items-center p-4 w-max'
                   {...provided.droppableProps}
-                  ref={provided.innerRef}>
+                  ref={provided.innerRef}
+                >
                   {words.map((word, index) => {
                     return (
-                      <Draggable key={word.id} draggableId={(word.id ?? '').toString()} index={index}>
+                      <Draggable
+                        key={word.id}
+                        draggableId={(word.id ?? '').toString()}
+                        index={index}
+                      >
                         {(dragProvided, dragSnapshot) => {
                           const bgColor = getDraggedItemBackgroundColor(dragSnapshot, word, text);
                           return (
@@ -198,9 +202,13 @@ export default function Semantics() {
                               className={'m-4 p-4 text-white text-base rounded-lg ' + bgColor}
                               {...dragProvided.draggableProps}
                               {...dragProvided.dragHandleProps}
-                              ref={dragProvided.innerRef}>
+                              ref={dragProvided.innerRef}
+                            >
                               <span className='gurmuhki'>{word.word}</span>
-                              <span className='brandon-grotesque'> ({convertToTitleCase(word.translation ?? '')})</span>
+                              <span className='brandon-grotesque'>
+                                {' '}
+                                ({convertToTitleCase(word.translation ?? '')})
+                              </span>
                             </div>
                           );
                         }}
@@ -212,26 +220,40 @@ export default function Semantics() {
               )}
             </Droppable>
 
-            <div className="flex items-center justify-around my-10 mx-5 gap-5 w-full">
-              <Droppable
-                droppableId={synonymsText.toLowerCase()}
-                type="COLUMN">
-                {(provided, snapshot) => (
-                  createSemanticDraggables(provided, synonyms, snapshot, synonymsText.toLowerCase(), text, jumpBoxRef)
-                )}
+            <div className='flex items-center justify-around my-10 mx-5 gap-5 w-full'>
+              <Droppable droppableId={synonymsText.toLowerCase()} type='COLUMN'>
+                {(provided, snapshot) =>
+                  createSemanticDraggables(
+                    provided,
+                    synonyms,
+                    snapshot,
+                    synonymsText.toLowerCase(),
+                    text,
+                    jumpBoxRef,
+                  )
+                }
               </Droppable>
-              <Droppable
-                droppableId={antonymsText.toLowerCase()}
-                type="COLUMN">
-                {(provided, snapshot) => (
-                  createSemanticDraggables(provided, antonyms, snapshot, antonymsText.toLowerCase(), text, jumpBoxRef)
-                )}
+              <Droppable droppableId={antonymsText.toLowerCase()} type='COLUMN'>
+                {(provided, snapshot) =>
+                  createSemanticDraggables(
+                    provided,
+                    antonyms,
+                    snapshot,
+                    antonymsText.toLowerCase(),
+                    text,
+                    jumpBoxRef,
+                  )
+                }
               </Droppable>
             </div>
           </div>
         </div>
       </DragDropContext>
-      <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.INFORMATION}?id=${wordId}`} nextText='Next' absolute={true}/>
+      <LevelsFooter
+        nextUrl={`${ROUTES.WORD + ROUTES.INFORMATION}?id=${wordId}`}
+        nextText='Next'
+        absolute={true}
+      />
     </div>
   );
 }

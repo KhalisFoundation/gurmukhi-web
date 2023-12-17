@@ -5,7 +5,6 @@ export const PAGES = {
   SIGN_OUT: 'signout',
   DASHBOARD: 'dashboard',
   PROFILE: 'profile',
-  QUESTIONS: 'questions',
   SETTINGS: 'settings',
   WORDS: 'word/*',
   WORD: 'word',
@@ -13,6 +12,12 @@ export const PAGES = {
   EXAMPLES: 'examples',
   INFORMATION: 'information',
   SEMANTICS: 'semantics',
+  QUESTIONS: 'questions',
+  QUESTION: 'question',
+  IMAGE: 'image',
+  MEANING: 'meaning',
+  WIN: 'win',
+  WINCOIN: 'wincoin',
 };
 // dynamically add / in front of every route in above const and keep the same key name
 export const ROUTES: { [key: string]: string } = Object.keys(PAGES).reduce((acc, key) => {
