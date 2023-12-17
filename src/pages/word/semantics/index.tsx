@@ -1,17 +1,21 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import Confetti from 'react-confetti';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import BackBtn from 'components/buttons/BackBtn';
 import { WordData, wordData } from 'constants/wordsData';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { useLocation } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
-import { convertToTitleCase, createSemanticDraggables, getDraggedItemBackgroundColor } from 'utils/words';
-import { useTranslation } from 'react-i18next';
+import { createSemanticDraggables } from 'utils/words';
 
 export default function Semantics() {
   const { t: text } = useTranslation();
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
+  const [showConfetti, setShowConfetti] = useState(false);
 
   // Extract the "id" parameter from the search string in the URL
   const searchParams = new URLSearchParams(location.search);
@@ -26,7 +30,9 @@ export default function Semantics() {
   const currentWord = useMemo(() => wordData.find((word) => word.id === Number(wordId)) ?? {}, [wordId]);
   const [words, setWords] = useState<WordData[]>([]);
   const [synonyms, setSynonyms] = useState<WordData[]>([]);
+  const [isSynonymsDisabled, setIsSynonymsDisabled] = useState<boolean>(false);
   const [antonyms, setAntonyms] = useState<WordData[]>([]);
+  const [isAntonymsDisabled, setIsAntonymsDisabled] = useState<boolean>(false);
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -134,6 +140,34 @@ export default function Semantics() {
   }, [wordId, currentWord]);  
 
   useEffect(() => {
+    const synonymFound = currentWord.synonyms ? currentWord.synonyms.map((synonymId) => synonyms.some(synonym => synonym.id === synonymId)) : [];
+    const antonymFound = currentWord.antonyms ? currentWord.antonyms.map((antonymId) => antonyms.some(antonym => antonym.id === antonymId)) : [];
+    const allWords = [...synonymFound, ...antonymFound];
+    // if all words are found, show confetti
+    if (allWords.every((wordFound) => wordFound)) {
+      setShowConfetti(true);
+    } else {
+      setShowConfetti(false);
+    }
+  }, [currentWord, synonyms, antonyms]);
+
+  const showToastMessage = () => {
+    toast.success(text('SEMANTICS_PRAISE'), {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      closeOnClick: true,
+    });
+  };
+
+  useEffect(() => {
+    if (showConfetti) {
+      showToastMessage();
+      setTimeout(() => {
+        setShowConfetti(false);
+      }, 8000);
+    }
+  }, [showConfetti]);
+
+  useEffect(() => {
     const processWords = (wordList: WordData[], type: keyof WordData) => {
       wordList.forEach((word) => {
         if (!(currentWord[type] as (number | string)[]).includes(Number(word.id))) {
@@ -177,6 +211,8 @@ export default function Semantics() {
           <h2 className="text-2xl italic text-gray-e4">{currentWord.translation}</h2>
           <img className="w-3/5 h-6" src="/icons/pointy_border.svg" alt="border-top" />
           <div className="flex flex-col items-center justify-between w-full my-10 mx-5 gap-5">
+            {showConfetti && <Confetti />}
+            <ToastContainer />
             <Droppable 
               droppableId={text('ALL_WORDS')}
               type="COLUMN"
@@ -190,17 +226,15 @@ export default function Semantics() {
                   {words.map((word, index) => {
                     return (
                       <Draggable key={word.id} draggableId={(word.id ?? '').toString()} index={index}>
-                        {(dragProvided, dragSnapshot) => {
-                          const bgColor = getDraggedItemBackgroundColor(dragSnapshot, word, text);
+                        {(dragProvided) => {
                           return (
                             <div
                               draggable
-                              className={'m-4 p-4 text-white text-base rounded-lg ' + bgColor}
+                              className={'m-4 p-4 text-white text-base rounded-lg bg-darkBlue'}
                               {...dragProvided.draggableProps}
                               {...dragProvided.dragHandleProps}
                               ref={dragProvided.innerRef}>
                               <span className='gurmuhki'>{word.word}</span>
-                              <span className='brandon-grotesque'> ({convertToTitleCase(word.translation ?? '')})</span>
                             </div>
                           );
                         }}
@@ -215,16 +249,34 @@ export default function Semantics() {
             <div className="flex items-center justify-around my-10 mx-5 gap-5 w-full">
               <Droppable
                 droppableId={synonymsText.toLowerCase()}
+                isDropDisabled={isSynonymsDisabled}
                 type="COLUMN">
-                {(provided, snapshot) => (
-                  createSemanticDraggables(provided, synonyms, snapshot, synonymsText.toLowerCase(), text, jumpBoxRef)
+                {(provided) => (
+                  createSemanticDraggables(
+                    provided,
+                    synonyms,
+                    synonymsText.toLowerCase(),
+                    text, 
+                    currentWord.synonyms as (string | number)[],
+                    setIsSynonymsDisabled,
+                    jumpBoxRef,
+                  )
                 )}
               </Droppable>
               <Droppable
                 droppableId={antonymsText.toLowerCase()}
+                isDropDisabled={isAntonymsDisabled}
                 type="COLUMN">
-                {(provided, snapshot) => (
-                  createSemanticDraggables(provided, antonyms, snapshot, antonymsText.toLowerCase(), text, jumpBoxRef)
+                {(provided) => (
+                  createSemanticDraggables(
+                    provided,
+                    antonyms,
+                    antonymsText.toLowerCase(),
+                    text,
+                    currentWord.antonyms as (string | number)[],
+                    setIsAntonymsDisabled,
+                    jumpBoxRef,
+                  )
                 )}
               </Droppable>
             </div>
