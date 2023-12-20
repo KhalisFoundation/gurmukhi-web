@@ -8,6 +8,8 @@ interface InputWithIconProps {
   placeholder: string;
   type: string;
   icon?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  border?: string;
 }
 
 export default function InputWithIcon({ ...props }: InputWithIconProps) {
@@ -41,6 +43,8 @@ export default function InputWithIcon({ ...props }: InputWithIconProps) {
       setViewPassword(!viewPassword);
     }
   };
+
+  const inputClassName = props.border ? `w-full p-4 rounded-lg bg-gray-eee border-2 border-${props.border}` : 'w-full p-4 rounded-lg bg-gray-eee';
   return (
     <div className="relative mb-6">
       {props.icon === '' ? null : (
@@ -56,7 +60,13 @@ export default function InputWithIcon({ ...props }: InputWithIconProps) {
           }
         </div>
       )}
-      <input type={props.type} className="w-full p-4 rounded-lg bg-gray-eee" id={props.id} placeholder={props.placeholder} />
+      <input
+        id={props.id}
+        type={props.type}
+        placeholder={props.placeholder} 
+        className={inputClassName}
+        onChange={props.onChange}
+      />
     </div>
   );
 }

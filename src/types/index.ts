@@ -161,3 +161,8 @@ export interface MiniWord {
   translation?: string,
   is_for_support?: boolean
 }
+
+export interface SignError {
+  code: string,
+  message: string
+}

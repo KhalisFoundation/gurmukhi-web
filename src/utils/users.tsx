@@ -47,3 +47,12 @@ export const checkIfEmailUnique = async (email: string) => {
   const usersSnapshot = await getDocs(queryStatement);
   return usersSnapshot.empty;
 };
+
+export const getEmailFromUsername = async (username: string) => {
+  const queryStatement = query(usersCollection, where('username', '==', username));
+  const usersSnapshot = await getDocs(queryStatement);
+  if (!usersSnapshot.empty) {
+    return usersSnapshot.docs[0].data().email;
+  }
+  return null;
+};

@@ -2,27 +2,49 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { User } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { getUser } from 'utils/users';
 import { logOut, userStateListener } from '../firebase';
 
 interface Props {
   children?: ReactNode
 }
 
+interface LocalUser {
+  user: User | null,
+  uid?: string,
+  email?: string,
+  displayName?: string,
+  photoURL?: string
+  role?: string,
+  username?: string
+}
+
 export const AuthContext = createContext({
   // "User" comes from firebase auth-public.d.ts
-  currentUser: {} as User | null,
-  setCurrentUser: (_user:User) => {},
+  currentUser: {} as LocalUser | null,
+  setCurrentUser: (_user:LocalUser) => {},
   signOut: () => {},
 });
 
 export const AuthProvider = ({ children }: Props) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState<LocalUser | null>(null);
 
   useEffect(() => {
     const unsubscribe = userStateListener((user) => {
       if (user) {
-        setCurrentUser(user);
+        const { uid, email } = user;
+        const userData = getUser(email ?? '', uid)
+          .then((data) => {
+            const usrData = {
+              user,
+              uid,
+              email: data?.email,
+              displayName: data?.name,
+              photoURL: '',
+              role: data?.role,
+            };
+            setCurrentUser(usrData);
+          });
       }
     });
     return unsubscribe;
@@ -33,7 +55,6 @@ export const AuthProvider = ({ children }: Props) => {
   const signOut = () => {
     logOut();
     setCurrentUser(null);
-    navigate('/');
   };
 
   const value = {
