@@ -1,5 +1,5 @@
 import React, { MutableRefObject } from 'react';
-import { Draggable, DraggableStateSnapshot, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd';
+import { Draggable, DroppableProvided } from 'react-beautiful-dnd';
 import { TFunction } from 'i18next';
 import { WordData } from 'constants/wordsData';
 
@@ -29,51 +29,48 @@ const highlightWord = (sentence: string, word: string, lang?: string) => {
   );
 };
 
-const createSemanticDraggables = (provided: DroppableProvided, wordList: WordData[], snapshot: DroppableStateSnapshot, type: string, text: TFunction<'translation', undefined>, boxRef?: MutableRefObject<any>) => {
+const createSemanticDraggables = (
+  provided: DroppableProvided, wordList: WordData[], 
+  type: string, text: TFunction<'translation', undefined>, 
+  originalSemantics: (string | number)[],
+  disableDroppable: React.Dispatch<React.SetStateAction<boolean>>,
+  boxRef?: MutableRefObject<any>,
+) => {
   const synonyms = text('SYNONYMS');
   const antonyms = text('ANTONYMS');
   const droppableId = type;
   const heading = type === synonyms.toLowerCase() ? synonyms : antonyms;
+  const semanticsLeft = originalSemantics.filter(
+    (wordId) => !wordList.some((word) => word.id === wordId),
+  ).length;
+  if (semanticsLeft === 0) disableDroppable(true);
   return (
     <div
       className='h-72 w-80 p-4 cardImage bg-cover bg-sky-100 bg-blend-soft-light border-2 border-sky-200 shadow-lg rounded-lg'
       ref={provided.innerRef}
       {...provided.droppableProps}>
-      <h2 className='text-center text-black tracking-widest'>{heading.toUpperCase()}</h2>
+      <h2 className='text-center text-black tracking-widest'>{`${heading.toUpperCase()} - ${semanticsLeft === 0 ? '✓' : semanticsLeft}`}</h2>
       <div className='grid grid-cols-2 gap-4 h-60 w-72'>
         {wordList?.map((word, index) => {
           return (
             <Draggable 
               key={droppableId + word.id?.toString()}
               draggableId={droppableId + word.id?.toString()}
+              isDragDisabled={semanticsLeft == 0}
               index={index}>
-              {(dragProvided, dragSnapshot) => {
-                const isDragging = dragSnapshot.isDragging ?? false;
-                const draggingOver = dragSnapshot.draggingOver ?? '';
-                let bgColor = 'bg-darkBlue';
-                let color = 'grey';
-                if (isDragging) {
-                  bgColor = 'bg-darkBlue';
-                  if (draggingOver === synonyms.toLowerCase()) {
-                    bgColor = 'bg-green-500';
-                    color = 'green';
-                  } else if (draggingOver === antonyms.toLowerCase()) {
-                    bgColor = 'bg-red-500';
-                    color = 'red';
-                  }
-                }
+              {(dragProvided) => {
                 return (
                   <div
                     draggable
-                    className={'flex h-min w-max m-4 p-4 text-white text-sm rounded-lg z-10 ' + bgColor}
-                    style={{ backgroundColor: color }}
+                    className={'flex h-min w-max m-4 p-4 text-white text-sm rounded-lg z-10'}
+
                     {...dragProvided.draggableProps}
                     {...dragProvided.dragHandleProps}
                     ref={(el) => {
                       dragProvided.innerRef(el);
                       if (boxRef) boxRef.current = el;
                     }}>
-                    {word.word} ({convertToTitleCase(word.translation ?? '')})
+                    {word.word}
                   </div>
                 );
               }}
@@ -86,33 +83,9 @@ const createSemanticDraggables = (provided: DroppableProvided, wordList: WordDat
   );
 };
 
-const getDraggedItemBackgroundColor = (dragSnapshot: DraggableStateSnapshot, word: WordData, text: TFunction<'translation', undefined>) => {
-  const synonyms = text('SYNONYMS');
-  const antonyms = text('ANTONYMS');
-  const isDragging = dragSnapshot.isDragging ?? false;
-  const draggingOver = dragSnapshot.draggingOver ?? '';
-
-  if (isDragging) {
-    switch (draggingOver) {
-      case synonyms.toLowerCase():
-        if (word.type === 'synonym') return 'bg-green-500';
-        if (word.type === 'antonym') return 'bg-red-500';
-        break;
-      case antonyms.toLowerCase():
-        if (word.type === 'antonym') return 'bg-green-500';
-        if (word.type === 'synonym') return 'bg-red-500';
-        break;
-      default:
-        return 'bg-darkBlue';
-    }
-  }
-  return 'bg-darkBlue';
-};
-
 export { 
   addEndingPunctuation,
   highlightWord,
   convertToTitleCase, 
-  createSemanticDraggables, 
-  getDraggedItemBackgroundColor,
+  createSemanticDraggables,
 };

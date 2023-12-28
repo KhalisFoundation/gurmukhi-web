@@ -23,6 +23,7 @@ const CONSTANTS = {
   PROFILE: 'Profile',
   QUESTIONS: 'Questions',
   QUESTIONS_TO_GO: 'QUESTIONS TO GO FOR YOUR NEXT NANAK COIN!!',
+  SEMANTICS_PRAISE: 'ਸ਼ਾਬਾਸ਼! (Well done) Ready for the challenges?',
   SETTINGS: 'Settings',
   SIGN_IN: 'Sign In',
   SIGN_IN_WITH_GOOGLE: 'Sign In with Google',
