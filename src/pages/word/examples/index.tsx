@@ -5,7 +5,7 @@ import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import BackBtn from 'components/buttons/BackBtn';
 import { wordData } from 'constants/wordsData';
 import { ROUTES } from 'constants/routes';
-import { highlightWord } from 'utils/words';
+import { highlightWord } from 'utils';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 

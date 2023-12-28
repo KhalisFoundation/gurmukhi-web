@@ -6,7 +6,7 @@ import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import BackBtn from 'components/buttons/BackBtn';
 import { WordData, wordData } from 'constants/wordsData';
 import { ROUTES } from 'constants/routes';
-import { convertToTitleCase, highlightWord } from 'utils/words';
+import { convertToTitleCase, highlightWord } from 'utils';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 

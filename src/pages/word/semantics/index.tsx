@@ -11,8 +11,7 @@ import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { ROUTES } from 'constants/routes';
 import { WordData, wordData } from 'constants/wordsData';
-import { showToastMessage } from 'utils';
-import { createSemanticDraggables } from 'utils/words';
+import { showToastMessage, createSemanticDraggables } from 'utils';
 import { processWords, semanticsOnDrag, updateSemanticWordsData } from './hooks';
 
 export default function Semantics() {

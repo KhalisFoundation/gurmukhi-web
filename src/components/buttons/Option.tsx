@@ -3,7 +3,7 @@ import { TFunction } from 'i18next';
 import { Link } from 'react-router-dom';
 import TextToSpeechBtn from './TextToSpeechBtn';
 import { Option } from 'types';
-import { addEndingPunctuation } from 'utils/words';
+import { addEndingPunctuation } from 'utils';
 import { ROUTES } from 'constants/routes';
 
 interface OptionProps {

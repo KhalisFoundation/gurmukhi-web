@@ -14,7 +14,7 @@ import {
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, firestore } from '../firebase';
-import { checkIfUsernameUnique, checkUser, getEmailFromUsername, getUser } from 'utils/users';
+import { checkIfUsernameUnique, checkUser, getEmailFromUsername, getUser } from 'utils';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 

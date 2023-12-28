@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NewQuestionType, Option } from 'types';
 import OptionBtn from 'components/buttons/Option';
-import { highlightWord } from 'utils/words';
+import { highlightWord } from 'utils';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 
 

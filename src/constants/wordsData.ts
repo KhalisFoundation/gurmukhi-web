@@ -17,7 +17,6 @@ export interface WordData {
   type?: string;
 }
 
-
 export const wordData: WordData[] = [
   {},
   {
