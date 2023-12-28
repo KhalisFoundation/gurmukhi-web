@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { User } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
 import { getUser } from 'utils/users';
 import { logOut, userStateListener } from '../firebase';
 

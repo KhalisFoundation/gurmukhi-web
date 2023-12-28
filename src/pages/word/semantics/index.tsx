@@ -12,7 +12,7 @@ import metaTags from 'constants/meta';
 import { ROUTES } from 'constants/routes';
 import { WordData, wordData } from 'constants/wordsData';
 import { showToastMessage } from 'utils';
-import { convertToTitleCase, createSemanticDraggables, getDraggedItemBackgroundColor } from 'utils/words';
+import { createSemanticDraggables } from 'utils/words';
 import { processWords, semanticsOnDrag, updateSemanticWordsData } from './hooks';
 
 export default function Semantics() {
