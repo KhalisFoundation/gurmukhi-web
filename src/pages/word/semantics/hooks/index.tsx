@@ -122,7 +122,7 @@ export const processWords = (
   setWords: React.Dispatch<React.SetStateAction<WordData[]>>,
   setSynonyms: React.Dispatch<React.SetStateAction<WordData[]>>,
   setAntonyms: React.Dispatch<React.SetStateAction<WordData[]>>,
-  ) => {
+) => {
   wordList.forEach((word) => {
     if (!(currentWord[type] as (number | string)[]).includes(Number(word.id))) {
       jumpBoxRef.current?.classList.remove('bg-green-500');
