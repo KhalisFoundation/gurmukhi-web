@@ -15,12 +15,11 @@ interface SignUpProps {
 export default function SignUp({ ...props }: SignUpProps) {
   const { t: text } = useTranslation();
 
-  const getPasswordBorderColor = () => {
-    if (!!props.errorMessage && props.errorMessage.code == 'pwd-mismatch') {
+  const getErrorColor = () => {
+    if (!!props.errorMessage && props.errorMessage.code == 'error') {
       return 'red';
-    }
-    if (!!props.errorMessage && props.errorMessage.code == 'pwd-match') {
-      return 'brightGreen';
+    } else {
+      return 'gray';
     }
   };
 
@@ -48,7 +47,7 @@ export default function SignUp({ ...props }: SignUpProps) {
         id='password'
         placeholder='Password'
         type='password'
-        border={getPasswordBorderColor()}
+        border={getErrorColor() ?? 'red'}
         onChange={
           (event: React.ChangeEvent<HTMLInputElement>) =>  props.passwordChange(event.target.value)
         }
@@ -57,12 +56,12 @@ export default function SignUp({ ...props }: SignUpProps) {
         id='cpassword'
         placeholder='Confirm Password'
         type='password'
-        border={getPasswordBorderColor()}
+        border={getErrorColor()}
         onChange={
           (event: React.ChangeEvent<HTMLInputElement>) =>  props.cpasswordChange(event.target.value)
         }
       />
-      {props.errorMessage && <div className={`text-${getPasswordBorderColor()}-500 text-sm`}>{props.errorMessage.message}</div>}
+      {props.errorMessage && <div className={'text-red-500 text-sm'}>{props.errorMessage.message}</div>}
       <button type='submit' className='w-full p-4 rounded-lg bg-gradient-to-r from-brightBlue to-softBlue text-white text-lg'>{text('SIGN_UP')}</button>
     </div>
   );

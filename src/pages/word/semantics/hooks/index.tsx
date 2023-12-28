@@ -124,7 +124,7 @@ export const processWords = (
   setAntonyms: React.Dispatch<React.SetStateAction<WordData[]>>,
 ) => {
   wordList.forEach((word) => {
-    if (!(currentWord[type] as (number | string)[]).includes(Number(word.id))) {
+    if (currentWord[type] && !(currentWord[type] as (number | string)[]).includes(Number(word.id))) {
       jumpBoxRef.current?.classList.remove('bg-green-500');
       jumpBoxRef.current.classList.add('jump-box');
       jumpBoxRef.current.classList.add('bg-red-500');

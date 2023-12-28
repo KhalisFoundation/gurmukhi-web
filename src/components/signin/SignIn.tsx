@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
@@ -27,22 +27,6 @@ export default function SignIn() {
     });
   };
 
-  useEffect(() => {
-    if (password === '' && cpassword === '') {
-      setErrorMessage(null);
-    } else if (password === cpassword && password !== '' && cpassword !== '') {
-      setErrorMessage({
-        code: 'pwd-match',
-        message: 'Passwords match',
-      });
-    } else {
-      setErrorMessage({
-        code: 'pwd-mismatch',
-        message: 'Passwords do not match',
-      });
-    }
-  }, [password, cpassword]);
-
   const signToggle = (e: FormEvent) => {
     e.preventDefault();
     const switchElement = document.getElementsByClassName('switch')[0];
@@ -59,6 +43,41 @@ export default function SignIn() {
     event.preventDefault();
     try {
       const username = email.split('@')[0];
+      let valid = true;
+      if (name === '' || username == '' || email === '' || password === '') {
+        valid = false;
+        setErrorMessage({
+          code: 'error',
+          message: 'Please fill all the fields',
+        });
+      } else if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
+        valid = false;
+        setErrorMessage({
+          code: 'error',
+          message: 'Please enter a valid email address',
+        });
+      } else if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+        valid = false;
+        setErrorMessage({
+          code: 'error',
+          message: 'Password must contain at least 8 characters, one uppercase, one lowercase and one number',
+        });
+      } else if (
+        password !== cpassword
+        && password !== ''
+        && cpassword !== ''
+      ) {
+        valid = false;
+        setErrorMessage({
+          code: 'error',
+          message: 'Passwords do not match',
+        });
+      }
+
+      if (!valid) {
+        return;
+      }
+
       if (isNewUser) {
         if (password === cpassword) {
           const success = await signUp(name, username, email, password, cpassword, showToastMessage);
@@ -67,11 +86,17 @@ export default function SignIn() {
           } 
         } else {
           setErrorMessage({
-            code: 'pwd-mismatch',
+            code: 'error',
             message: 'Passwords do not match',
           });
         }
       } else {
+        if (username === '' || password === '') {
+          setErrorMessage({
+            code: 'error',
+            message: 'Please fill all the fields',
+          });
+        }
         const success = await logIn(username, password, showToastMessage);
         if (success) {
           navigate(ROUTES.DASHBOARD);
