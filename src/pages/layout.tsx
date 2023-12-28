@@ -12,7 +12,7 @@ export default function RootLayout() {
   return (
     <main className='flex flex-col background-layer'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col h-screen justify-start overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg z-[1]'>
+      <div className='flex flex-col h-screen justify-start bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg z-[1]'>
         <Header loggedIn={!!user} />
         <Outlet />
       </div>

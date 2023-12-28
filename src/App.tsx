@@ -32,7 +32,7 @@ function App() {
         <UserAuthContextProvider>
           <div>
             <Meta title={title} description={description} />
-            <main className='flex h-screen flex-col justify-center overflow-y-scroll bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer'>
+            <main className='flex h-screen flex-col justify-center bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer'>
               <AppRouter />
             </main>
           </div>
