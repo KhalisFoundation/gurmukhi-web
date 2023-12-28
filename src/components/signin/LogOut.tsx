@@ -16,7 +16,7 @@ export default function LogOut() {
     toast.success(errorMessage, {
       position: toast.POSITION.BOTTOM_RIGHT,
       closeOnClick: true,
-      type: 'error'
+      type: 'error',
     });
   };
 
