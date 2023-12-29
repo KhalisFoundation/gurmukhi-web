@@ -16,7 +16,7 @@ export default function Profile() {
         <h1 className='title'>{text('PROFILE')}</h1>
         <div className='flex flex-col'>
           <span>{user.displayName}</span>
-          <span>Email: {user.email}</span>
+          <span>{text('EMAIL')}: {user.email}</span>
         </div>
       </div>
     </section>

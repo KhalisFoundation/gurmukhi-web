@@ -14,7 +14,7 @@ import {
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, firestore } from '../firebase';
-import { checkIfUsernameUnique, checkUser, getEmailFromUsername, getUser } from 'utils';
+import { checkIfUsernameUnique, checkUser, getUser } from 'utils';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 
@@ -25,24 +25,21 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
   const { t: text } = useTranslation();
 
   const logIn = async (
-    username: string,
+    email: string,
     password: string,
     showToastMessage: (text: string, error?: boolean) => void,
-  ) => getEmailFromUsername(username).then((email) => {
-    try {
-      if (email) return signInWithEmailAndPassword(auth, email, password);
-      return null;
-    } catch (error: any) {
-      if (Object.keys(errors).includes(error.code)) {
-        console.log(error.code);
-        console.log(errors[error.code]);
-        showToastMessage(errors[error.code]);
-      }
-      return null;
+  ) => signInWithEmailAndPassword(auth, email, password).catch((error: any) => {
+    if (Object.keys(errors).includes(error.code)) {
+      showToastMessage(errors[error.code]);
+    } else {
+      showToastMessage(text('ERROR') + error.code + error.message);
     }
+    return null;
   });
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (
+    showToastMessage: (text: string, error?: boolean) => void,
+  ) => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider)
       .then((userCredential) => {
@@ -64,7 +61,7 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
         });
       }).catch((error: any) => {
         if (Object.keys(errors).includes(error.code)) {
-          alert(errors[error.code]);
+          showToastMessage(errors[error.code]);
         }
         return false;
       });

@@ -44,41 +44,45 @@ export default function SignIn() {
     try {
       const username = email.split('@')[0];
       let valid = true;
-      if (name === '' || username == '' || email === '' || password === '') {
+      if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
         valid = false;
         setErrorMessage({
-          code: 'error',
-          message: 'Please fill all the fields',
-        });
-      } else if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-        valid = false;
-        setErrorMessage({
-          code: 'error',
-          message: 'Please enter a valid email address',
+          code: text('ERROR'),
+          message: text('ENTER_VALID_EMAIL'),
         });
       } else if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
         valid = false;
         setErrorMessage({
-          code: 'error',
-          message: 'Password must contain at least 8 characters, one uppercase, one lowercase and one number',
+          code: text('ERROR'),
+          message: text('ERROR_PWD'),
         });
-      } else if (
-        password !== cpassword
-        && password !== ''
-        && cpassword !== ''
-      ) {
-        valid = false;
-        setErrorMessage({
-          code: 'error',
-          message: 'Passwords do not match',
-        });
-      }
-
-      if (!valid) {
-        return;
       }
 
       if (isNewUser) {
+        if (
+          password !== cpassword
+          && password !== ''
+          && cpassword !== ''
+        ) {
+          valid = false;
+          setErrorMessage({
+            code: text('ERROR'),
+            message: text('PASSWORDS_DONT_MATCH'),
+          });
+        }
+
+        if (name === '' || username == '' || email === '' || password === '') {
+          valid = false;
+          setErrorMessage({
+            code: text('ERROR'),
+            message: text('FILL_ALL_FIELDS'),
+          });
+        }
+
+        if (!valid) {
+          return;
+        }
+
         if (password === cpassword) {
           const success = await signUp(name, username, email, password, cpassword, showToastMessage);
           if (success) {
@@ -86,18 +90,24 @@ export default function SignIn() {
           } 
         } else {
           setErrorMessage({
-            code: 'error',
-            message: 'Passwords do not match',
+            code: text('ERROR'),
+            message: text('PASSWORDS_DONT_MATCH'),
           });
         }
       } else {
-        if (username === '' || password === '') {
+        if (email === '' || password === '') {
+          valid = false;
           setErrorMessage({
-            code: 'error',
-            message: 'Please fill all the fields',
+            code: text('ERROR'),
+            message: text('FILL_ALL_FIELDS'),
           });
         }
-        const success = await logIn(username, password, showToastMessage);
+        
+        if (!valid) {
+          return;
+        }
+
+        const success = await logIn(email, password, showToastMessage);
         if (success) {
           navigate(ROUTES.DASHBOARD);
         }
@@ -110,7 +120,7 @@ export default function SignIn() {
   const handleGoogleSignIn = async (event: React.MouseEvent) => {
     event.preventDefault();
     try {
-      const success = await signInWithGoogle();
+      const success = await signInWithGoogle(showToastMessage);
       if (success) {
         navigate(ROUTES.DASHBOARD);
       }
@@ -153,8 +163,9 @@ export default function SignIn() {
         )
           : (
             <div className='appear-from-below'>
-              <InputWithIcon id="username" placeholder="Username (same as your email)" type="text" icon="user" onChange={(e) => setEmail(e.target.value)} />
-              <InputWithIcon id="spassword" placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+              <InputWithIcon id="username" placeholder={text('EMAIL')} type="text" icon="user" onChange={(e) => setEmail(e.target.value)} />
+              <InputWithIcon id="spassword" placeholder={text('PASSWORD')} type="password" onChange={(e) => setPassword(e.target.value)} />
+              {errorMessage && <div className={'text-red-500 text-sm'}>{errorMessage.message}</div>}
               <button className="w-full p-4 rounded-lg bg-gradient-to-r from-brightBlue to-softBlue text-white text-lg" type='submit'>{text('SIGN_IN')}</button>
             </div>
           )

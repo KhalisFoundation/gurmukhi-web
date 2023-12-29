@@ -17,9 +17,9 @@ export default function SignUp({ ...props }: SignUpProps) {
 
   const getErrorColor = () => {
     if (!!props.errorMessage && props.errorMessage.code == 'error') {
-      return 'red';
+      return text('RED');
     } else {
-      return 'gray';
+      return text('GRAY');
     }
   };
 
@@ -27,7 +27,7 @@ export default function SignUp({ ...props }: SignUpProps) {
     <div className='appear-from-below'>
       <InputWithIcon
         id='name'
-        placeholder='Name'
+        placeholder={text('NAME')}
         type='text'
         icon='name'
         onChange={
@@ -36,7 +36,7 @@ export default function SignUp({ ...props }: SignUpProps) {
       />
       <InputWithIcon
         id='email'
-        placeholder='Email'
+        placeholder={text('EMAIL')}
         type='email'
         icon='email'
         onChange={
@@ -45,16 +45,16 @@ export default function SignUp({ ...props }: SignUpProps) {
       />
       <InputWithIcon
         id='password'
-        placeholder='Password'
+        placeholder={text('PASSWORD')}
         type='password'
-        border={getErrorColor() ?? 'red'}
+        border={getErrorColor() ?? text('RED')}
         onChange={
           (event: React.ChangeEvent<HTMLInputElement>) =>  props.passwordChange(event.target.value)
         }
       />
       <InputWithIcon
         id='cpassword'
-        placeholder='Confirm Password'
+        placeholder={text('CONFIRM_PASSWORD')}
         type='password'
         border={getErrorColor()}
         onChange={

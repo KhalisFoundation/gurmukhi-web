@@ -8,4 +8,5 @@ export const firebaseErrorCodes: StringyObject = {
   'auth/invalid-email': 'The email address is invalid.',
   'auth/operation-not-allowed': 'The email/password accounts are not enabled.',
   'auth/weak-password': 'The password is too weak.',
+  'auth/wrong-password': 'The password is incorrect.',
 };
