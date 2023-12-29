@@ -32,6 +32,7 @@ export const logOut = async () => signOut(auth);
 
 export const passwordReset = async (email: string) => sendPasswordResetEmail(auth, email);
 
+export const wordsdb = getFirestore(app);
 export const firestore = getFirestore(app, 'shabadavali-dev');
 export const analytics = getAnalytics(app);
 export const storage = getStorage(app);
