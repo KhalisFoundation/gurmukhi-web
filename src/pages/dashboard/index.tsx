@@ -21,8 +21,8 @@ export default function Dashboard() {
       <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
         <Ssa name={user.displayName} />
         <div className='flex flex-row text-center justify-center gap-6 h-2/5'>
-          <WordsSnippetBox commonStyle={commonStyle} />
-          <CoinBox commonStyle={commonStyle} />
+          <WordsSnippetBox commonStyle={commonStyle} wordsLearnt={user.wordsLearnt} />
+          <CoinBox commonStyle={commonStyle} coins={user.coins} />
           <WordBox commonStyle={commonStyle} />
         </div>
       </div>

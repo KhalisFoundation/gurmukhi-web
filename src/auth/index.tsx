@@ -37,9 +37,7 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
     return null;
   });
 
-  const signInWithGoogle = async (
-    showToastMessage: (text: string, error?: boolean) => void,
-  ) => {
+  const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider)
       .then((userCredential) => {
@@ -50,6 +48,8 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
             setDoc(localUser, {
               role: roles.student,
               email,
+              coins: 0,
+              wordsLearnt: 0,
               displayName: displayName ?? email?.split('@')[0],
               created_at: Timestamp.now(),
               updated_at: Timestamp.now(),
@@ -59,7 +59,8 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
           }
           setUser(userCredential.user);
         });
-      }).catch((error: any) => {
+      })
+      .catch((error: any) => {
         if (Object.keys(errors).includes(error.code)) {
           showToastMessage(errors[error.code]);
         }
@@ -95,6 +96,8 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
         email,
         username,
         displayName: displayName ?? name,
+        coins: 0,
+        wordsLearnt: 0,
         created_at: Timestamp.now(),
         updated_at: Timestamp.now(),
       });
@@ -120,18 +123,19 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
     const unsubscribe = onAuthStateChanged(auth, (currentuser: any) => {
       if (currentuser !== null) {
         const { uid, email } = currentuser;
-        getUser(email ?? '', uid)
-          .then((data) => {
-            const usr = {
-              user,
-              uid,
-              email: data?.email,
-              displayName: data?.displayName,
-              photoURL: '',
-              role: data?.role,
-            };
-            setUser(usr);
-          });
+        getUser(email ?? '', uid).then((data) => {
+          const usr = {
+            user,
+            uid,
+            coins: data?.coins,
+            wordsLearnt: data?.wordsLearnt,
+            email: data?.email,
+            displayName: data?.displayName,
+            photoURL: '',
+            role: data?.role,
+          };
+          setUser(usr);
+        });
       }
       setUser(currentuser);
     });
