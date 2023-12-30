@@ -56,6 +56,9 @@ export default function SignIn() {
           code: text('ERROR'),
           message: text('ERROR_PWD'),
         });
+      } else {
+        valid = true;
+        setErrorMessage(null);
       }
 
       if (isNewUser) {
@@ -79,9 +82,8 @@ export default function SignIn() {
           });
         }
 
-        if (!valid) {
-          return;
-        }
+        if (valid) setErrorMessage(null);
+        else return;
 
         if (password === cpassword) {
           const success = await signUp(name, username, email, password, cpassword, showToastMessage);
@@ -102,10 +104,9 @@ export default function SignIn() {
             message: text('FILL_ALL_FIELDS'),
           });
         }
-        
-        if (!valid) {
-          return;
-        }
+
+        if (valid) setErrorMessage(null);
+        else return;
 
         const success = await logIn(email, password, showToastMessage);
         if (success) {
