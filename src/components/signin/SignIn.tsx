@@ -50,7 +50,7 @@ export default function SignIn() {
           code: text('ERROR'),
           message: text('ENTER_VALID_EMAIL'),
         });
-      } else if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+      } else if (!password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)) {
         valid = false;
         setErrorMessage({
           code: text('ERROR'),
