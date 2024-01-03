@@ -50,12 +50,15 @@ export default function SignIn() {
           code: text('ERROR'),
           message: text('ENTER_VALID_EMAIL'),
         });
-      } else if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)) {
+      } else if (!password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)) {
         valid = false;
         setErrorMessage({
           code: text('ERROR'),
           message: text('ERROR_PWD'),
         });
+      } else {
+        valid = true;
+        setErrorMessage(null);
       }
 
       if (isNewUser) {
@@ -79,9 +82,8 @@ export default function SignIn() {
           });
         }
 
-        if (!valid) {
-          return;
-        }
+        if (valid) setErrorMessage(null);
+        else return;
 
         if (password === cpassword) {
           const success = await signUp(name, username, email, password, cpassword, showToastMessage);
@@ -102,10 +104,9 @@ export default function SignIn() {
             message: text('FILL_ALL_FIELDS'),
           });
         }
-        
-        if (!valid) {
-          return;
-        }
+
+        if (valid) setErrorMessage(null);
+        else return;
 
         const success = await logIn(email, password, showToastMessage);
         if (success) {
