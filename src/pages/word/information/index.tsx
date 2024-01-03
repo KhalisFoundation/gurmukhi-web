@@ -28,10 +28,16 @@ export default function Information() {
     () => wordData.find((word) => word.id === wordId) ?? {},
     [wordId],
   );
-  currentWord = currentWord ?? backUpWord;
+  let isWordFromDB = false;
+  if (location.state?.word) {
+    isWordFromDB = true;
+    currentWord = location.state.word;
+  } else {
+    currentWord = backUpWord;
+  }
 
   const renderFooter = (word_id: number) => {
-    if (word_id <= wordData.length - 1) {
+    if (word_id <= wordData.length - 1 && !isWordFromDB) {
       if (currentWord.questions && currentWord.questions.length > 0) {
         return <LevelsFooter nextUrl={`${ROUTES.QUESTION}?id=${word_id}&qid=0`} nextText='Next' />;
       } else {
@@ -44,7 +50,7 @@ export default function Information() {
       }
     } else {
       return (
-        <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' absolute={true} />
+        <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' />
       );
     }
   };
