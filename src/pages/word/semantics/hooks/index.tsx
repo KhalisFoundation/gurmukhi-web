@@ -91,19 +91,21 @@ export const semanticsOnDrag = (
 };
 
 export const updateSemanticWordsData = (
-  wordId: string | null,
+  wordId: string,
   currentWord: WordData,
   wordData: WordData[],
   setWords: React.Dispatch<React.SetStateAction<WordData[]>>,
 ) => {
-  const wordsData = wordData.filter((word) => word.id && word.id !== Number(wordId));
+  const wordsData = wordData.filter((word) => word.id && word.id !== wordId);
   // map through synonyms and antonyms and set its type to 'synonym' or 'antonym'
   const newWordsData: WordData[] = wordsData.map((word) => {
-    if (currentWord.synonyms?.includes(Number(word.id))) {
-      return { ...word, type: 'synonym' };
-    }
-    if (currentWord.antonyms?.includes(Number(word.id))) {
-      return { ...word, type: 'antonym' };
+    if (word.id) {
+      if (currentWord.synonyms?.includes(word.id)) {
+        return { ...word, type: 'synonym' };
+      }
+      if (currentWord.antonyms?.includes(word.id)) {
+        return { ...word, type: 'antonym' };
+      }
     }
     return word;
   });
@@ -132,9 +134,9 @@ export const processWords = (
         jumpBoxRef.current?.classList.remove('jump-box');
 
         if (type === 'synonyms') {
-          setSynonyms(synonyms.filter((synonym) => synonym.id !== Number(word.id)));
+          setSynonyms(synonyms.filter((synonym) => synonym.id !== word.id));
         } else if (type === 'antonyms') {
-          setAntonyms(antonyms.filter((antonym) => antonym.id !== Number(word.id)));
+          setAntonyms(antonyms.filter((antonym) => antonym.id !== word.id));
         }
 
         setWords([...words, word]);

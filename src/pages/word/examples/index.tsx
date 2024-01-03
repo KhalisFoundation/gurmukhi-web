@@ -66,9 +66,9 @@ export default function Examples() {
                 <div key={index} className='flex flex-col text-xl gap-1'>
                   <span className='text-black-111'>{highlightedSentence}</span>
                   <span className='text-black'>
-                    {sentence.sentenceEnglish.endsWith('.') || sentence.sentence.endsWith('?')
-                      ? sentence.sentenceEnglish
-                      : sentence.sentenceEnglish + '.'}
+                    {sentence.translation.endsWith('.') || sentence.sentence.endsWith('?')
+                      ? sentence.translation
+                      : sentence.translation + '.'}
                   </span>
                 </div>
               );

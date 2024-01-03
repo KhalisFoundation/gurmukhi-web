@@ -23,7 +23,7 @@ export default function Semantics() {
 
   // Extract the "id" parameter from the search string in the URL
   const searchParams = new URLSearchParams(location.search);
-  const wordId = searchParams.get('id');
+  const wordId = searchParams.get('id') ?? '';
   const synonymsText = text('SYNONYMS');
   const antonymsText = text('ANTONYMS');
 
@@ -32,7 +32,7 @@ export default function Semantics() {
 
   // fetch word from state using wordId
   const currentWord = useMemo(
-    () => wordData.find((word) => word.id === Number(wordId)) ?? {},
+    () => wordData.find((word) => word.id === wordId) ?? {},
     [wordId],
   );
   const [words, setWords] = useState<WordData[]>([]);

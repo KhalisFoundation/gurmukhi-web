@@ -166,3 +166,8 @@ export interface SignError {
   code: string,
   message: string
 }
+
+export interface SentenceType {
+  sentence: string,
+  translation: string
+}

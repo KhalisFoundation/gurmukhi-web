@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import BackBtn from 'components/buttons/BackBtn';
-import { WordData, wordData } from 'constants/wordsData';
+import { wordData } from 'constants/wordsData';
 import { ROUTES } from 'constants/routes';
 import { convertToTitleCase, highlightWord } from 'utils';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
+import { MiniWord, SentenceType } from 'types';
 
 export default function Information() {
   const { t: text } = useTranslation();
@@ -18,21 +19,22 @@ export default function Information() {
 
   // Extract the "id" parameter from the search string in the URL
   const searchParams = new URLSearchParams(location.search);
-  const wordId = searchParams.get('id');
+  const wordId = searchParams.get('id') ?? '';
 
   // fetch word from state using wordId
-  const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
+  let currentWord = location.state?.word;
+  // added temporary condition to keep the app flowing, can be removed once full db integration is done
+  const backUpWord = useMemo(
+    () => wordData.find((word) => word.id === wordId) ?? {},
+    [wordId],
+  );
+  currentWord = currentWord ?? backUpWord;
 
   const renderFooter = (word_id: number) => {
     if (word_id <= wordData.length - 1) {
       if (currentWord.questions && currentWord.questions.length > 0) {
         return <LevelsFooter nextUrl={`${ROUTES.QUESTION}?id=${word_id}&qid=0`} nextText='Next' />;
       } else {
-        if (word_id == wordData.length - 1) {
-          return (
-            <LevelsFooter nextUrl={ROUTES.DASHBOARD} nextText='Back to Dashboard' absolute={true} />
-          );
-        }
         return (
           <LevelsFooter
             nextUrl={`${ROUTES.WORD + ROUTES.DEFINITION}?id=${word_id + 1}`}
@@ -46,22 +48,6 @@ export default function Information() {
       );
     }
   };
-
-  const [synonyms, setSynonyms] = useState<WordData[]>([]);
-  const [antonyms, setAntonyms] = useState<WordData[]>([]);
-
-  useEffect(() => {
-    const synonymsIndex = currentWord.synonyms ?? [];
-    const antonymsIndex = currentWord.antonyms ?? [];
-    if (synonymsIndex.length != 0) {
-      const currentSynonyms = wordData.filter((word) => word.id && synonymsIndex.includes(word.id));
-      setSynonyms(currentSynonyms);
-    }
-    if (antonymsIndex.length != 0) {
-      const currentAntonyms = wordData.filter((word) => word.id && antonymsIndex.includes(word.id));
-      setAntonyms(currentAntonyms);
-    }
-  }, [synonyms, antonyms]);
 
   if (!currentWord.word) {
     // Handle case when word is not found
@@ -108,11 +94,10 @@ export default function Information() {
               className='object-cover rounded-xl'
             />
           </div>
-          ,
           <div className='flex flex-col items-left justify-evenly w-3/4'>
             <div className='flex flex-col items-left text-left justify-between gap-6'>
               <span className='tracking-widest'>{text('EXAMPLES').toUpperCase()}</span>
-              {currentWord.sentences?.map((sentence, index) => {
+              {currentWord.sentences && currentWord.sentences.map((sentence: SentenceType, index: number) => {
                 const highlightedSentence = highlightWord(
                   sentence.sentence,
                   currentWord.word ?? '',
@@ -122,9 +107,9 @@ export default function Information() {
                   <div key={index} className='flex flex-col text-xl'>
                     <span className='text-black-111'>{highlightedSentence}</span>
                     <span className='text-black'>
-                      {sentence.sentenceEnglish.endsWith('.') || sentence.sentence.endsWith('?')
-                        ? sentence.sentenceEnglish
-                        : sentence.sentenceEnglish + '.'}
+                      {sentence.translation.endsWith('.') || sentence.sentence.endsWith('?')
+                        ? sentence.translation
+                        : sentence.translation + '.'}
                     </span>
                   </div>
                 );
@@ -132,15 +117,15 @@ export default function Information() {
             </div>
             <div className='flex items-center justify-around my-10 gap-5 w-full'>
               <div
-                className={`card-bg shadow-lg rounded-lg w-2/5 h-64 p-5 ${
-                  (synonyms.length == 0) ? 'hidden' : ''
+                className={`w-2/5 h-64 p-5 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                  (currentWord.synonyms.length === 0) ? 'hidden' : ''
                 }`}
               >
                 <h2 className='text-black tracking-widest ms-2'>
                   {text('SYNONYMS').toUpperCase()}
                 </h2>
                 <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
-                  {synonyms.map((word) => {
+                  {currentWord.synonyms.map((word: MiniWord) => {
                     return (
                       <div
                         key={word.id}
@@ -155,15 +140,15 @@ export default function Information() {
                 </div>
               </div>
               <div
-                className={`card-bg shadow-lg rounded-lg w-2/5 h-64 p-5 ${
-                  (antonyms.length == 0) ? 'hidden' : ''
+                className={`w-2/5 h-64 p-5 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                  (currentWord.antonyms.length === 0) ? 'hidden' : ''
                 }`}
               >
                 <h2 className='text-black tracking-widest ms-2'>
                   {text('ANTONYMS').toUpperCase()}
                 </h2>
                 <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
-                  {antonyms.map((word) => {
+                  {currentWord.antonyms.map((word: MiniWord) => {
                     return (
                       <div
                         key={word.id}
