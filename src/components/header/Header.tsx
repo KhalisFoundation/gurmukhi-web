@@ -56,15 +56,11 @@ export default function Header({ ...props }: PropTypes) {
                   </span>
                 </button>
                 <ul
-                  className="bg-white border rounded-md transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 right-8"
+                  className="bg-white border rounded-md transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-24 right-8"
                 >
-                  <li><a href={ROUTES.PROFILE} className='block px-3 py-2 hover:bg-gray-200'>{text('PROFILE')}</a></li>
-                  <li><a href={ROUTES.SETTINGS} className='block px-3 py-2 hover:bg-gray-200'>{text('SETTINGS')}</a></li>
-                  <li><button onClick={
-                    () => {
-                      navigate(ROUTES.LOG_OUT);
-                    }
-                  } className='block px-3 py-2 hover:bg-gray-200'>{text('SIGN_OUT')}</button></li>
+                  <li><button onClick={() => {navigate(ROUTES.PROFILE);}} className='block w-24 px-3 py-2 hover:bg-gray-200'>{text('PROFILE')}</button></li>
+                  <li><button onClick={() => {navigate(ROUTES.SETTINGS);}} className='block w-24 px-3 py-2 hover:bg-gray-200'>{text('SETTINGS')}</button></li>
+                  <li><button onClick={() => {navigate(ROUTES.LOG_OUT);}} className='block w-24 px-3 py-2 hover:bg-gray-200'>{text('SIGN_OUT')}</button></li>
                 </ul>
               </div>
             </li>
