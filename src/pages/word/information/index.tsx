@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
@@ -6,7 +6,7 @@ import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import BackBtn from 'components/buttons/BackBtn';
 import { wordData } from 'constants/wordsData';
 import { ROUTES } from 'constants/routes';
-import { convertToTitleCase, highlightWord } from 'utils';
+import { convertToTitleCase, getWordById, highlightWord } from 'utils';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { MiniWord, SentenceType } from 'types';
@@ -22,22 +22,10 @@ export default function Information() {
   const wordId = searchParams.get('id') ?? '';
 
   // fetch word from state using wordId
-  let currentWord = location.state?.word;
-  // added temporary condition to keep the app flowing, can be removed once full db integration is done
-  const backUpWord = useMemo(
-    () => wordData.find((word) => word.id === wordId) ?? {},
-    [wordId],
-  );
-  let isWordFromDB = false;
-  if (location.state?.word) {
-    isWordFromDB = true;
-    currentWord = location.state.word;
-  } else {
-    currentWord = backUpWord;
-  }
+  const currentWord = location.state?.word ?? getWordById(wordId, true);
 
   const renderFooter = (word_id: number) => {
-    if (word_id <= wordData.length - 1 && !isWordFromDB) {
+    if (word_id <= wordData.length - 1 && wordId !== '') {
       if (currentWord.questions && currentWord.questions.length > 0) {
         return <LevelsFooter nextUrl={`${ROUTES.QUESTION}?id=${word_id}&qid=0`} nextText='Next' />;
       } else {

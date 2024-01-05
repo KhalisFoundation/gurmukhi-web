@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import Shabadavali from 'assets/icons/Shabadavali';
-import { PAGES, ROUTES } from 'constants/routes';
+import { ROUTES } from 'constants/routes';
 import { useNavigate } from 'react-router-dom';
 
 interface PropTypes {
@@ -17,7 +17,7 @@ export default function Header({ ...props }: PropTypes) {
 
   return (
     <header className="flex bg-gradient-to-r sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10">
-      <a href={PAGES.DASHBOARD}>
+      <a href={ROUTES.DASHBOARD}>
         <main className="flex items-center justify-between">
           <Shabadavali />
           <h1 className="title">{text('APP_TITLE')}</h1>

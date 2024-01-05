@@ -8,3 +8,4 @@ export const showToastMessage = (message: string, position: ToastPosition, close
 };
 export * from './users';
 export * from './words';
+export * from './database';

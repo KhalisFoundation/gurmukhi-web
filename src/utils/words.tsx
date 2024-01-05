@@ -2,8 +2,6 @@ import React, { MutableRefObject } from 'react';
 import { Draggable, DroppableProvided } from 'react-beautiful-dnd';
 import { TFunction } from 'i18next';
 import { WordData } from 'constants/wordsData';
-import { wordsdb } from '../firebase';
-import { DocumentData, collection, doc, documentId, getDoc, getDocs, limit, query, where } from 'firebase/firestore';
 
 const convertToTitleCase = (word: string) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
@@ -85,127 +83,9 @@ const createSemanticDraggables = (
   );
 };
 
-const wordsCollection = collection(wordsdb, 'words');
-const sentencesCollection = collection(wordsdb, 'sentences');
-
-// Function to generate a random alphanumeric ID
-const generateRandomId = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let randomId = '';
-
-  for (let i = 0; i < 20; i++) {
-    randomId += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-
-  return randomId;
-};
-
-const fetchSentencesFromWordId = async (wordId: string) => {
-  const sentencesData: DocumentData[] = [];
-  const queryRef = query(sentencesCollection, where('word_id', '==', wordId));
-  const sentences = await getDocs(queryRef);
-
-  sentences.docs.forEach((sentence) => {
-    sentencesData.push(sentence.data());
-  });
-  return sentencesData;
-};
-
-const fetchDataFromCollection = async (id: string, collectionName: string) => {
-  const docRef = doc(wordsdb, collectionName, id);
-  const wordSnapshot = await getDoc(docRef);
-  const wordData = wordSnapshot.data() as WordData;
-  return wordData;
-};
-
-const fetchMiniWordById = async (wordId: string) => {
-  const docRef = doc(wordsdb, 'words', wordId);
-  const wordSnapshot = await getDoc(docRef);
-
-  const { word, translation } = wordSnapshot.data() as WordData;
-  
-  return {
-    id: wordId,
-    word,
-    translation,
-  };
-};
-
-const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) => {
-  const synonymsPromises: any = (synonymsIds || []).map((synonym) => fetchMiniWordById(synonym.toString()));
-  const antonymsPromises: any = (antonymsIds || []).map((antonym) => fetchMiniWordById(antonym.toString()));
-
-  const [synonyms, antonyms] = await Promise.all([Promise.all(synonymsPromises), Promise.all(antonymsPromises)]);
-
-  return {
-    synonyms,
-    antonyms,
-  };
-};
-
-const getWordById = async (wordId: string, needExtras = false) => {
-  const docRef = doc(wordsdb, 'words', wordId);
-  const wordSnapshot = await getDoc(docRef);
-  
-  if (wordSnapshot.exists()) {
-    const wordData = wordSnapshot.data() as WordData;
-    
-    if (needExtras) {
-      const { synonyms, antonyms } = await getSemanticsByIds(wordData.synonyms as string[], wordData.antonyms as string[]);
-      
-      return {
-        ...wordData,
-        id: wordId,
-        synonyms,
-        antonyms,
-      };
-    } else {
-      return {
-        ...wordData,
-        id: wordId,
-      };
-      
-    }
-  } else {
-    console.log('No such document!');
-    return null;
-  }
-};
-
-const getRandomWord: () => Promise<WordData> = async () => {
-  // get random word from wordsCollection from firestore
-  const randomId = generateRandomId();
-  const queryRef = query(wordsCollection, where(documentId(), '>=', randomId), where('status', '==', 'active'), limit(1));
-  const wordSnapshot = await getDocs(queryRef);
-
-  if (!wordSnapshot.empty) {
-    const wordData = wordSnapshot.docs[0].data() as WordData;
-    const wordId = wordSnapshot.docs[0].id;
-    const sentences = await fetchSentencesFromWordId(wordId);
-    const { synonyms, antonyms } = await getSemanticsByIds(
-      wordData.synonyms as string[], 
-      wordData.antonyms as string[],
-    );
-
-    return {
-      ...wordData,
-      id: wordId,
-      sentences,
-      synonyms,
-      antonyms,
-    } as WordData;
-  } else {
-    return getRandomWord();
-  }
-};
-
 export { 
   addEndingPunctuation,
   highlightWord,
   convertToTitleCase, 
   createSemanticDraggables,
-  getRandomWord,
-  getWordById,
-  fetchDataFromCollection,
-  fetchSentencesFromWordId,
 };
