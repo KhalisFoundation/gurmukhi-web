@@ -50,6 +50,11 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
               email,
               coins: 0,
               wordsLearnt: 0,
+              progress: {
+                currentProgress: 0,
+                gameSession: [],
+                currentLevel: 0,
+              },
               displayName: displayName ?? email?.split('@')[0],
               created_at: Timestamp.now(),
               updated_at: Timestamp.now(),
@@ -98,6 +103,11 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
         displayName: displayName ?? name,
         coins: 0,
         wordsLearnt: 0,
+        progress: {
+          currentProgress: 0,
+          gameSession: [],
+          currentLevel: 0,
+        },
         created_at: Timestamp.now(),
         updated_at: Timestamp.now(),
       });
@@ -129,6 +139,7 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
             uid,
             coins: data?.coins,
             wordsLearnt: data?.wordsLearnt,
+            progress: data?.progress,
             email: data?.email,
             displayName: data?.displayName,
             photoURL: '',

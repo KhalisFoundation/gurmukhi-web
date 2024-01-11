@@ -87,25 +87,27 @@ const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) =
 
 const getWordById = async (wordId: string, needExtras = false) => {
   const wordData = await getDataById(wordId, wordsCollection) as WordData;
-  
+
   if (wordData) {
     if (needExtras) {
       const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
-      const { synonyms, antonyms } = await getSemanticsByIds(wordData.synonyms as string[], wordData.antonyms as string[]);
-      
+      const { synonyms, antonyms } = await getSemanticsByIds(
+        wordData.synonyms as string[],
+        wordData.antonyms as string[],
+      );
+
       return {
         ...wordData,
         id: wordId,
         sentences,
         synonyms,
         antonyms,
-      };
+      } as WordData;
     } else {
       return {
         ...wordData,
         id: wordId,
-      };
-      
+      } as WordData;
     }
   } else {
     console.log('No such document!');

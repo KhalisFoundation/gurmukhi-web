@@ -1,49 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
-import BackBtn from 'components/buttons/BackBtn';
-import { wordData } from 'constants/wordsData';
-import { ROUTES } from 'constants/routes';
+import { getWordById } from 'utils';
 import { highlightWord } from 'utils';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
+import ALL_CONSTANT from 'constants/constant';
+import { WordData } from 'constants/wordsData';
+import { useAppSelector } from 'store/hooks';
 
 export default function Examples() {
   const { t: text } = useTranslation();
+  const [wordID, setWordID] = useState<string | null>(null);
+  const [currentWord, setCurrentWord] = useState<WordData | null>(null);
+  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
+  const currentLevel = useAppSelector((state) => state.currentLevel);
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
   const { title, description } = metaTags.EXAMPLES;
   // Extract the "id" parameter from the search string in the URL
-  const searchParams = new URLSearchParams(location.search);
-  const wordId = searchParams.get('id');
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    setWordID(searchParams.get('id'));
+  }, [location.search]);
 
-  // fetch word from state using wordId
-  const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
-
-  const hasNoSynonymsOrAntonyms = !currentWord.synonyms?.length && !currentWord.antonyms?.length;
-  const nextUrl =
-    ROUTES.WORD +
-    (hasNoSynonymsOrAntonyms
-      ? `${ROUTES.INFORMATION}?id=${wordId}`
-      : `${ROUTES.SEMANTICS}?id=${wordId}`);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!wordID) {
+        return;
+      }
+      const words = await getWordById(wordID, true);
+      if (words !== null) {
+        setCurrentWord(words);
+      }
+    };
+    fetchData();
+  }, [wordID]);
 
   const LevelsFooterProps = {
-    nextUrl,
+    operation: ALL_CONSTANT.NEXT,
     nextText: 'Next',
     absolute: true,
+    currentGamePosition: currentGamePosition + 1,
+    currentLevel: currentLevel,
   };
 
-  if (!currentWord.word) {
+  if (!currentWord) {
     // Handle case when word is not found
     return <div>{text('WORD_NOT_FOUND')}</div>;
   }
 
   return (
-    <div className='flex flex-col h-screen items-center gap-5'>
+    <div className='flex flex-col items-center gap-5 w-full h-full'>
       <Meta title={title} description={description} />
-      <BackBtn navlink={-1} />
-      <div className='flex flex-col h-full justify-center items-center gap-5 pb-12 brandon-grotesque'>
+      <div className='flex flex-col h-full justify-center items-center gap-5 brandon-grotesque'>
         <h1 className='text-4xl gurmukhi text-black'>{currentWord.word}</h1>
         <h2 className='text-2xl italic text-gray-e4'>{currentWord.translation}</h2>
         <img

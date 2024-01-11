@@ -56,3 +56,5 @@ export const getEmailFromUsername = async (username: string) => {
   }
   return null;
 };
+
+export const updateProgress = async () => {};

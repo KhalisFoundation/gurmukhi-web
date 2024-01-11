@@ -9,15 +9,18 @@ import BackBtn from 'components/buttons/BackBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
-import { ROUTES } from 'constants/routes';
 import { WordData, wordData } from 'constants/wordsData';
 import { showToastMessage, createSemanticDraggables } from 'utils';
 import { processWords, semanticsOnDrag, updateSemanticWordsData } from './hooks';
+import ALL_CONSTANT from 'constants/constant';
+import { useAppSelector } from 'store/hooks';
 
 export default function Semantics() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.SEMANTICS;
   // Use useLocation to get the search parameters from the URL
+  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
+  const currentLevel = useAppSelector((state) => state.currentLevel);
   const location = useLocation();
   const [showConfetti, setShowConfetti] = useState(false);
 
@@ -31,10 +34,7 @@ export default function Semantics() {
   const jumpBoxRef = useRef<any>(null);
 
   // fetch word from state using wordId
-  const currentWord = useMemo(
-    () => wordData.find((word) => word.id === wordId) ?? {},
-    [wordId],
-  );
+  const currentWord = useMemo(() => wordData.find((word) => word.id === wordId) ?? {}, [wordId]);
   const [words, setWords] = useState<WordData[]>([]);
   const [synonyms, setSynonyms] = useState<WordData[]>([]);
   const [isSynonymsDisabled, setIsSynonymsDisabled] = useState<boolean>(false);
@@ -57,17 +57,21 @@ export default function Semantics() {
   };
 
   useEffect(() => {
-    updateSemanticWordsData(
-      wordId,
-      currentWord,
-      wordData,
-      setWords,
-    );
+    updateSemanticWordsData(wordId, currentWord, wordData, setWords);
   }, []);
 
   useEffect(() => {
-    const synonymFound = currentWord.synonyms ? currentWord.synonyms.map((synonymId) => synonyms.some(synonym => synonym.id === synonymId)) : [];
-    const antonymFound = currentWord.antonyms ? currentWord.antonyms.map((antonymId) => antonyms.some(antonym => antonym.id === antonymId)) : [];
+    const synonymIds = new Set(synonyms.map((synonym) => synonym.id));
+    const antonymIds = new Set(antonyms.map((antonym) => antonym.id));
+
+    const synonymFound = currentWord.synonyms
+      ? currentWord.synonyms.map((synonymId) => synonymIds.has(synonymId))
+      : [];
+
+    const antonymFound = currentWord.antonyms
+      ? currentWord.antonyms.map((antonymId) => antonymIds.has(antonymId))
+      : [];
+
     const allWords = [...synonymFound, ...antonymFound];
     // if all words are found, show confetti
     if (allWords.every((wordFound) => wordFound)) {
@@ -76,7 +80,6 @@ export default function Semantics() {
       setShowConfetti(false);
     }
   }, [currentWord, synonyms, antonyms]);
-
 
   useEffect(() => {
     if (showConfetti) {
@@ -172,24 +175,24 @@ export default function Semantics() {
                 droppableId={synonymsText.toLowerCase()}
                 isDropDisabled={isSynonymsDisabled}
               >
-                {(provided) => (
+                {(provided) =>
                   createSemanticDraggables(
                     provided,
                     synonyms,
                     synonymsText.toLowerCase(),
-                    text, 
+                    text,
                     currentWord.synonyms as (string | number)[],
                     setIsSynonymsDisabled,
                     jumpBoxRef,
                   )
-                )}
+                }
               </Droppable>
               <Droppable
                 type='COLUMN'
                 droppableId={antonymsText.toLowerCase()}
                 isDropDisabled={isAntonymsDisabled}
               >
-                {(provided) => (
+                {(provided) =>
                   createSemanticDraggables(
                     provided,
                     antonyms,
@@ -199,16 +202,18 @@ export default function Semantics() {
                     setIsAntonymsDisabled,
                     jumpBoxRef,
                   )
-                )}
+                }
               </Droppable>
             </div>
           </div>
         </div>
       </DragDropContext>
       <LevelsFooter
-        nextUrl={`${ROUTES.WORD + ROUTES.INFORMATION}?id=${wordId}`}
+        operation={ALL_CONSTANT.NEXT}
         nextText='Next'
         absolute={true}
+        currentLevel={currentLevel}
+        currentGamePosition={currentGamePosition}
       />
     </div>
   );

@@ -1,37 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
-import BackBtn from 'components/buttons/BackBtn';
-import { wordData } from 'constants/wordsData';
-import { ROUTES } from 'constants/routes';
+import { WordData } from 'constants/wordsData';
 import metaTags from 'constants/meta';
 import Meta from 'components/meta';
+import { getWordById } from 'utils';
+import ALL_CONSTANT from 'constants/constant';
+import { useAppSelector } from 'store/hooks';
 
 export default function Defintion() {
   const { t: text } = useTranslation();
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
   const { title, description } = metaTags.DEFINITION;
+  const [wordID, setWordID] = useState<string | null>(null);
+  const [currentWord, setCurrentWord] = useState<WordData | null>(null);
+  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
+  const currentLevel = useAppSelector((state) => state.currentLevel);
 
   // Extract the "id" parameter from the search string in the URL
-  const searchParams = new URLSearchParams(location.search);
-  const wordId = searchParams.get('id');
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    setWordID(searchParams.get('id'));
+  }, [location.search]);
 
   // fetch word from state using wordId
-  const currentWord = wordData[Number(wordId)] ? wordData[Number(wordId)] : {};
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!wordID) {
+        return;
+      }
+      const words = await getWordById(wordID);
+      if (words !== null) {
+        setCurrentWord(words);
+      }
+    };
+    fetchData();
+  }, [wordID]);
 
-  if (!currentWord.word) {
+  if (!currentWord) {
     // Handle case when word is not found
     return <div>{text('WORD_NOT_FOUND')}</div>;
   }
 
   return (
-    <div className='flex flex-col h-screen items-center gap-5'>
+    <div className='flex flex-col justify-end h-full w-full'>
       <Meta title={title} description={description} />
-      <BackBtn />
-      <div className='flex flex-col h-3/4 justify-center items-center gap-5'>
+      <div className='flex flex-col h-3/4 justify-between items-center gap-5'>
         <img
           className='w-3/5 h-6'
           src='/icons/pointy_border.svg'
@@ -51,7 +68,7 @@ export default function Defintion() {
             }
             className='object-cover rounded-xl'
           />
-          <div className='flex flex-col h-[296px] items-left justify-evenly p-8'>
+          <div className='flex flex-col h-[296px] items-left justify-evenly '>
             <div className='flex flex-row items-center justify-between gap-5'>
               <div className='flex flex-col'>
                 <h1 className={'text-5xl gurmukhi text-black'}>{currentWord.word}</h1>
@@ -75,10 +92,14 @@ export default function Defintion() {
           height={200}
         />
       </div>
-      <LevelsFooter nextUrl={`${ROUTES.WORD + ROUTES.EXAMPLES}?id=${wordId}`} nextText='Next' />
+      <LevelsFooter
+        nextText='Next'
+        operation={ALL_CONSTANT.NEXT}
+        currentLevel={currentLevel}
+        currentGamePosition={currentGamePosition + 1}
+      />
     </div>
   );
 }
 
 Defintion.propTypes = {};
-

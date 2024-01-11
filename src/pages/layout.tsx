@@ -10,9 +10,9 @@ export default function RootLayout() {
   const { title, description } = metaTags.ROOT;
   const { user } = useUserAuth();
   return (
-    <main className='flex flex-col background-layer'>
+    <main className='flex flex-col background-layer h-full'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col h-screen justify-start bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg z-[1]'>
+      <div className='flex flex-col justify-start bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg z-[1] h-full'>
         <Header loggedIn={!!user} />
         <Outlet />
       </div>

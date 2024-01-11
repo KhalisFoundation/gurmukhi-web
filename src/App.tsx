@@ -28,11 +28,11 @@ function App() {
 
   return (
     <Suspense fallback={<div>{text('LOADING')}</div>}>
-      <div className='App'>
+      <div className='App h-full'>
         <UserAuthContextProvider>
-          <div>
+          <div className='h-full'>
             <Meta title={title} description={description} />
-            <main className='flex h-screen flex-col justify-center bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer'>
+            <main className='flex flex-col bg-cover bg-scroll bg-bottom bg-no-repeat shadow-lg background-layer h-full'>
               <AppRouter />
             </main>
           </div>

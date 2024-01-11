@@ -14,7 +14,8 @@ const CONSTANTS = {
   ENTER_DETAILS: 'Please enter your details',
   ENTER_VALID_EMAIL: 'Please enter a valid email address',
   ERROR: 'Error',
-  ERROR_PWD: 'Password must contain at least 8 characters, one uppercase, one lowercase and one number',
+  ERROR_PWD:
+    'Password must contain at least 8 characters, one uppercase, one lowercase and one number',
   EXAMPLES: 'Examples',
   EXPLORE_WORD: 'Explore Word',
   FIFTH_QUESTION: 'You completed your 5th question!',
