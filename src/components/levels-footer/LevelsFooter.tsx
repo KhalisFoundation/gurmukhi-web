@@ -30,8 +30,8 @@ export default function LevelsFooter({
     (absolute ? 'absolute' : 'static');
 
   const getLevelType = (num: number) => {
-    if (num < currentLevel - 1) return 'completed';
-    if (num === currentLevel - 1) return 'current';
+    if (num < currentLevel) return 'completed';
+    if (num === currentLevel) return 'current';
     return 'locked';
   };
   return (
