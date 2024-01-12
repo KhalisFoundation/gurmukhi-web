@@ -78,7 +78,7 @@ export default function Question() {
       <LevelsFooter
         operation={ALL_CONSTANT.NEXT}
         nextText='Next'
-        currentLevel={currentLevel + 1}
+        currentLevel={currentLevel}
         currentGamePosition={currentGamePosition + 1}
         isDisabled={false}
       />

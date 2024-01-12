@@ -28,6 +28,12 @@ export default function LevelsFooter({
   const footerClass =
     'flex flex-row w-full sticky inset-x-0 bottom-0 bg-white/[.1] items-center justify-between z-10 box-border' +
     (absolute ? 'absolute' : 'static');
+
+  const getLevelType = (num: number) => {
+    if (num < currentLevel - 1) return 'completed';
+    if (num === currentLevel - 1) return 'current';
+    return 'locked';
+  };
   return (
     <footer className={footerClass}>
       <div className='flex flex-col items-left justify-between gap-4 m-5'>
@@ -35,15 +41,9 @@ export default function LevelsFooter({
           {numQuestionsLeft} {text('QUESTIONS_TO_GO')}
         </h1>
         <div className='flex flex-row gap-5'>
-          {Array.from(Array(totalNumQuestions).keys()).map((num) => {
-            if (num < currentLevel - 1) {
-              return <LevelHexagon key={num} number={num + 1} type='completed' />;
-            } else if (num === currentLevel - 1) {
-              return <LevelHexagon key={num} number={num + 1} type='current' />;
-            } else {
-              return <LevelHexagon key={num} number={num + 1} type='locked' />;
-            }
-          })}
+          {Array.from({ length: totalNumQuestions }).map((_, num) => (
+            <LevelHexagon key={num} number={num + 1} type={getLevelType(num)} />
+          ))}
         </div>
       </div>
       <StartQuestionBtn
