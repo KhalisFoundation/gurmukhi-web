@@ -214,6 +214,7 @@ export default function Semantics() {
         absolute={true}
         currentLevel={currentLevel}
         currentGamePosition={currentGamePosition}
+        isDisabled={false}
       />
     </div>
   );

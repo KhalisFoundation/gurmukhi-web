@@ -17,9 +17,14 @@ export default function MultipleChoiceQuestion({
   const { t: text } = useTranslation();
   const [selectedOption, setSelectedOption] = React.useState<Option | null>(null);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setSelectedOption(null);
+  }, [question]);
   useEffect(() => {
     if (selectedOption) {
       if (question.options[question.answer] === selectedOption) {
+        console.log('question is correct');
         dispatch(increment());
       }
     }

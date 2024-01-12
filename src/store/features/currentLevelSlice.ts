@@ -9,7 +9,10 @@ const currentLevelSlice = createSlice({
     increment: (state) => {
       return state + 1;
     },
+    resetLevel: () => {
+      return 0;
+    },
   },
 });
-export const { setCurrentLevel, increment } = currentLevelSlice.actions;
+export const { setCurrentLevel, increment, resetLevel } = currentLevelSlice.actions;
 export default currentLevelSlice.reducer;

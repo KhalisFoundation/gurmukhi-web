@@ -44,6 +44,7 @@ export default function Examples() {
     absolute: true,
     currentGamePosition: currentGamePosition + 1,
     currentLevel: currentLevel,
+    isDisabled: false,
   };
 
   if (!currentWord) {

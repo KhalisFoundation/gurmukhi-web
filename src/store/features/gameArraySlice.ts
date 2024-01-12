@@ -6,13 +6,16 @@ const gameArraySlice = createSlice({
   reducers: {
     addScreens: (state, action: PayloadAction<string | string[]>) => {
       if (Array.isArray(action.payload)) {
-        state.push(...action.payload);
+        return [...action.payload];
       } else {
-        state.push(action.payload);
+        return [...state, action.payload];
       }
     },
     removeScreen: (state, action: PayloadAction<string>) => {
-      state = state.filter((item) => item !== action.payload);
+      const index = state.findIndex((item) => item === action.payload);
+      if (index !== -1) {
+        state.splice(index, 1);
+      }
     },
     updateScreen: (state, action: PayloadAction<string>) => {
       const index = state.findIndex((item) => item === action.payload);
@@ -20,7 +23,10 @@ const gameArraySlice = createSlice({
         state[index] = action.payload;
       }
     },
+    reset: () => {
+      return [];
+    },
   },
 });
-export const { addScreens, removeScreen, updateScreen } = gameArraySlice.actions;
+export const { addScreens, removeScreen, updateScreen, reset } = gameArraySlice.actions;
 export default gameArraySlice.reducer;

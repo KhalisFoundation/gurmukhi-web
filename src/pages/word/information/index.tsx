@@ -3,8 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
-import BackBtn from 'components/buttons/BackBtn';
-import { WordData, wordData } from 'constants/wordsData';
+import { WordData } from 'constants/wordsData';
 
 import { convertToTitleCase, getWordById, highlightWord } from 'utils';
 import Meta from 'components/meta';
@@ -42,15 +41,15 @@ export default function Information() {
     };
     fetchData();
   }, [wordID]);
-  const renderFooter = (word_id: number) => {
-    let operation = ALL_CONSTANT.NEXT;
-    let nextText = 'Next';
+  const renderFooter = () => {
+    const operation = ALL_CONSTANT.NEXT;
+    const nextText = 'Next';
 
     // Determine if it's time to go back to the dashboard
-    if (word_id > wordData.length - 1 || wordID === '') {
-      operation = ALL_CONSTANT.BACK_TO_DASHBOARD;
-      nextText = 'Back to Dashboard';
-    }
+    // if (wordID > wordData.length - 1 || wordID === '') {
+    //   operation = ALL_CONSTANT.BACK_TO_DASHBOARD;
+    //   nextText = 'Back to Dashboard';
+    // }
 
     return (
       <LevelsFooter
@@ -58,6 +57,7 @@ export default function Information() {
         nextText={nextText}
         currentLevel={currentLevel}
         currentGamePosition={currentGamePosition}
+        isDisabled={false}
       />
     );
   };
@@ -68,9 +68,8 @@ export default function Information() {
   }
 
   return (
-    <div className='flex flex-col items-center gap-5'>
+    <div className='flex flex-col items-center gap-5 w-full h-full justify-between'>
       <Meta title={title} description={description} />
-      <BackBtn navlink={-1} />
       <div className='flex flex-col h-3/4 justify-center items-center gap-5'>
         <img
           className='w-3/5 h-6'
@@ -193,7 +192,7 @@ export default function Information() {
           height={200}
         />
       </div>
-      {renderFooter(Number(wordID))}
+      {renderFooter()}
     </div>
   );
 }

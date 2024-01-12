@@ -9,5 +9,6 @@ const ALL_CONSTANT = {
   CURRENT_GAME_POSITION: 'currentGamePosition',
   CURRENT_LEVEL: 'currentLevel',
   LEARNING_WORDS: 'learningWords',
+  LEVELS_COUNT: 13,
 };
 export default ALL_CONSTANT;

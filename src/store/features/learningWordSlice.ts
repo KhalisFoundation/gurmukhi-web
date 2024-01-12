@@ -6,13 +6,16 @@ const learningWordSlice = createSlice({
   reducers: {
     addWordIDs: (state, action: PayloadAction<string | string[]>) => {
       if (Array.isArray(action.payload)) {
-        state.push(...action.payload);
+        return [...action.payload];
       } else {
-        state.push(action.payload);
+        return [...state, action.payload];
       }
     },
     removeWordID: (state, action: PayloadAction<string>) => {
-      state = state.filter((item) => item !== action.payload);
+      const index = state.findIndex((item) => item === action.payload);
+      if (index !== -1) {
+        state.splice(index, 1);
+      }
     },
     updateWordID: (state, action: PayloadAction<string>) => {
       const index = state.findIndex((item) => item === action.payload);
@@ -20,7 +23,10 @@ const learningWordSlice = createSlice({
         state[index] = action.payload;
       }
     },
+    reset: () => {
+      return [];
+    },
   },
 });
-export const { addWordIDs, removeWordID, updateWordID } = learningWordSlice.actions;
+export const { addWordIDs, removeWordID, updateWordID, reset } = learningWordSlice.actions;
 export default learningWordSlice.reducer;

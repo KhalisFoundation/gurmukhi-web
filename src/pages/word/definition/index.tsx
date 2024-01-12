@@ -97,6 +97,7 @@ export default function Defintion() {
         operation={ALL_CONSTANT.NEXT}
         currentLevel={currentLevel}
         currentGamePosition={currentGamePosition + 1}
+        isDisabled={false}
       />
     </div>
   );

@@ -12,14 +12,22 @@ interface Props {
   text?: string;
   active?: boolean;
   currentGamePosition?: number;
+  isDisabled?: boolean;
 }
 
-const StartQuestionBtn = ({ operation, text, active = true, currentGamePosition }: Props) => {
+const StartQuestionBtn = ({
+  operation,
+  text,
+  active = true,
+  currentGamePosition,
+  isDisabled,
+}: Props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isActive = active ? '' : ' disabled';
   const linkClass = 'flex flex-row items-center justify-between gap-2 min-w-52' + isActive;
   const gameArray = useAppSelector((state) => state.gameArray);
+  const currentLevel = useAppSelector((state) => state.currentLevel);
 
   const navigateTo = (key: string, wordID: string, questionID: string | null = null) => {
     const routeMap = {
@@ -30,26 +38,32 @@ const StartQuestionBtn = ({ operation, text, active = true, currentGamePosition 
     navigate(routeMap[key]);
   };
   const handleClick = useCallback(() => {
-    console.log('currentGamePosition', currentGamePosition);
-    const sessionInfo = currentGamePosition !== undefined ? gameArray[currentGamePosition] : null;
-    console.log('sessionInfo', sessionInfo);
-    console.log(currentGamePosition);
-    if (sessionInfo) {
-      const [key, wordID, questionID] = sessionInfo.split('-');
-      console.log('Question ID', questionID);
-      if (key) {
-        navigateTo(key, wordID, questionID);
-      }
-    }
-    switch (operation) {
-      case ALL_CONSTANT.BACK_TO_DASHBOARD:
-        navigate(ROUTES.DASHBOARD);
-        return;
-      case ALL_CONSTANT.NEXT:
-        if (currentGamePosition) {
-          dispatch(setCurrentGamePosition(currentGamePosition));
+    if (currentLevel < ALL_CONSTANT.LEVELS_COUNT) {
+      if (gameArray.length > 0) {
+        const sessionInfo =
+          currentGamePosition !== undefined ? gameArray[currentGamePosition] : null;
+        console.log('sessionInfo', sessionInfo);
+        console.log(currentGamePosition);
+        if (sessionInfo) {
+          const [key, wordID, questionID] = sessionInfo.split('-');
+          console.log('Question ID', questionID);
+          if (key) {
+            navigateTo(key, wordID, questionID);
+          }
         }
-        break;
+        switch (operation) {
+          case ALL_CONSTANT.BACK_TO_DASHBOARD:
+            navigate(ROUTES.DASHBOARD);
+            return;
+          case ALL_CONSTANT.NEXT:
+            if (currentGamePosition) {
+              dispatch(setCurrentGamePosition(currentGamePosition));
+            }
+            break;
+        }
+      }
+    } else {
+      navigate(`${ROUTES.WINCOIN}`);
     }
   }, [gameArray, currentGamePosition]);
 
@@ -57,6 +71,7 @@ const StartQuestionBtn = ({ operation, text, active = true, currentGamePosition 
     <a onClick={handleClick} className={linkClass}>
       <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure' />
       <button
+        disabled={isDisabled}
         className='bg-lightAzure text-darkBlue rounded-lg p-3 w-52 text-center'
         color='secondary'
         style={{

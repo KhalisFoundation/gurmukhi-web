@@ -9,8 +9,12 @@ const currentGamePositionSlice = createSlice({
     increment: (state) => {
       return state + 1;
     },
+    resetGamePosition: () => {
+      return 0;
+    },
   },
 });
 
-export const { setCurrentGamePosition, increment } = currentGamePositionSlice.actions;
+export const { setCurrentGamePosition, increment, resetGamePosition } =
+  currentGamePositionSlice.actions;
 export default currentGamePositionSlice.reducer;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
@@ -25,7 +25,6 @@ export default function Question() {
   const location = useLocation();
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    console.log(searchParams.get('qid'));
     setWordID(searchParams.get('id'));
     setQuestionID(searchParams.get('qid'));
   }, [location.search]);
@@ -36,7 +35,6 @@ export default function Question() {
         return;
       }
       const question = await getQuestionByID(questionID);
-      console.log('question', question);
       if (question !== null) {
         setCurrentQuestion(question);
         const word = await getWordById(wordID);
@@ -49,12 +47,19 @@ export default function Question() {
     fetchData();
   }, [wordID, learningWords, questionID]);
 
+  const questionData = useMemo(() => {
+    return { ...currentQuestion, word: currentWord } as NewQuestionType;
+  }, [currentQuestion, currentWord]);
+
   const getQuestionElement = () => {
-    let questionData = { ...currentQuestion, word: currentWord } as NewQuestionType;
     switch (currentQuestion?.type) {
       case 'image':
-        questionData = { ...questionData, image: currentWord?.image };
-        return <MultipleChoiceQuestion question={questionData} hasImage={true} />;
+        return (
+          <MultipleChoiceQuestion
+            question={{ ...questionData, image: currentWord?.image }}
+            hasImage={true}
+          />
+        );
       default:
         return <MultipleChoiceQuestion question={questionData as NewQuestionType} />;
     }
@@ -67,6 +72,7 @@ export default function Question() {
         nextText='Back to Dashboard'
         currentLevel={currentLevel}
         currentGamePosition={currentGamePosition}
+        isDisabled={false}
       />
     ) : (
       <LevelsFooter
@@ -74,6 +80,7 @@ export default function Question() {
         nextText='Next'
         currentLevel={currentLevel + 1}
         currentGamePosition={currentGamePosition + 1}
+        isDisabled={false}
       />
     );
   };

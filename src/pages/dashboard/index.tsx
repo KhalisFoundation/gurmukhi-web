@@ -9,7 +9,6 @@ import metaTags from 'constants/meta';
 import { useUserAuth } from 'auth';
 import gamePlay from 'utils/gamePlay';
 import ALL_CONSTANT from 'constants/constant';
-import { fetchQuestions } from 'store/features/questionStore';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { addWordIDs } from 'store/features/learningWordSlice';
 import { addScreens } from 'store/features/gameArraySlice';
@@ -27,7 +26,6 @@ export default function Dashboard() {
       if (user.progress) {
         try {
           const { learningWords, gameArray } = await gamePlay(user);
-          fetchQuestions(learningWords[0]);
           dispatch(addWordIDs(learningWords));
           dispatch(addScreens(gameArray));
         } catch (error) {
@@ -45,7 +43,7 @@ export default function Dashboard() {
         <Ssa name={user.displayName} />
         <div className='flex flex-row text-center justify-center gap-6 h-2/5'>
           <WordsSnippetBox commonStyle={commonStyle} wordsLearnt={user.wordsLearnt} />
-          <CoinBox commonStyle={commonStyle} coins={user.coins} />
+          <CoinBox commonStyle={commonStyle} />
           <WordBox commonStyle={commonStyle} />
         </div>
       </div>
@@ -53,6 +51,7 @@ export default function Dashboard() {
         operation={ALL_CONSTANT.START_QUESTION}
         currentGamePosition={currentGamePosition}
         currentLevel={currentLevel}
+        isDisabled={false}
       />
     </div>
   );

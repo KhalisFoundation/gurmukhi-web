@@ -10,6 +10,7 @@ interface Props {
   completed?: boolean;
   currentGamePosition?: number;
   currentLevel: number;
+  isDisabled: boolean;
 }
 
 export default function LevelsFooter({
@@ -19,6 +20,7 @@ export default function LevelsFooter({
   nextText = 'Start Learning',
   absolute = false,
   completed = false,
+  isDisabled,
 }: Props) {
   const { t: text } = useTranslation();
   const totalNumQuestions = Number(text('TOTAL_NUM_QUESTIONS'));
@@ -49,6 +51,7 @@ export default function LevelsFooter({
         text={nextText}
         active={completed}
         currentGamePosition={currentGamePosition}
+        isDisabled={isDisabled}
       />
     </footer>
   );
