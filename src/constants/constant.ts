@@ -2,7 +2,7 @@ const ALL_CONSTANT = {
   NEXT: 'next',
   BACK_TO_DASHBOARD: 'back_to_dashboard',
   START_QUESTION: 'start_question',
-  DEFINATION: 'defination',
+  DEFINITION: 'definition',
   SENTENCES: 'sentences',
   QUESTIONS_SMALL: 'questions',
   PROGRESS: 'progress',

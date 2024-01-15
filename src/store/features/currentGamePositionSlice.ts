@@ -15,6 +15,9 @@ const currentGamePositionSlice = createSlice({
   },
 });
 
-export const { setCurrentGamePosition, increment, resetGamePosition } =
-  currentGamePositionSlice.actions;
+export const { 
+  setCurrentGamePosition, 
+  increment, 
+  resetGamePosition, 
+} = currentGamePositionSlice.actions;
 export default currentGamePositionSlice.reducer;

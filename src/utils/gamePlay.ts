@@ -34,7 +34,7 @@ const gamePlay = async (user: User) => {
         if (word?.id) {
           const questions = await getQuestionsByWordID(word.id);
           addWordIfNotExists(word.id);
-          gameArray.push(`${ALL_CONSTANT.DEFINATION}-${word.id}`);
+          gameArray.push(`${ALL_CONSTANT.DEFINITION}-${word.id}`);
           gameArray.push(`${ALL_CONSTANT.SENTENCES}-${word.id}`);
           for (let j = 0; j < questions.length; j++) {
             gameArray.push(`${ALL_CONSTANT.QUESTIONS_SMALL}-${word.id}-${questions[j].id}`);

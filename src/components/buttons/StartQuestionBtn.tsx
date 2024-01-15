@@ -31,7 +31,9 @@ const StartQuestionBtn = ({
 
   const navigateTo = (key: string, wordID: string, questionID: string | null = null) => {
     const routeMap = {
-      [ALL_CONSTANT.DEFINATION]: `${ROUTES.WORD + ROUTES.DEFINITION}?id=${wordID}`,
+      [ALL_CONSTANT.DEFINITION]: `${
+        ROUTES.WORD + ROUTES.DEFINITION
+      }?id=${wordID}`,
       [ALL_CONSTANT.SENTENCES]: `${ROUTES.WORD + ROUTES.EXAMPLES}?id=${wordID}`,
       [ALL_CONSTANT.QUESTIONS_SMALL]: `${ROUTES.QUESTION}?id=${wordID}&qid=${questionID}`,
     };
