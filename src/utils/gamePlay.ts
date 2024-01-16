@@ -1,14 +1,8 @@
 import ALL_CONSTANT from 'constants/constant';
 import { getQuestionsByWordID } from 'database/question';
 import { getRandomWord } from './database';
+import { User } from '../types/index';
 
-type User = {
-  progress: {
-    gameSession: string[];
-    currentLevel: number;
-    currentProgress: number;
-  };
-};
 
 const TOTAL_LEVEL = 13;
 const fetchProgress = (user: User) => {

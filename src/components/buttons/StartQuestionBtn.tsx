@@ -25,11 +25,16 @@ const StartQuestionBtn = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isActive = active ? '' : ' disabled';
-  const linkClass = 'flex flex-row items-center justify-between gap-2 min-w-52' + isActive;
+  const linkClass =
+    'flex flex-row items-center justify-between gap-2 min-w-52 ' + isActive;
   const gameArray = useAppSelector((state) => state.gameArray);
   const currentLevel = useAppSelector((state) => state.currentLevel);
 
-  const navigateTo = (key: string, wordID: string, questionID: string | null = null) => {
+  const navigateTo = (
+    key: string,
+    wordID: string,
+    questionID: string | null = null,
+  ) => {
     const routeMap = {
       [ALL_CONSTANT.DEFINITION]: `${
         ROUTES.WORD + ROUTES.DEFINITION
@@ -43,7 +48,9 @@ const StartQuestionBtn = ({
     if (currentLevel < ALL_CONSTANT.LEVELS_COUNT) {
       if (gameArray.length > 0) {
         const sessionInfo =
-          currentGamePosition !== undefined ? gameArray[currentGamePosition] : null;
+          currentGamePosition !== undefined
+            ? gameArray[currentGamePosition]
+            : null;
         console.log('sessionInfo', sessionInfo);
         console.log(currentGamePosition);
         if (sessionInfo) {
@@ -70,22 +77,23 @@ const StartQuestionBtn = ({
   }, [gameArray, currentGamePosition]);
 
   return (
-    <a onClick={handleClick} className={linkClass}>
+    <button
+      onClick={handleClick}
+      className={linkClass}
+      disabled={isDisabled}
+      color='secondary'
+      style={{
+        fontFamily:
+          "HvDTrial Brandon Grotesque, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif",
+        letterSpacing: '.1rem',
+      }}
+    >
       <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure' />
-      <button
-        disabled={isDisabled}
-        className='bg-lightAzure text-darkBlue rounded-lg p-3 w-52 text-center'
-        color='secondary'
-        style={{
-          fontFamily:
-            "HvDTrial Brandon Grotesque, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif",
-          letterSpacing: '.1rem',
-        }}
-      >
+      <p className='bg-lightAzure text-darkBlue rounded-lg p-3 w-52 text-center'>
         {text?.toUpperCase()}
-      </button>
+      </p>
       <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure' />
-    </a>
+    </button>
   );
 };
 

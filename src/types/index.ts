@@ -171,3 +171,11 @@ export interface SentenceType {
   sentence: string,
   translation: string
 }
+
+export interface User {
+  progress: {
+    gameSession: string[];
+    currentLevel: number;
+    currentProgress: number;
+  };
+}

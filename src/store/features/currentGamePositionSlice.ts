@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 const currentGamePositionSlice = createSlice({
   name: 'currentGamePosition',
   initialState: 0,
