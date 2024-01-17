@@ -16,6 +16,7 @@ export default function Header({ ...props }: PropTypes) {
   const navigate = useNavigate();
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const loggedIn = props.loggedIn ?? false;
+  const buttonComonStyle = 'block w-24 px-3 py-2 hover:bg-gray-200';
 
   return (
     <header className='flex bg-gradient-to-r sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10'>
@@ -29,7 +30,7 @@ export default function Header({ ...props }: PropTypes) {
         {loggedIn ? (
           <ul className='flex items-center justify-between gap-4 brandon-grotesque dull-blue'>
             <li>
-              <a href='/settings'>{text('SETTINGS')}</a>
+              <a href={ROUTES.SETTINGS}>{text('SETTINGS')}</a>
             </li>
             <li>
               <a href={ROUTES.DASHBOARD}>{text('DASHBOARD')}</a>
@@ -76,7 +77,7 @@ export default function Header({ ...props }: PropTypes) {
                       onClick={() => {
                         navigate(ROUTES.PROFILE);
                       }}
-                      className='block w-24 px-3 py-2 hover:bg-gray-200'
+                      className={buttonComonStyle}
                     >
                       {text('PROFILE')}
                     </button>
@@ -86,7 +87,7 @@ export default function Header({ ...props }: PropTypes) {
                       onClick={() => {
                         navigate(ROUTES.SETTINGS);
                       }}
-                      className='block w-24 px-3 py-2 hover:bg-gray-200'
+                      className={buttonComonStyle}
                     >
                       {text('SETTINGS')}
                     </button>
@@ -96,7 +97,7 @@ export default function Header({ ...props }: PropTypes) {
                       onClick={() => {
                         navigate(ROUTES.LOG_OUT);
                       }}
-                      className='block w-24 px-3 py-2 hover:bg-gray-200'
+                      className={buttonComonStyle}
                     >
                       {text('SIGN_OUT')}
                     </button>
