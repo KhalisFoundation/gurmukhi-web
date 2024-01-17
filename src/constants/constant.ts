@@ -10,5 +10,6 @@ const ALL_CONSTANT = {
   CURRENT_LEVEL: 'currentLevel',
   LEARNING_WORDS: 'learningWords',
   LEVELS_COUNT: 13,
+  FETCHING: 'Fetching',
 };
 export default ALL_CONSTANT;

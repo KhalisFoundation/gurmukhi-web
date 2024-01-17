@@ -78,20 +78,29 @@ const StartQuestionBtn = ({
     }
   }, [gameArray, currentGamePosition]);
   const renderLoader = () => {
+    // please keep one of the below loaders
     return (
       <span>
-        <svg className='animate-spin h-5 w-5 m-auto' viewBox='0 0 24 24'>
+        <svg 
+          className='animate-spin h-5 w-5 m-auto'
+          viewBox='0 0 24 24'
+          style={{
+            display: 'inline',
+            marginInlineEnd: '0.5rem',
+          }}
+        >
           <circle
             cx='12'
             cy='12'
             r='10'
-            stroke='#000'
+            stroke='#1F4860'
             strokeWidth='2'
             fill='none'
             strokeDasharray='31.4 31.4'
           />
         </svg>
-        {'Fetching...'}
+        <span>{ALL_CONSTANT.FETCHING}</span>
+        <div className='loader'></div>
       </span>
     );
   };
