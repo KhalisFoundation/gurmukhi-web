@@ -10,21 +10,26 @@ import { useAppDispatch } from 'store/hooks';
 export default function MultipleChoiceQuestion({
   question,
   hasImage,
+  setIsOptionSelected,
 }: {
   question: NewQuestionType;
   hasImage?: boolean;
+  setIsOptionSelected: (value: boolean) => void;
 }) {
   const { t: text } = useTranslation();
-  const [selectedOption, setSelectedOption] = React.useState<Option | null>(null);
+  const [selectedOption, setSelectedOption] = React.useState<Option | null>(
+    null,
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     setSelectedOption(null);
+    setIsOptionSelected(false);
   }, [question]);
   useEffect(() => {
     if (selectedOption) {
+      setIsOptionSelected(true);
       if (question.options[question.answer] === selectedOption) {
-        console.log('question is correct');
         dispatch(increment());
       }
     }
