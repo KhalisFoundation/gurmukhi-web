@@ -45,12 +45,6 @@ export default function Information() {
     const operation = ALL_CONSTANT.NEXT;
     const nextText = 'Next';
 
-    // Determine if it's time to go back to the dashboard
-    // if (wordID > wordData.length - 1 || wordID === '') {
-    //   operation = ALL_CONSTANT.BACK_TO_DASHBOARD;
-    //   nextText = 'Back to Dashboard';
-    // }
-
     return (
       <LevelsFooter
         operation={operation}
