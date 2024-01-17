@@ -1,10 +1,9 @@
 import ALL_CONSTANT from 'constants/constant';
 import { getQuestionsByWordID } from 'database/question';
 import { getRandomWord } from './database';
+
 import { User } from '../types/index';
 
-
-const TOTAL_LEVEL = 13;
 const fetchProgress = (user: User) => {
   return user?.progress.gameSession.length > 0 ? user.progress.gameSession : null;
 };
@@ -22,7 +21,7 @@ const gamePlay = async (user: User) => {
 
   if (!progress) {
     let i = 0;
-    while (i < TOTAL_LEVEL) {
+    while (i < ALL_CONSTANT.LEVELS_COUNT) {
       try {
         const word = await getRandomWord();
         if (word?.id) {
@@ -31,7 +30,9 @@ const gamePlay = async (user: User) => {
           gameArray.push(`${ALL_CONSTANT.DEFINITION}-${word.id}`);
           gameArray.push(`${ALL_CONSTANT.SENTENCES}-${word.id}`);
           for (let j = 0; j < questions.length; j++) {
-            gameArray.push(`${ALL_CONSTANT.QUESTIONS_SMALL}-${word.id}-${questions[j].id}`);
+            gameArray.push(
+              `${ALL_CONSTANT.QUESTIONS_SMALL}-${word.id}-${questions[j].id}`,
+            );
             i += 1;
           }
         }
