@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
-import { WordData, wordData } from 'constants/wordsData';
+import { WordData } from 'constants/wordsData';
 import MultipleChoiceQuestion from 'components/questions/multiple-choice';
 import { NewQuestionType, QuestionData } from 'types';
 import Meta from 'components/meta';
@@ -15,12 +15,17 @@ import { useAppSelector } from 'store/hooks';
 export default function Question() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.QUESTION;
-  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
+  const currentGamePosition = useAppSelector(
+    (state) => state.currentGamePosition,
+  );
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const [wordID, setWordID] = useState<string | null>(null);
   const [questionID, setQuestionID] = useState<string | null>(null);
-  const [currentQuestion, setCurrentQuestion] = useState<QuestionData | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState<QuestionData | null>(
+    null,
+  );
   const [currentWord, setCurrentWord] = useState<WordData | null>(null);
+  const [isOptionSelected, setOptionSelected] = useState<boolean>(false);
   const learningWords = useAppSelector((state) => state.learningWords);
   const location = useLocation();
   useEffect(() => {
@@ -58,29 +63,27 @@ export default function Question() {
           <MultipleChoiceQuestion
             question={{ ...questionData, image: currentWord?.image }}
             hasImage={true}
+            setOptionSelected={setOptionSelected}
           />
         );
       default:
-        return <MultipleChoiceQuestion question={questionData as NewQuestionType} />;
+        return (
+          <MultipleChoiceQuestion
+            question={questionData as NewQuestionType}
+            setOptionSelected={setOptionSelected}
+          />
+        );
     }
   };
 
-  const renderFooter = (word_id: number) => {
-    return word_id >= wordData.length - 1 ? (
-      <LevelsFooter
-        operation={ALL_CONSTANT.BACK_TO_DASHBOARD}
-        nextText='Back to Dashboard'
-        currentLevel={currentLevel}
-        currentGamePosition={currentGamePosition}
-        isDisabled={false}
-      />
-    ) : (
+  const renderFooter = () => {
+    return (
       <LevelsFooter
         operation={ALL_CONSTANT.NEXT}
         nextText='Next'
         currentLevel={currentLevel}
         currentGamePosition={currentGamePosition + 1}
-        isDisabled={false}
+        isDisabled={!isOptionSelected}
       />
     );
   };
@@ -112,7 +115,7 @@ export default function Question() {
           />
         </div>
       </div>
-      {renderFooter(Number(wordID))}
+      {renderFooter()}
     </div>
   );
 }

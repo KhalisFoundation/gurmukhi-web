@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import Ssa from 'components/ssa';
 import WordsSnippetBox from './components/wordsSnippetBox';
@@ -19,15 +19,20 @@ export default function Dashboard() {
   const { title, description } = metaTags.DASHBOARD;
   const { user } = useUserAuth();
   const dispatch = useAppDispatch();
-  const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
+  const currentGamePosition: number = useAppSelector(
+    (state) => state.currentGamePosition,
+  );
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
+  const [isLoading, toggleLoading] = useState<boolean>(true);
   useEffect(() => {
     const gamePlayAlgo = async () => {
       if (user.progress) {
+        toggleLoading(true);
         try {
           const { learningWords, gameArray } = await gamePlay(user);
           dispatch(addWordIDs(learningWords));
           dispatch(addScreens(gameArray));
+          toggleLoading(false);
         } catch (error) {
           console.error('Error in Game Play Algo', error);
         }
@@ -42,7 +47,10 @@ export default function Dashboard() {
       <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
         <Ssa name={user.displayName} />
         <div className='flex flex-row text-center justify-center gap-6 h-2/5'>
-          <WordsSnippetBox commonStyle={commonStyle} wordsLearnt={user.wordsLearnt} />
+          <WordsSnippetBox
+            commonStyle={commonStyle}
+            wordsLearnt={user.wordsLearnt}
+          />
           <CoinBox commonStyle={commonStyle} />
           <WordBox commonStyle={commonStyle} />
         </div>
@@ -51,7 +59,8 @@ export default function Dashboard() {
         operation={ALL_CONSTANT.START_QUESTION}
         currentGamePosition={currentGamePosition}
         currentLevel={currentLevel}
-        isDisabled={false}
+        isDisabled={isLoading}
+        isLoading={isLoading}
       />
     </div>
   );

@@ -13,6 +13,7 @@ interface Props {
   active?: boolean;
   currentGamePosition?: number;
   isDisabled?: boolean;
+  isLoading?: boolean;
 }
 
 const StartQuestionBtn = ({
@@ -21,6 +22,7 @@ const StartQuestionBtn = ({
   active = true,
   currentGamePosition,
   isDisabled,
+  isLoading = false,
 }: Props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -75,7 +77,33 @@ const StartQuestionBtn = ({
       navigate(`${ROUTES.WINCOIN}`);
     }
   }, [gameArray, currentGamePosition]);
-
+  const renderLoader = () => {
+    // please keep one of the below loaders
+    return (
+      <span>
+        <svg 
+          className='animate-spin h-5 w-5 m-auto'
+          viewBox='0 0 24 24'
+          style={{
+            display: 'inline',
+            marginInlineEnd: '0.5rem',
+          }}
+        >
+          <circle
+            cx='12'
+            cy='12'
+            r='10'
+            stroke='#1F4860'
+            strokeWidth='2'
+            fill='none'
+            strokeDasharray='31.4 31.4'
+          />
+        </svg>
+        <span>{ALL_CONSTANT.FETCHING}</span>
+        <div className='loader'></div>
+      </span>
+    );
+  };
   return (
     <button
       onClick={handleClick}
@@ -90,7 +118,7 @@ const StartQuestionBtn = ({
     >
       <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure' />
       <p className='bg-lightAzure text-darkBlue rounded-lg p-3 w-52 text-center'>
-        {text?.toUpperCase()}
+        {isLoading ? renderLoader() : text?.toUpperCase()}
       </p>
       <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure' />
     </button>
