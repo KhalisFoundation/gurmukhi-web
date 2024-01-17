@@ -681,6 +681,9 @@ video {
 .inline-block {
   display: inline-block;
 }
+.inline {
+  display: inline;
+}
 .flex {
   display: flex;
 }
@@ -1398,7 +1401,7 @@ html,body,#root{
   --background-end-rgb: 156, 201, 226;
 }
 * {
-  font-family: 'HvDTrial Brandon Grotesque';
+  font-family: 'Recoleta';
 }
 body {
   color: rgb(var(--foreground-rgb));
@@ -1510,7 +1513,17 @@ body #sortbox:checked ~ #sortboxmenu {
 body .fade-to-complete {
     animation: fadeIn 0.5s ease-in-out;
   }
+body .loader {
+    width: 15px;
+    display: inline-block;
+    aspect-ratio: 4;
+    background: radial-gradient(circle closest-side,#1F4860 90%,#0000) 0/calc(100%/3) 100% space;
+    clip-path: inset(0 100% 0 0);
+    animation: loading 1s steps(4) infinite;
+  }
 body {
+
+  @keyframes loading {to{clip-path: inset(0 -34% 0 0)}}
 
   @keyframes jump {
     0%, 20%, 50%, 80%, 100% {
