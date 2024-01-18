@@ -172,10 +172,16 @@ export interface SentenceType {
   translation: string
 }
 
+export interface GameScreen {
+  key: string;
+  data: any;
+}
 export interface User {
+  coins: number;
   progress: {
-    gameSession: string[];
+    gameSession: GameScreen[];
     currentLevel: number;
     currentProgress: number;
   };
 }
+

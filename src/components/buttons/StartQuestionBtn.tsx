@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { ROUTES } from 'constants/routes';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import ALL_CONSTANT from 'constants/constant';
+import { GameScreen } from 'types';
 
 interface Props {
   operation?: string;
@@ -29,13 +30,14 @@ const StartQuestionBtn = ({
   const isActive = active ? '' : ' disabled';
   const linkClass =
     'flex flex-row items-center justify-between gap-2 min-w-52 ' + isActive;
-  const gameArray = useAppSelector((state) => state.gameArray);
+  const gameArray: GameScreen[] = useAppSelector((state) => state.gameArray);
   const currentLevel = useAppSelector((state) => state.currentLevel);
 
   const navigateTo = (
     key: string,
     wordID: string,
     questionID: string | null = null,
+    data: any,
   ) => {
     const routeMap = {
       [ALL_CONSTANT.DEFINITION]: `${
@@ -44,7 +46,7 @@ const StartQuestionBtn = ({
       [ALL_CONSTANT.SENTENCES]: `${ROUTES.WORD + ROUTES.EXAMPLES}?id=${wordID}`,
       [ALL_CONSTANT.QUESTIONS_SMALL]: `${ROUTES.QUESTION}?id=${wordID}&qid=${questionID}`,
     };
-    navigate(routeMap[key]);
+    navigate(routeMap[key], { state: { data: data } });
   };
   const handleClick = useCallback(() => {
     if (currentLevel < ALL_CONSTANT.LEVELS_COUNT) {
@@ -56,10 +58,10 @@ const StartQuestionBtn = ({
         console.log('sessionInfo', sessionInfo);
         console.log(currentGamePosition);
         if (sessionInfo) {
-          const [key, wordID, questionID] = sessionInfo.split('-');
+          const [key, wordID, questionID] = sessionInfo.key.split('-');
           console.log('Question ID', questionID);
           if (key) {
-            navigateTo(key, wordID, questionID);
+            navigateTo(key, wordID, questionID, sessionInfo.data);
           }
         }
         switch (operation) {
