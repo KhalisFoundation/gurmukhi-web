@@ -1,6 +1,6 @@
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';
-import { generateRandomId, getDataById, wordsCollection } from 'utils';
-import { wordsdb } from '../firebase';
+import { generateRandomId, getDataById, wordsCollection } from './database';
+import { wordsdb } from '../../firebase';
 import { Option, QuestionData } from 'types';
 
 const questionCollection = collection(wordsdb, 'questions');

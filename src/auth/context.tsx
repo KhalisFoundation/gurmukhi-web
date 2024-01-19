@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { User } from 'firebase/auth';
-import { getUser } from 'utils';
+import { getUser } from 'database/shabadavalidb';
 import { logOut, userStateListener } from '../firebase';
 
 interface Props {

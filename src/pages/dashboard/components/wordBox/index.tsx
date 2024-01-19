@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { WordData } from 'constants/wordsData';
 import { useTranslation } from 'react-i18next';
-import { getRandomWord } from 'utils';
+import { getRandomWord } from 'database/default';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
 

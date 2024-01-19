@@ -6,7 +6,7 @@ import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import { WordData } from 'constants/wordsData';
 import metaTags from 'constants/meta';
 import Meta from 'components/meta';
-import { getWordById } from 'utils';
+import { getWordById } from 'database/default';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 
@@ -17,7 +17,9 @@ export default function Defintion() {
   const { title, description } = metaTags.DEFINITION;
   const [wordID, setWordID] = useState<string | null>(null);
   const [currentWord, setCurrentWord] = useState<WordData | null>(null);
-  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
+  const currentGamePosition = useAppSelector(
+    (state) => state.currentGamePosition,
+  );
   const currentLevel = useAppSelector((state) => state.currentLevel);
 
   // Extract the "id" parameter from the search string in the URL
@@ -37,7 +39,12 @@ export default function Defintion() {
         setCurrentWord(words);
       }
     };
-    fetchData();
+    const data = location.state.data;
+    if (data) {
+      setCurrentWord(data);
+    } else {
+      fetchData();
+    }
   }, [wordID]);
 
   if (!currentWord) {
@@ -62,8 +69,8 @@ export default function Defintion() {
             height={296}
             width={524}
             src={
-              currentWord.image
-                ? currentWord.image
+              currentWord.images && currentWord.images?.length > 0
+                ? currentWord.images[0]
                 : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
             }
             className='object-cover rounded-xl'
@@ -71,7 +78,9 @@ export default function Defintion() {
           <div className='flex flex-col h-[296px] items-left justify-evenly '>
             <div className='flex flex-row items-center justify-between gap-5'>
               <div className='flex flex-col'>
-                <h1 className={'text-5xl gurmukhi text-black'}>{currentWord.word}</h1>
+                <h1 className={'text-5xl gurmukhi text-black'}>
+                  {currentWord.word}
+                </h1>
                 <h2 className='text-2xl brandon-grotesque italic text-gray-4e4'>
                   {currentWord.translation}
                 </h2>
@@ -79,7 +88,9 @@ export default function Defintion() {
               <TextToSpeechBtn backgroundColor='bg-white-150' />
             </div>
             <div className='flex flex-col text-lg'>
-              <span className={'text-black-111'}>{currentWord.meaningEnglish}</span>
+              <span className={'text-black-111'}>
+                {currentWord.meaningEnglish}
+              </span>
               <span className={'text-black'}>{currentWord.meaning}</span>
             </div>
           </div>

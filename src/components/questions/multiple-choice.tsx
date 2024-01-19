@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { NewQuestionType, Option } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
+import { updateCurrentLevel } from 'database/shabadavalidb';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
-import { useAppDispatch } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { useUserAuth } from 'auth';
 
 export default function MultipleChoiceQuestion({
   question,
@@ -20,6 +22,8 @@ export default function MultipleChoiceQuestion({
   const [selectedOption, setSelectedOption] = React.useState<Option | null>(
     null,
   );
+  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const { user } = useUserAuth();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -30,7 +34,7 @@ export default function MultipleChoiceQuestion({
     if (selectedOption) {
       setOptionSelected(true);
       if (question.options[question.answer] === selectedOption) {
-        console.log('question is correct');
+        updateCurrentLevel(user.uid, currentLevel + 1);
         dispatch(increment());
       }
     }

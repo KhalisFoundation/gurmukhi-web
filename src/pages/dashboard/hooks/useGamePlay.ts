@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { User } from 'types';
+import { User, GameScreen } from 'types/shabadavlidb';
 import { addWordIDs } from 'store/features/learningWordSlice';
 import { addScreens } from 'store/features/gameArraySlice';
-import { GameScreen } from 'types';
 import { useAppDispatch } from 'store/hooks';
 import ALL_CONSTANT from 'constants/constant';
-import { getRandomWord } from 'utils';
-import { getQuestionsByWordID } from 'database/question';
+import { getRandomWord } from 'database/default';
+import { updateProgress } from 'database/shabadavalidb';
+import { getQuestionsByWordID } from 'database/default/question';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { setCurrentLevel } from 'store/features/currentLevelSlice';
 import {
@@ -22,7 +22,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
   const dispatch = useAppDispatch();
 
   const gamePlay = async () => {
-    const gameArray: GameScreen[] = [];
+    let gameArray: GameScreen[] = [];
     const learningWords: string[] = [];
     const learntWords: string[] = [];
     const progress: GameScreen[] | null = fetchProgress(user);
@@ -57,6 +57,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
     };
 
     if (checkIsFirstTime(user)) {
+      console.log('its running frist time');
       let i = 0;
       while (i < ALL_CONSTANT.LEVELS_COUNT) {
         try {
@@ -65,11 +66,13 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
           console.error('Error fetching random word:', error);
         }
       }
-    } else if (progress !== null) {
-      dispatch(addScreens(progress));
+      updateProgress(user.uid, 0, gameArray, 0);
+    } else if (progress && progress?.length > 0) {
+      gameArray = progress;
       dispatch(setCurrentGamePosition(user?.progress.currentProgress));
       dispatch(setCurrentLevel(user?.progress.currentLevel));
     } else {
+      console.log('Else running');
       const totalLength = operations.length;
       let current = 0;
       let questionCount = 0;
@@ -78,6 +81,8 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
         questionCount < ALL_CONSTANT.LEVELS_COUNT
       ) {
         const randomElement = getRandomElement(operations);
+        console.log('Random Element', randomElement);
+        console.log('current', current);
         switch (randomElement) {
           case 'learning':
             const learningQuestion = await addQuestionToGameArray(
@@ -101,6 +106,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
         }
         current += 1;
       }
+      updateProgress(user.uid, 0, gameArray, 0);
     }
 
     return { learningWords, gameArray };

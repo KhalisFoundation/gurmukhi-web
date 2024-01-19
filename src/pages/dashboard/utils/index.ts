@@ -1,5 +1,5 @@
-import { GameScreen, User } from 'types';
-import { getRandomQuestion } from 'database/question';
+import { GameScreen, User } from 'types/shabadavlidb';
+import { getRandomQuestion } from 'database/default/question';
 import ALL_CONSTANT from 'constants/constant';
 
 export const operations = [

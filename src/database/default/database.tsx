@@ -1,6 +1,16 @@
 import { WordData } from 'constants/wordsData';
-import { wordsdb } from '../firebase';
-import { CollectionReference, DocumentData, QueryFieldFilterConstraint, collection, documentId, getDocs, limit, query, where } from 'firebase/firestore';
+import { wordsdb } from '../../firebase';
+import {
+  CollectionReference,
+  DocumentData,
+  QueryFieldFilterConstraint,
+  collection,
+  documentId,
+  getDocs,
+  limit,
+  query,
+  where,
+} from 'firebase/firestore';
 
 const wordsCollection = collection(wordsdb, 'words');
 const sentencesCollection = collection(wordsdb, 'sentences');
@@ -13,9 +23,9 @@ const getDataById = async (
   miniWord?: boolean,
 ) => {
   const fieldPath = key ? key : documentId();
-  const queryRef = limitVal ?
-    query(collectionRef, where(fieldPath, '==', id), limit(limitVal)) :
-    query(collectionRef, where(fieldPath, '==', id));
+  const queryRef = limitVal
+    ? query(collectionRef, where(fieldPath, '==', id), limit(limitVal))
+    : query(collectionRef, where(fieldPath, '==', id));
   const querySnapshot = await getDocs(queryRef);
 
   if (limitVal && limitVal > 1) {
@@ -23,7 +33,7 @@ const getDataById = async (
   } else {
     if (miniWord) {
       const { word, translation } = querySnapshot.docs[0].data();
-    
+
       return {
         id,
         word,
@@ -57,9 +67,14 @@ const getRandomData = async (
 ) => {
   const randomId = generateRandomId();
   const fieldPath = key ? key : documentId();
-  const queryRef = limitVal ?
-    query(collectionRef, where(fieldPath, '>=', randomId), ...conditions, limit(limitVal)) :
-    query(collectionRef, where(fieldPath, '>=', randomId), ...conditions);
+  const queryRef = limitVal
+    ? query(
+        collectionRef,
+        where(fieldPath, '>=', randomId),
+        ...conditions,
+        limit(limitVal),
+      )
+    : query(collectionRef, where(fieldPath, '>=', randomId), ...conditions);
   const querySnapshot = await getDocs(queryRef);
 
   if (!querySnapshot.empty) {
@@ -76,11 +91,21 @@ const getRandomData = async (
   }
 };
 
-const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) => {
-  const synonymsPromises: any = (synonymsIds || []).map((synonym) => getDataById(synonym.toString(), wordsCollection, null, 1, true));
-  const antonymsPromises: any = (antonymsIds || []).map((antonym) => getDataById(antonym.toString(), wordsCollection, null, 1, true));
+const getSemanticsByIds = async (
+  synonymsIds: string[],
+  antonymsIds: string[],
+) => {
+  const synonymsPromises: any = (synonymsIds || []).map((synonym) =>
+    getDataById(synonym.toString(), wordsCollection, null, 1, true),
+  );
+  const antonymsPromises: any = (antonymsIds || []).map((antonym) =>
+    getDataById(antonym.toString(), wordsCollection, null, 1, true),
+  );
 
-  const [synonyms, antonyms] = await Promise.all([Promise.all(synonymsPromises), Promise.all(antonymsPromises)]);
+  const [synonyms, antonyms] = await Promise.all([
+    Promise.all(synonymsPromises),
+    Promise.all(antonymsPromises),
+  ]);
 
   return {
     synonyms,
@@ -89,11 +114,16 @@ const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) =
 };
 
 const getWordById = async (wordId: string, needExtras = false) => {
-  const wordData = await getDataById(wordId, wordsCollection) as WordData;
+  const wordData = (await getDataById(wordId, wordsCollection)) as WordData;
 
   if (wordData) {
     if (needExtras) {
-      const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
+      const sentences = await getDataById(
+        wordId,
+        sentencesCollection,
+        'word_id',
+        3,
+      );
       const { synonyms, antonyms } = await getSemanticsByIds(
         wordData.synonyms as string[],
         wordData.antonyms as string[],
@@ -120,17 +150,27 @@ const getWordById = async (wordId: string, needExtras = false) => {
 
 const getRandomWord: () => Promise<WordData> = async () => {
   // get random word from wordsCollection from firestore
-  const wordData = await getRandomData(wordsCollection, [where('status', '==', 'active')], null, 1) as WordData;
+  const wordData = (await getRandomData(
+    wordsCollection,
+    [where('status', '==', 'active')],
+    null,
+    1,
+  )) as WordData;
 
   if (wordData) {
     const wordId = wordData.id;
     if (wordId) {
-      const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
+      const sentences = await getDataById(
+        wordId,
+        sentencesCollection,
+        'word_id',
+        3,
+      );
       const { synonyms, antonyms } = await getSemanticsByIds(
-        wordData.synonyms as string[], 
+        wordData.synonyms as string[],
         wordData.antonyms as string[],
       );
-  
+
       return {
         ...wordData,
         id: wordId,

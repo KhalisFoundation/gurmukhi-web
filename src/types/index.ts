@@ -168,20 +168,6 @@ export interface SignError {
 }
 
 export interface SentenceType {
-  sentence: string,
-  translation: string
+  sentence: string;
+  translation: string;
 }
-
-export interface GameScreen {
-  key: string;
-  data: any;
-}
-export interface User {
-  coins: number;
-  progress: {
-    gameSession: GameScreen[];
-    currentLevel: number;
-    currentProgress: number;
-  };
-}
-

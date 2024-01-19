@@ -5,8 +5,10 @@ import { faDiamond } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { ROUTES } from 'constants/routes';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
+import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
-import { GameScreen } from 'types';
+import { GameScreen } from 'types/shabadavlidb';
+import { updateCurrentProgress } from 'database/shabadavalidb';
 
 interface Props {
   operation?: string;
@@ -32,7 +34,7 @@ const StartQuestionBtn = ({
     'flex flex-row items-center justify-between gap-2 min-w-52 ' + isActive;
   const gameArray: GameScreen[] = useAppSelector((state) => state.gameArray);
   const currentLevel = useAppSelector((state) => state.currentLevel);
-
+  const { user } = useUserAuth();
   const navigateTo = (
     key: string,
     wordID: string,
@@ -49,17 +51,14 @@ const StartQuestionBtn = ({
     navigate(routeMap[key], { state: { data: data } });
   };
   const handleClick = useCallback(() => {
-    if (currentLevel < ALL_CONSTANT.LEVELS_COUNT) {
+    if (currentLevel < ALL_CONSTANT.LEVELS_COUNT - 1) {
       if (gameArray.length > 0) {
         const sessionInfo =
           currentGamePosition !== undefined
             ? gameArray[currentGamePosition]
             : null;
-        console.log('sessionInfo', sessionInfo);
-        console.log(currentGamePosition);
         if (sessionInfo) {
           const [key, wordID, questionID] = sessionInfo.key.split('-');
-          console.log('Question ID', questionID);
           if (key) {
             navigateTo(key, wordID, questionID, sessionInfo.data);
           }
@@ -70,6 +69,7 @@ const StartQuestionBtn = ({
             return;
           case ALL_CONSTANT.NEXT:
             if (currentGamePosition) {
+              updateCurrentProgress(user.uid, currentGamePosition);
               dispatch(setCurrentGamePosition(currentGamePosition));
             }
             break;
@@ -83,7 +83,7 @@ const StartQuestionBtn = ({
     // please keep one of the below loaders
     return (
       <span>
-        <svg 
+        <svg
           className='animate-spin h-5 w-5 m-auto'
           viewBox='0 0 24 24'
           style={{
