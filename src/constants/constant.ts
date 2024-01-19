@@ -11,5 +11,8 @@ const ALL_CONSTANT = {
   LEARNING_WORDS: 'learningWords',
   LEVELS_COUNT: 13,
   FETCHING: 'Fetching',
+  USERS: 'user',
+  WORDS: 'words',
+  QUESTIONS: 'questions',
 };
 export default ALL_CONSTANT;
