@@ -62,8 +62,8 @@ export default function Defintion() {
             height={296}
             width={524}
             src={
-              currentWord.image
-                ? currentWord.image
+              currentWord.images
+                ? currentWord.images[0]
                 : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
             }
             className='object-cover rounded-xl'
@@ -71,7 +71,9 @@ export default function Defintion() {
           <div className='flex flex-col h-[296px] items-left justify-evenly '>
             <div className='flex flex-row items-center justify-between gap-5'>
               <div className='flex flex-col'>
-                <h1 className={'text-5xl gurmukhi text-black'}>{currentWord.word}</h1>
+                <h1 className={'text-5xl gurmukhi text-black'}>
+                  {currentWord.word}
+                </h1>
                 <h2 className='text-2xl brandon-grotesque italic text-gray-4e4'>
                   {currentWord.translation}
                 </h2>
@@ -79,7 +81,9 @@ export default function Defintion() {
               <TextToSpeechBtn backgroundColor='bg-white-150' />
             </div>
             <div className='flex flex-col text-lg'>
-              <span className={'text-black-111'}>{currentWord.meaningEnglish}</span>
+              <span className={'text-black-111'}>
+                {currentWord.meaningEnglish}
+              </span>
               <span className={'text-black'}>{currentWord.meaning}</span>
             </div>
           </div>
