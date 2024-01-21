@@ -1,8 +1,11 @@
 import {
-  DocumentReference, collection, doc, documentId, getDoc, getDocs, query, setDoc, where,
+  DocumentReference, collection, doc, documentId, getDoc, getDocs, query, updateDoc, where,
 } from 'firebase/firestore';
-import { UserProfile } from 'firebase/auth';
 import { firestore as db } from '../firebase';
+import { LocalUser } from 'auth/context';
+import { User } from 'types';
+
+interface UserProfile extends User, LocalUser {}
 
 export const usersCollection = collection(db, 'users');
 
@@ -21,7 +24,7 @@ export const getUser = async (email: string, uid: string) => {
 };
 
 export const updateUser = async (userRef: DocumentReference, userData: UserProfile) => {
-  const updatedUser = await setDoc(userRef, {
+  const updatedUser = await updateDoc(userRef, {
     ...userData,
   });
   return updatedUser;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,7 @@ import Shabadavali from 'assets/icons/Shabadavali';
 import { ROUTES } from 'constants/routes';
 import { useAppSelector } from 'store/hooks';
 import { useNavigate } from 'react-router-dom';
+import { useUserAuth } from 'auth';
 
 interface PropTypes {
   loggedIn?: boolean;
@@ -13,10 +14,18 @@ interface PropTypes {
 
 export default function Header({ ...props }: PropTypes) {
   const { t: text } = useTranslation();
+  const { user } = useUserAuth();
+  const [ photoURL, setPhotoURL ] = React.useState('/images/profile.jpeg');
   const navigate = useNavigate();
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const loggedIn = props.loggedIn ?? false;
   const buttonComonStyle = 'block w-24 px-3 py-2 hover:bg-gray-200';
+
+  useEffect(() => {
+    if (user?.photoURL) {
+      setPhotoURL(user.photoURL);
+    }
+  }, [user]);
 
   return (
     <header className='flex bg-gradient-to-r sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10'>
@@ -62,7 +71,7 @@ export default function Header({ ...props }: PropTypes) {
                       'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
                     }
                   >
-                    <img src='/icons/profile.svg' className={'h-8 w-8'} />
+                    <img src={photoURL} className={'h-8 w-8 rounded-full'} />
                   </div>
                   <span>
                     <FontAwesomeIcon

@@ -578,6 +578,21 @@ video {
 .z-\[1\] {
   z-index: 1;
 }
+.col-span-12 {
+  grid-column: span 12 / span 12;
+}
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+.col-span-4 {
+  grid-column: span 4 / span 4;
+}
+.col-span-8 {
+  grid-column: span 8 / span 8;
+}
+.col-span-9 {
+  grid-column: span 9 / span 9;
+}
 .m-2 {
   margin: 0.5rem;
 }
@@ -717,6 +732,9 @@ video {
 .h-3\/4 {
   height: 75%;
 }
+.h-32 {
+  height: 8rem;
+}
 .h-4 {
   height: 1rem;
 }
@@ -805,6 +823,9 @@ video {
 .w-3\/5 {
   width: 60%;
 }
+.w-32 {
+  width: 8rem;
+}
 .w-4 {
   width: 1rem;
 }
@@ -856,6 +877,9 @@ video {
 .min-w-52 {
   min-width: 13rem;
 }
+.min-w-\[200px\] {
+  min-width: 200px;
+}
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -905,6 +929,9 @@ video {
 }
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.grid-cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -984,9 +1011,17 @@ video {
 .border-2 {
   border-width: 2px;
 }
+.border-darkBlue {
+  --tw-border-opacity: 1;
+  border-color: rgb(31 72 96 / var(--tw-border-opacity));
+}
 .border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
+.border-red-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(239 68 68 / var(--tw-border-opacity));
 }
 .border-sky-200 {
   --tw-border-opacity: 1;
@@ -1003,6 +1038,10 @@ video {
 .bg-darkBlue {
   --tw-bg-opacity: 1;
   background-color: rgb(31 72 96 / var(--tw-bg-opacity));
+}
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 .bg-gray-eee {
   --tw-bg-opacity: 1;
@@ -1119,6 +1158,10 @@ video {
 .p-8 {
   padding: 2rem;
 }
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -1126,6 +1169,10 @@ video {
 .px-32 {
   padding-left: 8rem;
   padding-right: 8rem;
+}
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 .py-1 {
   padding-top: 0.25rem;
@@ -1600,9 +1647,25 @@ body {
 .hover\:bg-white-150:hover {
   background-color: rgba(249, 249, 249, 0.5);
 }
+.focus\:border-transparent:focus {
+  border-color: transparent;
+}
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+.focus\:ring-2:focus {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+.focus\:ring-darkBlue:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(31 72 96 / var(--tw-ring-opacity));
+}
+.focus\:ring-red-500:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(239 68 68 / var(--tw-ring-opacity));
 }
 .group:hover .group-hover\:w-full {
   width: 100%;

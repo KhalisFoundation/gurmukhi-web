@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { getRandomWord } from 'utils';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
+import { useUserAuth } from 'auth';
 
 function WordBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
   const [randomWord, setRandomWord] = useState<WordData>({});
+  const { user } = useUserAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,7 +19,9 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
       setRandomWord(newWord);
     };
 
-    fetchData();
+    if (user && user.uid) {
+      fetchData();
+    }
   }, []);
 
   return (
