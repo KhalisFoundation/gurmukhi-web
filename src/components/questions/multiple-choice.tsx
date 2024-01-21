@@ -9,11 +9,9 @@ import { useAppDispatch } from 'store/hooks';
 
 export default function MultipleChoiceQuestion({
   question,
-  hasImage,
   setOptionSelected,
 }: {
   question: NewQuestionType;
-  hasImage?: boolean;
   setOptionSelected: (value: boolean) => void;
 }) {
   const { t: text } = useTranslation();

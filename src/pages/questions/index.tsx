@@ -60,23 +60,12 @@ export default function Question() {
   }, [currentQuestion, currentWord]);
 
   const getQuestionElement = () => {
-    switch (currentQuestion?.type) {
-      case 'image':
-        return (
-          <MultipleChoiceQuestion
-            question={{ ...questionData, image: currentWord?.image }}
-            hasImage={true}
-            setOptionSelected={setOptionSelected}
-          />
-        );
-      default:
-        return (
-          <MultipleChoiceQuestion
-            question={questionData as NewQuestionType}
-            setOptionSelected={setOptionSelected}
-          />
-        );
-    }
+    return (
+      <MultipleChoiceQuestion
+        question={questionData as NewQuestionType}
+        setOptionSelected={setOptionSelected}
+      />
+    );
   };
 
   const renderFooter = () => {
