@@ -39,9 +39,6 @@ export default function Header({ ...props }: PropTypes) {
         {loggedIn ? (
           <ul className='flex items-center justify-between gap-4 brandon-grotesque dull-blue'>
             <li>
-              <a href={ROUTES.SETTINGS}>{text('SETTINGS')}</a>
-            </li>
-            <li>
               <a href={ROUTES.DASHBOARD}>{text('DASHBOARD')}</a>
             </li>
             {/* <li>

@@ -47,7 +47,7 @@ const StartQuestionBtn = ({
     navigate(routeMap[key]);
   };
   const handleClick = useCallback(() => {
-    if (currentLevel < ALL_CONSTANT.LEVELS_COUNT) {
+    if (currentLevel < ALL_CONSTANT.LEVELS_COUNT - 1) {
       if (gameArray.length > 0) {
         const sessionInfo =
           currentGamePosition !== undefined

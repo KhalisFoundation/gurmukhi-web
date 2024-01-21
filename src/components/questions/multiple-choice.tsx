@@ -21,6 +21,7 @@ export default function MultipleChoiceQuestion({
     null,
   );
   const dispatch = useAppDispatch();
+  const hasImage = question?.image;
 
   useEffect(() => {
     setSelectedOption(null);

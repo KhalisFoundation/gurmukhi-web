@@ -41,8 +41,11 @@ export default function Question() {
       }
       const question = await getQuestionByID(questionID);
       if (question !== null) {
-        setCurrentQuestion(question);
         const word = await getWordById(wordID);
+        if (question.type === 'image' && word?.images) {
+          question.image = word?.images[0];
+        }
+        setCurrentQuestion(question);
         if (word !== null) {
           setCurrentWord(word);
         }
