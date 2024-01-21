@@ -15,6 +15,7 @@ export interface WordData {
   synonyms?: string[];
   antonyms?: string[];
   type?: string;
+  audioURL?: string;
 }
 
 export const wordData: WordData[] = [

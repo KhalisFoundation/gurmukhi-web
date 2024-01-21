@@ -2,6 +2,8 @@ import React, { MutableRefObject } from 'react';
 import { Draggable, DroppableProvided } from 'react-beautiful-dnd';
 import { TFunction } from 'i18next';
 import { WordData } from 'constants/wordsData';
+import { doc, updateDoc } from 'firebase/firestore';
+import { wordsdb } from '../firebase';
 
 const convertToTitleCase = (word: string) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
@@ -83,9 +85,18 @@ const createSemanticDraggables = (
   );
 };
 
+const updateWord = async (word_id: string, wordData: WordData) => {
+  const wordRef = doc(wordsdb, 'words', word_id);
+  const updatedWord = await updateDoc(wordRef, {
+    ...wordData,
+  });
+  return updatedWord;
+}
+
 export { 
   addEndingPunctuation,
   highlightWord,
   convertToTitleCase, 
   createSemanticDraggables,
+  updateWord,
 };
