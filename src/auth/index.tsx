@@ -138,12 +138,13 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
             user,
             uid,
             coins: data?.coins,
-            wordsLearnt: data?.wordsLearnt,
+            wordsLearnt: data?.words.length ?? 0,
             progress: data?.progress,
             email: data?.email,
             displayName: data?.displayName,
             photoURL: '',
             role: data?.role,
+            words: data?.words,
           };
           setUser(usr);
         });

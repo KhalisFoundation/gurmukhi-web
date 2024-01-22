@@ -8,7 +8,7 @@ interface Props {
   children?: ReactNode
 }
 
-interface LocalUser {
+export interface LocalUser {
   user: User | null,
   uid?: string,
   email?: string,

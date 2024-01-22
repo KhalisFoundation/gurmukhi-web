@@ -49,6 +49,7 @@ export default function Dashboard() {
         <div className='flex flex-row text-center justify-center gap-6 h-2/5'>
           <WordsSnippetBox
             commonStyle={commonStyle}
+            user={user}
             wordsLearnt={user.wordsLearnt}
           />
           <CoinBox commonStyle={commonStyle} />
