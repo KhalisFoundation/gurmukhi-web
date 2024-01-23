@@ -9,6 +9,8 @@ import { checkIfUsernameUnique, showToastMessage, updateUser } from 'utils';
 import { ToastContainer, toast } from 'react-toastify';
 import { uploadImage } from 'utils/storage';
 import { doc } from 'firebase/firestore';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiamond } from '@fortawesome/free-solid-svg-icons';
 
 export default function Profile() {
   const { t: text } = useTranslation();
@@ -21,6 +23,7 @@ export default function Profile() {
   const [ username, setUsername ] = useState(user.username ?? user.email?.split('@')[0]);
   const [ usernameError, setUsernameError ] = useState('');
   const [ photo, setPhoto ] = useState<File | null>(null);
+  const [ preview, setPreview ] = useState<string | undefined>(undefined);
   const [ photoURL, setPhotoURL ] = useState('/images/profile.jpeg');
   const [ verifiable, setVerifiable ] = useState(true);
 
@@ -28,15 +31,16 @@ export default function Profile() {
   const lastLoginAt = new Date(user.lastLogInAt);
 
   const getTabData = (heading: string, info: string, children?: JSX.Element) => {
+    const gridColSpan = editMode ? 'grid-cols-6' : 'grid-cols-8';
     return (
-      <div className='col-span-12'>
-        <div className='grid grid-cols-12 py-1'>
+      <div className={editMode ? 'col-span-6' : 'col-span-8'}>
+        <div className={`grid ${gridColSpan} py-1`}>
           <div className='col-span-2'>
             <h3 className='text-lg font-bold pr-3'>
               {heading}
             </h3>
           </div>
-          <div className='col-span-8'>
+          <div className={editMode ? 'col-span-4' : 'col-span-6'}>
             <h4 className='text-lg'>
               {info}
               {children}
@@ -84,7 +88,7 @@ export default function Profile() {
   const handleSubmit = async () => {
     if (user && usernameError === '') {
       // check if anything has changed
-      if (name === user.displayName && username === user.username && photoURL === user.user.photoURL) {
+      if (name === user.displayName && username === user.username && photoURL === user.user.photoURL && !photo) {
         return;
       }
       try {
@@ -131,11 +135,33 @@ export default function Profile() {
     }
   };
 
-  const buttonStyle = 'group relative h-8 overflow-hidden rounded-lg text-md shadow';
-  const buttonInnerDivStyle = 'absolute inset-0 w-3 bg-darkBlue transition-all duration-[250ms] ease-out group-hover:w-full';
+  const linkClass = 'flex flex-row items-center justify-between gap-2 min-w-26';
+  const gridColSpan = editMode ? '6' : '8';
+
+  const renderButton = (textValue: string, onClick: () => void, disabled: boolean, sides: boolean) => {
+    const disabledClass = disabled ? 'opacity-50 cursor-not-allowed' : '';
+    return (
+      <button
+        onClick={onClick}
+        className={linkClass}
+        disabled={disabled}
+        color='secondary'
+        style={{
+          fontFamily:
+            "HvDTrial Brandon Grotesque, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif",
+          letterSpacing: '.1rem',
+        }}
+      >
+        {sides && <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure border border-darkBlue rotate-45' />}
+        <p className={'bg-lightAzure text-darkBlue rounded-lg px-2 py-1 w-26 text-center border border-darkBlue' + disabledClass}>
+          {textValue}
+        </p>
+        {sides && <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure border border-darkBlue rotate-45' />}
+      </button>
+    );
+  };
 
   const renderLoader = () => {
-    // please keep one of the below loaders
     return (
       <span>
         <svg 
@@ -173,129 +199,118 @@ export default function Profile() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!photo) {
+        setPreview(undefined)
+        return
+    }
+
+    const objectUrl = URL.createObjectURL(photo)
+    setPreview(objectUrl)
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl)
+}, [photo])
+
   if (isLoading) {
     return renderLoader();
   }
 
   return (
-    <section className='flex flex-row w-full h-full justify-between gap-5 p-12'>
+    <section className='flex flex-row w-full h-full gap-5 p-12 text-darkBlue pt-28'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col items-left gap-5 brandon-grotesque'>
+      <div className='flex flex-col w-full items-center gap-5 brandon-grotesque'>
         <ToastContainer />
-        <div className='col-span-9 general-info'>
-          <div className='tab-content' id='myTabContent'>
-            <div className='tab-pane fade show active' id='about' role='tabpanel' aria-labelledby='about-tab'>
-              <div className='box-component'>
-                <h2 className='text-2xl font-bold'>{text('YOUR_DETAILS')}</h2>
-                <div className='container'>
-                  <div className='grid grid-cols-12'>
-                    <div className='col-span-12 py-2'>
-                      <img src={photoURL} alt={'No Profile Picture found!'} className='w-32 h-32 rounded-full m-4' />
-                      {editMode ? 
-                        <div className='grid grid-cols-12 py-1'>
-                          <div className='col-span-8'>
-                            <input
-                              type='file'
-                              accept='.png, .jpeg, .jpg'
-                              onChange={handlePhotoChange}
-                            />
-                          </div>
-                          <div className='col-span-4'>
-                            <button
-                              className={buttonStyle + ' px-4'  + (photo ? ' bg-white' : ' bg-gray-300')}
-                              disabled={isLoading || !photo}
-                              onClick={handleUpload}
-                            >
-                              {
-                                !photo
-                                  ? null
-                                  : <div className={buttonInnerDivStyle}></div>
-                              }
-                              <span className={'relative text-black'  + (photo ? ' group-hover:text-white' : '')}>{text('UPLOAD_A_PHOTO')}</span>
-                            </button>
-                          </div>
-                        </div>
-                        : null
+        <div className='flex flex-col justify-center items-center rounded-lg p-4 cardImage bg-cover bg-sky-100 bg-blend-soft-light aspect-auto'>
+          <h2 className='text-2xl font-bold'>{text('YOUR_DETAILS')}</h2>
+          <div className='flex flex-row items-center justify-between gap-5 rounded-lg p-4 container'>
+            <div className='flex flex-col items-center'>
+              <img src={preview ?? photoURL} alt={'No Profile Picture found!'} className='h-60 w-60 rounded-full m-4' />
+              {editMode ? 
+                <div className='flex flex-row justify-center'>
+                  <div className='w-[200px]'>
+                    <input
+                      type='file'
+                      accept='.png, .jpeg, .jpg'
+                      onChange={handlePhotoChange}
+                    />
+                  </div>
+                </div>
+                : null
+              }
+            </div>
+            <div className={`grid grid-cols-${gridColSpan}`}>
+              <div className={`col-span-${gridColSpan} py-2`}>
+              </div>
+              {getTabData(text('NAME'), '', (
+                editMode ?
+                  <div className='h-10 w-full'>
+                    <input
+                      className='h-full w-full rounded-lg border-2 border-darkBlue focus:outline-none focus:ring-2 focus:ring-darkBlue focus:border-transparent px-2'
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  : <span>{name}</span>
+              ))}
+              {getTabData(text('USERNAME'), '', (
+                editMode ?
+                  <div className='h-10 w-full'>
+                    <input
+                      className={
+                        'h-full w-full rounded-lg border-2 focus:outline-none focus:ring-2 focus:border-transparent px-2'
+                        + (usernameError ? ' border-red-500 focus:ring-red-500' : ' border-darkBlue focus:ring-darkBlue')
                       }
-                    </div>
-                    {getTabData(text('NAME'), '', (
-                      editMode ?
-                        <div className='relative h-10 w-full min-w-[200px]'>
-                          <input
-                            className='h-full w-full rounded-lg border-2 border-darkBlue focus:outline-none focus:ring-2 focus:ring-darkBlue focus:border-transparent px-2'
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                          />
-                        </div>
-                        : <span>{name}</span>
-                    ))}
-                    {getTabData(text('USERNAME'), '', (
-                      editMode ?
-                        <div className='relative h-10 w-full min-w-[200px]'>
-                          <input
-                            className={
-                              'h-full w-full rounded-lg border-2 focus:outline-none focus:ring-2 focus:border-transparent px-2'
-                              + (usernameError ? ' border-red-500 focus:ring-red-500' : ' border-darkBlue focus:ring-darkBlue')
-                            }
-                            value={username}
-                            onChange={handleUsernameChange}
-                          />
-                        </div>
-                        : <span>{username}</span>
-                    ))}
-                    {editMode && getTabData('', '', (
-                      <span className='text-red-500'>{usernameError}</span>
-                    ))}
-                    {getTabData(text('EMAIL'), user.email)}
-                    {
-                      user?.emailVerified ?? false
-                        ? getTabData(text('EMAIL_VALIDATED'), text('YES'))
-                        : getTabData(text('EMAIL_VALIDATED'), '', (
-                          <button
-                            className={buttonStyle + ' w-24' + (verifiable ? ' bg-white' : ' bg-gray-300')}
-                            onClick={() => sendEmailVerification(auth.currentUser ?? user).then(() => {
-                              showToastMessage(text('EMAIL_VERIFICATION_SENT'), toast.POSITION.TOP_CENTER, true);
-                              setVerifiable(false);
-                            })}
-                            disabled={!verifiable}
-                          >
-                            {verifiable ?
-                              <div className={buttonInnerDivStyle}></div> :
-                              null
-                            }
-                            <span className={'relative text-black' + (verifiable ? ' group-hover:text-white' : '')}>{text('VERIFY')}</span>
-                          </button>
-                        ))
+                      value={username}
+                      onChange={handleUsernameChange}
+                    />
+                  </div>
+                  : <span>{username}</span>
+              ))}
+              {editMode && getTabData('', '', (
+                <span className='text-red-500'>{usernameError}</span>
+              ))}
+              {getTabData(text('EMAIL'), user.email)}
+              {
+                user?.emailVerified ?? false
+                  ? getTabData(text('EMAIL_VALIDATED'), text('YES'))
+                  : getTabData(text('EMAIL_VALIDATED'), '', (
+                    renderButton(text('VERIFY'), () => sendEmailVerification(auth.currentUser ?? user).then(() => {
+                      showToastMessage(text('EMAIL_VERIFICATION_SENT'), toast.POSITION.TOP_CENTER, true);
+                      setVerifiable(false);
+                    }), !verifiable, false)
+                  ))
+              }
+              {getTabData(text('CREATED_AT'), createdAt.toLocaleString() ?? 'not defined')}
+              {getTabData(text('LAST_LOGIN_AT'), lastLoginAt.toLocaleString() ?? 'not defined')}
+
+              <div className={`col-span-${gridColSpan} py-2`}>
+                <div className={`grid grid-cols-${gridColSpan} py-1`}>
+                  <div className='col-span-2'>
+                    {editMode ?
+                      renderButton(
+                        text('SAVE'),
+                        () => {
+                          setEditMode(!editMode);
+                          handleSubmit();
+                        },
+                        false,
+                        false,
+                      ) 
+                      : renderButton(
+                        text('EDIT'),
+                        () => {
+                          setEditMode(!editMode);
+                        },
+                        false,
+                        false,
+                      )
                     }
-                    {getTabData(text('CREATED_AT'), createdAt.toLocaleString() ?? 'not defined')}
-                    {getTabData(text('LAST_LOGIN_AT'), lastLoginAt.toLocaleString() ?? 'not defined')}
-
-                    <div className='col-span-12 py-2'>
-                      <div className='grid grid-cols-12 py-1 align-left'>
-                        <div className='col-span-2'>
-                          <button
-                            className={buttonStyle + ' w-24 bg-white'}
-                            onClick={() => {
-                              setEditMode(!editMode);
-                              if (editMode) {
-                                handleSubmit();
-                              }
-                            }}
-                            disabled={!verifiable}
-                          >
-                            <div className={buttonInnerDivStyle}></div>
-                            <span className={'relative text-black group-hover:text-white'}>
-                              {editMode ? text('SAVE') : text('EDIT')}
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* We can add preferences here like confetti disable and others */}
                   </div>
                 </div>
               </div>
+
+              {/* We can add preferences here like confetti disable and others */}
             </div>
           </div>
         </div>
