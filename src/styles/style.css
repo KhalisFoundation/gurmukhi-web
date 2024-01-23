@@ -1439,7 +1439,6 @@ body .content-overlay {
 body .word-brick-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    grid-template-rows: repeat(5, 1fr);
     grid-gap: 0.5rem;
     align-content: end;
     position: absolute;
