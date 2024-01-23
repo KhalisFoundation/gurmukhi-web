@@ -201,16 +201,16 @@ export default function Profile() {
 
   useEffect(() => {
     if (!photo) {
-        setPreview(undefined)
-        return
+      setPreview(undefined);
+      return;
     }
 
-    const objectUrl = URL.createObjectURL(photo)
-    setPreview(objectUrl)
+    const objectUrl = URL.createObjectURL(photo);
+    setPreview(objectUrl);
 
     // free memory when ever this component is unmounted
-    return () => URL.revokeObjectURL(objectUrl)
-}, [photo])
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [photo]);
 
   if (isLoading) {
     return renderLoader();
