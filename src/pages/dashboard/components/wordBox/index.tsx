@@ -22,7 +22,7 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
     if (user && user.uid) {
       fetchData();
     }
-  }, []);
+  }, [user]);
 
   return (
     <div className={commonStyle}>
