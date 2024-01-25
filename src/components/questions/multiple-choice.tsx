@@ -33,9 +33,11 @@ export default function MultipleChoiceQuestion({
 
   useEffect(() => {
     setSelectedOption(null);
+    setOptionSelected(false);
   }, [question]);
   useEffect(() => {
     if (selectedOption) {
+      setOptionSelected(true);
       if (question.options[question.answer] === selectedOption) {
         updateCurrentLevel(user.uid, currentLevel + 1);
         dispatch(increment());
