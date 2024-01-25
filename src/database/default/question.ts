@@ -1,5 +1,5 @@
-import { collection, getDocs, limit, query, where } from 'firebase/firestore';
-import { generateRandomId, getDataById, wordsCollection } from './database';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { getDataById, wordsCollection } from './database';
 import { wordsdb } from '../../firebase';
 import { Option, QuestionData } from 'types';
 
@@ -7,7 +7,6 @@ const questionCollection = collection(wordsdb, 'questions');
 
 const getOptions = async (wordIDs: string[]) => {
   const optionsPromise = wordIDs.map((option) => {
-    console.log(option);
     return getDataById(option.toString(), wordsCollection, null, 1, true);
   });
   const options = await Promise.all(optionsPromise);
@@ -57,23 +56,4 @@ const getQuestionByID = async (id: string) => {
   return questionData as QuestionData;
 };
 
-const getRandomQuestion = async (wordID: string) => {
-  const randomID = generateRandomId();
-  const queryRef = query(
-    questionCollection,
-    where('id', '>=', randomID),
-    where('word_id', '==', wordID),
-    limit(1),
-  );
-  const questionSnapshot = await getDocs(queryRef);
-  const questionData = questionSnapshot.docs[0].data();
-  if (
-    questionData.options.length > 0 &&
-    typeof questionData.options[0] === 'string'
-  ) {
-    const options = await getOptions(questionData.options as string[]);
-    return { ...questionData, options } as QuestionData;
-  }
-  return questionData as QuestionData;
-};
-export { getQuestionsByWordID, getQuestionByID, getRandomQuestion };
+export { getQuestionsByWordID, getQuestionByID };

@@ -1,4 +1,4 @@
-import { WordData } from 'constants/wordsData';
+import { WordType } from 'types';
 import { wordsdb } from '../../firebase';
 import {
   CollectionReference,
@@ -114,7 +114,7 @@ const getSemanticsByIds = async (
 };
 
 const getWordById = async (wordId: string, needExtras = false) => {
-  const wordData = (await getDataById(wordId, wordsCollection)) as WordData;
+  const wordData = (await getDataById(wordId, wordsCollection)) as WordType;
 
   if (wordData) {
     if (needExtras) {
@@ -135,54 +135,53 @@ const getWordById = async (wordId: string, needExtras = false) => {
         sentences,
         synonyms,
         antonyms,
-      } as WordData;
+      } as WordType;
     } else {
       return {
         ...wordData,
         id: wordId,
-      } as WordData;
+      } as WordType;
     }
   } else {
-    console.log('No such document!');
+    console.error('No such document!');
     return null;
   }
 };
 
-const getRandomWord: () => Promise<WordData> = async () => {
-  // get random word from wordsCollection from firestore
-  const wordData = (await getRandomData(
-    wordsCollection,
-    [where('status', '==', 'active')],
-    null,
-    1,
-  )) as WordData;
+const getRandomWord = async () => {
+  try {
+    const wordData = (await getRandomData(
+      wordsCollection,
+      [where('status', '==', 'active')],
+      null,
+      1,
+    )) as WordType;
 
-  if (wordData) {
-    const wordId = wordData.id;
-    if (wordId) {
-      const sentences = await getDataById(
-        wordId,
-        sentencesCollection,
-        'word_id',
-        3,
-      );
-      const { synonyms, antonyms } = await getSemanticsByIds(
-        wordData.synonyms as string[],
-        wordData.antonyms as string[],
-      );
+    if (wordData) {
+      const wordId = wordData.id;
+      if (wordId) {
+        const sentences = await getDataById(
+          wordId,
+          sentencesCollection,
+          'word_id',
+          3,
+        );
+        const { synonyms, antonyms } = await getSemanticsByIds(
+          wordData.synonyms as string[],
+          wordData.antonyms as string[],
+        );
 
-      return {
-        ...wordData,
-        id: wordId,
-        sentences,
-        synonyms,
-        antonyms,
-      } as WordData;
+        return {
+          ...wordData,
+          id: wordId,
+          sentences,
+          synonyms,
+          antonyms,
+        } as WordType;
+      }
     }
-    return {};
-  } else {
-    console.log('No such document!');
-    return {};
+  } catch (error) {
+    console.error('No such Document', error);
   }
 };
 

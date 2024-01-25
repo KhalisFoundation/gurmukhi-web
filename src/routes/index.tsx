@@ -10,7 +10,7 @@ import Examples from 'pages/word/examples';
 import WordsPageLayout from 'pages/word/layout';
 import NotFound from 'pages/not-found';
 import Home from 'pages/page';
-import Semantics from 'pages/word/semantics';
+// import Semantics from 'pages/word/semantics';
 import Information from 'pages/word/information';
 import LogOut from 'components/signin/LogOut';
 import RequireAuth from 'auth/require-auth';
@@ -37,10 +37,13 @@ export function AppRouter() {
         <Route path={PAGES.WORDS} element={requireAuth(<WordsPageLayout />)}>
           <Route path={PAGES.DEFINITION} element={<Defintion />} />
           <Route path={PAGES.EXAMPLES} element={<Examples />} />
-          <Route path={PAGES.SEMANTICS} element={<Semantics />} />
+          {/* <Route path={PAGES.SEMANTICS} element={<Semantics />} /> */}
           <Route path={PAGES.INFORMATION} element={<Information />} />
         </Route>
-        <Route path={PAGES.QUESTION} element={requireAuth(<QuestionsPageLayout />)}>
+        <Route
+          path={PAGES.QUESTION}
+          element={requireAuth(<QuestionsPageLayout />)}
+        >
           <Route path={''} element={<Question />} />
         </Route>
         <Route path='*' element={<NotFound />} />

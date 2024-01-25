@@ -1,20 +1,25 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NewQuestionType, Option } from 'types';
+import { Option, QuestionData } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
-import { updateCurrentLevel } from 'database/shabadavalidb';
+import {
+  addQuestionToSubCollection,
+  updateCurrentLevel,
+  updateWordFromUser,
+} from 'database/shabadavalidb';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
+import { QuestionType } from 'types/shabadavlidb';
 
 export default function MultipleChoiceQuestion({
   question,
   hasImage,
   setOptionSelected,
 }: {
-  question: NewQuestionType;
+  question: QuestionData;
   hasImage?: boolean;
   setOptionSelected: (value: boolean) => void;
 }) {
@@ -28,17 +33,46 @@ export default function MultipleChoiceQuestion({
 
   useEffect(() => {
     setSelectedOption(null);
-    setOptionSelected(false);
   }, [question]);
   useEffect(() => {
     if (selectedOption) {
-      setOptionSelected(true);
       if (question.options[question.answer] === selectedOption) {
         updateCurrentLevel(user.uid, currentLevel + 1);
         dispatch(increment());
       }
     }
   }, [selectedOption]);
+
+  useEffect(() => {
+    const storeData = async () => {
+      if (
+        user &&
+        user.uid &&
+        question &&
+        question.id &&
+        selectedOption === question.options[question.answer]
+      ) {
+        const questionTypeData: QuestionType = {
+          word_id: question.word_id,
+          question_id: question.id,
+          isLearnt: question.options[question.answer] === selectedOption,
+          question: question.question,
+          answer: question.answer,
+          options: question.options,
+          word: question.word,
+        };
+        if (question.image) {
+          questionTypeData.image = question.image;
+        }
+        if (question.type) {
+          questionTypeData.type = question.type;
+        }
+        await addQuestionToSubCollection(user.uid, questionTypeData);
+        await updateWordFromUser(user.uid, questionTypeData.word_id);
+      }
+    };
+    storeData();
+  }, [question, user, selectedOption]);
 
   const optionsClass = `flex flex-col text-lg grid ${
     hasImage ? 'grid-cols-2' : 'grid-cols-1'
@@ -48,6 +82,31 @@ export default function MultipleChoiceQuestion({
     // Handle case when word is not found
     return <div>{text('QUESTION_NOT_FOUND')}</div>;
   }
+  const renderOptionButtons = () => {
+    return question.options.map((option, idx) => {
+      const key =
+        typeof option === 'object' && option !== null && 'id' in option
+          ? option.id
+          : idx;
+      const isSelected = selectedOption && option === selectedOption;
+      return (
+        <OptionBtn
+          key={key}
+          option={option as Option}
+          text={text}
+          word_id={question.word_id}
+          selector={setSelectedOption}
+          setOptionSelected={setOptionSelected}
+          isCorrect={
+            isSelected
+              ? question.options[question.answer] === selectedOption
+              : undefined
+          }
+          disabled={!!selectedOption}
+        />
+      );
+    });
+  };
 
   return (
     <div className='flex flex-col items-left justify-evenly text-center'>
@@ -68,35 +127,8 @@ export default function MultipleChoiceQuestion({
           className='h-60 object-cover rounded-xl'
         />
       )}
-      <div className={optionsClass}>
-        {question.options.map((option, idx) => {
-          if (selectedOption && option === selectedOption) {
-            return (
-              <OptionBtn
-                key={option.id ?? idx}
-                option={option as Option}
-                text={text}
-                selector={setSelectedOption}
-                word_id={question.word_id}
-                isCorrect={question.options[question.answer] === selectedOption}
-                disabled={!!selectedOption}
-              />
-            );
-          } else {
-            return (
-              <OptionBtn
-                key={option.id ?? idx}
-                option={option as Option}
-                text={text}
-                selector={setSelectedOption}
-                disabled={!!selectedOption}
-              />
-            );
-          }
-        })}
-      </div>
+      <div className={optionsClass}>{renderOptionButtons()}</div>
     </div>
   );
 }
 
-MultipleChoiceQuestion.propTypes = {};

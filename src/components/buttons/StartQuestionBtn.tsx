@@ -102,7 +102,7 @@ const StartQuestionBtn = ({
           />
         </svg>
         <span>{ALL_CONSTANT.FETCHING}</span>
-        <div className='loader'></div>
+        <span className='loader'></span>
       </span>
     );
   };

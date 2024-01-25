@@ -1,3 +1,6 @@
+import { Timestamp } from 'firebase/firestore';
+import { Option } from 'types';
+
 export interface GameScreen {
   key: string;
   data: any;
@@ -20,18 +23,20 @@ export interface WordShabadavaliDB {
   isLearnt: boolean;
   progress: number;
   isWordRead: boolean;
-  wordID: string;
+  word_id: string;
   word: string;
-  id: string;
+  id?: string;
 }
 export interface QuestionType {
-  wordID: string;
+  word_id: string;
   word: string;
-  questionID: string;
-  id: string;
+  question_id: string;
+  id?: string;
   isLearnt: boolean;
-  lastReviewed: string;
+  lastReviewed?: Timestamp;
   question: string;
-  answer: string;
-  options: string;
+  answer: number;
+  options: Option[] | string[];
+  type?: string;
+  image?: string;
 }

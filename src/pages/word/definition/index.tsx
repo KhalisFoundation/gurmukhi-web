@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
-import { WordData } from 'constants/wordsData';
+import { WordType } from 'types';
 import metaTags from 'constants/meta';
 import Meta from 'components/meta';
 import { getWordById } from 'database/default';
@@ -16,7 +16,7 @@ export default function Defintion() {
   const location = useLocation();
   const { title, description } = metaTags.DEFINITION;
   const [wordID, setWordID] = useState<string | null>(null);
-  const [currentWord, setCurrentWord] = useState<WordData | null>(null);
+  const [currentWord, setCurrentWord] = useState<WordType | null>(null);
   const currentGamePosition = useAppSelector(
     (state) => state.currentGamePosition,
   );

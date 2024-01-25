@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import MultipleChoiceQuestion from 'components/questions/multiple-choice';
-import { NewQuestionType, QuestionData } from 'types';
+import { QuestionData } from 'types';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import ALL_CONSTANT from 'constants/constant';
@@ -22,15 +22,18 @@ export default function Question() {
   const [currentQuestion, setCurrentQuestion] = useState<QuestionData | null>(
     null,
   );
-  const [isOptionSelected, setOptionSelected] = useState<boolean>(false);
-  const learningWords = useAppSelector((state) => state.learningWords);
+  const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
   const location = useLocation();
-
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     setWordID(searchParams.get('id'));
     setQuestionID(searchParams.get('qid'));
   }, [location.search]);
+
+  useEffect(() => {
+    // Reset option selected state when question changes
+    setIsOptionSelected(false);
+  }, [currentQuestion]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,30 +52,20 @@ export default function Question() {
     } else {
       fetchData();
     }
-  }, [wordID, learningWords, questionID]);
+  }, [wordID, questionID]);
 
   const questionData = useMemo(() => {
-    return { ...currentQuestion } as NewQuestionType;
+    return { ...currentQuestion } as QuestionData;
   }, [currentQuestion]);
 
   const getQuestionElement = () => {
-    switch (currentQuestion?.type) {
-      case 'image':
-        return (
-          <MultipleChoiceQuestion
-            question={{ ...questionData, image: currentQuestion.image }}
-            hasImage={true}
-            setOptionSelected={setOptionSelected}
-          />
-        );
-      default:
-        return (
-          <MultipleChoiceQuestion
-            question={questionData as NewQuestionType}
-            setOptionSelected={setOptionSelected}
-          />
-        );
-    }
+    return (
+      <MultipleChoiceQuestion
+        question={questionData}
+        hasImage={currentQuestion?.type === 'image'}
+        setOptionSelected={setIsOptionSelected}
+      />
+    );
   };
 
   const renderFooter = () => {

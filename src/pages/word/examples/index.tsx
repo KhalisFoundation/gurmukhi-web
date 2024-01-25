@@ -7,13 +7,13 @@ import { highlightWord } from 'utils';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import ALL_CONSTANT from 'constants/constant';
-import { WordData } from 'constants/wordsData';
+import { WordType } from 'types';
 import { useAppSelector } from 'store/hooks';
 
 export default function Examples() {
   const { t: text } = useTranslation();
   const [wordID, setWordID] = useState<string | null>(null);
-  const [currentWord, setCurrentWord] = useState<WordData | null>(null);
+  const [currentWord, setCurrentWord] = useState<WordType | null>(null);
   const currentGamePosition = useAppSelector(
     (state) => state.currentGamePosition,
   );

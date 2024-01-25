@@ -24,10 +24,10 @@ const gameArraySlice = createSlice({
     //     state[index] = action.payload;
     //   }
     // },
-    reset: () => {
+    resetGameArray: () => {
       return [];
     },
   },
 });
-export const { addScreens, reset } = gameArraySlice.actions;
+export const { addScreens, resetGameArray } = gameArraySlice.actions;
 export default gameArraySlice.reducer;

@@ -1,21 +1,13 @@
-import { GameScreen, User } from 'types/shabadavlidb';
-import { getRandomQuestion } from 'database/default/question';
-import ALL_CONSTANT from 'constants/constant';
-
-export const operations = [
-  'Definition',
-  'learning',
-  'learning',
-  'learning',
-  'learning',
-  'learning',
-  'learning',
-  'learning',
-  'learning',
-  'learnt',
-  'learnt',
-  'learnt',
-];
+import {
+  GameScreen,
+  QuestionType,
+  User,
+  WordShabadavaliDB,
+} from 'types/shabadavlidb';
+// import { getRandomQuestion } from 'database/default/question';
+// import ALL_CONSTANT from 'constants/constant';
+import { QuestionData } from 'types';
+import { WordType } from 'types';
 
 export const getRandomElement = (array: string[]) => {
   const randomIndex = Math.floor(Math.random() * array.length);
@@ -23,12 +15,15 @@ export const getRandomElement = (array: string[]) => {
   return removedElement;
 };
 
-export const getRandomWordFromArray = (array: string[]) => {
+export const getRandomWordFromArray = (array: WordShabadavaliDB[]) => {
   const randomIndex = Math.floor(Math.random() * array.length);
   return array[randomIndex];
 };
 
-export const createGameScreen = (key: string, data: any): GameScreen => {
+export const createGameScreen = (
+  key: string,
+  data: QuestionData | WordType | QuestionType,
+): GameScreen => {
   return { key, data };
 };
 
@@ -44,16 +39,4 @@ export const fetchProgress = (user: User) => {
   return user?.progress.gameSession.length > 0
     ? user.progress.gameSession
     : null;
-};
-
-export const addQuestionToGameArray = async (wordArray: string[]) => {
-  const wordID = getRandomWordFromArray(wordArray);
-  const question = await getRandomQuestion(wordID);
-
-  if (question) {
-    return createGameScreen(
-      `${ALL_CONSTANT.QUESTIONS_SMALL}-${wordID}-${question.id}`,
-      question,
-    );
-  }
 };

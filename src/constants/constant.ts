@@ -11,7 +11,7 @@ const ALL_CONSTANT = {
   LEARNING_WORDS: 'learningWords',
   LEVELS_COUNT: 13,
   FETCHING: 'Fetching',
-  USERS: 'user',
+  USERS: 'users',
   WORDS: 'words',
   QUESTIONS: 'questions',
 };

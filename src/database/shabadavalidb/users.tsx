@@ -108,6 +108,7 @@ export const updateProgress = async (
 ) => {
   const progress = { currentProgress, gameSession, currentLevel };
   await updateUserDocument(uid, { progress });
+  console.log('Document is updated successfully');
 };
 
 export const updateCurrentProgress = async (

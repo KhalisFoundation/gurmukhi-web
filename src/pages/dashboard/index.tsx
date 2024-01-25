@@ -9,7 +9,7 @@ import metaTags from 'constants/meta';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
-import useGamePlay from './hooks/useGamePlay';
+import useGamePlay from './hooks/useGamePlay1';
 
 export default function Dashboard() {
   const commonStyle =
@@ -29,10 +29,7 @@ export default function Dashboard() {
       <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
         <Ssa name={user.displayName} />
         <div className='flex flex-row text-center justify-center gap-6 h-2/5'>
-          <WordsSnippetBox
-            commonStyle={commonStyle}
-            wordsLearnt={user.wordsLearnt}
-          />
+          <WordsSnippetBox commonStyle={commonStyle} />
           <CoinBox commonStyle={commonStyle} />
           <WordBox commonStyle={commonStyle} />
         </div>
