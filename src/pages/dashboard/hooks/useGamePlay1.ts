@@ -51,6 +51,8 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
         if (word?.id) {
           const questions = await getQuestionsByWordID(word.id, true);
           addWordIfNotExists(word);
+          delete word.created_at;
+          delete word.updated_at;
           gameArray.push(
             createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, word),
           );
@@ -60,6 +62,9 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
           for (let j = 0; j < questions.length; j++) {
             if (word.word) {
               questions[j].word = word.word;
+            }
+            if (questions[j].type === 'image' && !questions[j].image && word.images) {
+              questions[j].image = word.images[0];
             }
 
             gameArray.push(
@@ -84,6 +89,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
       );
       if (questions.length > 0) {
         for (const question of questions) {
+          delete question.lastReviewed;
           gameArray.push(
             createGameScreen(
               `${ALL_CONSTANT.QUESTIONS_SMALL}-${question.word_id}-${question.question_id}`,
@@ -103,6 +109,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
       );
       if (questions.length > 0) {
         for (const question of questions) {
+          delete question.lastReviewed;
           gameArray.push(
             createGameScreen(
               `${ALL_CONSTANT.QUESTIONS_SMALL}-${question.word_id}-${question.question_id}`,
