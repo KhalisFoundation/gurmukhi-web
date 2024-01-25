@@ -38,8 +38,8 @@ const StartQuestionBtn = ({
   const navigateTo = (
     key: string,
     wordID: string,
-    questionID: string | null = null,
     data: any,
+    questionID: string | null = null,
   ) => {
     const routeMap = {
       [ALL_CONSTANT.DEFINITION]: `${
@@ -60,7 +60,7 @@ const StartQuestionBtn = ({
         if (sessionInfo) {
           const [key, wordID, questionID] = sessionInfo.key.split('-');
           if (key) {
-            navigateTo(key, wordID, questionID, sessionInfo.data);
+            navigateTo(key, wordID, sessionInfo.data, questionID);
           }
         }
         switch (operation) {

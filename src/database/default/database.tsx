@@ -69,11 +69,11 @@ const getRandomData = async (
   const fieldPath = key ? key : documentId();
   const queryRef = limitVal
     ? query(
-        collectionRef,
-        where(fieldPath, '>=', randomId),
-        ...conditions,
-        limit(limitVal),
-      )
+      collectionRef,
+      where(fieldPath, '>=', randomId),
+      ...conditions,
+      limit(limitVal),
+    )
     : query(collectionRef, where(fieldPath, '>=', randomId), ...conditions);
   const querySnapshot = await getDocs(queryRef);
 

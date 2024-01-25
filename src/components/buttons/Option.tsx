@@ -29,8 +29,8 @@ export default function OptionBtn({
     isCorrect
       ? 'bg-lightGreen shadow-sm shadow-green-500'
       : isCorrect === false
-      ? 'bg-lightRed shadow-sm shadow-maroon'
-      : `bg-white-125 shadow-sm shadow-skyBlue ${
+        ? 'bg-lightRed shadow-sm shadow-maroon'
+        : `bg-white-125 shadow-sm shadow-skyBlue ${
           !disabled ? 'hover:bg-white-150' : ''
         }`
   }`;
