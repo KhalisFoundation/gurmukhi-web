@@ -3,9 +3,7 @@ import {
   QuestionType,
   User,
   WordShabadavaliDB,
-} from 'types/shabadavlidb';
-// import { getRandomQuestion } from 'database/default/question';
-// import ALL_CONSTANT from 'constants/constant';
+} from 'types/shabadavalidb';
 import { QuestionData } from 'types';
 import { WordType } from 'types';
 

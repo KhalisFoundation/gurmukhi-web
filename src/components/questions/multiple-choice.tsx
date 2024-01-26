@@ -12,7 +12,7 @@ import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
-import { QuestionType } from 'types/shabadavlidb';
+import { QuestionType } from 'types/shabadavalidb';
 
 export default function MultipleChoiceQuestion({
   question,

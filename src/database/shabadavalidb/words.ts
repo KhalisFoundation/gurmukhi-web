@@ -10,7 +10,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { shabadavaliDB } from '../../firebase';
-import { WordShabadavaliDB } from 'types/shabadavlidb';
+import { WordShabadavaliDB } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 
 const getWordCollectionRef = (uid: string) => {

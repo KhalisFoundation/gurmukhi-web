@@ -7,7 +7,7 @@ import { ROUTES } from 'constants/routes';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
-import { GameScreen } from 'types/shabadavlidb';
+import { GameScreen } from 'types/shabadavalidb';
 import { updateCurrentProgress } from 'database/shabadavalidb';
 
 interface Props {

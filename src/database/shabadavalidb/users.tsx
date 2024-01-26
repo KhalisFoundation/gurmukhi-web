@@ -1,18 +1,15 @@
 import {
-  DocumentReference,
   collection,
   doc,
   documentId,
   getDoc,
   getDocs,
   query,
-  setDoc,
   where,
   updateDoc,
 } from 'firebase/firestore';
-import { UserProfile } from 'firebase/auth';
 import { shabadavaliDB as db } from '../../firebase';
-import { GameScreen } from 'types/shabadavlidb';
+import { GameScreen } from 'types/shabadavalidb';
 
 export const usersCollection = collection(db, 'users');
 
@@ -30,15 +27,6 @@ export const getUser = async (email: string, uid: string) => {
   return null;
 };
 
-export const updateUser = async (
-  userRef: DocumentReference,
-  userData: UserProfile,
-) => {
-  const updatedUser = await setDoc(userRef, {
-    ...userData,
-  });
-  return updatedUser;
-};
 
 export const checkUser = async (uid: string, email: string) => {
   const queryStatement = query(

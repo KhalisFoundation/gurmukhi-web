@@ -1,5 +1,5 @@
 import { shabadavaliDB } from '../../firebase';
-import { QuestionType } from 'types/shabadavlidb';
+import { QuestionType } from 'types/shabadavalidb';
 import {
   addDoc,
   collection,
@@ -90,7 +90,7 @@ export const getRandomQuestion = async (
   }
   const questionsData = questionSnapshots.docs.map((document) =>
     document.data(),
-  ); // Correctly map over the docs to extract data
+  );
 
   return questionsData as QuestionType[];
 };

@@ -1,5 +1,5 @@
-import { QuestionType, User } from 'types/shabadavlidb';
-import { GameScreen, WordShabadavaliDB } from 'types/shabadavlidb';
+import { QuestionType, User } from 'types/shabadavalidb';
+import { GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
 import { fetchProgress } from '../utils';
 import { getRandomWord, getQuestionsByWordID } from 'database/default';
 import { addWordsBatch, getRandomQuestion } from 'database/shabadavalidb';
