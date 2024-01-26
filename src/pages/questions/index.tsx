@@ -2,14 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
-import { WordData } from 'constants/wordsData';
 import MultipleChoiceQuestion from 'components/questions/multiple-choice';
-import { NewQuestionType, QuestionData } from 'types';
+import { QuestionData } from 'types';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import ALL_CONSTANT from 'constants/constant';
-import { getQuestionByID } from 'database/question';
-import { getWordById } from 'utils';
+import { getQuestionByID } from 'database/default/question';
 import { useAppSelector } from 'store/hooks';
 
 export default function Question() {
@@ -24,9 +22,7 @@ export default function Question() {
   const [currentQuestion, setCurrentQuestion] = useState<QuestionData | null>(
     null,
   );
-  const [currentWord, setCurrentWord] = useState<WordData | null>(null);
-  const [isOptionSelected, setOptionSelected] = useState<boolean>(false);
-  const learningWords = useAppSelector((state) => state.learningWords);
+  const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
   const location = useLocation();
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -35,35 +31,39 @@ export default function Question() {
   }, [location.search]);
 
   useEffect(() => {
+    // Reset option selected state when question changes
+    setIsOptionSelected(false);
+  }, [currentQuestion]);
+
+  useEffect(() => {
     const fetchData = async () => {
       if (!wordID || !questionID) {
         return;
       }
       const question = await getQuestionByID(questionID);
       if (question !== null) {
-        const word = await getWordById(wordID);
-        if (question.type === 'image' && word?.images) {
-          question.image = word?.images[0];
-        }
         setCurrentQuestion(question);
-        if (word !== null) {
-          setCurrentWord(word);
-        }
         return;
       }
     };
-    fetchData();
-  }, [wordID, learningWords, questionID]);
+    const data = location.state.data;
+    if (data) {
+      setCurrentQuestion(data);
+    } else {
+      fetchData();
+    }
+  }, [wordID, questionID]);
 
   const questionData = useMemo(() => {
-    return { ...currentQuestion, word: currentWord } as NewQuestionType;
-  }, [currentQuestion, currentWord]);
+    return { ...currentQuestion } as QuestionData;
+  }, [currentQuestion]);
 
   const getQuestionElement = () => {
     return (
       <MultipleChoiceQuestion
-        question={questionData as NewQuestionType}
-        setOptionSelected={setOptionSelected}
+        question={questionData}
+        hasImage={currentQuestion?.type === 'image'}
+        setOptionSelected={setIsOptionSelected}
       />
     );
   };

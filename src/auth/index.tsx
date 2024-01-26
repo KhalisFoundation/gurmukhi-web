@@ -13,14 +13,22 @@ import {
   Timestamp, doc, setDoc, // query, where, documentId, getDocs,
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
-import { auth, firestore } from '../firebase';
-import { checkIfUsernameUnique, checkUser, getUser } from 'utils';
+import { auth, shabadavaliDB } from '../firebase';
+import {
+  checkIfUsernameUnique,
+  checkUser,
+  getUser,
+} from 'database/shabadavalidb';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 
 const UserAuthContext = createContext<any>(null);
 
-export const UserAuthContextProvider = ({ children }: { children:ReactElement }) => {
+export const UserAuthContextProvider = ({
+  children,
+}: {
+  children: ReactElement;
+}) => {
   const [user, setUser] = useState({});
   const { t: text } = useTranslation();
 
@@ -28,23 +36,26 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
     email: string,
     password: string,
     showToastMessage: (text: string, error?: boolean) => void,
-  ) => signInWithEmailAndPassword(auth, email, password).catch((error: any) => {
-    if (Object.keys(errors).includes(error.code)) {
-      showToastMessage(errors[error.code]);
-    } else {
-      showToastMessage(text('ERROR') + error.code + error.message);
-    }
-    return null;
-  });
+  ) =>
+    signInWithEmailAndPassword(auth, email, password).catch((error: any) => {
+      if (Object.keys(errors).includes(error.code)) {
+        showToastMessage(errors[error.code]);
+      } else {
+        showToastMessage(text('ERROR') + error.code + error.message);
+      }
+      return null;
+    });
 
-  const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
+  const signInWithGoogle = async (
+    showToastMessage: (text: string, error?: boolean) => void,
+  ) => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider)
       .then((userCredential) => {
         const { uid, email, displayName } = userCredential.user;
         return checkUser(uid, email ?? '').then((found) => {
           if (!found) {
-            const localUser = doc(firestore, `users/${uid}`);
+            const localUser = doc(shabadavaliDB, `users/${uid}`);
             setDoc(localUser, {
               role: roles.student,
               email,
@@ -86,15 +97,19 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
         showToastMessage(text('PASSWORDS_DONT_MATCH'));
         return false;
       }
-      const found = checkIfUsernameUnique(username);
-      if (!found) {
+      const unique = checkIfUsernameUnique(username);
+      if (!unique) {
         showToastMessage(text('USERNAME_TAKEN'));
         return false;
       }
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       const userData = userCredential.user;
       const { uid, displayName } = userData;
-      const localUser = doc(firestore, `users/${uid}`);
+      const localUser = doc(shabadavaliDB, `users/${uid}`);
       await setDoc(localUser, {
         name,
         role: roles.student,
@@ -132,18 +147,23 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentuser: any) => {
       if (currentuser !== null) {
-        const { uid, email } = currentuser;
+        const { uid, email, emailVerified, metadata } = currentuser;
         getUser(email ?? '', uid).then((data) => {
           const usr = {
-            user,
+            user: currentuser,
             uid,
+            name: data?.name,
             coins: data?.coins,
             wordsLearnt: data?.wordsLearnt,
             progress: data?.progress,
             email: data?.email,
+            emailVerified: emailVerified ?? false,
             displayName: data?.displayName,
             photoURL: '',
             role: data?.role,
+            username: data?.username,
+            createdAt: metadata.creationTime,
+            lastLogInAt: metadata.lastSignInTime,
           };
           setUser(usr);
         });
@@ -157,9 +177,15 @@ export const UserAuthContextProvider = ({ children }: { children:ReactElement })
   }, []);
 
   return (
-    <UserAuthContext.Provider value={{
-      user, logIn, signUp, logOut, signInWithGoogle, resetPassword,
-    }}
+    <UserAuthContext.Provider
+      value={{
+        user,
+        logIn,
+        signUp,
+        logOut,
+        signInWithGoogle,
+        resetPassword,
+      }}
     >
       {children}
     </UserAuthContext.Provider>

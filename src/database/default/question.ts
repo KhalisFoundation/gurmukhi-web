@@ -1,13 +1,12 @@
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { getDataById, wordsCollection } from 'utils';
-import { wordsdb } from '../firebase';
+import { getDataById, wordsCollection } from './database';
+import { wordsdb } from '../../firebase';
 import { Option, QuestionData } from 'types';
 
 const questionCollection = collection(wordsdb, 'questions');
 
 const getOptions = async (wordIDs: string[]) => {
   const optionsPromise = wordIDs.map((option) => {
-    console.log(option);
     return getDataById(option.toString(), wordsCollection, null, 1, true);
   });
   const options = await Promise.all(optionsPromise);
@@ -47,10 +46,14 @@ const getQuestionByID = async (id: string) => {
     return null;
   }
   const questionData = questionSnapshot.docs[0].data();
-  if (questionData.options.length > 0 && typeof questionData.options[0] === 'string') {
+  if (
+    questionData.options.length > 0 &&
+    typeof questionData.options[0] === 'string'
+  ) {
     const options = await getOptions(questionData.options as string[]);
     return { ...questionData, options } as QuestionData;
   }
   return questionData as QuestionData;
 };
+
 export { getQuestionsByWordID, getQuestionByID };
