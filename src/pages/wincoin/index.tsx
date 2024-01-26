@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import Meta from 'components/meta';
@@ -9,6 +9,9 @@ import { increment } from 'store/features/nanakCoin';
 import convertNumber from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
+import { useUserAuth } from 'auth';
+import { updateNanakCoin, updateProgress } from 'database/shabadavalidb';
+import { resetGameArray } from 'store/features/gameArraySlice';
 
 function WinCoin() {
   const { t: text } = useTranslation();
@@ -16,10 +19,21 @@ function WinCoin() {
   const dispatch = useAppDispatch();
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const navigate = useNavigate();
+  const { user } = useUserAuth();
+  const [isLoading, toggleIsLoading] = useState<boolean>(true);
+
   useEffect(() => {
-    dispatch(increment());
-    dispatch(resetGamePosition());
-    dispatch(resetLevel());
+    const storeData = async () => {
+      toggleIsLoading(true);
+      dispatch(increment());
+      dispatch(resetGamePosition());
+      dispatch(resetLevel());
+      dispatch(resetGameArray());
+      await updateNanakCoin(user.uid, nanakCoin + 1);
+      await updateProgress(user.uid, 0, [], 0);
+      toggleIsLoading(false);
+    };
+    storeData();
   }, []);
   return (
     <div className='nanakback h-full bg-cover w-full'>
@@ -32,8 +46,11 @@ function WinCoin() {
             alt='Nanak Coin'
           />
           <p className='text-3xl text-sky-800'>{text('GREAT_JOB')}</p>
-          <p className='text-xl mb-10 text-sky-800'>{convertNumber(nanakCoin)}</p>
+          <p className='text-xl mb-10 text-sky-800'>
+            {convertNumber(nanakCoin)}
+          </p>
           <button
+            disabled={isLoading}
             onClick={() => navigate(ROUTES.DASHBOARD)}
             className='bg-sky-900 text-xs text-white p-3 mb-20 tracking-widest font-light '
           >

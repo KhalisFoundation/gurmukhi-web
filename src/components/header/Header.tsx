@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,7 @@ import Shabadavali from 'assets/icons/Shabadavali';
 import { ROUTES } from 'constants/routes';
 import { useAppSelector } from 'store/hooks';
 import { useNavigate } from 'react-router-dom';
+import { useUserAuth } from 'auth';
 
 interface PropTypes {
   loggedIn?: boolean;
@@ -13,10 +14,18 @@ interface PropTypes {
 
 export default function Header({ ...props }: PropTypes) {
   const { t: text } = useTranslation();
+  const { user } = useUserAuth();
+  const [ photoURL, setPhotoURL ] = React.useState('/images/profile.jpeg');
   const navigate = useNavigate();
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const loggedIn = props.loggedIn ?? false;
   const buttonComonStyle = 'block w-24 px-3 py-2 hover:bg-gray-200';
+
+  useEffect(() => {
+    if (user?.photoURL) {
+      setPhotoURL(user.photoURL);
+    }
+  }, [user]);
 
   return (
     <header className='flex bg-gradient-to-r sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10'>
@@ -30,20 +39,8 @@ export default function Header({ ...props }: PropTypes) {
         {loggedIn ? (
           <ul className='flex items-center justify-between gap-4 brandon-grotesque dull-blue'>
             <li>
-              <a href={ROUTES.SETTINGS}>{text('SETTINGS')}</a>
-            </li>
-            <li>
               <a href={ROUTES.DASHBOARD}>{text('DASHBOARD')}</a>
             </li>
-            {/* <li>
-              <div className={'flex bg-white h-10 w-10 rounded-full shadow items-center justify-evenly gap-2 p-1'}>
-                <span className="absolute flex h-2 w-2 ml-2.5 mb-3.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brightGreen opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-brightGreen"></span>
-                </span>
-                <img src='/icons/bell.svg' className={'h-4 w-4'} />
-              </div>
-            </li> */}
             <li>
               <div
                 className={
@@ -62,7 +59,7 @@ export default function Header({ ...props }: PropTypes) {
                       'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
                     }
                   >
-                    <img src='/icons/profile.svg' className={'h-8 w-8'} />
+                    <img src={photoURL} className={'h-8 w-8 rounded-full'} />
                   </div>
                   <span>
                     <FontAwesomeIcon
@@ -80,16 +77,6 @@ export default function Header({ ...props }: PropTypes) {
                       className={buttonComonStyle}
                     >
                       {text('PROFILE')}
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        navigate(ROUTES.SETTINGS);
-                      }}
-                      className={buttonComonStyle}
-                    >
-                      {text('SETTINGS')}
                     </button>
                   </li>
                   <li>

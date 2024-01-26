@@ -3,10 +3,10 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
-import { WordData } from 'constants/wordsData';
+import { WordType } from 'types';
 import metaTags from 'constants/meta';
 import Meta from 'components/meta';
-import { getWordById } from 'utils';
+import { getWordById } from 'database/default';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 
@@ -16,8 +16,10 @@ export default function Defintion() {
   const location = useLocation();
   const { title, description } = metaTags.DEFINITION;
   const [wordID, setWordID] = useState<string | null>(null);
-  const [currentWord, setCurrentWord] = useState<WordData | null>(null);
-  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
+  const [currentWord, setCurrentWord] = useState<WordType | null>(null);
+  const currentGamePosition = useAppSelector(
+    (state) => state.currentGamePosition,
+  );
   const currentLevel = useAppSelector((state) => state.currentLevel);
 
   // Extract the "id" parameter from the search string in the URL
@@ -37,7 +39,12 @@ export default function Defintion() {
         setCurrentWord(words);
       }
     };
-    fetchData();
+    const data = location.state.data;
+    if (data) {
+      setCurrentWord(data);
+    } else {
+      fetchData();
+    }
   }, [wordID]);
 
   if (!currentWord) {
@@ -62,7 +69,7 @@ export default function Defintion() {
             height={296}
             width={524}
             src={
-              currentWord.images
+              currentWord.images && currentWord.images?.length > 0
                 ? currentWord.images[0]
                 : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
             }

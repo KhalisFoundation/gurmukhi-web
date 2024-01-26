@@ -3,9 +3,9 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
-import { WordData } from 'constants/wordsData';
-
-import { convertToTitleCase, getWordById, highlightWord } from 'utils';
+import { WordType } from 'types';
+import { convertToTitleCase, highlightWord } from 'utils';
+import { getWordById } from 'database/default';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { MiniWord, SentenceType } from 'types';
@@ -15,10 +15,12 @@ import { useAppSelector } from 'store/hooks';
 export default function Information() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.INFORMATION;
-  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
+  const currentGamePosition = useAppSelector(
+    (state) => state.currentGamePosition,
+  );
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const [wordID, setWordID] = useState<string | null>(null);
-  const [currentWord, setCurrentWord] = useState<WordData | null>(null);
+  const [currentWord, setCurrentWord] = useState<WordType | null>(null);
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -39,7 +41,12 @@ export default function Information() {
         setCurrentWord(words);
       }
     };
-    fetchData();
+    const data = location.state?.data;
+    if (data) {
+      setCurrentWord(data);
+    } else {
+      fetchData();
+    }
   }, [wordID]);
   const renderFooter = () => {
     const operation = ALL_CONSTANT.NEXT;
@@ -49,8 +56,8 @@ export default function Information() {
       <LevelsFooter
         operation={operation}
         nextText={nextText}
-        currentLevel={currentLevel}
-        currentGamePosition={currentGamePosition}
+        currentLevel={currentLevel + 1}
+        currentGamePosition={currentGamePosition + 1}
         isDisabled={false}
       />
     );
@@ -207,5 +214,3 @@ export default function Information() {
     </div>
   );
 }
-
-Information.propTypes = {};

@@ -4,6 +4,8 @@ import { User } from 'types';
 import { LocalUser } from 'auth/context';
 import { DocumentReference } from 'firebase/firestore';
 import { Counter } from '../Counter';
+import { useUserAuth } from 'auth';
+import { getLearntWordsCount } from 'database/shabadavalidb';
 
 type UserData = LocalUser & User & {
   words: Array<{
@@ -19,17 +21,29 @@ type UserData = LocalUser & User & {
 
 function WordsSnippetBox({
   commonStyle,
-  user,
-  wordsLearnt,
 }: {
   commonStyle: string;
   user: UserData;
   wordsLearnt: number;
 }) {
   const { t: text } = useTranslation();
-  const words = user?.words;
+  const [wordsLearnt, setWordsLearnt] = useState(0);
+  const { user } = useUserAuth();
+  const words = user?.words; // getLearntWords from /database/shabadavaliDB/words
   const [fallenWords, setFallenWords] = useState<number>(0);
-
+  
+  useEffect(() => {
+    const fetchCount = async () => {
+      const count = await getLearntWordsCount(user.uid);
+      if (count) {
+        setWordsLearnt(count);
+      }
+    };
+    if (user.uid) {
+      fetchCount();
+    }
+  }, [user.uid]);
+  
   useEffect(() => {
     if (words && fallenWords < words.length) {
       setTimeout(() => {

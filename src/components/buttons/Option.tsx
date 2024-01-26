@@ -10,30 +10,47 @@ interface OptionProps {
   option: Option;
   text: TFunction<'translation', undefined>;
   selector: React.Dispatch<React.SetStateAction<Option | null>>;
-  word_id?: number | string;
+  setOptionSelected: (value: boolean) => void;
+  word_id?: string;
   isCorrect?: boolean | null;
   disabled?: boolean;
 }
 
-export default function OptionBtn({ option, text, selector, word_id, isCorrect, disabled }: OptionProps) {
-  let optionClassname = 'flex flex-row items-center justify-between gap-5 rounded-lg p-4 ps-6';
-  if (isCorrect) {
-    optionClassname += ' bg-lightGreen shadow-sm shadow-green-500';
-  } else if (isCorrect === false) {
-    optionClassname += ' bg-lightRed shadow-sm shadow-maroon';
-  } else {
-    optionClassname += ` bg-white-125 shadow-sm shadow-skyBlue ${
-      !disabled ? 'hover:bg-white-150' : ''
-    }`;
-  }
+export default function OptionBtn({
+  option,
+  text,
+  selector,
+  setOptionSelected,
+  word_id,
+  isCorrect,
+  disabled,
+}: OptionProps) {
+  const optionClassname = `flex flex-row items-center justify-between gap-5 rounded-lg p-4 ps-6 ${
+    isCorrect
+      ? 'bg-lightGreen shadow-sm shadow-green-500'
+      : isCorrect === false
+        ? 'bg-lightRed shadow-sm shadow-maroon'
+        : `bg-white-125 shadow-sm shadow-skyBlue ${
+          !disabled ? 'hover:bg-white-150' : ''
+        }`
+  }`;
 
   const textClassname = `gurmukhi font-medium text-2xl ${
     isCorrect === false ? 'text-brightRed' : 'text-darkBlue'
   }`;
   return (
-    <button className={optionClassname} onClick={() => selector(option)} disabled={disabled}>
+    <button
+      className={optionClassname}
+      onClick={() => {
+        selector(option);
+        setOptionSelected(true);
+      }}
+      disabled={disabled}
+    >
       <span className={textClassname}>
-        {option.word ? addEndingPunctuation(option.word, text('GURMUKHI')) : option.option}
+        {option.word
+          ? addEndingPunctuation(option.word, text('GURMUKHI'))
+          : option.option}
       </span>
       {isCorrect === false ? (
         <Link

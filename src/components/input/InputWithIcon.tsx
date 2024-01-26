@@ -52,9 +52,9 @@ export default function InputWithIcon({ ...props }: InputWithIconProps) {
           {
             props.type === 'password' ? (
               viewPassword ? (
-                <FontAwesomeIcon icon={faEye} className="text-gray-400 cursor-pointer" onClick={(e) => action(e)}/>
-              ) : (
                 <FontAwesomeIcon icon={faEyeSlash} className="text-gray-400 cursor-pointer" onClick={(e) => action(e)}/>
+              ) : (
+                <FontAwesomeIcon icon={faEye} className="text-gray-400 cursor-pointer" onClick={(e) => action(e)}/>
               )
             ) : <FontAwesomeIcon icon={getIcon()} className="text-gray-400" />
           }
