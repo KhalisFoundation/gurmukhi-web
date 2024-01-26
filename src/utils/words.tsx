@@ -91,7 +91,7 @@ const updateWord = async (word_id: string, wordData: WordData) => {
     ...wordData,
   });
   return updatedWord;
-}
+};
 
 export { 
   addEndingPunctuation,
