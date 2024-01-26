@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import Meta from 'components/meta';
-import metaTags from 'constants/meta';
-import { useUserAuth } from 'auth';
 import { sendEmailVerification, updateProfile } from 'firebase/auth';
-import { auth, firestore } from '../../firebase';
-import { checkIfUsernameUnique, showToastMessage, updateUser } from 'utils';
-import { ToastContainer, toast } from 'react-toastify';
-import { uploadImage } from 'utils/storage';
-import { doc } from 'firebase/firestore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiamond } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
+import { ToastContainer, toast } from 'react-toastify';
+import { useUserAuth } from 'auth';
+import Meta from 'components/meta';
+import metaTags from 'constants/meta';
+import { checkIfUsernameUnique, updateUserDocument } from 'database/shabadavalidb';
+import { auth } from '../../firebase';
+import { showToastMessage } from 'utils';
+import { uploadImage } from 'utils/storage';
 
 export default function Profile() {
   const { t: text } = useTranslation();
@@ -94,14 +94,19 @@ export default function Profile() {
       try {
         setIsLoading(true);
         handleUpload();
-        const userRef = doc(firestore, `users/${user.uid}`);
         if (username !== user.username) {
           const unique = checkIfUsernameUnique(username);
           if (!unique) {
             showToastMessage(text('USERNAME_TAKEN'), toast.POSITION.TOP_CENTER, false);
             return;
           } else {
-            await updateUser(userRef, { ...user, displayName: name, photoURL, username, user: null });
+            await updateUserDocument(user.uid, {
+              ...user,
+              displayName: name,
+              photoURL,
+              username,
+              user: null,
+            });
             await updateProfile(
               user.user,
               {
@@ -113,7 +118,12 @@ export default function Profile() {
             showToastMessage(text('PROFILE_UPDATED'), toast.POSITION.TOP_CENTER, true);
           }
         } else {
-          await updateUser(userRef, { ...user, displayName: name, photoURL, user: null });
+          await updateUserDocument(user.uid, {
+            ...user,
+            displayName: name,
+            photoURL,
+            user: null,
+          });
           await updateProfile(
             user.user,
             {

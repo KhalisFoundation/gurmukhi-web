@@ -1,6 +1,11 @@
 import { ToastPosition, toast } from 'react-toastify';
 
-export const showToastMessage = (message: string, position: ToastPosition, closeOnClick: boolean, error?: boolean) => {
+export const showToastMessage = (
+  message: string,
+  position: ToastPosition,
+  closeOnClick: boolean,
+  error?: boolean,
+) => {
   if (error) {
     toast.error(message, {
       position: position,
@@ -13,6 +18,5 @@ export const showToastMessage = (message: string, position: ToastPosition, close
     closeOnClick,
   });
 };
-export * from './users';
+
 export * from './words';
-export * from './database';

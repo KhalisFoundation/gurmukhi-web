@@ -5,7 +5,10 @@ import { faDiamond } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { ROUTES } from 'constants/routes';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
+import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
+import { GameScreen } from 'types/shabadavalidb';
+import { updateCurrentProgress } from 'database/shabadavalidb';
 
 interface Props {
   operation?: string;
@@ -29,12 +32,13 @@ const StartQuestionBtn = ({
   const isActive = active ? '' : ' disabled';
   const linkClass =
     'flex flex-row items-center justify-between gap-2 min-w-52 ' + isActive;
-  const gameArray = useAppSelector((state) => state.gameArray);
+  const gameArray: GameScreen[] = useAppSelector((state) => state.gameArray);
   const currentLevel = useAppSelector((state) => state.currentLevel);
-
+  const { user } = useUserAuth();
   const navigateTo = (
     key: string,
     wordID: string,
+    data: any,
     questionID: string | null = null,
   ) => {
     const routeMap = {
@@ -44,7 +48,7 @@ const StartQuestionBtn = ({
       [ALL_CONSTANT.SENTENCES]: `${ROUTES.WORD + ROUTES.EXAMPLES}?id=${wordID}`,
       [ALL_CONSTANT.QUESTIONS_SMALL]: `${ROUTES.QUESTION}?id=${wordID}&qid=${questionID}`,
     };
-    navigate(routeMap[key]);
+    navigate(routeMap[key], { state: { data: data } });
   };
   const handleClick = useCallback(() => {
     if (currentLevel < ALL_CONSTANT.LEVELS_COUNT - 1) {
@@ -53,13 +57,10 @@ const StartQuestionBtn = ({
           currentGamePosition !== undefined
             ? gameArray[currentGamePosition]
             : null;
-        console.log('sessionInfo', sessionInfo);
-        console.log(currentGamePosition);
         if (sessionInfo) {
-          const [key, wordID, questionID] = sessionInfo.split('-');
-          console.log('Question ID', questionID);
+          const [key, wordID, questionID] = sessionInfo.key.split('-');
           if (key) {
-            navigateTo(key, wordID, questionID);
+            navigateTo(key, wordID, sessionInfo.data, questionID);
           }
         }
         switch (operation) {
@@ -68,6 +69,7 @@ const StartQuestionBtn = ({
             return;
           case ALL_CONSTANT.NEXT:
             if (currentGamePosition) {
+              updateCurrentProgress(user.uid, currentGamePosition);
               dispatch(setCurrentGamePosition(currentGamePosition));
             }
             break;
@@ -81,7 +83,7 @@ const StartQuestionBtn = ({
     // please keep one of the below loaders
     return (
       <span>
-        <svg 
+        <svg
           className='animate-spin h-5 w-5 m-auto'
           viewBox='0 0 24 24'
           style={{
@@ -100,7 +102,7 @@ const StartQuestionBtn = ({
           />
         </svg>
         <span>{ALL_CONSTANT.FETCHING}</span>
-        <div className='loader'></div>
+        <span className='loader'></span>
       </span>
     );
   };
