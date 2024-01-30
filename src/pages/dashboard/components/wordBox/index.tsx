@@ -14,6 +14,7 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
     const fetchData = async () => {
       // Asynchronous logic here
       const newWord = await getRandomWord();
+      console.log(newWord);
       if (newWord) {
         setRandomWord(newWord);
       }
@@ -33,17 +34,17 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
           <p className='text-4xl text-sky-900 mb-7 gurmukhi'>
             {randomWord ? randomWord.word : ''}
           </p>
-          <button
+          {randomWord && <button
             className='font-serif text-sm text-sky-700 mb-2'
             onClick={() => {
               // navigate to information with random word as part of state
-              navigate(`${ROUTES.WORD + ROUTES.INFORMATION}`, {
-                state: { word: randomWord },
+              navigate(`${ROUTES.WORD + ROUTES.INFORMATION}?id=${randomWord.id}`, {
+                state: { data: randomWord },
               });
             }}
           >
             {text('EXPLORE_WORD')}
-          </button>
+          </button>}
           <img className='mx-auto my-0' src='/images/line.png' alt='Line' />
         </div>
       </div>
