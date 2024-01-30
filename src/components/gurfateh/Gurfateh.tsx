@@ -5,7 +5,7 @@ export default function Gurfateh() {
   const { t: text } = useTranslation();
 
   return (
-    <main className='relative flex '>
+    <main className='relative flex w-2/5 '>
       <div className="bg-slate-100/75 shadow rounded-3xl flex-col text-left p-14 gap-4 overflow-hidden">
         <div className="flex-grow">
           <h1 className="text-xl font-medium text-black text-left gurmukhi">{text('GURFATEH_PUNJABI')}</h1>
