@@ -1,7 +1,7 @@
 ```
 This is the main file of backend server which faciliates the conversion of text to speech using Narakeet API.
 It is a simple express server which accepts a POST request with text and voice as body parameters.
-It is currently hosted on Render.com for testing purposes, and we need to host it on a more reliable server for production.
+It is currently hosted on Heroku for testing purposes, and we need to host it on a more reliable server for production.
 ```
 
 require('dotenv').config();

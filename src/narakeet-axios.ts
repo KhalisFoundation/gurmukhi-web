@@ -26,7 +26,7 @@ export const uploadImage = async (
 
 export const generateNarakeetAudio = async (text: string, setAudioUrl: Dispatch<string>) => {
   try {
-    const BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8080/';
+    const BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL;
     const requestUrl = `${BACKEND_API_URL}generate-audio`;
     const response = await axios.post(
       requestUrl,
