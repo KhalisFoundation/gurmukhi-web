@@ -13,7 +13,7 @@ import { updateProgress } from 'database/shabadavalidb';
 import { useEffect } from 'react';
 import { addScreens } from 'store/features/gameArraySlice';
 
-const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
+const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetGame = true) => {
   const dispatch = useAppDispatch();
   const gamePlay = async () => {
     const progress: GameScreen[] | null = fetchProgress(user);
@@ -174,8 +174,10 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void) => {
         }
       }
     };
-    fetchGamePlay();
-  }, [user]);
+    if (resetGame === true) {
+      fetchGamePlay();
+    }
+  }, [user, resetGame]);
 };
 
 export default useGamePlay;

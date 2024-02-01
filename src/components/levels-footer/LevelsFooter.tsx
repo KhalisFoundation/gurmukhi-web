@@ -4,11 +4,11 @@ import LevelHexagon from '../levels/LevelHexagon';
 import StartQuestionBtn from '../buttons/StartQuestionBtn';
 
 interface Props {
-  operation?: string;
+  operation: string;
   nextText?: string;
   absolute?: boolean;
   completed?: boolean;
-  currentGamePosition?: number;
+  currentGamePosition: number;
   currentLevel: number;
   isDisabled: boolean;
   isLoading?: boolean;
