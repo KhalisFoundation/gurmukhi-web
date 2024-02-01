@@ -121,12 +121,16 @@ export const checkIfWordPresent = async (uid: string, wordID: string) => {
   return !querySnapshot.empty;
 };
 
-export const getLearntWordsCount = async (uid: string) => {
+export const getLearntWords = async (uid: string) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const q = query(wordsCollectionRef, where('isLearnt', '==', true));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.size;
+    const documents = querySnapshot.docs.map((document) => ({
+      id: document.id,
+      ...document.data(),
+    }));
+    return documents as WordShabadavaliDB[];
   } catch (error) {
     console.error(error);
     throw error;
