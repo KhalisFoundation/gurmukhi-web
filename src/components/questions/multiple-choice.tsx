@@ -96,7 +96,6 @@ export default function MultipleChoiceQuestion({
           key={key}
           option={option as Option}
           text={text}
-          word_id={question.word_id}
           selector={setSelectedOption}
           setOptionSelected={setOptionSelected}
           isCorrect={
@@ -116,7 +115,7 @@ export default function MultipleChoiceQuestion({
         <h1 className={'text-5xl gurmukhi text-black font-semibold'}>
           {highlightWord(question.question, question.word)}
         </h1>
-        <TextToSpeechBtn backgroundColor='bg-white-175' />
+        <TextToSpeechBtn backgroundColor='bg-white-175' text={question.question} />
       </div>
       {hasImage && (
         <img

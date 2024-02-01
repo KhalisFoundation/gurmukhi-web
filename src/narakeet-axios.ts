@@ -1,4 +1,4 @@
-const APIKEY = process.env.NARAKEET_TTS_API_KEY,
+const APIKEY = "2BuxDt7nHH1IOcIl01rsk4h999xgpVLR8PgZHQvq",
   voice = 'Diljit';
 
 import { Dispatch } from 'react';
@@ -8,7 +8,6 @@ import { updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { LocalUser } from 'auth/context';
 import { storage } from './firebase';
-import { updateWord } from 'utils';
 
 export const getAudio = async (text: string) => {
   const response = await axios.post(
@@ -48,7 +47,7 @@ export const uploadImage = async (
   setLoading(false);
 };
 
-const generateNarakeetAudio = async (text: string, fileRef: any) => {
+export const generateNarakeetAudio = async (text: string) => {
   const response = await axios.post(
     `https://api.narakeet.com/text-to-speech/mp3?voice=${voice}`,
     text,
@@ -58,19 +57,21 @@ const generateNarakeetAudio = async (text: string, fileRef: any) => {
         'x-api-key': APIKEY,
         'content-type': 'text/plain',
       },
-      responseType: 'stream',
     },
   );
 
-  response.data.pipe(createWriteStream('result.mp3'));
+  console.log('Narakeet response:', response);
+  console.log('Narakeet response data:', response.data);
+  console.log('Narakeet response audio data:', response.data.audioContent);
+  
 
-  // Upload the generated audio to Firebase Storage
-  await uploadBytes(fileRef, response.data);
+  // // Upload the generated audio to Firebase Storage
+  // await uploadBytes(fileRef, response.data);
 
-  // Get the download URL of the uploaded audio
-  const audioURL = await getDownloadURL(fileRef);
+  // // Get the download URL of the uploaded audio
+  // const audioURL = await getDownloadURL(fileRef);
 
-  return audioURL;
+  return response.data;
 };
 
 export const generateAndUploadAudio = async (
@@ -83,10 +84,10 @@ export const generateAndUploadAudio = async (
 
   // Generate audio using Narakeet
   const audioFileRef = ref(storage, `word_audios/${word_id}.mp3`);
-  const narakeetAudioURL = await generateNarakeetAudio(text, audioFileRef);
+  // const narakeetAudioURL = await generateNarakeetAudio(text, audioFileRef);
 
   // Update user profile with the audio URL
-  await updateWord(word_id, { audioURL: narakeetAudioURL });
+  // await updateWord(word_id, { audioURL: narakeetAudioURL });
 
   setLoading(false);
 };

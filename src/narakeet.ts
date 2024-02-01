@@ -12,7 +12,6 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { LocalUser } from 'auth/context';
 import { storage, wordsdb } from './firebase';
 import { doc, updateDoc } from 'firebase/firestore';
-import { updateWord } from 'utils';
 
 // export const getAudio = async (text: string) => {
 //     const data = await pipeline(
