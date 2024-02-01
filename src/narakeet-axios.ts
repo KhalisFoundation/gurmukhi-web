@@ -28,6 +28,7 @@ export const generateNarakeetAudio = async (text: string, setAudioUrl: Dispatch<
   try {
     const BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL;
     const requestUrl = `${BACKEND_API_URL}generate-audio`;
+    console.log('Request URL: ', requestUrl);
     const response = await axios.post(
       requestUrl,
       {
