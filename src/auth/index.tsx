@@ -154,7 +154,6 @@ export const UserAuthContextProvider = ({
             uid,
             name: data?.name,
             coins: data?.coins,
-            wordsLearnt: data?.wordsLearnt,
             progress: data?.progress,
             email: data?.email,
             emailVerified: emailVerified ?? false,
