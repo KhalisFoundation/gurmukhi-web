@@ -1,4 +1,4 @@
-const APIKEY = "2BuxDt7nHH1IOcIl01rsk4h999xgpVLR8PgZHQvq",
+const APIKEY = '2BuxDt7nHH1IOcIl01rsk4h999xgpVLR8PgZHQvq',
   voice = 'Diljit';
 
 import { Dispatch } from 'react';
@@ -83,7 +83,7 @@ export const generateAndUploadAudio = async (
   setLoading(true);
 
   // Generate audio using Narakeet
-  const audioFileRef = ref(storage, `word_audios/${word_id}.mp3`);
+  // const audioFileRef = ref(storage, `word_audios/${word_id}.mp3`);
   // const narakeetAudioURL = await generateNarakeetAudio(text, audioFileRef);
 
   // Update user profile with the audio URL
