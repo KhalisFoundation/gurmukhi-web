@@ -132,13 +132,13 @@ export default function SignIn() {
 
   return (
     <main className='bg-white h-full w-2/5 rounded-3xl brandon-grotesque'>
-      <div className='my-7 flex flex-col gap-4 w-2/3 m-auto'>
-        <div className='text-center'>
+      <div className='flex flex-col w-2/3 m-auto my-0 h-full justify-center'>
+        <div className='text-center m-4'>
           <h1 className='fs-rem-2 recoleta'>{text('WELCOME')}</h1>
           <h3 className='grey text-lg'>{text('ENTER_DETAILS')}</h3>
         </div>
 
-        <div className='w-80 m-auto rounded-full h-12 flex p-5 relative items-center justify-between gap-4 bg-gray-eee'>
+        <div className='w-80 my-0 m-auto rounded-full h-12 flex p-5 relative items-center justify-between gap-4 bg-gray-eee'>
           <div className='w-full flex justify-center grey'>
             <button className='signin' onClick={(e) => signToggle(e)}>
               {text('SIGN_IN')}

@@ -8,7 +8,7 @@ export default function Login() {
   const { title, description } = metaTags.LOGIN;
 
   return (
-    <section className='flex flex-row w-full items-center justify-evenly m-auto'>
+    <section className='flex flex-row w-full items-center justify-evenly m-auto my-0 h-5/6'>
       <Meta title={title} description={description} />
       <Gurfateh />
       <SignIn />
