@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiamond } from '@fortawesome/free-solid-svg-icons';
 
 import { useOnClick } from 'components/buttons/hooks';
-import LoaderButton from './LoderButton';
+import LoaderButton from './LoaderButton';
 import ALL_CONSTANT from 'constants/constant';
 
 interface Props {

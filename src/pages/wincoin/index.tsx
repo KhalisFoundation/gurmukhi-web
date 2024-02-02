@@ -15,7 +15,7 @@ import { resetGameArray } from 'store/features/gameArraySlice';
 import ALL_CONSTANT from 'constants/constant';
 import useGamePlay from 'pages/dashboard/hooks/useGamePlay1';
 import { useOnClick } from 'components/buttons/hooks';
-import LoaderButton from 'components/buttons/LoderButton';
+import LoaderButton from 'components/buttons/LoaderButton';
 
 function WinCoin() {
   const { t: text } = useTranslation();
