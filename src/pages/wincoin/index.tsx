@@ -12,29 +12,42 @@ import { ROUTES } from 'constants/routes';
 import { useUserAuth } from 'auth';
 import { updateNanakCoin, updateProgress } from 'database/shabadavalidb';
 import { resetGameArray } from 'store/features/gameArraySlice';
+import ALL_CONSTANT from 'constants/constant';
+import useGamePlay from 'pages/dashboard/hooks/useGamePlay1';
+import { useOnClick } from 'components/buttons/hooks';
+import LoaderButton from 'components/buttons/LoaderButton';
 
 function WinCoin() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.WIN;
   const dispatch = useAppDispatch();
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
+  const currentLevel = useAppSelector((state)=>state.currentLevel);
+  const [resetGame, toggleResetGame] = useState<boolean>(false);
   const navigate = useNavigate();
   const { user } = useUserAuth();
   const [isLoading, toggleIsLoading] = useState<boolean>(true);
+  const handleClick = useOnClick(0);
+  
+  useGamePlay(user, toggleIsLoading, resetGame);
 
   useEffect(() => {
     const storeData = async () => {
+      toggleResetGame(false);
       toggleIsLoading(true);
-      dispatch(increment());
       dispatch(resetGamePosition());
       dispatch(resetLevel());
       dispatch(resetGameArray());
-      await updateNanakCoin(user.uid, nanakCoin + 1);
+      if (currentLevel === ALL_CONSTANT.LEVELS_COUNT) {
+        dispatch(increment());
+        await updateNanakCoin(user.uid, nanakCoin + 1);
+      }
       await updateProgress(user.uid, 0, [], 0);
       toggleIsLoading(false);
+      toggleResetGame(true);
     };
     storeData();
-  }, []);
+  }, [user]);
   return (
     <div className='nanakback h-full bg-cover w-full'>
       <Meta title={title} description={description} />
@@ -49,13 +62,22 @@ function WinCoin() {
           <p className='text-xl mb-10 text-sky-800'>
             {convertNumber(nanakCoin)}
           </p>
-          <button
-            disabled={isLoading}
-            onClick={() => navigate(ROUTES.DASHBOARD)}
-            className='bg-sky-900 text-xs text-white p-3 mb-20 tracking-widest font-light '
-          >
-            {text('GET_ONE_MORE')}
-          </button>
+          <div className='flex flex-col w-1/2 m-auto justify-evenly mb-10 gap-4'>
+            <button
+              disabled={isLoading}
+              onClick={() => handleClick(ALL_CONSTANT.GET_ONE_MORE)}
+              className='bg-sky-900 text-xs text-white p-3  tracking-widest font-light '
+            >
+              {isLoading ? <LoaderButton theme={ALL_CONSTANT.LIGHT} /> : ALL_CONSTANT.GET_ONE_MORE}
+              
+            </button>
+            <button
+              onClick={() => navigate(ROUTES.DASHBOARD)}
+              className='bg-sky-100 border-sky-900 border-2 text-xs text-sky-900 p-3  tracking-widest font-light'
+            >
+              {ALL_CONSTANT.END_SESSION}
+            </button>
+          </div>
         </div>
       </div>
     </div>
