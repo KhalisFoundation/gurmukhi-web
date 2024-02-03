@@ -85,7 +85,15 @@ export default function Defintion() {
                   {currentWord.translation}
                 </h2>
               </div>
-              <TextToSpeechBtn backgroundColor='bg-white-150' text={currentWord.word} word_id={currentWord.id} />
+              {
+                currentWord.word && (
+                  <TextToSpeechBtn
+                    backgroundColor='bg-white-150'
+                    text={currentWord.word}
+                    word_id={currentWord.id}
+                  />
+                )
+              }
             </div>
             <div className='flex flex-col text-lg'>
               <span className={'text-black-111'}>

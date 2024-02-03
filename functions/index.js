@@ -1,22 +1,19 @@
-```
-This is the main file of backend server which faciliates the conversion of text to speech using Narakeet API.
-It is a simple express server which accepts a POST request with text and voice as body parameters.
-It is currently hosted on Heroku for testing purposes, and we need to host it on a more reliable server for production.
-```
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { Readable } = require('stream');
+const helmet = require('helmet');
 const axios = require('axios');
+const functions = require('firebase-functions');
 const { createWriteStream, readFileSync } = require('fs');
+const { Readable } = require('stream');
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.NARAKEET_TTS_API_KEY;
-app.use(cors());
 
 app.use(express.json());
+app.use(cors());
+app.use(helmet());
 
 async function generateAudioWithAxios(text, voice = 'Diljit') {
     try {
@@ -24,8 +21,8 @@ async function generateAudioWithAxios(text, voice = 'Diljit') {
         `https://api.narakeet.com/text-to-speech/mp3?voice=${voice}`,
         Readable.from([text]),
         {
-            'accept': 'application/octet-stream',
           headers: {
+            'accept': 'application/octet-stream',
             'x-api-key': API_KEY,
             'content-type': 'text/plain'
           },
@@ -33,9 +30,9 @@ async function generateAudioWithAxios(text, voice = 'Diljit') {
         }
       );
   
-      response.data.pipe(writeStream);
       await new Promise((resolve, reject) => {
         const writeStream = createWriteStream('result.mp3');
+        response.data.pipe(writeStream);
         writeStream.on('finish', resolve);
         writeStream.on('error', reject);
         console.log('Audio file generated successfully.');
@@ -48,7 +45,7 @@ async function generateAudioWithAxios(text, voice = 'Diljit') {
 
 app.post('/generate-audio', async (req, res) => {
   try {
-    const response = await generateAudioWithAxios(req.body.text, req.body.voice);
+    await generateAudioWithAxios(req.body.text, req.body.voice);
 
     // Read audio file as base64
     const audio = readFileSync('result.mp3', { encoding: 'base64' });
@@ -68,3 +65,5 @@ app.post('/generate-audio', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+exports.api = functions.https.onRequest(app);

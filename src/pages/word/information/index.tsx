@@ -91,7 +91,12 @@ export default function Information() {
                     {currentWord?.translation}
                   </h2>
                 </div>
-                <TextToSpeechBtn />
+                {
+                  currentWord &&
+                  currentWord.word && (
+                    <TextToSpeechBtn text={currentWord.word} />
+                  )
+                }
               </div>
               <div className='flex flex-col text-lg'>
                 <span className={'text-black-111'}>
