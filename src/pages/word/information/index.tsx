@@ -11,6 +11,7 @@ import metaTags from 'constants/meta';
 import { MiniWord, SentenceType } from 'types';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
+import Loading from 'components/loading';
 
 export default function Information() {
   const { t: text } = useTranslation();
@@ -65,7 +66,7 @@ export default function Information() {
 
   if (currentWord && !currentWord.word) {
     // Handle case when word is not found
-    return <div>{text('WORD_NOT_FOUND')}</div>;
+    return <Loading/>;
   }
 
   return (

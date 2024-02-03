@@ -14,5 +14,9 @@ const ALL_CONSTANT = {
   USERS: 'users',
   WORDS: 'words',
   QUESTIONS: 'questions',
+  END_SESSION: 'END SESSION',
+  GET_ONE_MORE: 'GET ONE MORE',
+  LIGHT:'LIGHT',
+  DARK:'DARK',
 };
 export default ALL_CONSTANT;

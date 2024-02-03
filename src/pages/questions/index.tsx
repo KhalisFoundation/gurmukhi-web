@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import MultipleChoiceQuestion from 'components/questions/multiple-choice';
@@ -9,9 +8,9 @@ import metaTags from 'constants/meta';
 import ALL_CONSTANT from 'constants/constant';
 import { getQuestionByID } from 'database/default/question';
 import { useAppSelector } from 'store/hooks';
+import Loading from 'components/loading';
 
 export default function Question() {
-  const { t: text } = useTranslation();
   const { title, description } = metaTags.QUESTION;
   const currentGamePosition = useAppSelector(
     (state) => state.currentGamePosition,
@@ -82,7 +81,7 @@ export default function Question() {
 
   if (!currentQuestion) {
     // Handle case when word is not found
-    return <div>{text('WORD_NOT_FOUND')}</div>;
+    return <Loading/>;
   }
 
   return (
