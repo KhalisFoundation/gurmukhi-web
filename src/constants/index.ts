@@ -24,7 +24,6 @@ const CONSTANTS = {
   FIFTH_QUESTION: 'You completed your 5th question!',
   FILL_ALL_FIELDS: 'Please fill all the fields',
   FIX_ERRORS: 'Please fix the errors to proceed',
-  GET_ONE_MORE: 'GET ONE MORE',
   GRAY: 'gray',
   GREAT_JOB: 'Great Job!',
   GURFATEH_PUNJABI: 'ਵਾਹਿਗੁਰੂ ਜੀ ਕਾ ਖਾਲਸਾ ॥ ਵਾਹਿਗੁਰੂ ਜੀ ਕੀ ਫਤਿਹ ॥',

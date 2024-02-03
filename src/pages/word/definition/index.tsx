@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import { WordType } from 'types';
@@ -9,9 +8,9 @@ import Meta from 'components/meta';
 import { getWordById } from 'database/default';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
+import Loading from 'components/loading';
 
 export default function Defintion() {
-  const { t: text } = useTranslation();
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
   const { title, description } = metaTags.DEFINITION;
@@ -49,7 +48,7 @@ export default function Defintion() {
 
   if (!currentWord) {
     // Handle case when word is not found
-    return <div>{text('WORD_NOT_FOUND')}</div>;
+    return <Loading/>;
   }
 
   return (

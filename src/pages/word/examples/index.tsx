@@ -9,6 +9,7 @@ import metaTags from 'constants/meta';
 import ALL_CONSTANT from 'constants/constant';
 import { WordType } from 'types';
 import { useAppSelector } from 'store/hooks';
+import Loading from 'components/loading';
 
 export default function Examples() {
   const { t: text } = useTranslation();
@@ -56,7 +57,7 @@ export default function Examples() {
 
   if (!currentWord) {
     // Handle case when word is not found
-    return <div>{text('WORD_NOT_FOUND')}</div>;
+    return <Loading />;
   }
 
   return (
