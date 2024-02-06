@@ -1,14 +1,16 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { Dispatch, FC, useEffect, useRef, useState } from 'react';
 import { generateNarakeetAudio } from 'narakeet-axios';
 
 interface TextToSpeechBtnProps {
   text: string;
+  type: string;
   audioURL?: string;
-  word_id?: string;
+  id?: string;
   backgroundColor?: string;
+  setLoading?: Dispatch<boolean>,
 }
 
-const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', backgroundColor, audioURL }) => {
+const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioURL, id, backgroundColor, setLoading }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string>(audioURL || '');
@@ -19,21 +21,35 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', backgroundCo
 
   useEffect(() => {
     const generateAudio = async () => {
-      let justSetAudioUrl = false;
+      // let justSetAudioUrl = false;
       try {
-        if (!audioUrl) {
+        let audioNotWorking = false;
+        // check if audioURL is playable
+        if (audioUrl) {
+          const audio = new Audio(audioUrl);
+          audio.oncanplay = () => {
+            audioNotWorking = false;
+          };
+          audio.onerror = () => {
+            audioNotWorking = true;
+          };
+        }
+        if (!audioUrl || audioNotWorking) {
+          setLoading?.(true);
           setIsLoading(true);
-          const audioContent = await generateNarakeetAudio(betterText, setAudioUrl);
+          const audioContent = await generateNarakeetAudio(betterText, type, setAudioUrl, id ?? undefined);
           console.log('Narakeet Audio Content: ', audioContent);
-          justSetAudioUrl = true;
+          // justSetAudioUrl = true;
         }
       } catch (error) {
         console.error('Error generating audio:', error);
       } finally {
         setIsLoading(false);
-        if (justSetAudioUrl || !isPlaying) {
-          audioRef.current?.play();
-        }
+        setLoading?.(false);
+        // Code to auto play audio
+        // if (justSetAudioUrl || !isPlaying) {
+        //   audioRef.current?.play();
+        // }
       }
     };
     generateAudio();
@@ -44,7 +60,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', backgroundCo
     try {
       if (!audioUrl) {
         setIsLoading(true);
-        const audioContent = await generateNarakeetAudio(betterText, setAudioUrl);
+        const audioContent = await generateNarakeetAudio(betterText, type, setAudioUrl, id ?? undefined);
         console.log('Narakeet Audio Content: ', audioContent);
         justSetAudioUrl = true;
       }

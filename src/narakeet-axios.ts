@@ -24,19 +24,24 @@ export const uploadImage = async (
   setLoading(false);
 };
 
-export const generateNarakeetAudio = async (text: string, setAudioUrl: Dispatch<string>) => {
+export const generateNarakeetAudio = async (text: string, type: string, setAudioUrl: Dispatch<string>, id?: string) => {
   try {
-    const BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL;
+    const BACKEND_API_URL = 'http://localhost:8080/'; //process.env.REACT_APP_BACKEND_API_URL;
     const requestUrl = `${BACKEND_API_URL}generate-audio`;
+    const reqJson = {
+      id: id ?? undefined,
+      type: type,
+      voice: 'Diljit',
+      text: text,
+    };
+    console.log('reqJson:', reqJson);
     const response = await axios.post(
       requestUrl,
-      {
-        voice: 'Diljit',
-        text: text,
-      },
+      reqJson,
     );
+    console.log('response:', response);
 
-    setAudioUrl(`data:audio/mp3;base64,${response.data.audio.toString('base64')}`);
+    setAudioUrl(response.data.audio);
     return response;
   } catch (error) {
     console.error('Error generating audio:', error);

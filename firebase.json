@@ -13,12 +13,12 @@
     ],
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/index.html"
-      },
-      {
         "source": "/api/**",
         "function": "api"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   },
@@ -44,6 +44,7 @@
     {
       "source": "functions",
       "codebase": "default",
+      "port": 3000,
       "ignore": [
         "node_modules",
         ".git",

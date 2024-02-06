@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { TFunction } from 'i18next';
 import TextToSpeechBtn from './TextToSpeechBtn';
 import { Option } from 'types';
 import { addEndingPunctuation } from 'utils';
+import ALL_CONSTANT from 'constants/constant';
 
 interface OptionProps {
   option: Option;
   text: TFunction<'translation', undefined>;
-  selector: React.Dispatch<React.SetStateAction<Option | null>>;
+  selector: Dispatch<React.SetStateAction<Option | null>>;
   setOptionSelected: (value: boolean) => void;
   isCorrect?: boolean | null;
   disabled?: boolean;
@@ -52,7 +53,12 @@ export default function OptionBtn({
             : option.option}
         </span>
       </button>
-      <TextToSpeechBtn backgroundColor='bg-white-175' text={option.word ?? option.option} />
+      <TextToSpeechBtn
+        backgroundColor='bg-white-175'
+        text={option.word ?? option.option}
+        type={ALL_CONSTANT.OPTION}
+        id={option.id}
+      />
     </div>
   );
 }

@@ -13,6 +13,7 @@ import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
 import { QuestionType } from 'types/shabadavalidb';
+import ALL_CONSTANT from 'constants/constant';
 
 export default function MultipleChoiceQuestion({
   questionData,
@@ -37,7 +38,12 @@ export default function MultipleChoiceQuestion({
   useEffect(() => {
     if (questionData.question) {
       setQuestionTTSComponent(
-        <TextToSpeechBtn backgroundColor='bg-white-175' text={questionData.question} />,
+        <TextToSpeechBtn
+          backgroundColor='bg-white-175'
+          text={questionData.question}
+          type={ALL_CONSTANT.QUESTION}
+          id={questionData.id}
+        />,
       );
     }
   }, [questionData.question]);
