@@ -13,10 +13,6 @@
     ],
     "rewrites": [
       {
-        "source": "/api/**",
-        "function": "api"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
@@ -39,18 +35,5 @@
       "enabled": true
     },
     "singleProjectMode": true
-  },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "default",
-      "port": 3000,
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log"
-      ]
-    }
-  ]
+  }
 }
