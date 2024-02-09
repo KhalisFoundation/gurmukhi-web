@@ -1,5 +1,6 @@
 import React, { Dispatch, FC, useEffect, useRef, useState } from 'react';
 import { generateNarakeetAudio } from 'narakeet-axios';
+import Loading from 'components/loading';
 
 interface TextToSpeechBtnProps {
   text: string;
@@ -84,24 +85,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
   return (
     <button className={ttsClassname} onClick={onBtnClick} disabled={isLoading}>
       {isLoading ? (
-        <svg
-          className='animate-spin h-5 w-5 m-auto'
-          viewBox='0 0 24 24'
-          style={{
-            display: 'inline',
-            marginInlineEnd: '0.5rem',
-          }}
-        >
-          <circle
-            cx='12'
-            cy='12'
-            r='10'
-            stroke='#1F4860'
-            strokeWidth='2'
-            fill='none'
-            strokeDasharray='31.4 31.4'
-          />
-        </svg>
+        <Loading />
       ) : (
         <>
           <img src={'/icons/speaker.svg'} alt='Play' width={24} height={24} />
