@@ -4,7 +4,6 @@ import { Option, QuestionData } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
 import {
-  addQuestionToSubCollection,
   updateCurrentLevel,
   updateWordFromUser,
 } from 'database/shabadavalidb';
@@ -12,7 +11,6 @@ import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
-import { QuestionType } from 'types/shabadavalidb';
 
 export default function MultipleChoiceQuestion({
   question,
@@ -54,23 +52,7 @@ export default function MultipleChoiceQuestion({
         question.id &&
         selectedOption === question.options[question.answer]
       ) {
-        const questionTypeData: QuestionType = {
-          word_id: question.word_id,
-          question_id: question.id,
-          isLearnt: question.options[question.answer] === selectedOption,
-          question: question.question,
-          answer: question.answer,
-          options: question.options,
-          word: question.word,
-        };
-        if (question.image) {
-          questionTypeData.image = question.image;
-        }
-        if (question.type) {
-          questionTypeData.type = question.type;
-        }
-        await addQuestionToSubCollection(user.uid, questionTypeData);
-        await updateWordFromUser(user.uid, questionTypeData.word_id);
+        await updateWordFromUser(user.uid, question.word_id);
       }
     };
     storeData();
