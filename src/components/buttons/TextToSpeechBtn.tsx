@@ -25,16 +25,25 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
       // let justSetAudioUrl = false;
       try {
         let audioNotWorking = false;
-        // check if audioURL is playable
         if (audioUrl) {
-          const audio = new Audio(audioUrl);
-          audio.oncanplay = () => {
-            audioNotWorking = false;
-          };
-          audio.onerror = () => {
+          const decodedAudioUrl = decodeURIComponent(audioUrl);
+          const audioText = decodedAudioUrl.split('/')[5].split('.mp3')[0];
+          const currentText = betterText.replace(/[\s ]/g, '_');
+
+          if (audioText !== currentText) {
             audioNotWorking = true;
-          };
+            setAudioUrl('');
+          } else {
+            const audio = new Audio(audioUrl);
+            audio.oncanplay = () => {
+              audioNotWorking = false;
+            };
+            audio.onerror = () => {
+              audioNotWorking = true;
+            };
+          }
         }
+
         if (!audioUrl || audioNotWorking) {
           setLoading?.(true);
           setIsLoading(true);
@@ -85,7 +94,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
   return (
     <button className={ttsClassname} onClick={onBtnClick} disabled={isLoading}>
       {isLoading ? (
-        <Loading />
+        <Loading size={'5'} />
       ) : (
         <>
           <img src={'/icons/speaker.svg'} alt='Play' width={24} height={24} />
