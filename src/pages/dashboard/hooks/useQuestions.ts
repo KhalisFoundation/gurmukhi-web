@@ -6,7 +6,6 @@ import { getQuestionsByWordID } from 'database/default';
 import { QuestionData } from 'types';
 
 const useQuestions = (user:User)=>{
-
   const getRandomQuestions = async (count: number, isLearnt:boolean) => {
     const gameArray: GameScreen[] = [];
     const words:WordShabadavaliDB[] = await getWordsFromUser(user.uid, count, isLearnt);

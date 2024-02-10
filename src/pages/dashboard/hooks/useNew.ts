@@ -4,6 +4,7 @@ import { getQuestionsByWordID } from 'database/default';
 import {  WordType } from 'types';
 import { createGameScreen } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
+
 const useNew = ()=>{
   const addWordIfNotExists = (word: WordType, learningWords:WordShabadavaliDB[]) => {
     const exists = learningWords.some((obj) => obj.word_id === word.id);
@@ -60,8 +61,6 @@ const useNew = ()=>{
 
     return { game, learningWords };
   };
-
-
   return getNewQuestions;
 };
 export default useNew;
