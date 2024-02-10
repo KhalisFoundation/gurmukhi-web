@@ -23,6 +23,9 @@ export const requireAuth = (children: JSX.Element) => <RequireAuth>{children}</R
 export function AppRouter() {
   return (
     <Routes>
+      <Route path={PAGES.API}>
+        <Route path='*'/>
+      </Route>
       <Route path={PAGES.ROOT} element={<RootLayout />}>
         <Route path={''} element={requireAuth(<Dashboard />)} />
         <Route path={PAGES.DASHBOARD} element={requireAuth(<Dashboard />)} />

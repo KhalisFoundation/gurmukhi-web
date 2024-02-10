@@ -1,9 +1,14 @@
 import React from 'react';
-const Loading = ()=>{
+
+interface LoadingProps {
+  size?: string;
+}
+
+const Loading: React.FC<LoadingProps> = ({ size = '1/4' }) => {
   return (
     <div className='text-center'>
       <svg
-        className='animate-spin h-1/4 w-1/4 m-auto'
+        className={`animate-spin h-${size} w-${size} m-auto`}
         viewBox='0 0 24 24'
         style={{
           display: 'inline',
