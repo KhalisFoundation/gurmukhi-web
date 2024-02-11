@@ -16,15 +16,15 @@ export default function MultipleChoiceQuestion({
   question,
   hasImage,
   setOptionSelected,
+  setIsCorrectOption,
 }: {
   question: QuestionData;
   hasImage?: boolean;
   setOptionSelected: (value: boolean) => void;
+  setIsCorrectOption: (value: boolean) => void;
 }) {
   const { t: text } = useTranslation();
-  const [selectedOption, setSelectedOption] = React.useState<Option | null>(
-    null,
-  );
+  const [selectedOption, setSelectedOption] = React.useState<Option | null>(null);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const { user } = useUserAuth();
   const dispatch = useAppDispatch();
@@ -37,8 +37,11 @@ export default function MultipleChoiceQuestion({
     if (selectedOption) {
       setOptionSelected(true);
       if (question.options[question.answer] === selectedOption) {
+        setIsCorrectOption(true);
         updateCurrentLevel(user.uid, currentLevel + 1);
         dispatch(increment());
+      } else {
+        setIsCorrectOption(false);
       }
     }
   }, [selectedOption]);
@@ -68,10 +71,7 @@ export default function MultipleChoiceQuestion({
   }
   const renderOptionButtons = () => {
     return question.options.map((option, idx) => {
-      const key =
-        typeof option === 'object' && option !== null && 'id' in option
-          ? option.id
-          : idx;
+      const key = typeof option === 'object' && option !== null && 'id' in option ? option.id : idx;
       const isSelected = selectedOption && option === selectedOption;
       return (
         <OptionBtn
@@ -81,11 +81,7 @@ export default function MultipleChoiceQuestion({
           word_id={question.word_id}
           selector={setSelectedOption}
           setOptionSelected={setOptionSelected}
-          isCorrect={
-            isSelected
-              ? question.options[question.answer] === selectedOption
-              : undefined
-          }
+          isCorrect={isSelected ? question.options[question.answer] === selectedOption : undefined}
           disabled={!!selectedOption}
         />
       );

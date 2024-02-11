@@ -35,29 +35,34 @@ const useOnClick = (currentGamePosition:number)=>{
 
   const handleClick = useCallback((operation:string)=>{
     if (currentLevel < ALL_CONSTANT.LEVELS_COUNT - 1) {
-      if (gameArray.length > 0) {
-        const sessionInfo =
-              currentGamePosition !== undefined
-                ? gameArray[currentGamePosition]
-                : null;
-        if (sessionInfo) {
-          const [key, wordID, questionID] = sessionInfo.key.split('-');
-          if (key) {
-            navigateTo(key, wordID, sessionInfo.data, questionID);
-          }
-        }
-        switch (operation) {
-          case ALL_CONSTANT.BACK_TO_DASHBOARD:
-            navigate(ROUTES.DASHBOARD);
-            return;
-          case ALL_CONSTANT.NEXT:
-            if (currentGamePosition) {
-              updateCurrentProgress(user.uid, currentGamePosition);
-              dispatch(setCurrentGamePosition(currentGamePosition));
-            }
-            break;
+      if (gameArray.length === 0) {
+        return;
+      }
+      let saveWordID = null;
+      const sessionInfo = currentGamePosition !== undefined ? gameArray[currentGamePosition] : null;
+
+      if (sessionInfo) {
+        const [key, wordID, questionID] = sessionInfo.key.split('-');
+        saveWordID = wordID;
+        if (key) {
+          navigateTo(key, wordID, sessionInfo.data, questionID);
         }
       }
+      switch (operation) {
+        case ALL_CONSTANT.BACK_TO_DASHBOARD:
+          navigate(ROUTES.DASHBOARD);
+          return;
+        case ALL_CONSTANT.INFORMATION:
+          navigate(`${ROUTES.WORD + ROUTES.INFORMATION}?id=${saveWordID}`);
+          return;
+        case ALL_CONSTANT.NEXT:
+          if (currentGamePosition) {
+            updateCurrentProgress(user.uid, currentGamePosition);
+            dispatch(setCurrentGamePosition(currentGamePosition));
+          }
+          break;
+      }
+      
     } else {
       navigate(`${ROUTES.WINCOIN}`);
     }

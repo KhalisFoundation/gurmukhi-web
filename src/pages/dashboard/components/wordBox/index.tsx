@@ -14,7 +14,6 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
     const fetchData = async () => {
       // Asynchronous logic here
       const newWord = await getRandomWord();
-      console.log(newWord);
       if (newWord) {
         setRandomWord(newWord);
       }

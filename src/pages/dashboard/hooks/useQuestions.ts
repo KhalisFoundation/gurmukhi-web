@@ -1,38 +1,31 @@
-import {  User, GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
+import { User, GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
 import { getWordsFromUser } from 'database/shabadavalidb';
 import { createGameScreen } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
 import { getQuestionsByWordID } from 'database/default';
 import { QuestionData } from 'types';
 
-const useQuestions = (user:User)=>{
-  const getRandomQuestions = async (count: number, isLearnt:boolean) => {
+const useQuestions = (user: User) => {
+  const getRandomQuestions = async (count: number, isLearnt: boolean) => {
     const gameArray: GameScreen[] = [];
-    const words:WordShabadavaliDB[] = await getWordsFromUser(user.uid, count, isLearnt);
+    const words: WordShabadavaliDB[] = await getWordsFromUser(user.uid, count, isLearnt);
     if (words.length === 0) {
       return [];
     }
-    const questionsPromises = words.map((word) =>
-      getQuestionsByWordID(word.word_id, 2, true),
-    );
-    const questionsResults: QuestionData[][] = await Promise.all(
-      questionsPromises,
-    );
+    const questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, true));
+    const questionsResults: QuestionData[][] = await Promise.all(questionsPromises);
     const questions: QuestionData[] = questionsResults.flat();
     if (questions.length === 0) {
       return [];
     }
     const finalCount = Math.min(questions.length, count);
 
-    for (let i = 0;i < finalCount;i++) {
+    for (let i = 0; i < finalCount; i++) {
       if (questions[i].type === 'image') {
-        const foundWord = words.find(
-          (wordObj) => wordObj.word_id === questions[i].word_id,
-        );
+        const foundWord = words.find((wordObj) => wordObj.word_id === questions[i].word_id);
         if (foundWord) {
           questions[i].image = foundWord.image;
         }
-
       }
       gameArray.push(
         createGameScreen(
