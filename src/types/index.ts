@@ -30,8 +30,8 @@ export interface WordType {
   word_id?: string;
   word?: string;
   translation?: string;
-  meaningEnglish?: string;
-  meaning?: string;
+  meaning_english?: string;
+  meaning_punjabi?: string;
   part_of_speech?: string;
   images?: string[];
   antonyms?: string[];
@@ -48,6 +48,7 @@ export interface WordType {
   notes?: string;
   wordlists?: DocumentReference[];
   is_for_support?: boolean;
+  audioURL?: string;
 }
 
 export interface MiniWord {

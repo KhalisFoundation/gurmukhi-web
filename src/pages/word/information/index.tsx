@@ -92,11 +92,23 @@ export default function Information() {
                     {currentWord?.translation}
                   </h2>
                 </div>
-                <TextToSpeechBtn />
+                {
+                  currentWord &&
+                  currentWord.word && (
+                    <TextToSpeechBtn
+                      text={currentWord.word}
+                      type={ALL_CONSTANT.WORD} 
+                      id={currentWord.id}
+                      audioURL={currentWord?.audioURL}
+                    />
+                  )
+                }
               </div>
               <div className='flex flex-col text-lg'>
-                <span className={'text-black-111'}>{currentWord?.meaningEnglish}</span>
-                <span className={'text-black'}>{currentWord?.meaning}</span>
+                <span className={'text-black-111'}>
+                  {currentWord?.meaning_english}
+                </span>
+                <span className={'text-black'}>{currentWord?.meaning_punjabi}</span>
               </div>
             </div>
             <img
