@@ -20,8 +20,9 @@ const ALL_CONSTANT = {
   SENTENCE: 'sentence',
   END_SESSION: 'END SESSION',
   GET_ONE_MORE: 'GET ONE MORE',
-  LIGHT:'LIGHT',
-  DARK:'DARK',
-  INFORMATION:'information',
+  LIGHT: 'LIGHT',
+  DARK: 'DARK',
+  INFORMATION: 'information',
+  START_LEARNING: 'START LEARNING',
 };
 export default ALL_CONSTANT;

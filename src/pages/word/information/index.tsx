@@ -21,6 +21,7 @@ export default function Information() {
   const [wordID, setWordID] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
+  const [isRandom, setIsRandom] = useState<boolean>(false);
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -44,6 +45,9 @@ export default function Information() {
       setIsLoading(false);
     };
     const data = location.state?.data;
+    if (location.state?.isRandom) {
+      setIsRandom(location.state?.isRandom);
+    }
     if (data) {
       setCurrentWord(data);
       setIsLoading(false);
@@ -52,8 +56,8 @@ export default function Information() {
     }
   }, [wordID]);
   const renderFooter = () => {
-    const operation = ALL_CONSTANT.NEXT;
-    const nextText = 'Next';
+    const operation = isRandom ? ALL_CONSTANT.START_QUESTION : ALL_CONSTANT.NEXT;
+    const nextText = isRandom ? ALL_CONSTANT.START_LEARNING : 'Next';
 
     return (
       <LevelsFooter

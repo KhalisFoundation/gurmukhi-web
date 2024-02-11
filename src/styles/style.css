@@ -692,8 +692,8 @@ video {
 .aspect-auto {
   aspect-ratio: auto;
 }
-.h-1\/4 {
-  height: 25%;
+.h-1\/2 {
+  height: 50%;
 }
 .h-10 {
   height: 2.5rem;
@@ -730,9 +730,6 @@ video {
 }
 .h-60 {
   height: 15rem;
-}
-.h-64 {
-  height: 16rem;
 }
 .h-72 {
   height: 18rem;

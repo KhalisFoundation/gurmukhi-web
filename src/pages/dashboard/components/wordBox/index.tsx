@@ -38,7 +38,7 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
             onClick={() => {
               // navigate to information with random word as part of state
               navigate(`${ROUTES.WORD + ROUTES.INFORMATION}?id=${randomWord.id}`, {
-                state: { data: randomWord },
+                state: { data: randomWord, isRandom: true },
               });
             }}
           >
