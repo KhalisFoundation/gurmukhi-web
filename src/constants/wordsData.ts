@@ -5,8 +5,8 @@ export const wordData: WordType[] = [
     id: '1',
     word: 'ਉਸਾਰੀ',
     translation: 'to build',
-    meaning_punjabi: 'ਕਿਸੇ ਚੀਜ਼ ਦੀ ਉਸਾਰੀ ਕਰਨ ਦਾ ਮਤਲਬ ਹੈ ਕਿ ਉਸ ਨੂੰ ਬਨਾਉਣਾ',
-    meaning_english: 'To "ਉਸਾਰ" something means to build or construct it',
+    meaning: 'ਕਿਸੇ ਚੀਜ਼ ਦੀ ਉਸਾਰੀ ਕਰਨ ਦਾ ਮਤਲਬ ਹੈ ਕਿ ਉਸ ਨੂੰ ਬਨਾਉਣਾ',
+    meaningEnglish: 'To "ਉਸਾਰ" something means to build or construct it',
     images: ['https://images.unsplash.com/photo-1531834685032-c34bf0d84c77'],
     sentences: [
       {
@@ -33,8 +33,8 @@ export const wordData: WordType[] = [
     id: '2',
     word: 'ਅਭਿਆਸ',
     translation: 'to practice',
-    meaning_punjabi: 'ਕਿਸੇੇ ਚੀਜ਼ ਦਾ ਅਭਿਆਸ ਕਰਨ ਦਾ ਮਤਲਬ ਹੈ ਕੇ ਤੁਸੀ ਉਸ ਨੂੰ ਬਾਰ ਬਾਰ ਕਰਦੇ ਹੋ',
-    meaning_english:
+    meaning: 'ਕਿਸੇੇ ਚੀਜ਼ ਦਾ ਅਭਿਆਸ ਕਰਨ ਦਾ ਮਤਲਬ ਹੈ ਕੇ ਤੁਸੀ ਉਸ ਨੂੰ ਬਾਰ ਬਾਰ ਕਰਦੇ ਹੋ',
+    meaningEnglish:
       'To do ਅਭਿਆਸ of something means you repeat it again and again',
     sentences: [
       {

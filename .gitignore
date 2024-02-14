@@ -10,7 +10,6 @@ coverage
 
 # production
 build
-functions
 
 # misc
 .DS_Store
@@ -29,3 +28,4 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 *sdk.json
+functions
