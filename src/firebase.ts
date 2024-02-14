@@ -33,9 +33,7 @@ export const logOut = async () => signOut(auth);
 export const passwordReset = async (email: string) => sendPasswordResetEmail(auth, email);
 
 export const wordsdb = getFirestore(app);
-// can be removed and set to shabadavali, once the algorithm is finalised
-const usersDBName = process.env.REACT_APP_PROJECT_ID === 'gurmukhi-dev' ? 'shabadavali-dev' : 'shabadavali';
-export const shabadavaliDB = getFirestore(app, usersDBName);
+export const shabadavaliDB = getFirestore(app, 'shabadavali-dev');
 export const analytics = getAnalytics(app);
 export const storage = getStorage(app);
 

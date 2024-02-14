@@ -10,7 +10,6 @@ coverage
 
 # production
 build
-functions
 
 # misc
 .DS_Store
