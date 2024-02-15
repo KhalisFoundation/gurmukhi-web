@@ -41,6 +41,7 @@ export default function MultipleChoiceQuestion({
       if (question.options[question.answer] === selectedOption) {
         updateCurrentLevel(user.uid, currentLevel + 1);
         dispatch(increment());
+        setIsCorrectOption(true);
       } else {
         setIsCorrectOption(false);
       }
