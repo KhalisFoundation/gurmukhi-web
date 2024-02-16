@@ -38,16 +38,20 @@ export default function MultipleChoiceQuestion({
   }, [questionData]);
 
   useEffect(() => {
-    if (selectedOption) {
-      setOptionSelected(true);
-      if (questionData.options[questionData.answer] === selectedOption) {
-        updateCurrentLevel(user.uid, currentLevel + 1);
-        dispatch(increment());
-        setIsCorrectOption(true);
-      } else {
-        setIsCorrectOption(false);
+    const updateOptions = async () => {
+      if (selectedOption) {
+        setOptionSelected(true);
+        if (questionData.options[questionData.answer] === selectedOption) {
+          await updateCurrentLevel(user.uid, currentLevel + 1);
+          dispatch(increment());
+          setIsCorrectOption(true);
+        } else {
+          setIsCorrectOption(false);
+        }
       }
-    }
+    };
+
+    updateOptions();
   }, [selectedOption]);
 
   useEffect(() => {
