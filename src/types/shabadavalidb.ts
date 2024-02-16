@@ -1,5 +1,4 @@
 import { Timestamp } from 'firebase/firestore';
-import { Option } from 'types';
 
 export interface GameScreen {
   key: string;
@@ -11,7 +10,6 @@ export interface User {
   photoURL: string;
   uid: string;
   coins: number;
-  wordsLearnt: number;
   email: string;
   progress: {
     gameSession: GameScreen[];
@@ -25,18 +23,7 @@ export interface WordShabadavaliDB {
   isWordRead: boolean;
   word_id: string;
   word: string;
+  image?:string;
   id?: string;
-}
-export interface QuestionType {
-  word_id: string;
-  word: string;
-  question_id: string;
-  id?: string;
-  isLearnt: boolean;
-  lastReviewed?: Timestamp;
-  question: string;
-  answer: number;
-  options: Option[] | string[];
-  type?: string;
-  image?: string;
+  lastReviewed?:Timestamp;
 }

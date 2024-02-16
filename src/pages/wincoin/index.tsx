@@ -36,13 +36,13 @@ function WinCoin() {
       toggleResetGame(false);
       toggleIsLoading(true);
       dispatch(resetGamePosition());
-      dispatch(resetLevel());
       dispatch(resetGameArray());
-      if (currentLevel === ALL_CONSTANT.LEVELS_COUNT) {
+      if (currentLevel === ALL_CONSTANT.LEVELS_COUNT - 1) {
         dispatch(increment());
+        dispatch(resetLevel());
         await updateNanakCoin(user.uid, nanakCoin + 1);
+        await updateProgress(user.uid, 0, [], 0);
       }
-      await updateProgress(user.uid, 0, [], 0);
       toggleIsLoading(false);
       toggleResetGame(true);
     };
