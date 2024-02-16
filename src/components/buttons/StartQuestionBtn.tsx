@@ -24,15 +24,15 @@ const StartQuestionBtn = ({
   isLoading = false,
 }: Props) => {
   const isActive = active ? '' : ' disabled';
-  const linkClass =
-    'flex flex-row items-center justify-between gap-2 min-w-52 ' + isActive;
+  const linkClass = `flex flex-row items-center justify-between gap-2 min-w-52 ${isActive} ${
+    isDisabled ? 'cursor-not-allowed' : ''
+  }`;
   const handleClick = useOnClick(currentGamePosition);
   return (
     <button
-      onClick={()=>handleClick(operation)}
+      onClick={() => handleClick(operation)}
       className={linkClass}
       disabled={isDisabled}
-      color='secondary'
       style={{
         fontFamily:
           "HvDTrial Brandon Grotesque, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif",

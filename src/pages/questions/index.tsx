@@ -22,6 +22,7 @@ export default function Question() {
     null,
   );
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
+  const [isCorrectOption, setIsCorrectOption] = useState<boolean | null>(null);
   const location = useLocation();
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -60,9 +61,10 @@ export default function Question() {
   const getQuestionElement = () => {
     return (
       <MultipleChoiceQuestion
-        question={questionData}
+        questionData={questionData}
         hasImage={currentQuestion?.type === 'image'}
         setOptionSelected={setIsOptionSelected}
+        setIsCorrectOption={setIsCorrectOption}
       />
     );
   };
@@ -70,10 +72,10 @@ export default function Question() {
   const renderFooter = () => {
     return (
       <LevelsFooter
-        operation={ALL_CONSTANT.NEXT}
-        nextText='Next'
+        operation={isCorrectOption ? ALL_CONSTANT.NEXT : ALL_CONSTANT.INFORMATION}
+        nextText={'Next'}
         currentLevel={currentLevel}
-        currentGamePosition={currentGamePosition + 1}
+        currentGamePosition={isCorrectOption ? currentGamePosition + 1 : currentGamePosition}
         isDisabled={!isOptionSelected}
       />
     );

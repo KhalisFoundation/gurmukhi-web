@@ -16,7 +16,13 @@ const ALL_CONSTANT = {
   QUESTIONS: 'questions',
   END_SESSION: 'END SESSION',
   GET_ONE_MORE: 'GET ONE MORE',
-  LIGHT:'LIGHT',
-  DARK:'DARK',
+  LIGHT: 'LIGHT',
+  DARK: 'DARK',
+  INFORMATION: 'information',
+  START_LEARNING: 'START LEARNING',
+  OPTION: 'option',
+  QUESTION: 'question',
+  WORD: 'word',
 };
+
 export default ALL_CONSTANT;

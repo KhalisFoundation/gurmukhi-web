@@ -1,7 +1,8 @@
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import { getDataById, wordsCollection } from './database';
 import { wordsdb } from '../../firebase';
 import { Option, QuestionData } from 'types';
+import { generateRandomId } from 'database/util';
 
 const questionCollection = collection(wordsdb, 'questions');
 
@@ -12,12 +13,23 @@ const getOptions = async (wordIDs: string[]) => {
   const options = await Promise.all(optionsPromise);
   return options as Option[];
 };
-const getQuestionsByWordID = async (wordID: string, needOptions = false) => {
-  const queryRef = query(questionCollection, where('word_id', '==', wordID));
-  const questionSnapshots = await getDocs(queryRef);
+const getQuestionsByWordID = async (wordID: string, count:number, needOptions = false) => {
+  const randomID = generateRandomId();
+  const queryRef = query(questionCollection, where('word_id', '==', wordID), where('id', '<=', randomID), limit(count));
+  let questionSnapshots = null;
+  questionSnapshots = await getDocs(queryRef);
 
   if (questionSnapshots.empty) {
-    return [];
+    const queryRef2 = query(
+      questionCollection,
+      where('word_id', '==', wordID),
+      where('id', '>', randomID),
+      limit(count),
+    );
+    questionSnapshots = await getDocs(queryRef2);
+    if (questionSnapshots.empty) {
+      return [];
+    }
   }
 
   const questionsData = await Promise.all(
