@@ -29,10 +29,12 @@ const useNew = () => {
         addWordIfNotExists(word, learningWords);
         delete word.created_at;
         delete word.updated_at;
-        game.push(createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, word));
-        game.push(createGameScreen(`${ALL_CONSTANT.SENTENCES}-${word.id}`, word));
+        
         if (questions.length === 0) {
           i++;
+        } else {
+          game.push(createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, word));
+          game.push(createGameScreen(`${ALL_CONSTANT.SENTENCES}-${word.id}`, word));
         }
         for (const question of questions) {
           if (word.word) {

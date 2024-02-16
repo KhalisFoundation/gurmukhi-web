@@ -1,4 +1,5 @@
 import { ToastPosition, toast } from 'react-toastify';
+import { GameScreen } from 'types/shabadavalidb';
 
 export const showToastMessage = (
   message: string,
@@ -18,5 +19,17 @@ export const showToastMessage = (
     closeOnClick,
   });
 };
+export const countQuestionKeys = (gameArray: GameScreen[]) => {
+  let count = 0;
+  gameArray.forEach((obj) => {
+    Object.keys(obj).forEach((key) => {
+      if (key.includes('Question')) {
+        count++;
+      }
+    });
+  });
+  return count;
+};
+
 
 export * from './words';

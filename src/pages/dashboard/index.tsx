@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import Ssa from 'components/ssa';
 import WordsSnippetBox from './components/wordsSnippetBox';
@@ -6,23 +6,33 @@ import WordBox from './components/wordBox';
 import CoinBox from './components/coinbox';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
-import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
-import useGamePlay from './hooks/useGamePlay1';
+import useFetchQuestions from './hooks/useFetchQuestions';
+import { useUserAuth } from 'auth';
 
 export default function Dashboard() {
   const commonStyle =
     'w-3/12 h-100 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   const { title, description } = metaTags.DASHBOARD;
-  const { user } = useUserAuth();
-  const [isLoading, toggleLoading] = useState<boolean>(true);
 
-  const currentGamePosition: number = useAppSelector(
-    (state) => state.currentGamePosition,
-  );
+  const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
-  useGamePlay(user, toggleLoading);
+  const { user } = useUserAuth();
+  const storeQuestions = useFetchQuestions(user);
+  const [isLoading, setLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const initialQuestionsFetch = async () => {
+      setLoading(true);
+      await storeQuestions(5);
+      setLoading(false);
+    };
+    console.log(Object.keys(user));
+    if (Object.keys(user).length !== 0 && user.progress) {
+      console.log("it's running------");
+      initialQuestionsFetch();
+    }
+  }, [user.progress]);
   return (
     <div className='h-full flex flex-col justify-between'>
       <Meta title={title} description={description} />

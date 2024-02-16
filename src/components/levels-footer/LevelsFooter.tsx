@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import LevelHexagon from '../levels/LevelHexagon';
+import { useAppSelector } from 'store/hooks';
+import { useUserAuth } from 'auth';
 import StartQuestionBtn from '../buttons/StartQuestionBtn';
+import { countQuestionKeys } from 'utils';
+import useFetchQuestions from 'pages/dashboard/hooks/useFetchQuestions';
+import ALL_CONSTANT from 'constants/constant';
 
 interface Props {
   operation: string;
@@ -27,10 +32,19 @@ export default function LevelsFooter({
   const { t: text } = useTranslation();
   const totalNumQuestions = Number(text('TOTAL_NUM_QUESTIONS'));
   const numQuestionsLeft = totalNumQuestions - currentLevel;
+  const gameArray = useAppSelector((state) => state.gameArray);
   const footerClass =
     'flex flex-row w-full sticky inset-x-0 bottom-0 bg-white/[.1] items-center justify-between z-10 box-border' +
     (absolute ? 'absolute' : 'static');
+  const user = useUserAuth();
+  const storeQuestions = useFetchQuestions(user);
 
+  useEffect(() => {
+    if (gameArray.length / 2 === currentGamePosition) {
+      const questionCount = countQuestionKeys(gameArray);
+      storeQuestions(ALL_CONSTANT.LEVELS_COUNT - questionCount);
+    }
+  }, [gameArray]);
   const getLevelType = (num: number) => {
     if (num < currentLevel) return 'completed';
     if (num === currentLevel) return 'current';
