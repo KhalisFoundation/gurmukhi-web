@@ -59,7 +59,7 @@ export default function MultipleChoiceQuestion({
         questionData.id &&
         selectedOption === questionData.options[questionData.answer]
       ) {
-        await updateWordFromUser(user.uid, question.word_id);
+        await updateWordFromUser(user.uid, questionData.word_id);
       }
     };
     storeData();
