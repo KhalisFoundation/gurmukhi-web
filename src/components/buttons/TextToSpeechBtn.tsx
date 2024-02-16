@@ -46,7 +46,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
         if (!audioUrl || audioNotWorking) {
           setLoading?.(true);
           setIsLoading(true);
-          const audioContent = await generateNarakeetAudio(betterText, type, setAudioUrl, id ?? undefined);
+          await generateNarakeetAudio(betterText, type, setAudioUrl, id ?? undefined);
         }
       } catch (error) {
         console.error('Error generating audio:', error);
@@ -63,7 +63,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
     try {
       if (!audioUrl) {
         setIsLoading(true);
-        const audioContent = await generateNarakeetAudio(betterText, type, setAudioUrl, id ?? undefined);
+        await generateNarakeetAudio(betterText, type, setAudioUrl, id ?? undefined);
         justSetAudioUrl = true;
       }
     } catch (error) {
