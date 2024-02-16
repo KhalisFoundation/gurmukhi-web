@@ -18,5 +18,9 @@ const ALL_CONSTANT = {
   GET_ONE_MORE: 'GET ONE MORE',
   LIGHT:'LIGHT',
   DARK:'DARK',
+  OPTION: 'option',
+  QUESTION: 'question',
+  WORD: 'word',
+  INFORMATION: 'information',
 };
 export default ALL_CONSTANT;

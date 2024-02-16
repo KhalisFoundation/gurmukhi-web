@@ -29,7 +29,7 @@ const StartQuestionBtn = ({
   const handleClick = useOnClick(currentGamePosition);
   return (
     <button
-      onClick={()=>handleClick(operation)}
+      onClick={() => handleClick(operation)}
       className={linkClass}
       disabled={isDisabled}
       color='secondary'
