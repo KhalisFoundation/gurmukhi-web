@@ -11,7 +11,6 @@ import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
-import { QuestionType } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 
 export default function MultipleChoiceQuestion({
