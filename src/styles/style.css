@@ -1406,6 +1406,18 @@ video {
 .ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
+@font-face {
+  font-family: 'Recoleta';
+  src: url('../../public/fonts/Recoleta-RegularDEMO.otf');
+}
+@font-face {
+  font-family: 'Baloo Paaji 2';
+  src: url('../../public/fonts/BalooPaaji2-VariableFont_wght.ttf');
+}
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('../../public/fonts/Brandon_Grotesque_regular.otf');
+}
 html,body,#root{
   height: 100%;
 }
@@ -1497,10 +1509,10 @@ body .winbadge{
     height:25vh;
   }
 body .brandon-grotesque {
-    font-family: 'HvDTrial Brandon Grotesque' !important;
+    font-family: 'Brandon Grotesque' !important;
   }
 body .brandon-grotesque * {
-      font-family: 'HvDTrial Brandon Grotesque' !important;
+      font-family: 'Brandon Grotesque' !important;
     }
 body .card-bg::after {
     content: "";
@@ -1525,10 +1537,10 @@ body .recoleta * {
       font-family: 'Recoleta';
     }
 body form {
-    font-family: 'HvDTrial Brandon Grotesque';
+    font-family: 'Brandon Grotesque';
   }
 body form input {
-      font-family: 'HvDTrial Brandon Grotesque';
+      font-family: 'Brandon Grotesque';
     }
 body .dark-blue * {
       color: #1F4860;
