@@ -10,7 +10,6 @@ coverage
 
 # production
 build
-functions
 
 # misc
 .DS_Store
@@ -30,3 +29,4 @@ functions
 .env.development.local
 .env.test.local
 *sdk.json
+functions

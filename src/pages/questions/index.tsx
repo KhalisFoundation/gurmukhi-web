@@ -60,10 +60,7 @@ export default function Question() {
   const getQuestionElement = () => {
     return (
       <MultipleChoiceQuestion
-        questionData={{
-          ...questionData,
-          id: questionID ?? questionData.id,
-        }}
+        question={questionData}
         hasImage={currentQuestion?.type === 'image'}
         setOptionSelected={setIsOptionSelected}
       />

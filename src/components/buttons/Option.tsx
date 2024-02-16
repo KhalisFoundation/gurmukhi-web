@@ -1,15 +1,17 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { TFunction } from 'i18next';
+import { Link } from 'react-router-dom';
 import TextToSpeechBtn from './TextToSpeechBtn';
 import { Option } from 'types';
 import { addEndingPunctuation } from 'utils';
-import ALL_CONSTANT from 'constants/constant';
+import { ROUTES } from 'constants/routes';
 
 interface OptionProps {
   option: Option;
   text: TFunction<'translation', undefined>;
-  selector: Dispatch<React.SetStateAction<Option | null>>;
+  selector: React.Dispatch<React.SetStateAction<Option | null>>;
   setOptionSelected: (value: boolean) => void;
+  word_id?: string;
   isCorrect?: boolean | null;
   disabled?: boolean;
 }
@@ -19,6 +21,7 @@ export default function OptionBtn({
   text,
   selector,
   setOptionSelected,
+  word_id,
   isCorrect,
   disabled,
 }: OptionProps) {
@@ -36,29 +39,31 @@ export default function OptionBtn({
     isCorrect === false ? 'text-brightRed' : 'text-darkBlue'
   }`;
   return (
-    <div
+    <button
       className={optionClassname}
+      onClick={() => {
+        selector(option);
+        setOptionSelected(true);
+      }}
+      disabled={disabled}
     >
-      <button
-        className={'h-full w-full'}
-        onClick={() => {
-          selector(option);
-          setOptionSelected(true);
-        }}
-        disabled={disabled}
-      >
-        <span className={textClassname}>
-          {option.word
-            ? addEndingPunctuation(option.word, text('GURMUKHI'))
-            : option.option}
-        </span>
-      </button>
-      <TextToSpeechBtn
-        backgroundColor='bg-white-175'
-        text={option.word ?? option.option}
-        type={ALL_CONSTANT.OPTION}
-        id={option.id}
-      />
-    </div>
+      <span className={textClassname}>
+        {option.word
+          ? addEndingPunctuation(option.word, text('GURMUKHI'))
+          : option.option}
+      </span>
+      {isCorrect === false ? (
+        <Link
+          to={`${ROUTES.WORD + ROUTES.INFORMATION}?id=${word_id}`}
+          className={
+            'text-sm text-maroon rounded-full p-4 tracking-widest uppercase brandon-grotesque'
+          }
+        >
+          {text('KNOW_MORE')}
+        </Link>
+      ) : (
+        <TextToSpeechBtn />
+      )}
+    </button>
   );
 }

@@ -13,14 +13,13 @@ import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
 import { QuestionType } from 'types/shabadavalidb';
-import ALL_CONSTANT from 'constants/constant';
 
 export default function MultipleChoiceQuestion({
-  questionData,
+  question,
   hasImage,
   setOptionSelected,
 }: {
-  questionData: QuestionData;
+  question: QuestionData;
   hasImage?: boolean;
   setOptionSelected: (value: boolean) => void;
 }) {
@@ -28,35 +27,18 @@ export default function MultipleChoiceQuestion({
   const [selectedOption, setSelectedOption] = React.useState<Option | null>(
     null,
   );
-  const [questionTTSComponent, setQuestionTTSComponent] = React.useState<JSX.Element | null>(
-    null,
-  );
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const { user } = useUserAuth();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (questionData.question) {
-      setQuestionTTSComponent(
-        <TextToSpeechBtn
-          backgroundColor='bg-white-175'
-          text={questionData.question}
-          type={ALL_CONSTANT.QUESTION}
-          id={questionData.id}
-        />,
-      );
-    }
-  }, [questionData.question]);
-
-  useEffect(() => {
     setSelectedOption(null);
     setOptionSelected(false);
-  }, [questionData]);
-
+  }, [question]);
   useEffect(() => {
     if (selectedOption) {
       setOptionSelected(true);
-      if (questionData.options[questionData.answer] === selectedOption) {
+      if (question.options[question.answer] === selectedOption) {
         updateCurrentLevel(user.uid, currentLevel + 1);
         dispatch(increment());
       }
@@ -68,42 +50,42 @@ export default function MultipleChoiceQuestion({
       if (
         user &&
         user.uid &&
-        questionData &&
-        questionData.id &&
-        selectedOption === questionData.options[questionData.answer]
+        question &&
+        question.id &&
+        selectedOption === question.options[question.answer]
       ) {
         const questionTypeData: QuestionType = {
-          word_id: questionData.word_id,
-          question_id: questionData.id,
-          isLearnt: questionData.options[questionData.answer] === selectedOption,
-          question: questionData.question,
-          answer: questionData.answer,
-          options: questionData.options,
-          word: questionData.word,
+          word_id: question.word_id,
+          question_id: question.id,
+          isLearnt: question.options[question.answer] === selectedOption,
+          question: question.question,
+          answer: question.answer,
+          options: question.options,
+          word: question.word,
         };
-        if (questionData.image) {
-          questionTypeData.image = questionData.image;
+        if (question.image) {
+          questionTypeData.image = question.image;
         }
-        if (questionData.type) {
-          questionTypeData.type = questionData.type;
+        if (question.type) {
+          questionTypeData.type = question.type;
         }
         await addQuestionToSubCollection(user.uid, questionTypeData);
         await updateWordFromUser(user.uid, questionTypeData.word_id);
       }
     };
     storeData();
-  }, [questionData, user, selectedOption]);
+  }, [question, user, selectedOption]);
 
   const optionsClass = `flex flex-col text-lg grid ${
     hasImage ? 'grid-cols-2' : 'grid-cols-1'
   } m-2 gap-2`;
 
-  if (!questionData) {
+  if (!question) {
     // Handle case when word is not found
     return <div>{text('QUESTION_NOT_FOUND')}</div>;
   }
   const renderOptionButtons = () => {
-    return questionData.options.map((option, idx) => {
+    return question.options.map((option, idx) => {
       const key =
         typeof option === 'object' && option !== null && 'id' in option
           ? option.id
@@ -114,11 +96,12 @@ export default function MultipleChoiceQuestion({
           key={key}
           option={option as Option}
           text={text}
+          word_id={question.word_id}
           selector={setSelectedOption}
           setOptionSelected={setOptionSelected}
           isCorrect={
             isSelected
-              ? questionData.options[questionData.answer] === selectedOption
+              ? question.options[question.answer] === selectedOption
               : undefined
           }
           disabled={!!selectedOption}
@@ -131,16 +114,16 @@ export default function MultipleChoiceQuestion({
     <div className='flex flex-col items-left justify-evenly text-center'>
       <div className='flex flex-row items-center justify-between gap-5 rounded-lg p-4'>
         <h1 className={'text-5xl gurmukhi text-black font-semibold'}>
-          {highlightWord(questionData.question, questionData.word)}
+          {highlightWord(question.question, question.word)}
         </h1>
-        {questionTTSComponent}
+        <TextToSpeechBtn backgroundColor='bg-white-175' />
       </div>
       {hasImage && (
         <img
           alt='word-image'
           src={
-            questionData?.image
-              ? questionData?.image
+            question?.image
+              ? question?.image
               : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
           }
           className='h-60 object-cover rounded-xl'
