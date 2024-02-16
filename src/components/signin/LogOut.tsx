@@ -5,20 +5,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUserAuth } from 'auth';
 import { ROUTES } from 'constants/routes';
+import { showToastMessage } from 'utils';
 
 export default function LogOut() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
   const { logOut } = useUserAuth();
   const { t: text } = useTranslation();
-
-  const showToastMessage = () => {
-    toast.success(errorMessage, {
-      position: toast.POSITION.BOTTOM_RIGHT,
-      closeOnClick: true,
-      type: 'error',
-    });
-  };
 
   useEffect(() => {
     const handleLogout = async () => {
@@ -27,7 +20,12 @@ export default function LogOut() {
         navigate(ROUTES.LOGIN);
       } catch (error: any) {
         setErrorMessage(error.message);
-        showToastMessage();
+        showToastMessage(
+          errorMessage,
+          toast.POSITION.BOTTOM_RIGHT,
+          true,
+          true,
+        );
       }
     };
     handleLogout();
