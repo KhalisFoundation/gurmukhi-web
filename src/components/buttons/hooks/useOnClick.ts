@@ -8,7 +8,7 @@ import { updateCurrentProgress } from 'database/shabadavalidb';
 import { useUserAuth } from 'auth';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 
-const useOnClick = (currentGamePosition:number)=>{
+const useOnClick = (currentGamePosition:number) => {
   const gameArray:GameScreen[] = useAppSelector(state=>state.gameArray);
   const currentLevel = useAppSelector(state=>state.currentLevel);
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const useOnClick = (currentGamePosition:number)=>{
     navigate(routeMap[key], { state: { data: data } });
   };
 
-  const handleClick = useCallback((operation:string)=>{
+  const handleClick = useCallback((operation:string) => {
     if (currentLevel < ALL_CONSTANT.LEVELS_COUNT - 1) {
       if (gameArray.length === 0) {
         return;

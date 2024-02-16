@@ -11,14 +11,16 @@ import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
+import { QuestionType } from 'types/shabadavalidb';
+import ALL_CONSTANT from 'constants/constant';
 
 export default function MultipleChoiceQuestion({
-  question,
+  questionData,
   hasImage,
   setOptionSelected,
   setIsCorrectOption,
 }: {
-  question: QuestionData;
+  questionData: QuestionData;
   hasImage?: boolean;
   setOptionSelected: (value: boolean) => void;
   setIsCorrectOption: (value: boolean) => void;
@@ -34,11 +36,12 @@ export default function MultipleChoiceQuestion({
   useEffect(() => {
     setSelectedOption(null);
     setOptionSelected(false);
-  }, [question]);
+  }, [questionData]);
+
   useEffect(() => {
     if (selectedOption) {
       setOptionSelected(true);
-      if (question.options[question.answer] === selectedOption) {
+      if (questionData.options[questionData.answer] === selectedOption) {
         updateCurrentLevel(user.uid, currentLevel + 1);
         dispatch(increment());
         setIsCorrectOption(true);
@@ -53,26 +56,26 @@ export default function MultipleChoiceQuestion({
       if (
         user &&
         user.uid &&
-        question &&
-        question.id &&
-        selectedOption === question.options[question.answer]
+        questionData &&
+        questionData.id &&
+        selectedOption === questionData.options[questionData.answer]
       ) {
         await updateWordFromUser(user.uid, question.word_id);
       }
     };
     storeData();
-  }, [question, user, selectedOption]);
+  }, [questionData, user, selectedOption]);
 
   const optionsClass = `flex flex-col text-lg grid ${
     hasImage ? 'grid-cols-2' : 'grid-cols-1'
   } m-2 gap-2`;
 
-  if (!question) {
+  if (!questionData) {
     // Handle case when word is not found
     return <div>{text('QUESTION_NOT_FOUND')}</div>;
   }
   const renderOptionButtons = () => {
-    return question.options.map((option, idx) => {
+    return questionData.options.map((option, idx) => {
       const key =
         typeof option === 'object' && option !== null && 'id' in option
           ? option.id
@@ -83,12 +86,11 @@ export default function MultipleChoiceQuestion({
           key={key}
           option={option as Option}
           text={text}
-          word_id={question.word_id}
           selector={setSelectedOption}
           setOptionSelected={setOptionSelected}
           isCorrect={
             isSelected
-              ? question.options[question.answer] === selectedOption
+              ? questionData.options[questionData.answer] === selectedOption
               : undefined
           }
           disabled={!!selectedOption}
@@ -101,16 +103,21 @@ export default function MultipleChoiceQuestion({
     <div className='flex flex-col items-left justify-evenly text-center'>
       <div className='flex flex-row items-center justify-between gap-5 rounded-lg p-4'>
         <h1 className={'text-5xl gurmukhi text-black font-semibold'}>
-          {highlightWord(question.question, question.word)}
+          {highlightWord(questionData.question, questionData.word)}
         </h1>
-        <TextToSpeechBtn backgroundColor='bg-white-175' />
+        <TextToSpeechBtn
+          backgroundColor='bg-white-175'
+          text={questionData.question}
+          type={ALL_CONSTANT.QUESTION}
+          id={questionData.id}
+        />
       </div>
       {hasImage && (
         <img
           alt='word-image'
           src={
-            question?.image
-              ? question?.image
+            questionData?.image
+              ? questionData?.image
               : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
           }
           className='h-60 object-cover rounded-xl'

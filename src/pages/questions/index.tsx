@@ -61,7 +61,7 @@ export default function Question() {
   const getQuestionElement = () => {
     return (
       <MultipleChoiceQuestion
-        question={questionData}
+        questionData={questionData}
         hasImage={currentQuestion?.type === 'image'}
         setOptionSelected={setIsOptionSelected}
         setIsCorrectOption={setIsCorrectOption}
@@ -73,7 +73,7 @@ export default function Question() {
     return (
       <LevelsFooter
         operation={isCorrectOption ? ALL_CONSTANT.NEXT : ALL_CONSTANT.INFORMATION}
-        nextText='Next'
+        nextText={'Next'}
         currentLevel={currentLevel}
         currentGamePosition={isCorrectOption ? currentGamePosition + 1 : currentGamePosition}
         isDisabled={!isOptionSelected}

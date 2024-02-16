@@ -1283,10 +1283,6 @@ video {
   --tw-text-opacity: 1;
   color: rgb(214 233 243 / var(--tw-text-opacity));
 }
-.text-maroon {
-  --tw-text-opacity: 1;
-  color: rgb(99 5 5 / var(--tw-text-opacity));
-}
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));

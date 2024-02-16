@@ -20,5 +20,9 @@ const ALL_CONSTANT = {
   DARK: 'DARK',
   INFORMATION: 'information',
   START_LEARNING: 'START LEARNING',
+  OPTION: 'option',
+  QUESTION: 'question',
+  WORD: 'word',
 };
+
 export default ALL_CONSTANT;

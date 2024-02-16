@@ -15,7 +15,7 @@ export const PAGES = {
   QUESTIONS: 'questions',
   QUESTION: 'question',
   IMAGE: 'image',
-  MEANING: 'meaning',
+  MEANING: 'meaning_punjabi',
   WIN: 'win',
   WINCOIN: 'wincoin',
 };
