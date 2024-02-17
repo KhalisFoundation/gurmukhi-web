@@ -18,17 +18,17 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
   const inProgressWords: WordShabadavaliDB[] = [];
 
   const gamePlay = async () => {
-    const usr = await getUserData(user.uid);
+    const userData = await getUserData(user.uid);
 
-    if (!usr) {
+    if (!userData) {
       const gameArray: GameScreen[] = [];
       return { gameArray };
     }
-    const progress: GameScreen[] | null = await fetchProgress(usr);
+    const progress: GameScreen[] | null = await fetchProgress(userData);
     if (progress && progress.length > 0) {
       const gameArray: GameScreen[] | null = progress;
-      dispatch(setCurrentGamePosition(usr?.progress.currentProgress));
-      dispatch(setCurrentLevel(usr?.progress.currentLevel));
+      dispatch(setCurrentGamePosition(userData?.progress.currentProgress));
+      dispatch(setCurrentLevel(userData?.progress.currentLevel));
       return { gameArray };
     }
 
