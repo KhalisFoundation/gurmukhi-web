@@ -33,40 +33,43 @@ const useOnClick = (currentGamePosition:number) => {
     navigate(routeMap[key], { state: { data: data } });
   };
 
-  const handleClick = useCallback((operation:string) => {
-    if (currentLevel < ALL_CONSTANT.LEVELS_COUNT - 1) {
-      if (gameArray.length === 0) {
-        return;
-      }
-      let saveWordID = null;
-      const sessionInfo = currentGamePosition !== undefined ? gameArray[currentGamePosition] : null;
-
-      if (sessionInfo) {
-        const [key, wordID, questionID] = sessionInfo.key.split('-');
-        saveWordID = wordID;
-        if (key) {
-          navigateTo(key, wordID, sessionInfo.data, questionID);
+  const handleClick = useCallback(
+    async (operation: string) => {
+      if (currentLevel < ALL_CONSTANT.LEVELS_COUNT - 1) {
+        if (gameArray.length === 0) {
+          return;
         }
-      }
-      switch (operation) {
-        case ALL_CONSTANT.BACK_TO_DASHBOARD:
-          navigate(ROUTES.DASHBOARD);
-          return;
-        case ALL_CONSTANT.INFORMATION:
-          navigate(`${ROUTES.WORD + ROUTES.INFORMATION}?id=${saveWordID}`);
-          return;
-        case ALL_CONSTANT.NEXT:
-          if (currentGamePosition) {
-            updateCurrentProgress(user.uid, currentGamePosition);
-            dispatch(setCurrentGamePosition(currentGamePosition));
+        let saveWordID = null;
+        const sessionInfo =
+          currentGamePosition !== undefined ? gameArray[currentGamePosition] : null;
+
+        if (sessionInfo) {
+          const [key, wordID, questionID] = sessionInfo.key.split('-');
+          saveWordID = wordID;
+          if (key) {
+            navigateTo(key, wordID, sessionInfo.data, questionID);
           }
-          break;
+        }
+        switch (operation) {
+          case ALL_CONSTANT.BACK_TO_DASHBOARD:
+            navigate(ROUTES.DASHBOARD);
+            return;
+          case ALL_CONSTANT.INFORMATION:
+            navigate(`${ROUTES.WORD + ROUTES.INFORMATION}?id=${saveWordID}`);
+            return;
+          case ALL_CONSTANT.NEXT:
+            if (currentGamePosition) {
+              await updateCurrentProgress(user.uid, currentGamePosition);
+              dispatch(setCurrentGamePosition(currentGamePosition));
+            }
+            break;
+        }
+      } else {
+        navigate(`${ROUTES.WINCOIN}`);
       }
-      
-    } else {
-      navigate(`${ROUTES.WINCOIN}`);
-    }
-  }, [gameArray, currentGamePosition]);
+    },
+    [gameArray, currentGamePosition],
+  );
 
   return handleClick;
 
