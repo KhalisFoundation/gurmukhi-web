@@ -76,7 +76,7 @@ export default function Information() {
   }
 
   return (
-    <div className='flex flex-col items-center w-full h-full justify-center gap-5'>
+    <div className='flex flex-col items-center w-full h-full justify-between gap-5'>
       <Meta title={title} description={description} />
       <div className='flex flex-col h-3/4 justify-between items-center'>
         <img
@@ -96,23 +96,18 @@ export default function Information() {
                     {currentWord?.translation}
                   </h2>
                 </div>
-                {
-                  currentWord &&
-                  currentWord.word && (
-                    <TextToSpeechBtn
-                      backgroundColor='bg-white-150'
-                      text={currentWord.word}
-                      type={ALL_CONSTANT.WORD} 
-                      id={currentWord.id}
-                      audioURL={currentWord?.audioURL}
-                    />
-                  )
-                }
+                {currentWord && currentWord.word && (
+                  <TextToSpeechBtn
+                    backgroundColor='bg-white-150'
+                    text={currentWord.word}
+                    type={ALL_CONSTANT.WORD}
+                    id={currentWord.id}
+                    audioURL={currentWord?.audioURL}
+                  />
+                )}
               </div>
               <div className='flex flex-col text-lg'>
-                <span className={'text-black-111'}>
-                  {currentWord?.meaning_english}
-                </span>
+                <span className={'text-black-111'}>{currentWord?.meaning_english}</span>
                 <span className={'text-black'}>{currentWord?.meaning_punjabi}</span>
               </div>
             </div>

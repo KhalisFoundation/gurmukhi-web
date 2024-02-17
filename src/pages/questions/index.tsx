@@ -68,12 +68,11 @@ export default function Question() {
       />
     );
   };
-
   const renderFooter = () => {
     return (
       <LevelsFooter
         operation={isCorrectOption ? ALL_CONSTANT.NEXT : ALL_CONSTANT.INFORMATION}
-        nextText={'Next'}
+        nextText={isCorrectOption === false ? ALL_CONSTANT.LEARN_MORE : ALL_CONSTANT.NEXT}
         currentLevel={currentLevel}
         currentGamePosition={isCorrectOption ? currentGamePosition + 1 : currentGamePosition}
         isDisabled={!isOptionSelected}

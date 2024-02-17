@@ -27,7 +27,6 @@ export const getUser = async (email: string, uid: string) => {
   return null;
 };
 
-
 export const checkUser = async (uid: string, email: string) => {
   const queryStatement = query(
     usersCollection,
@@ -42,10 +41,7 @@ export const checkUser = async (uid: string, email: string) => {
 };
 
 export const checkIfUsernameUnique = async (username: string) => {
-  const queryStatement = query(
-    usersCollection,
-    where('username', '==', username),
-  );
+  const queryStatement = query(usersCollection, where('username', '==', username));
   const usersSnapshot = await getDocs(queryStatement);
   return usersSnapshot.empty;
 };
@@ -57,10 +53,7 @@ export const checkIfEmailUnique = async (email: string) => {
 };
 
 export const getEmailFromUsername = async (username: string) => {
-  const queryStatement = query(
-    usersCollection,
-    where('username', '==', username),
-  );
+  const queryStatement = query(usersCollection, where('username', '==', username));
   const usersSnapshot = await getDocs(queryStatement);
   if (!usersSnapshot.empty) {
     return usersSnapshot.docs[0].data().email;
@@ -99,10 +92,7 @@ export const updateProgress = async (
   console.log('Document is updated successfully');
 };
 
-export const updateCurrentProgress = async (
-  uid: string,
-  currentProgress: number,
-) => {
+export const updateCurrentProgress = async (uid: string, currentProgress: number) => {
   await updateUserDocument(uid, {
     'progress.currentProgress': currentProgress,
   });
@@ -121,4 +111,14 @@ export const updateLevelProgress = async (
     'progress.currentLevel': currentLevel,
     'progress.currentProgress': currentGamePosition,
   });
+};
+
+export const getUserData = async (uid: string) => {
+  const userRef = doc(usersCollection, uid);
+  const userDoc = await getDoc(userRef);
+  if (!userDoc.exists()) {
+    return;
+  }
+  const data = userDoc.data();
+  return { progress: data.progress };
 };
