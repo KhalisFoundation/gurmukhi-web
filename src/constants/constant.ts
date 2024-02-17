@@ -23,6 +23,7 @@ const ALL_CONSTANT = {
   OPTION: 'option',
   QUESTION: 'question',
   WORD: 'word',
+  LEARN_MORE: 'Learn More',
 };
 
 export default ALL_CONSTANT;
