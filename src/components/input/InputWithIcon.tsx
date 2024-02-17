@@ -5,11 +5,13 @@ import { faEnvelope, faEye, faEyeSlash, faUser } from '@fortawesome/free-regular
 
 interface InputWithIconProps {
   id: string;
+  name?: string;
   placeholder: string;
   type: string;
   icon?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   border?: string;
+  value?: string;
 }
 
 export default function InputWithIcon({ ...props }: InputWithIconProps) {
@@ -62,7 +64,9 @@ export default function InputWithIcon({ ...props }: InputWithIconProps) {
       )}
       <input
         id={props.id}
+        name={props.name}
         type={props.type}
+        value={props.value}
         placeholder={props.placeholder} 
         className={inputClassName}
         onChange={props.onChange}
