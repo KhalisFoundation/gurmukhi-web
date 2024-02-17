@@ -60,7 +60,6 @@ export const UserAuthContextProvider = ({
               role: roles.student,
               email,
               coins: 0,
-              wordsLearnt: 0,
               progress: {
                 currentProgress: 0,
                 gameSession: [],
@@ -117,7 +116,6 @@ export const UserAuthContextProvider = ({
         username,
         displayName: displayName ?? name,
         coins: 0,
-        wordsLearnt: 0,
         progress: {
           currentProgress: 0,
           gameSession: [],

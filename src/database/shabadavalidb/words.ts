@@ -8,10 +8,13 @@ import {
   doc,
   limit,
   updateDoc,
+  Timestamp,
+  documentId,
 } from 'firebase/firestore';
 import { shabadavaliDB } from '../../firebase';
 import { WordShabadavaliDB } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
+import { generateRandomId } from 'database/util';
 
 const getWordCollectionRef = (uid: string) => {
   return collection(shabadavaliDB, ALL_CONSTANT.USERS, uid, ALL_CONSTANT.WORDS);
@@ -29,15 +32,30 @@ export const addWordsToSubCollection = async (
   }
 };
 
-export const getLearningWordsFromUser = async (uid: string) => {
+export const getWordsFromUser = async (uid: string, count:number, isLearnt:boolean) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
+    const randomID = generateRandomId();
     const q = query(
       wordsCollectionRef,
       where('isLearnt', '==', false),
-      limit(5),
+      where(documentId(), '<=', randomID),
+      limit(count),
     );
-    const querySnapshot = await getDocs(q);
+    let querySnapshot = null;
+    querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      const q2 = query(
+        wordsCollectionRef,
+        where('isLearnt', '==', isLearnt),
+        where(documentId(), '>', randomID),
+        limit(count),
+      );
+      querySnapshot = await getDocs(q2);
+      if (querySnapshot.empty) {
+        return [];
+      }
+    }
     const documents = querySnapshot.docs.map((document) => ({
       id: document.id,
       ...document.data(),
@@ -45,24 +63,7 @@ export const getLearningWordsFromUser = async (uid: string) => {
     return documents as WordShabadavaliDB[];
   } catch (error) {
     console.error(error);
-  }
-};
-export const getLearntWordsFromUser = async (uid: string) => {
-  try {
-    const wordsCollectionRef = getWordCollectionRef(uid);
-    const q = query(
-      wordsCollectionRef,
-      where('isLearnt', '==', true),
-      limit(5),
-    );
-    const querySnapshot = await getDocs(q);
-    const documents = querySnapshot.docs.map((document) => ({
-      id: document.id,
-      ...document.data(),
-    }));
-    return documents as WordShabadavaliDB[];
-  } catch (error) {
-    console.error(error);
+    return [];
   }
 };
 export const addWordsBatch = async (
@@ -78,6 +79,7 @@ export const addWordsBatch = async (
     );
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
+      wordData.lastReviewed = Timestamp.fromDate(new Date());
       const docRef = doc(wordsCollectionRef);
       batch.set(docRef, wordData);
     }
@@ -106,6 +108,7 @@ export const updateWordFromUser = async (uid: string, wordID: string) => {
       await updateDoc(documentRef, {
         progress: currentProgress + 1,
         isLearnt: isLearnt,
+        lastReviewed : Timestamp.fromDate(new Date()),
       });
       console.log('updated words doc');
     }

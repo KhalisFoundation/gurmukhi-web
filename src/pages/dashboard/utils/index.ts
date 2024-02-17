@@ -1,6 +1,5 @@
 import {
   GameScreen,
-  QuestionType,
   User,
   WordShabadavaliDB,
 } from 'types/shabadavalidb';
@@ -20,7 +19,7 @@ export const getRandomWordFromArray = (array: WordShabadavaliDB[]) => {
 
 export const createGameScreen = (
   key: string,
-  data: QuestionData | WordType | QuestionType,
+  data: QuestionData | WordType,
 ): GameScreen => {
   return { key, data };
 };
@@ -37,4 +36,14 @@ export const fetchProgress = (user: User) => {
   return user?.progress.gameSession.length > 0
     ? user.progress.gameSession
     : null;
+};
+export const shuffleArray = (array: GameScreen[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    // Generate a random index between 0 and i
+    const j = Math.floor(Math.random() * (i + 1));
+
+    // Swap elements at indices i and j
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 };

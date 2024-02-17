@@ -16,12 +16,12 @@ import Loading from 'components/loading';
 export default function Information() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.INFORMATION;
-  const currentGamePosition = useAppSelector(
-    (state) => state.currentGamePosition,
-  );
+  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const [wordID, setWordID] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
+  const [isRandom, setIsRandom] = useState<boolean>(false);
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
 
@@ -34,6 +34,7 @@ export default function Information() {
   // fetch word from state using wordId
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       if (!wordID) {
         return;
       }
@@ -41,38 +42,43 @@ export default function Information() {
       if (words !== null) {
         setCurrentWord(words);
       }
+      setIsLoading(false);
     };
     const data = location.state?.data;
+    if (location.state?.isRandom) {
+      setIsRandom(location.state?.isRandom);
+    }
     if (data) {
       setCurrentWord(data);
+      setIsLoading(false);
     } else {
       fetchData();
     }
   }, [wordID]);
   const renderFooter = () => {
-    const operation = ALL_CONSTANT.NEXT;
-    const nextText = 'Next';
+    const operation = isRandom ? ALL_CONSTANT.START_QUESTION : ALL_CONSTANT.NEXT;
+    const nextText = isRandom ? ALL_CONSTANT.START_LEARNING : 'Next';
 
     return (
       <LevelsFooter
         operation={operation}
         nextText={nextText}
-        currentLevel={currentLevel + 1}
-        currentGamePosition={currentGamePosition + 1}
+        currentLevel={currentLevel}
+        currentGamePosition={currentGamePosition}
         isDisabled={false}
       />
     );
   };
 
-  if (currentWord && !currentWord.word) {
+  if (isLoading) {
     // Handle case when word is not found
-    return <Loading/>;
+    return <Loading />;
   }
 
   return (
-    <div className='flex flex-col items-center gap-5 w-full h-full justify-between'>
+    <div className='flex flex-col items-center w-full h-full justify-center gap-5'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col h-3/4 justify-center items-center gap-5'>
+      <div className='flex flex-col h-3/4 justify-between items-center'>
         <img
           className='w-3/5 h-6'
           src='/icons/pointy_border.svg'
@@ -80,25 +86,34 @@ export default function Information() {
           width={200}
           height={200}
         />
-        <div className='flex flex-row items-center justify-between gap-5'>
-          <div className='flex flex-col items-left justify-evenly w-1/2 p-8 gap-5'>
+        <div className='flex flex-row items-center justify-between h-full gap-10 w-full'>
+          <div className='flex flex-col items-left justify-evenly w-1/2 h-full'>
             <div>
               <div className='flex flex-row items-center justify-between w-4/5'>
                 <div className='flex flex-col gap-5'>
-                  <h1 className={'text-5xl gurmukhi text-black'}>
-                    {currentWord?.word}
-                  </h1>
+                  <h1 className={'text-5xl gurmukhi text-black'}>{currentWord?.word}</h1>
                   <h2 className='text-2xl brandon-grotesque italic text-gray-4e4'>
                     {currentWord?.translation}
                   </h2>
                 </div>
-                <TextToSpeechBtn />
+                {
+                  currentWord &&
+                  currentWord.word && (
+                    <TextToSpeechBtn
+                      backgroundColor='bg-white-150'
+                      text={currentWord.word}
+                      type={ALL_CONSTANT.WORD} 
+                      id={currentWord.id}
+                      audioURL={currentWord?.audioURL}
+                    />
+                  )
+                }
               </div>
               <div className='flex flex-col text-lg'>
                 <span className={'text-black-111'}>
-                  {currentWord?.meaningEnglish}
+                  {currentWord?.meaning_english}
                 </span>
-                <span className={'text-black'}>{currentWord?.meaning}</span>
+                <span className={'text-black'}>{currentWord?.meaning_punjabi}</span>
               </div>
             </div>
             <img
@@ -112,41 +127,32 @@ export default function Information() {
               className='object-cover rounded-xl'
             />
           </div>
-          <div className='flex flex-col items-left justify-evenly w-3/4'>
+          <div className='flex flex-col items-left justify-evenly w-3/4 h-full gap-5'>
             <div className='flex flex-col items-left text-left justify-between gap-6'>
-              <span className='tracking-widest'>
-                {text('EXAMPLES').toUpperCase()}
-              </span>
+              <span className='tracking-widest'>{text('EXAMPLES').toUpperCase()}</span>
               {currentWord?.sentences &&
-                currentWord.sentences.map(
-                  (sentence: SentenceType, index: number) => {
-                    const highlightedSentence = highlightWord(
-                      sentence.sentence,
-                      currentWord.word ?? '',
-                      'gurmukhi',
-                    );
-                    return (
-                      <div key={index} className='flex flex-col text-xl'>
-                        <span className='text-black-111'>
-                          {highlightedSentence}
-                        </span>
-                        <span className='text-black'>
-                          {sentence.translation.endsWith('.') ||
-                          sentence.sentence.endsWith('?')
-                            ? sentence.translation
-                            : sentence.translation + '.'}
-                        </span>
-                      </div>
-                    );
-                  },
-                )}
+                currentWord.sentences.map((sentence: SentenceType, index: number) => {
+                  const highlightedSentence = highlightWord(
+                    sentence.sentence,
+                    currentWord.word ?? '',
+                    'gurmukhi',
+                  );
+                  return (
+                    <div key={index} className='flex flex-col text-xl'>
+                      <span className='text-black-111'>{highlightedSentence}</span>
+                      <span className='text-black'>
+                        {sentence.translation.endsWith('.') || sentence.sentence.endsWith('?')
+                          ? sentence.translation
+                          : sentence.translation + '.'}
+                      </span>
+                    </div>
+                  );
+                })}
             </div>
-            <div className='flex items-center justify-around my-10 gap-5 w-full'>
+            <div className='flex items-center justify-around gap-5 w-full h-1/2'>
               <div
-                className={`w-2/5 h-64 p-5 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
-                  currentWord?.synonyms && currentWord.synonyms.length === 0
-                    ? 'hidden'
-                    : ''
+                className={`w-2/5 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                  currentWord?.synonyms && currentWord.synonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
                 <h2 className='text-black tracking-widest ms-2'>
@@ -163,8 +169,7 @@ export default function Information() {
                               'flex h-min w-max p-4 text-black text-sm rounded-lg z-10 bg-white'
                             }
                           >
-                            {word.word} (
-                            {convertToTitleCase(word.translation ?? '')})
+                            {word.word} ({convertToTitleCase(word.translation ?? '')})
                           </div>
                         );
                       }
@@ -172,10 +177,8 @@ export default function Information() {
                 </div>
               </div>
               <div
-                className={`w-2/5 h-64 p-5 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
-                  currentWord?.antonyms && currentWord.antonyms.length === 0
-                    ? 'hidden'
-                    : ''
+                className={`w-2/5 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                  currentWord?.antonyms && currentWord.antonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
                 <h2 className='text-black tracking-widest ms-2'>
@@ -192,8 +195,7 @@ export default function Information() {
                               'flex h-min w-max p-4 text-black text-sm rounded-lg z-10 bg-white'
                             }
                           >
-                            {word.word} (
-                            {convertToTitleCase(word.translation ?? '')})
+                            {word.word} ({convertToTitleCase(word.translation ?? '')})
                           </div>
                         );
                       }
