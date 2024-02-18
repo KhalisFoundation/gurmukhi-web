@@ -4,6 +4,7 @@ export interface Option {
   id?: string;
   value?: string;
   option?: string;
+  label?: string;
   translation?: string;
   word: string;
 }
@@ -40,6 +41,7 @@ export interface WordType {
     sentence: string;
     translation: string;
   }[];
+  questions?: QuestionData[];
   status?: string;
   created_at?: TimestampType;
   created_by?: string;

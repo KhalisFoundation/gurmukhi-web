@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.0 | MIT License | https://tailwindcss.com
 *//*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
 2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
@@ -858,6 +858,9 @@ video {
 .flex-grow {
   flex-grow: 1;
 }
+.grow {
+  flex-grow: 1;
+}
 .origin-top {
   transform-origin: top;
 }
@@ -1354,11 +1357,6 @@ video {
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
-.ring {
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-}
 .drop-shadow-\[0_4px_15px_\#0567fb80\] {
   --tw-drop-shadow: drop-shadow(0 4px 15px #0567fb80);
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
@@ -1410,7 +1408,7 @@ video {
 }
 @font-face {
   font-family: 'Brandon Grotesque';
-  src: url('../../public/fonts/Brandon_Grotesque_regular.otf');
+  src: url('../../public/fonts/HvDTrial_Brandon_Grotesque_regular-BF64a625c9311e1.otf');
 }
 html,body,#root{
   height: 100%;
@@ -1492,12 +1490,6 @@ body .nanakback{
 body .cardImage{
     background-image: url('../../public/images/card.png');
   }
-body .gurmukhi {
-    font-family: 'Baloo Paaji 2' !important;
-  }
-body .gurmukhi * {
-      font-family: 'Baloo Paaji 2' !important;
-    }
 body .winbadge{
     background-image: url('../../public/images/winShape.png');
     height:25vh;
@@ -1507,6 +1499,12 @@ body .brandon-grotesque {
   }
 body .brandon-grotesque * {
       font-family: 'Brandon Grotesque' !important;
+    }
+body .gurmukhi {
+    font-family: 'Baloo Paaji 2' !important;
+  }
+body .gurmukhi * {
+      font-family: 'Baloo Paaji 2' !important;
     }
 body .card-bg::after {
     content: "";
