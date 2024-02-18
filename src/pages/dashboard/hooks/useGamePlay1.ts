@@ -4,7 +4,7 @@ import { fetchProgress, shuffleArray } from '../utils';
 import { useAppDispatch } from 'store/hooks';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { setCurrentLevel } from 'store/features/currentLevelSlice';
-import { updateProgress } from 'database/shabadavalidb';
+import { getUserData, updateProgress } from 'database/shabadavalidb';
 import { useEffect } from 'react';
 import { addScreens } from 'store/features/gameArraySlice';
 import useNew from './useNew';
@@ -15,14 +15,20 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
   const dispatch = useAppDispatch();
   const getRandomQuestions = useQuestions(user);
   const getNewQuestions = useNew();
-  const inProgressWords:WordShabadavaliDB[] = [];
-  
+  const inProgressWords: WordShabadavaliDB[] = [];
+
   const gamePlay = async () => {
-    const progress: GameScreen[] | null = fetchProgress(user);
+    const userData = await getUserData(user.uid);
+
+    if (!userData) {
+      const gameArray: GameScreen[] = [];
+      return { gameArray };
+    }
+    const progress: GameScreen[] | null = await fetchProgress(userData);
     if (progress && progress.length > 0) {
-      const gameArray = progress;
-      dispatch(setCurrentGamePosition(user?.progress.currentProgress));
-      dispatch(setCurrentLevel(user?.progress.currentLevel));
+      const gameArray: GameScreen[] | null = progress;
+      dispatch(setCurrentGamePosition(userData?.progress.currentProgress));
+      dispatch(setCurrentLevel(userData?.progress.currentLevel));
       return { gameArray };
     }
 
@@ -75,7 +81,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
     if (resetGame === true) {
       fetchGamePlay();
     }
-  }, [user, resetGame]);
+  }, [user.progress, resetGame]);
 };
 
 export default useGamePlay;
