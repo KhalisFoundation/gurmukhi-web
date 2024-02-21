@@ -2,6 +2,21 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@font-face {
+  font-family: 'Recoleta';
+  src: url('../../public/fonts/Recoleta-RegularDEMO.otf');
+}
+
+@font-face {
+  font-family: 'Baloo Paaji 2';
+  src: url('../../public/fonts/BalooPaaji2-VariableFont_wght.ttf');
+}
+
+@font-face {
+  font-family: 'Brandon Grotesque';
+  src: url('../../public/fonts/HvDTrial_Brandon_Grotesque_regular-BF64a625c9311e1.otf');
+}
+
 html,body,#root{
   height: 100%;
 }
@@ -100,9 +115,9 @@ body {
   }
 
   .brandon-grotesque {
-    font-family: 'HvDTrial Brandon Grotesque' !important;
+    font-family: 'Brandon Grotesque' !important;
     * {
-      font-family: 'HvDTrial Brandon Grotesque' !important;
+      font-family: 'Brandon Grotesque' !important;
     }
   }
 
@@ -133,9 +148,9 @@ body {
 
   form {
     input {
-      font-family: 'HvDTrial Brandon Grotesque';
+      font-family: 'Brandon Grotesque';
     }
-    font-family: 'HvDTrial Brandon Grotesque';
+    font-family: 'Brandon Grotesque';
   }
 
   .dark-blue {

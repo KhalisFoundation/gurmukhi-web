@@ -20,9 +20,18 @@ const ALL_CONSTANT = {
   DARK: 'DARK',
   INFORMATION: 'information',
   START_LEARNING: 'START LEARNING',
+  SENTENCE: 'Sentence',
   OPTION: 'option',
   QUESTION: 'question',
+  QUESTION_TITLECASE: 'Question',
   WORD: 'word',
+  NAME_REQUIRED: 'Name is required!',
+  EMAIL_REQUIRED: 'Email is required!',
+  FEEDBACK_REQUIRED: 'Feedback is required!',
+  WORD_TITLECASE: 'Word',
+  UI_DESIGN: 'UI/Design',
+  FUNCTIONALITY: 'Functionality',
+  OTHER: 'Other',
 };
 
 export default ALL_CONSTANT;
