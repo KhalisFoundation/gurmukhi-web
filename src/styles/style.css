@@ -581,6 +581,9 @@ video {
 .z-\[1\] {
   z-index: 1;
 }
+.z-\[50\] {
+  z-index: 50;
+}
 .col-span-2 {
   grid-column: span 2 / span 2;
 }
@@ -856,9 +859,6 @@ video {
   flex: 1 1 0%;
 }
 .flex-grow {
-  flex-grow: 1;
-}
-.grow {
   flex-grow: 1;
 }
 .origin-top {

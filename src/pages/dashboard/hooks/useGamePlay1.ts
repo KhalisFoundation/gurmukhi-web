@@ -33,9 +33,9 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
     }
 
     // If user has 0 coins, then we will give them locally stored questions
-    if (userData && userData?.coins === 0) {
+    if (userData && userData?.coins === 0 && userData?.progress.currentProgress === 0) {
       const { game, learningWords } = await getNewQuestions(13, inProgressWords, true);
-      const gameArray: GameScreen[] = game as GameScreen[];
+      const gameArray: GameScreen[] = game;
 
       if (learningWords.length > 0) {
         await addWordsBatch(user.uid, learningWords);
@@ -84,6 +84,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
           toggleLoading(true);
           const { gameArray } = await gamePlay();
           if (gameArray) {
+            await updateProgress(user.uid, 0, gameArray, 0);
             dispatch(addScreens(gameArray));
           }
           toggleLoading(false);

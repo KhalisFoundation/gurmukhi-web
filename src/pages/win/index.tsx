@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { gameSession0 } from 'constants/gameSession0';
+import seed0 from 'data/seed0.json';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 
@@ -18,7 +18,7 @@ function Win() {
           <p className='text-5xl text-sky-800 mb-3'>{text('GREAT_JOB')}</p>
           <p className='text-3xl text-sky-800 mb-8'>{text('FIFTH_QUESTION')}</p>
           <p className='text-medium text-slate-500 w-1/5 m-auto'>
-            {gameSession0.length} {text('QUESTIONS_TO_GO')}
+            {seed0.length} {text('QUESTIONS_TO_GO')}
           </p>
         </div>
       </div>
