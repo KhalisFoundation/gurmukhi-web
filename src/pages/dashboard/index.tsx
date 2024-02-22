@@ -13,7 +13,7 @@ import useGamePlay from './hooks/useGamePlay1';
 
 export default function Dashboard() {
   const commonStyle =
-    'w-3/12 h-100 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
+    'w-3/12 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   const { title, description } = metaTags.DASHBOARD;
   const { user } = useUserAuth();
   const [isLoading, toggleLoading] = useState<boolean>(true);
@@ -25,7 +25,7 @@ export default function Dashboard() {
       <Meta title={title} description={description} />
       <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
         <Ssa name={user.displayName} />
-        <div className='flex flex-row text-center justify-center gap-6 h-2/5'>
+        <div className='flex flex-row text-center justify-center gap-6'>
           <WordsSnippetBox commonStyle={commonStyle} />
           <CoinBox commonStyle={commonStyle} />
           <WordBox commonStyle={commonStyle} />
