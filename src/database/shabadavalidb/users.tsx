@@ -92,6 +92,10 @@ export const updateProgress = async (
   console.log('Document is updated successfully');
 };
 
+export const updateNextSession = async (uid: string, gameArray: GameScreen[]) => {
+  await updateUserDocument(uid, { next_session: gameArray });
+};
+
 export const updateCurrentProgress = async (uid: string, currentProgress: number) => {
   await updateUserDocument(uid, {
     'progress.currentProgress': currentProgress,
@@ -120,5 +124,5 @@ export const getUserData = async (uid: string) => {
     return;
   }
   const data = userDoc.data();
-  return { progress: data.progress };
+  return { progress: data.progress, nextSession: data.nextSession };
 };

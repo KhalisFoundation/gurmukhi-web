@@ -1,24 +1,19 @@
-import { User, WordShabadavaliDB } from 'types/shabadavalidb';
+import { User } from 'types/shabadavalidb';
 import { GameScreen } from 'types/shabadavalidb';
-import { fetchProgress, shuffleArray } from '../utils';
+import { fetchProgress } from '../utils';
 import { useAppDispatch } from 'store/hooks';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { setCurrentLevel } from 'store/features/currentLevelSlice';
 import { getUserData, updateProgress } from 'database/shabadavalidb';
 import { useEffect } from 'react';
 import { addScreens } from 'store/features/gameArraySlice';
-import useNew from './useNew';
-import useQuestions from './useQuestions';
-import { addWordsBatch } from 'database/shabadavalidb';
+import { gameAlgo } from '../utils';
 
 const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetGame = true) => {
   const dispatch = useAppDispatch();
-  const getRandomQuestions = useQuestions(user);
-  const getNewQuestions = useNew();
-  const inProgressWords: WordShabadavaliDB[] = [];
 
   const gamePlay = async () => {
-    const userData = await getUserData(user.uid);
+    const userData: any = await getUserData(user.uid);
 
     if (!userData) {
       const gameArray: GameScreen[] = [];
@@ -31,35 +26,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
       dispatch(setCurrentLevel(userData?.progress.currentLevel));
       return { gameArray };
     }
-
-    let learningCount = 9;
-    let learntCount = 2;
-    let newQuestionCount = 2;
-    const learningQuestions = await getRandomQuestions(learningCount, false);
-    if (learningQuestions.length < learningCount) {
-      learntCount += learningCount - learningQuestions.length;
-      learningCount = learningQuestions.length;
-    }
-    const learntQuestions = await getRandomQuestions(learntCount, true);
-
-    if (learntQuestions.length < learntCount) {
-      newQuestionCount += learntCount - learntQuestions.length;
-      learntCount = learntQuestions.length;
-    }
-    const { game, learningWords } = await getNewQuestions(newQuestionCount, inProgressWords);
-    let gameArray: GameScreen[] = [];
-    if (learntCount === 0 && learningCount === 0) {
-      gameArray = game as GameScreen[];
-    } else {
-      const combinedArrays = [...learningQuestions, ...learntQuestions];
-      gameArray = shuffleArray(combinedArrays);
-      gameArray = [...gameArray, ...game];
-    }
-
-    if (learningWords.length > 0) {
-      await addWordsBatch(user.uid, learningWords);
-    }
-    await updateProgress(user.uid, 0, gameArray, 0);
+    const { gameArray } = await gameAlgo(user);
     return { gameArray };
   };
 
@@ -70,6 +37,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
           toggleLoading(true);
           const { gameArray } = await gamePlay();
           if (gameArray) {
+            await updateProgress(user.uid, 0, gameArray, 0);
             dispatch(addScreens(gameArray));
           }
           toggleLoading(false);

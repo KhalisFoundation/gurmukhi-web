@@ -5,6 +5,9 @@ import {
 } from 'types/shabadavalidb';
 import { QuestionData } from 'types';
 import { WordType } from 'types';
+import getRandomQuestions from '../hooks/useQuestions';
+import getNewQuestions from '../hooks/useNew';
+import { addWordsBatch } from 'database/shabadavalidb';
 
 export const getRandomElement = (array: string[]) => {
   const randomIndex = Math.floor(Math.random() * array.length);
@@ -17,10 +20,7 @@ export const getRandomWordFromArray = (array: WordShabadavaliDB[]) => {
   return array[randomIndex];
 };
 
-export const createGameScreen = (
-  key: string,
-  data: QuestionData | WordType,
-): GameScreen => {
+export const createGameScreen = (key: string, data: QuestionData | WordType): GameScreen => {
   return { key, data };
 };
 
@@ -44,4 +44,35 @@ export const shuffleArray = (array: GameScreen[]) => {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
+};
+
+export const gameAlgo = async (user: User) => {
+  let learningCount = 9;
+  let learntCount = 2;
+  let newQuestionCount = 2;
+  const learningQuestions = await getRandomQuestions(user, learningCount, false);
+  if (learningQuestions.length < learningCount) {
+    learntCount += learningCount - learningQuestions.length;
+    learningCount = learningQuestions.length;
+  }
+  const learntQuestions = await getRandomQuestions(user, learntCount, true);
+
+  if (learntQuestions.length < learntCount) {
+    newQuestionCount += learntCount - learntQuestions.length;
+    learntCount = learntQuestions.length;
+  }
+  const { game, learningWords } = await getNewQuestions(newQuestionCount);
+  let gameArray: GameScreen[] = [];
+  if (learntCount === 0 && learningCount === 0) {
+    gameArray = game as GameScreen[];
+  } else {
+    const combinedArrays = [...learningQuestions, ...learntQuestions];
+    gameArray = shuffleArray(combinedArrays);
+    gameArray = [...gameArray, ...game];
+  }
+
+  if (learningWords.length > 0) {
+    await addWordsBatch(user.uid, learningWords);
+  }
+  return { gameArray };
 };

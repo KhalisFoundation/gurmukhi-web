@@ -2276,6 +2276,11 @@
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.14.1.tgz#6d2dd03d52e604279c38911afc1079d58c50a755"
   integrity sha512-Qg4DMQsfPNAs88rb2xkdk03N3bjK4jgX5fR24eHCTR9q6PrhZQZ4UJBPzCHJkIpTRN1UKxx2DzjZmnC+7Lj0Ow==
 
+"@remote-ui/rpc@^1.2.5":
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@remote-ui/rpc/-/rpc-1.4.5.tgz#20328970c314374d96fdaae1cf93aca4b47fefee"
+  integrity sha512-Cr+06niG/vmE4A9YsmaKngRuuVSWKMY42NMwtZfy+gctRWGu6Wj9BWuMJg5CEp+JTkRBPToqT5rqnrg1G/Wvow==
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz#04bc0608f4aa4b2e4b1aebf284344d0f68fda283"
@@ -2317,6 +2322,32 @@
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.6.1.tgz#9ab8f811930d7af3e3d549183a50884f9eb83f36"
   integrity sha512-UY+FGM/2jjMkzQLn8pxcHGMaVLh9aEitG3zY2CiY7XHdLiz3bZOwa6oDxNqEMv7zZkV+cj5DOdz0cQ1BP5Hjgw==
+
+"@shopify/react-hooks@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@shopify/react-hooks/-/react-hooks-3.0.5.tgz#d2103ecc60f111185b3f61a057893b4cd1841d9f"
+  integrity sha512-FzTkzFELTkfU0ErcURY2eAPRwFP3MkyeAl09STIbvfNLkNcFIG9i3869KAdFrSwRsR7WZ3PdWkWFcLAuRJPvpg==
+
+"@shopify/react-web-worker@^5.0.13":
+  version "5.0.13"
+  resolved "https://registry.yarnpkg.com/@shopify/react-web-worker/-/react-web-worker-5.0.13.tgz#6c15ff060c7edb77e67ef5f2f9f0e3bf62d3a490"
+  integrity sha512-HspNuLNDOPQhtPYes+i6MzFtiyAQicoBl8iYlpRefUwk1mW631LKbcyr/8RWsgZl6g80PByy9bn0OzD9CwN5PA==
+  dependencies:
+    "@shopify/react-hooks" "^3.0.5"
+    "@shopify/useful-types" "^5.1.2"
+    "@shopify/web-worker" "^6.0.5"
+
+"@shopify/useful-types@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@shopify/useful-types/-/useful-types-5.1.2.tgz#da8f2aaa8b3496705068b21deb76091cc58fcdc4"
+  integrity sha512-EjwIljAYHT1pfIxdMFp6ytJvCUmKXa5NWsvG7zXFX5EnLs7wYp66M/QCuoyJjI0Lq+5ZVyrJXJqqeBiXQVVs0w==
+
+"@shopify/web-worker@^6.0.5":
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/@shopify/web-worker/-/web-worker-6.0.5.tgz#7dbfe6b4a74f5ae2451233ed932f3357c4c1d67c"
+  integrity sha512-vM5diGhV3lVx6SQyl6jhXQEap+CzCqbSTG/rmCmX4HLifmnRpSGRBC3z0HpsUA6FYlLkk8VYqHkm1yGRHEe9BA==
+  dependencies:
+    "@remote-ui/rpc" "^1.2.5"
 
 "@sinclair/typebox@^0.24.1":
   version "0.24.51"
