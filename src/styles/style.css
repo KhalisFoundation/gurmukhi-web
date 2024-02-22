@@ -1649,12 +1649,6 @@ body .nanakback{
 body .cardImage{
     background-image: url('../../public/images/card.png');
   }
-body .gurmukhi {
-    font-family: 'Baloo Paaji 2' !important;
-  }
-body .gurmukhi * {
-      font-family: 'Baloo Paaji 2' !important;
-    }
 body .winbadge{
     background-image: url('../../public/images/winShape.png');
     height:25vh;
@@ -1664,6 +1658,12 @@ body .brandon-grotesque {
   }
 body .brandon-grotesque * {
       font-family: 'Brandon Grotesque' !important;
+    }
+body .gurmukhi {
+    font-family: 'Baloo Paaji 2' !important;
+  }
+body .gurmukhi * {
+      font-family: 'Baloo Paaji 2' !important;
     }
 body .card-bg::after {
     content: "";

@@ -32,6 +32,7 @@ const ALL_CONSTANT = {
   UI_DESIGN: 'UI/Design',
   FUNCTIONALITY: 'Functionality',
   OTHER: 'Other',
+  LEARN_MORE: 'Learn More',
 };
 
 export default ALL_CONSTANT;

@@ -17,12 +17,9 @@ export default function Dashboard() {
   const { title, description } = metaTags.DASHBOARD;
   const { user } = useUserAuth();
   const [isLoading, toggleLoading] = useState<boolean>(true);
-
-  const currentGamePosition: number = useAppSelector(
-    (state) => state.currentGamePosition,
-  );
-  const currentLevel: number = useAppSelector((state) => state.currentLevel);
   useGamePlay(user, toggleLoading);
+  const currentLevel: number = useAppSelector((state) => state.currentLevel);
+  const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
   return (
     <div className='h-full flex flex-col justify-between'>
       <Meta title={title} description={description} />

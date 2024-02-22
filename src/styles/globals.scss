@@ -14,18 +14,18 @@
 
 @font-face {
   font-family: 'Brandon Grotesque';
-  src: url('../../public/fonts/HvDTrial_Brandon_Grotesque_regular-BF64a625c9311e1.otf');
+  src: url('../../public/fonts/Brandon_Grotesque_regular.otf');
 }
 
 html,body,#root{
   height: 100%;
 }
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 229, 244, 253;
   --background-end-rgb: 156, 201, 226;
 }
-
 
 * {
   font-family: 'Recoleta';
@@ -103,12 +103,6 @@ body {
     background-image: url('../../public/images/card.png');
   }
 
-  .gurmukhi {
-    font-family: 'Baloo Paaji 2' !important;
-    * {
-      font-family: 'Baloo Paaji 2' !important;
-    }
-  }
   .winbadge{
     background-image: url('../../public/images/winShape.png');
     height:25vh;
@@ -118,6 +112,13 @@ body {
     font-family: 'Brandon Grotesque' !important;
     * {
       font-family: 'Brandon Grotesque' !important;
+    }
+  }
+
+  .gurmukhi {
+    font-family: 'Baloo Paaji 2' !important;
+    * {
+      font-family: 'Baloo Paaji 2' !important;
     }
   }
 
