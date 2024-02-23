@@ -49,6 +49,15 @@ export const shuffleArray = (array: GameScreen[]) => {
 };
 
 export const gameAlgo = async (user: User) => {
+  if (user && user?.coins === 0 && user?.progress.currentProgress === 0) {
+    const { game, learningWords } = await getNewQuestions(13, true);
+    const gameArray: GameScreen[] = game;
+
+    if (learningWords.length > 0) {
+      await addWordsBatch(user.uid, learningWords);
+    }
+    return { gameArray };
+  }
   let learningCount = 9;
   let learntCount = 2;
   let newQuestionCount = 2;
