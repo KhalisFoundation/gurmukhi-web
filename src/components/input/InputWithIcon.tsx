@@ -46,24 +46,32 @@ export default function InputWithIcon({ ...props }: InputWithIconProps) {
 
   const inputClassName = props.border ? `w-full p-4 rounded-lg bg-gray-eee border-2 border-${props.border}` : 'w-full p-4 rounded-lg bg-gray-eee';
   return (
-    <div className="relative mb-6">
+    <div className='relative mb-4'>
       {props.icon === '' ? null : (
-        <div className="absolute inset-y-0 right-0 flex items-center pr-3.5" >
-          {
-            props.type === 'password' ? (
-              viewPassword ? (
-                <FontAwesomeIcon icon={faEyeSlash} className="text-gray-400 cursor-pointer" onClick={(e) => action(e)}/>
-              ) : (
-                <FontAwesomeIcon icon={faEye} className="text-gray-400 cursor-pointer" onClick={(e) => action(e)}/>
-              )
-            ) : <FontAwesomeIcon icon={getIcon()} className="text-gray-400" />
-          }
+        <div className='absolute inset-y-0 right-0 flex items-center pr-3.5'>
+          {props.type === 'password' ? (
+            viewPassword ? (
+              <FontAwesomeIcon
+                icon={faEyeSlash}
+                className='text-gray-400 cursor-pointer'
+                onClick={(e) => action(e)}
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faEye}
+                className='text-gray-400 cursor-pointer'
+                onClick={(e) => action(e)}
+              />
+            )
+          ) : (
+            <FontAwesomeIcon icon={getIcon()} className='text-gray-400' />
+          )}
         </div>
       )}
       <input
         id={props.id}
         type={props.type}
-        placeholder={props.placeholder} 
+        placeholder={props.placeholder}
         className={inputClassName}
         onChange={props.onChange}
       />
