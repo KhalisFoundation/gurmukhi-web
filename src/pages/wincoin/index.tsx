@@ -23,14 +23,14 @@ import { useOnClick } from 'components/buttons/hooks';
 import LoaderButton from 'components/buttons/LoaderButton';
 
 function WinCoin() {
+  const navigate = useNavigate();
+  const { user } = useUserAuth();
   const { t: text } = useTranslation();
-  const { title, description } = metaTags.WIN;
   const dispatch = useAppDispatch();
+  const { title, description } = metaTags.WIN;
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const [resetGame, toggleResetGame] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const { user } = useUserAuth();
   const [isLoading, toggleIsLoading] = useState<boolean>(true);
   const handleClick = useOnClick(0);
 
@@ -56,6 +56,7 @@ function WinCoin() {
     };
     storeData();
   }, [user]);
+
   return (
     <div className='nanakback h-full bg-cover w-full'>
       <Meta title={title} description={description} />

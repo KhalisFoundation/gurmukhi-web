@@ -29,10 +29,10 @@ export const AuthProvider = ({ children }: Props) => {
   const [currentUser, setCurrentUser] = useState<LocalUser | null>(null);
 
   useEffect(() => {
-    const unsubscribe = userStateListener((user) => {
+    const unsubscribe = userStateListener(async (user) => {
       if (user) {
         const { uid, email } = user;
-        const userData = getUser(email ?? '', uid)
+        await getUser(email ?? '', uid)
           .then((data) => {
             const usrData = {
               user,

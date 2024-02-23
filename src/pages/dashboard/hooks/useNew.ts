@@ -4,6 +4,7 @@ import { getQuestionsByWordID } from 'database/default';
 import {  WordType } from 'types';
 import { createGameScreen } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
+import seed0 from 'data/seed0.json';
 
 const addWordIfNotExists = (word: WordType, learningWords: WordShabadavaliDB[]) => {
   const exists = learningWords.some((obj) => obj.word_id === word.id);
@@ -19,9 +20,22 @@ const addWordIfNotExists = (word: WordType, learningWords: WordShabadavaliDB[]) 
     learningWords.push(learningWord);
   }
 };
-const getNewQuestions = async (count: number) => {
+const getNewQuestions = async (count: number, local = false) => {
   const learningWords: WordShabadavaliDB[] = [];
   const game: GameScreen[] = [];
+  if (local) {
+    seed0.map((word) => {
+      if (word.key.includes(ALL_CONSTANT.DEFINITION)) {
+        const wordData = {
+          id: word.key.split('-')[1],
+          ...word.data,
+        } as WordType;
+        addWordIfNotExists(wordData as WordType, learningWords);
+      }
+    });
+
+    return { game: seed0, learningWords };
+  }
   for (let i = 0; i < count; ) {
     const word = await getRandomWord();
     if (word?.id) {

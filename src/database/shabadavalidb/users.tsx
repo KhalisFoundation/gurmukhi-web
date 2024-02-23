@@ -124,5 +124,5 @@ export const getUserData = async (uid: string) => {
     return;
   }
   const data = userDoc.data();
-  return { progress: data.progress, nextSession: data.nextSession };
+  return { progress: data.progress, nextSession: data.nextSession, coins: data.coins };
 };
