@@ -7,6 +7,7 @@ import SignUp from './SignUp';
 import InputWithIcon from '../input/InputWithIcon';
 import { SignError } from 'types';
 import { ToastContainer, toast } from 'react-toastify';
+import { showToastMessage } from 'utils';
 
 export default function SignIn() {
   const { t: text } = useTranslation();
@@ -19,12 +20,13 @@ export default function SignIn() {
   const [isNewUser, setIsNewUser] = useState(false);
   const { logIn, signUp, signInWithGoogle } = useUserAuth();
 
-  const showToastMessage = (textMsg: string, error = true) => {
-    toast.success(textMsg, {
-      position: toast.POSITION.BOTTOM_RIGHT,
-      closeOnClick: true,
-      type: error ? 'error' : 'success',
-    });
+  const displayToast = (textMsg: string, error = true) => {
+    showToastMessage(
+      textMsg,
+      toast.POSITION.BOTTOM_RIGHT,
+      true,
+      error,
+    );
   };
 
   const signToggle = (e: FormEvent) => {
@@ -86,7 +88,7 @@ export default function SignIn() {
         else return;
 
         if (password === cpassword) {
-          const success = await signUp(name, username, email, password, cpassword, showToastMessage);
+          const success = await signUp(name, username, email, password, cpassword, displayToast);
           if (success) {
             navigate(ROUTES.DASHBOARD);
           } 
@@ -108,25 +110,25 @@ export default function SignIn() {
         if (valid) setErrorMessage(null);
         else return;
 
-        const success = await logIn(email, password, showToastMessage);
+        const success = await logIn(email, password, displayToast);
         if (success) {
           navigate(ROUTES.DASHBOARD);
         }
       }
     } catch (error: any) {
-      showToastMessage(error.message);
+      displayToast(error.message);
     }
   };
 
   const handleGoogleSignIn = async (event: React.MouseEvent) => {
     event.preventDefault();
     try {
-      const success = await signInWithGoogle(showToastMessage);
+      const success = await signInWithGoogle(displayToast);
       if (success) {
         navigate(ROUTES.DASHBOARD);
       }
     } catch (error: any) {
-      showToastMessage(error.message);
+      displayToast(error.message);
     }
   };
 
