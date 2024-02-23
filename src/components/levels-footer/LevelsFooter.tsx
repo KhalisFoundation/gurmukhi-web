@@ -4,6 +4,7 @@ import { useUserAuth } from 'auth';
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 import LevelHexagon from '../levels/LevelHexagon';
 import StartQuestionBtn from '../buttons/StartQuestionBtn';
+import { getUserData } from 'database/shabadavalidb';
 
 interface Props {
   operation: string;
@@ -39,7 +40,12 @@ export default function LevelsFooter({
   useEffect(() => {
     const callWorker = async () => {
       console.log('worker is running');
-      await worker.fetchNextSessionData(user);
+      const userData = await getUserData(user.uid);
+      if (!userData) {
+        await worker.fetchNextSessionData(user);
+        return;
+      }
+      await worker.fetchNextSessionData(userData);
     };
     if (currentLevel === 10 && user.uid && worker) {
       callWorker();

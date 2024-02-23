@@ -1,11 +1,10 @@
 import { gameAlgo } from 'pages/dashboard/utils';
 import { User } from 'types/shabadavalidb';
-import { getUserData, updateNextSession } from 'database/shabadavalidb';
+import { updateNextSession } from 'database/shabadavalidb';
 
 export const fetchNextSessionData = async (usr: User) => {
   try {
-    const data = await getUserData(usr.uid);
-    const nextSession = data?.nextSession ?? [];
+    const nextSession = usr?.nextSession ?? [];
     if (nextSession.length > 0) {
       return;
     }

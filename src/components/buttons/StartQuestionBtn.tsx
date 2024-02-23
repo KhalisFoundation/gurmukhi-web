@@ -1,10 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiamond } from '@fortawesome/free-solid-svg-icons';
-
-import { useOnClick } from 'components/buttons/hooks';
+import handleClick from './hooks/useOnClick';
 import LoaderButton from './LoaderButton';
 import ALL_CONSTANT from 'constants/constant';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { useNavigate } from 'react-router-dom';
+import { useUserAuth } from 'auth';
 
 interface Props {
   operation: string;
@@ -27,10 +29,25 @@ const StartQuestionBtn = ({
   const linkClass = `flex flex-row items-center justify-between gap-2 min-w-52 ${isActive} ${
     isDisabled ? 'cursor-not-allowed' : ''
   }`;
-  const handleClick = useOnClick(currentGamePosition);
+  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const gameArray = useAppSelector((state) => state.gameArray);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { user } = useUserAuth();
+
   return (
     <button
-      onClick={() => handleClick(operation)}
+      onClick={() =>
+        handleClick(
+          currentGamePosition,
+          operation,
+          currentLevel,
+          gameArray,
+          navigate,
+          user,
+          dispatch,
+        )
+      }
       className={linkClass}
       disabled={isDisabled}
       style={{

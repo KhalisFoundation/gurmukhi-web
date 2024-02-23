@@ -9,7 +9,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { shabadavaliDB as db } from '../../firebase';
-import { GameScreen } from 'types/shabadavalidb';
+import { GameScreen, User } from 'types/shabadavalidb';
 
 export const usersCollection = collection(db, 'users');
 
@@ -124,5 +124,15 @@ export const getUserData = async (uid: string) => {
     return;
   }
   const data = userDoc.data();
-  return { progress: data.progress, nextSession: data.nextSession, coins: data.coins };
+  const user: User = {
+    displaName: data.displayName,
+    role: data.role,
+    photoURL: data.photoURL,
+    uid: data.uid,
+    coins: data.coins,
+    email: data.email,
+    progress: data.progress,
+    nextSession: data.next_session,
+  };
+  return user;
 };

@@ -18,9 +18,11 @@ import {
 } from 'database/shabadavalidb';
 import { resetGameArray } from 'store/features/gameArraySlice';
 import ALL_CONSTANT from 'constants/constant';
-import useGamePlay from 'pages/dashboard/hooks/useGamePlay1';
-import { useOnClick } from 'components/buttons/hooks';
+// import useGamePlay from 'pages/dashboard/hooks/useGamePlay1';
+import handleClick from 'components/buttons/hooks/useOnClick';
 import LoaderButton from 'components/buttons/LoaderButton';
+import { addScreens } from 'store/features/gameArraySlice';
+import { GameScreen } from 'types/shabadavalidb';
 
 function WinCoin() {
   const navigate = useNavigate();
@@ -30,29 +32,29 @@ function WinCoin() {
   const { title, description } = metaTags.WIN;
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const currentLevel = useAppSelector((state) => state.currentLevel);
-  const [resetGame, toggleResetGame] = useState<boolean>(false);
+  // const [resetGame] = useState<boolean>(false);
   const [isLoading, toggleIsLoading] = useState<boolean>(true);
-  const handleClick = useOnClick(0);
+  const [nextSession, setNextSession] = useState<GameScreen[]>([]);
 
-  useGamePlay(user, toggleIsLoading, resetGame);
+  // useGamePlay(user, toggleIsLoading, resetGame);
 
   useEffect(() => {
     const storeData = async () => {
-      toggleResetGame(false);
       toggleIsLoading(true);
-      dispatch(resetGamePosition());
-      dispatch(resetGameArray());
-      const data = await getUserData(user.uid);
-      const nextSession = data?.nextSession ?? [];
-      if (currentLevel === ALL_CONSTANT.LEVELS_COUNT - 1) {
+      if (currentLevel === ALL_CONSTANT.LEVELS_COUNT) {
+        dispatch(resetGamePosition());
+        dispatch(resetGameArray());
+        const data = await getUserData(user.uid);
+        const nxtSession = data?.nextSession ?? [];
+        setNextSession(nxtSession);
         dispatch(increment());
         dispatch(resetLevel());
+        dispatch(addScreens(nxtSession));
         await updateNanakCoin(user.uid, nanakCoin + 1);
-        await updateProgress(user.uid, 0, nextSession, 0);
+        await updateProgress(user.uid, 0, nxtSession, 0);
         await updateNextSession(user.uid, []);
       }
       toggleIsLoading(false);
-      toggleResetGame(nextSession.length !== 0);
     };
     storeData();
   }, [user]);
@@ -71,8 +73,18 @@ function WinCoin() {
           <p className='text-xl mb-10 text-sky-800'>{convertNumber(nanakCoin)}</p>
           <div className='flex flex-col w-1/2 m-auto justify-evenly mb-10 gap-4'>
             <button
-              disabled={isLoading}
-              onClick={() => handleClick(ALL_CONSTANT.GET_ONE_MORE)}
+              disabled={isLoading && nextSession.length === 0}
+              onClick={() =>
+                handleClick(
+                  0,
+                  ALL_CONSTANT.GET_ONE_MORE,
+                  currentLevel,
+                  nextSession,
+                  navigate,
+                  user,
+                  dispatch,
+                )
+              }
               className='bg-sky-900 text-xs text-white p-3  tracking-widest font-light '
             >
               {isLoading ? <LoaderButton theme={ALL_CONSTANT.LIGHT} /> : ALL_CONSTANT.GET_ONE_MORE}

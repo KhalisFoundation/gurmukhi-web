@@ -16,6 +16,7 @@ export interface User {
     currentLevel: number;
     currentProgress: number;
   };
+  nextSession?: GameScreen[];
 }
 export interface WordShabadavaliDB {
   isLearnt: boolean;
