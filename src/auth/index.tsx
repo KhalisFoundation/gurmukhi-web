@@ -8,6 +8,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   sendPasswordResetEmail,
+  User,
 } from 'firebase/auth';
 import {
   Timestamp, doc, setDoc, // query, where, documentId, getDocs,
@@ -109,12 +110,13 @@ export const UserAuthContextProvider = ({
       const userData = userCredential.user;
       const { uid, displayName } = userData;
       const localUser = doc(shabadavaliDB, `users/${uid}`);
-      await setDoc(localUser, {
+      let userDataForState = {
+        uid,
         name,
         role: roles.student,
         email,
         username,
-        displayName: displayName ?? name,
+        displayName: displayName || name,
         coins: 0,
         progress: {
           currentProgress: 0,
@@ -123,8 +125,12 @@ export const UserAuthContextProvider = ({
         },
         created_at: Timestamp.now(),
         updated_at: Timestamp.now(),
-      });
-      setUser(userData);
+        user: null as User | null,
+      };
+      await setDoc(localUser, userDataForState);
+
+      userDataForState = { ...userDataForState, user: userData };
+      setUser(userDataForState);
 
       sendEmailVerification(auth.currentUser ?? userData).then(() => {
         showToastMessage(text('EMAIL_VERIFICATION_SENT'), false);

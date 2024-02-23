@@ -120,5 +120,5 @@ export const getUserData = async (uid: string) => {
     return;
   }
   const data = userDoc.data();
-  return { progress: data.progress };
+  return { progress: data.progress, coins: data.coins };
 };

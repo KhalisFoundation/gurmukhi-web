@@ -32,6 +32,18 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
       return { gameArray };
     }
 
+    // If user has 0 coins, then we will give them locally stored questions
+    if (userData && userData?.coins === 0 && userData?.progress.currentProgress === 0) {
+      const { game, learningWords } = await getNewQuestions(13, inProgressWords, true);
+      const gameArray: GameScreen[] = game;
+
+      if (learningWords.length > 0) {
+        await addWordsBatch(user.uid, learningWords);
+      }
+      await updateProgress(user.uid, 0, gameArray, 0);
+      return { gameArray };
+    }
+
     let learningCount = 9;
     let learntCount = 2;
     let newQuestionCount = 2;
@@ -52,8 +64,10 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
       gameArray = game as GameScreen[];
     } else {
       const combinedArrays = [...learningQuestions, ...learntQuestions];
-      gameArray = shuffleArray(combinedArrays);
-      gameArray = [...gameArray, ...game];
+      gameArray = shuffleArray(combinedArrays) as GameScreen[];
+      if (game) {
+        gameArray = [...gameArray, ...game];
+      }
     }
 
     if (learningWords.length > 0) {
@@ -70,6 +84,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
           toggleLoading(true);
           const { gameArray } = await gamePlay();
           if (gameArray) {
+            await updateProgress(user.uid, 0, gameArray, 0);
             dispatch(addScreens(gameArray));
           }
           toggleLoading(false);
