@@ -14,7 +14,7 @@ import Loading from 'components/loading';
 
 export default function Dashboard() {
   const commonStyle =
-    'w-3/12 h-100 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
+    'w-3/12 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   const { title, description } = metaTags.DASHBOARD;
   const { user } = useUserAuth();
   const [ userData, setUserData ] = useState<any>(user);
