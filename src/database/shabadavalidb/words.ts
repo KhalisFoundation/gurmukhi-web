@@ -15,6 +15,7 @@ import { shabadavaliDB } from '../../firebase';
 import { WordShabadavaliDB } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 import { generateRandomId } from 'database/util';
+import { getWordIdsFromUser } from './users';
 
 const getWordCollectionRef = (uid: string) => {
   return collection(shabadavaliDB, ALL_CONSTANT.USERS, uid, ALL_CONSTANT.WORDS);
@@ -34,12 +35,15 @@ export const addWordsToSubCollection = async (
 
 export const getWordsFromUser = async (uid: string, count:number, isLearnt:boolean) => {
   try {
+    const existingWordIds: string[] = await getWordIdsFromUser(uid, 10);
     const wordsCollectionRef = getWordCollectionRef(uid);
     const randomID = generateRandomId();
+    const existingWordsNotIns = where(documentId(), 'not-in', existingWordIds);
     const q = query(
       wordsCollectionRef,
       where('isLearnt', '==', false),
       where(documentId(), '<=', randomID),
+      existingWordsNotIns,
       limit(count),
     );
     let querySnapshot = null;
@@ -49,6 +53,7 @@ export const getWordsFromUser = async (uid: string, count:number, isLearnt:boole
         wordsCollectionRef,
         where('isLearnt', '==', isLearnt),
         where(documentId(), '>', randomID),
+        existingWordsNotIns,
         limit(count),
       );
       querySnapshot = await getDocs(q2);
@@ -66,6 +71,7 @@ export const getWordsFromUser = async (uid: string, count:number, isLearnt:boole
     return [];
   }
 };
+
 export const addWordsBatch = async (
   uid: string,
   words: WordShabadavaliDB[],

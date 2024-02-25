@@ -27,4 +27,5 @@ export interface WordShabadavaliDB {
   image?:string;
   id?: string;
   lastReviewed?:Timestamp;
+  questionIds: string[];
 }

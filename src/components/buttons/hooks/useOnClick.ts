@@ -29,7 +29,10 @@ const handleClick = async (
   user: User,
   dispatch: any,
 ) => {
-  if (currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition]) {
+  const condition = user.coins !== 0 ?
+    currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition] :
+    currentLevel < ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition];
+  if (condition) {
     if (gameArray.length === 0) {
       return;
     }

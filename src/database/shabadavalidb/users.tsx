@@ -7,6 +7,7 @@ import {
   query,
   where,
   updateDoc,
+  limit,
 } from 'firebase/firestore';
 import { shabadavaliDB as db } from '../../firebase';
 import { GameScreen, User } from 'types/shabadavalidb';
@@ -86,9 +87,16 @@ export const updateProgress = async (
   currentProgress: number,
   gameSession: GameScreen[],
   currentLevel: number,
+  setLoading?: (value: boolean) => void,
 ) => {
   const progress = { currentProgress, gameSession, currentLevel };
+  if (setLoading) {
+    setLoading(true);
+  }
   await updateUserDocument(uid, { progress });
+  if (setLoading) {
+    setLoading(false);
+  }
   console.log('Document is updated successfully');
 };
 
@@ -135,4 +143,35 @@ export const getUserData = async (uid: string) => {
     nextSession: data.next_session,
   };
   return user;
+};
+
+export const getWordIdsFromUser = async (uid: string, count: number) => {
+  const userRef = doc(usersCollection, uid);
+  const wordsCollection = collection(userRef, 'words');
+  const wordsSnapshot = await getDocs(wordsCollection);
+  const wordIds: string[] = [];
+  wordsSnapshot.forEach((word) => {
+    const wordId = word.data().word_id;
+    wordIds.push(wordId || word.id);
+  });
+  return wordIds.slice(0, count);
+};
+
+export const getQuestionIdsFromWordInUser = async (uid: string, wordId: string) => {
+  const userRef = doc(usersCollection, uid);
+  const wordsCollection = collection(userRef, 'words');
+  const wordQueryRef = query(
+    wordsCollection,
+    where('word_id', '==', wordId),
+    limit(1),
+  );
+  const wordDocs = await getDocs(wordQueryRef);
+  let questionIds: string[] = [];
+  if (!wordDocs.empty) {
+    const data = wordDocs.docs[0].data();
+    if (data) {
+      questionIds = data.questionIds;
+    }
+  }
+  return questionIds;
 };

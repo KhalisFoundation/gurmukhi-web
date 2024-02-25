@@ -3,6 +3,7 @@ import { getDataById, wordsCollection } from './database';
 import { wordsdb } from '../../firebase';
 import { Option, QuestionData } from 'types';
 import { generateRandomId } from 'database/util';
+import { getQuestionIdsFromWordInUser } from 'database/shabadavalidb';
 
 const questionCollection = collection(wordsdb, 'questions');
 
@@ -13,9 +14,20 @@ const getOptions = async (wordIDs: string[]) => {
   const options = await Promise.all(optionsPromise);
   return options as Option[];
 };
-const getQuestionsByWordID = async (wordID: string, count:number, needOptions = false) => {
+
+const getQuestionsByWordID = async (wordID: string, count:number, uid: string, needOptions = false) => {
   const randomID = generateRandomId();
-  const queryRef = query(questionCollection, where('word_id', '==', wordID), where('id', '<=', randomID), limit(count));
+  const existingQuestions = await getQuestionIdsFromWordInUser(uid, wordID);
+  const questCondition = existingQuestions.length > 0 ?
+    [where('id', 'not-in', existingQuestions)] :
+    [];
+  const queryRef = query(
+    questionCollection,
+    where('word_id', '==', wordID),
+    where('id', '<=', randomID),
+    ...questCondition,
+    limit(count),
+  );
   let questionSnapshots = null;
   questionSnapshots = await getDocs(queryRef);
 
@@ -24,6 +36,7 @@ const getQuestionsByWordID = async (wordID: string, count:number, needOptions = 
       questionCollection,
       where('word_id', '==', wordID),
       where('id', '>', randomID),
+      ...questCondition,
       limit(count),
     );
     questionSnapshots = await getDocs(queryRef2);
@@ -34,7 +47,9 @@ const getQuestionsByWordID = async (wordID: string, count:number, needOptions = 
 
   const questionsData = await Promise.all(
     questionSnapshots.docs.map(async (doc) => {
-      const questionData = doc.data() as QuestionData;
+      const questionData = {
+        id: doc.id, ...doc.data(),
+      } as QuestionData;
 
       if (
         needOptions &&
@@ -51,6 +66,7 @@ const getQuestionsByWordID = async (wordID: string, count:number, needOptions = 
 
   return questionsData;
 };
+
 const getQuestionByID = async (id: string) => {
   const queryRef = query(questionCollection, where('id', '==', id));
   const questionSnapshot = await getDocs(queryRef);
