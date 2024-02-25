@@ -18,7 +18,6 @@ import {
 } from 'database/shabadavalidb';
 import { resetGameArray } from 'store/features/gameArraySlice';
 import ALL_CONSTANT from 'constants/constant';
-// import useGamePlay from 'pages/dashboard/hooks/useGamePlay1';
 import handleClick from 'components/buttons/hooks/useOnClick';
 import LoaderButton from 'components/buttons/LoaderButton';
 import { addScreens } from 'store/features/gameArraySlice';
@@ -32,11 +31,8 @@ function WinCoin() {
   const { title, description } = metaTags.WIN;
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const currentLevel = useAppSelector((state) => state.currentLevel);
-  // const [resetGame] = useState<boolean>(false);
   const [isLoading, toggleIsLoading] = useState<boolean>(true);
   const [nextSession, setNextSession] = useState<GameScreen[]>([]);
-
-  // useGamePlay(user, toggleIsLoading, resetGame);
 
   useEffect(() => {
     const storeData = async () => {
