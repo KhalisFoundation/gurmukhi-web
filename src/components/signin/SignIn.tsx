@@ -133,16 +133,16 @@ export default function SignIn() {
   };
 
   return (
-    <main className='bg-white h-full w-2/5 rounded-3xl brandon-grotesque'>
+    <main className='bg-white lg:h-full rounded-3xl brandon-grotesque w-5/6 xl:w-1/3 self-center'>
       <div className='flex flex-col w-2/3 m-auto my-0 h-full justify-center'>
-        <div className='flex flex-col'>
-          <div>
-            <div className='text-center m-4'>
+        <div className='flex flex-col my-4 gap-4 xl:gap-0'>
+          <div className='flex flex-col gap-4'>
+            <div className='text-center'>
               <h1 className='fs-rem-2 recoleta'>{text('WELCOME')}</h1>
               <h3 className='grey text-lg'>{text('ENTER_DETAILS')}</h3>
             </div>
 
-            <div className='w-80 my-0 m-auto rounded-full h-12 flex p-5 relative items-center justify-between gap-4 bg-gray-eee'>
+            <div className='w-3/4 m-auto rounded-full h-12 flex p-5 relative items-center justify-between gap-4 bg-gray-eee'>
               <div className='w-full flex justify-center grey'>
                 <button className='signin' onClick={(e) => signToggle(e)}>
                   {text('SIGN_IN')}
@@ -199,18 +199,20 @@ export default function SignIn() {
                 </button>
               </div>
             )}
-            <div className='flex justify-center items-center grey'>
-              <div className='w-1/4 h-[1px] bg-stone-950/[.2] mr-1'></div>
-              {text('OR').toUpperCase()}
-              <div className='w-1/4 h-[1px] bg-stone-950/[.2] ml-1'></div>
+            <div className='flex flex-col gap-4'>
+              <div className='flex justify-center items-center grey'>
+                <span className='w-1/4 h-[1px] bg-stone-950/[.2] mr-1'></span>
+                {text('OR').toUpperCase()}
+                <span className='w-1/4 h-[1px] bg-stone-950/[.2] ml-1'></span>
+              </div>
+              <button
+                className='w-full flex p-4 rounded-lg bg-transparent hover:bg-slate-100 text-black text-lg items-center justify-center gap-4 border border-gray-300'
+                onClick={(e) => handleGoogleSignIn(e)}
+              >
+                <img className='w-6 h-6' src='/icons/google.svg' alt='google' />
+                {text('SIGN_IN_WITH_GOOGLE')}
+              </button>
             </div>
-            <button
-              className='w-full flex p-4 rounded-lg bg-transparent hover:bg-slate-100 text-black text-lg items-center justify-center gap-4 border border-gray-300'
-              onClick={(e) => handleGoogleSignIn(e)}
-            >
-              <img className='w-6 h-6' src='/icons/google.svg' alt='google' />
-              {text('SIGN_IN_WITH_GOOGLE')}
-            </button>
           </form>
         </div>
       </div>
