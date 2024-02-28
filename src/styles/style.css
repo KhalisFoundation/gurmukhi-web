@@ -519,9 +519,6 @@ video {
     max-width: 1536px;
   }
 }
-.static {
-  position: static;
-}
 .absolute {
   position: absolute;
 }
@@ -728,9 +725,6 @@ video {
 .h-2 {
   height: 0.5rem;
 }
-.h-2\/5 {
-  height: 40%;
-}
 .h-20 {
   height: 5rem;
 }
@@ -825,9 +819,6 @@ video {
 .w-3 {
   width: 0.75rem;
 }
-.w-3\/12 {
-  width: 25%;
-}
 .w-3\/4 {
   width: 75%;
 }
@@ -842,6 +833,9 @@ video {
 }
 .w-5 {
   width: 1.25rem;
+}
+.w-5\/6 {
+  width: 83.333333%;
 }
 .w-52 {
   width: 13rem;
@@ -993,6 +987,12 @@ video {
 }
 .flex-col {
   flex-direction: column;
+}
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+.flex-wrap {
+  flex-wrap: wrap;
 }
 .items-center {
   align-items: center;
@@ -1280,6 +1280,10 @@ video {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
 .pb-0 {
   padding-bottom: 0px;
 }
@@ -1561,7 +1565,9 @@ video {
   font-family: 'Brandon Grotesque';
   src: url('../../public/fonts/Brandon_Grotesque_regular.otf');
 }
-html,body,#root{
+html,
+body,
+#root {
   height: 100%;
 }
 :root {
@@ -1572,18 +1578,20 @@ html,body,#root{
 * {
   font-family: 'Recoleta';
 }
+.back-bg {
+  background: rgb(230, 242, 252);
+  background: linear-gradient(90deg, rgba(230, 242, 252, 1) 0%, rgba(159, 203, 227, 1) 0%);
+}
+.back-bg-image {
+  background-image: url('../../public/images/background.png');
+}
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
     rgb(var(--background-start-rgb));
-  
 }
 body .background-layer::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -1607,7 +1615,6 @@ body .word-brick-container {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     grid-gap: 0.5rem;
     align-content: end;
-    position: absolute;
     z-index: 1;
     width: 100%;
     height: 100%;
@@ -1633,17 +1640,16 @@ body {
       opacity: 1;
     }
   }
-  
 }
-body .nanakback{
+body .nanakback {
     background-image: url('../../public/images/coinback.png');
   }
-body .cardImage{
+body .cardImage {
     background-image: url('../../public/images/card.png');
   }
-body .winbadge{
+body .winbadge {
     background-image: url('../../public/images/winShape.png');
-    height:25vh;
+    height: 25vh;
   }
 body .brandon-grotesque {
     font-family: 'Brandon Grotesque' !important;
@@ -1658,7 +1664,7 @@ body .gurmukhi * {
       font-family: 'Baloo Paaji 2' !important;
     }
 body .card-bg::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -1686,23 +1692,23 @@ body form input {
       font-family: 'Brandon Grotesque';
     }
 body .dark-blue * {
-      color: #1F4860;
+      color: #1f4860;
     }
 body .dull-blue * {
-      color: #255C7A;
+      color: #255c7a;
     }
 body .mustard {
-    color: #FBBC05;
+    color: #fbbc05;
   }
 body .grey {
-    color: #999999
+    color: #999999;
   }
 body .black {
     color: #333333;
   }
 body .logo-bg {
-    background-color: #1F4860;
-    border: 2px solid #FFF;
+    background-color: #1f4860;
+    border: 2px solid #fff;
     min-height: 3rem;
     min-width: 3rem;
     margin-right: 0.5rem;
@@ -1716,7 +1722,7 @@ body .fs-rem-2 {
 body header .title {
       font-size: 1.5rem;
       font-family: 'Recoleta' !important;
-      color: #1F4860;
+      color: #1f4860;
     }
 body #sortbox:checked ~ #sortboxmenu {
     opacity: 1;
@@ -1728,16 +1734,25 @@ body .loader {
     width: 15px;
     display: inline-block;
     aspect-ratio: 4;
-    background: radial-gradient(circle closest-side,#1F4860 90%,#0000) 0/calc(100%/3) 100% space;
+    background: radial-gradient(circle closest-side, #1f4860 90%, #0000) 0 / calc(100% / 3) 100%
+      space;
     clip-path: inset(0 100% 0 0);
     animation: loading 1s steps(4) infinite;
   }
 body {
 
-  @keyframes loading {to{clip-path: inset(0 -34% 0 0)}}
+  @keyframes loading {
+    to {
+      clip-path: inset(0 -34% 0 0);
+    }
+  }
 
   @keyframes jump {
-    0%, 20%, 50%, 80%, 100% {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
       transform: translateY(0);
     }
     40% {
@@ -1750,17 +1765,24 @@ body {
 
   /* Define a keyframe animation */
   @keyframes shake {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateX(0) rotate(0deg);
     }
-    10%, 30%, 50%, 70%, 90% {
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
       transform: rotate(-5deg);
     }
-    20%, 40%, 60%, 80% {
+    20%,
+    40%,
+    60%,
+    80% {
       transform: rotate(5deg);
     }
   }
-  
 }
 body .jump-box {
     position: relative;
@@ -1783,9 +1805,9 @@ body {
     }
     100% {
       opacity: 1;
-      background-image: url('../../public/images/card.png'); }
+      background-image: url('../../public/images/card.png');
+    }
   }
-  
 }
 .hover\:relative:hover {
   position: relative;
@@ -1875,5 +1897,23 @@ body {
 
   .md\:rounded-none {
     border-radius: 0px;
+  }
+}
+@media (min-width: 1024px) {
+
+  .lg\:h-2\/5 {
+    height: 40%;
+  }
+
+  .lg\:h-4\/5 {
+    height: 80%;
+  }
+
+  .lg\:w-3\/12 {
+    width: 25%;
+  }
+
+  .lg\:flex-row {
+    flex-direction: row;
   }
 }

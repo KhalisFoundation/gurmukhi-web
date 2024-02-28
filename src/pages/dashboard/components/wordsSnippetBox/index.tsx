@@ -54,17 +54,15 @@ function WordsSnippetBox({
   });
 
   return (
-    <div className={`word-container ${commonStyle}`}>
-      <div className='content-overlay'>
-        <div className='flex justify-center items-center h-full w-full'>
-          <div>
+    <div className={`word-container ${commonStyle} p-4`}>
+      <div className='flex justify-center items-center h-full w-full'>
+        <div className='word-brick-container'>{wordBrick}</div>
+        <div className='content-overlay flex'>
+          <div className=' m-auto'>
             <p className='font-serif text-sm text-sky-700 mb-4'>{text('WORDS_YOU_LEARNT')}</p>
-            <Counter n={wordsLearnt?.length ?? 0} className={'text-6xl text-sky-800'}/>
+            <Counter n={wordsLearnt?.length ?? 0} className={'text-6xl text-sky-800'} />
           </div>
         </div>
-      </div>
-      <div className='word-brick-container'>
-        {wordBrick}
       </div>
     </div>
   );

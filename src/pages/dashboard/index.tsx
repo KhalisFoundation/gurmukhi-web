@@ -14,15 +14,15 @@ import Loading from 'components/loading';
 
 export default function Dashboard() {
   const commonStyle =
-    'w-3/12 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
+    'w-5/6 lg:w-3/12 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   const { title, description } = metaTags.DASHBOARD;
   const { user } = useUserAuth();
-  const [ userData, setUserData ] = useState<any>(user);
-  const [ isLoading, toggleLoading ] = useState<boolean>(true);
+  const [userData, setUserData] = useState<any>(user);
+  const [isLoading, toggleLoading] = useState<boolean>(true);
   useGamePlay(user, toggleLoading);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
-  
+
   useEffect(() => {
     if (!user) {
       toggleLoading(true);
@@ -36,18 +36,19 @@ export default function Dashboard() {
   return (
     <div className='h-full flex flex-col justify-between'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
-        { isLoading ? 
-          <Loading /> :
+      <div className='flex flex-col text-center recoleta items-center justify-center gap-10 h-full lg:h-4/5 my-10'>
+        {isLoading ? (
+          <Loading />
+        ) : (
           <>
             <Ssa name={user.displayName && userData.displayName} />
-            <div className='flex flex-row text-center justify-center gap-6 h-2/5'>
+            <div className='flex flex-col lg:flex-row text-center justify-center gap-6 h-full lg:h-2/5 w-full items-center'>
               <WordsSnippetBox commonStyle={commonStyle} />
               <CoinBox commonStyle={commonStyle} />
               <WordBox commonStyle={commonStyle} />
             </div>
           </>
-        }
+        )}
       </div>
       <LevelsFooter
         operation={ALL_CONSTANT.START_QUESTION}

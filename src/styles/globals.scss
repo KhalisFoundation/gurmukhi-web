@@ -17,7 +17,9 @@
   src: url('../../public/fonts/Brandon_Grotesque_regular.otf');
 }
 
-html,body,#root{
+html,
+body,
+#root {
   height: 100%;
 }
 
@@ -30,18 +32,21 @@ html,body,#root{
 * {
   font-family: 'Recoleta';
 }
+.back-bg {
+  background: rgb(230, 242, 252);
+  background: linear-gradient(90deg, rgba(230, 242, 252, 1) 0%, rgba(159, 203, 227, 1) 0%);
+}
+.back-bg-image {
+  background-image: url('../../public/images/background.png');
+}
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
     rgb(var(--background-start-rgb));
 
   .background-layer::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -55,25 +60,24 @@ body {
   .word-container {
     position: relative;
   }
-  
+
   .content-overlay {
     position: absolute;
     z-index: 2;
     width: 100%;
     height: 100%;
   }
-  
+
   .word-brick-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     grid-gap: 0.5rem;
     align-content: end;
-    position: absolute;
     z-index: 1;
     width: 100%;
     height: 100%;
   }
-  
+
   .word-fall-animation {
     position: relative;
     width: 100%;
@@ -95,17 +99,17 @@ body {
     }
   }
 
-  .nanakback{
+  .nanakback {
     background-image: url('../../public/images/coinback.png');
   }
 
-  .cardImage{
+  .cardImage {
     background-image: url('../../public/images/card.png');
   }
 
-  .winbadge{
+  .winbadge {
     background-image: url('../../public/images/winShape.png');
-    height:25vh;
+    height: 25vh;
   }
 
   .brandon-grotesque {
@@ -123,7 +127,7 @@ body {
   }
 
   .card-bg::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -156,31 +160,31 @@ body {
 
   .dark-blue {
     * {
-      color: #1F4860;
+      color: #1f4860;
     }
   }
 
   .dull-blue {
     * {
-      color: #255C7A;
+      color: #255c7a;
     }
   }
 
   .mustard {
-    color: #FBBC05;
+    color: #fbbc05;
   }
 
   .grey {
-    color: #999999
+    color: #999999;
   }
 
   .black {
     color: #333333;
   }
-  
+
   .logo-bg {
-    background-color: #1F4860;
-    border: 2px solid #FFF;
+    background-color: #1f4860;
+    border: 2px solid #fff;
     min-height: 3rem;
     min-width: 3rem;
     margin-right: 0.5rem;
@@ -189,7 +193,7 @@ body {
   .fs-125 {
     font-size: 1.125rem;
   }
-  
+
   .fs-rem-2 {
     font-size: 2rem;
   }
@@ -198,10 +202,10 @@ body {
     .title {
       font-size: 1.5rem;
       font-family: 'Recoleta' !important;
-      color: #1F4860;
+      color: #1f4860;
     }
   }
-  
+
   #sortbox:checked ~ #sortboxmenu {
     opacity: 1;
   }
@@ -214,15 +218,24 @@ body {
     width: 15px;
     display: inline-block;
     aspect-ratio: 4;
-    background: radial-gradient(circle closest-side,#1F4860 90%,#0000) 0/calc(100%/3) 100% space;
+    background: radial-gradient(circle closest-side, #1f4860 90%, #0000) 0 / calc(100% / 3) 100%
+      space;
     clip-path: inset(0 100% 0 0);
     animation: loading 1s steps(4) infinite;
   }
 
-  @keyframes loading {to{clip-path: inset(0 -34% 0 0)}}
+  @keyframes loading {
+    to {
+      clip-path: inset(0 -34% 0 0);
+    }
+  }
 
   @keyframes jump {
-    0%, 20%, 50%, 80%, 100% {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
       transform: translateY(0);
     }
     40% {
@@ -235,18 +248,25 @@ body {
 
   /* Define a keyframe animation */
   @keyframes shake {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateX(0) rotate(0deg);
     }
-    10%, 30%, 50%, 70%, 90% {
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
       transform: rotate(-5deg);
     }
-    20%, 40%, 60%, 80% {
+    20%,
+    40%,
+    60%,
+    80% {
       transform: rotate(5deg);
     }
   }
 
-  
   .jump-box {
     position: relative;
     animation: shake 2s infinite ease-in-out;
@@ -259,7 +279,7 @@ body {
         filter: drop-shadow(0 4px 15px #fbbd05);
       }
     }
-    
+
     &-current {
       &:hover {
         cursor: pointer;
@@ -275,7 +295,7 @@ body {
     }
     100% {
       opacity: 1;
-      background-image: url('../../public/images/card.png'); }
+      background-image: url('../../public/images/card.png');
+    }
   }
-  
 }
