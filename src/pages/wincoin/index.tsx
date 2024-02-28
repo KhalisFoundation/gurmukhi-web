@@ -59,7 +59,7 @@ function WinCoin() {
     <div className='nanakback h-full bg-cover w-full'>
       <Meta title={title} description={description} />
       <div className='flex flex-col text-center justify-evenly h-4/5 recoleta'>
-        <div className=' mx-auto bg-cyan-50 w-1/4 rounded-xl'>
+        <div className=' mx-auto bg-cyan-50 xl:w-1/4 w-2/4 rounded-xl'>
           <img
             className='mx-auto my-2 w-1/2 mt-10'
             src='/images/nanakcoinlg.png'

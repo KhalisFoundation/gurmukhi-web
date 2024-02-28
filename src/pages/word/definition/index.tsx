@@ -54,7 +54,7 @@ export default function Defintion() {
   return (
     <div className='flex flex-col justify-end h-full w-full'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col h-3/4 justify-between items-center gap-5'>
+      <div className='flex flex-col h-3/4 justify-center items-center gap-5 w-5/6 m-auto'>
         <img
           className='w-3/5 h-6'
           src='/icons/pointy_border.svg'
@@ -62,7 +62,7 @@ export default function Defintion() {
           width={200}
           height={200}
         />
-        <div className='flex flex-row items-center justify-between gap-5'>
+        <div className='flex flex-col lg:flex-row items-center justify-between gap-5'>
           <img
             alt='word-image'
             height={296}
@@ -74,32 +74,26 @@ export default function Defintion() {
             }
             className='object-cover rounded-xl'
           />
-          <div className='flex flex-col h-[296px] items-left justify-evenly '>
+          <div className='flex flex-col lg:h-[296px] items-left justify-center lg:justify-evenly '>
             <div className='flex flex-row items-center justify-between gap-5'>
               <div className='flex flex-col'>
-                <h1 className={'text-5xl gurmukhi text-black'}>
-                  {currentWord.word}
-                </h1>
+                <h1 className={'text-5xl gurmukhi text-black'}>{currentWord.word}</h1>
                 <h2 className='text-2xl brandon-grotesque italic text-gray-4e4'>
                   {currentWord.translation}
                 </h2>
               </div>
-              {
-                currentWord.word && (
-                  <TextToSpeechBtn
-                    backgroundColor='bg-white-150'
-                    text={currentWord.word}
-                    type={ALL_CONSTANT.WORD}
-                    id={currentWord.id}
-                    audioURL={currentWord.audioURL}
-                  />
-                )
-              }
+              {currentWord.word && (
+                <TextToSpeechBtn
+                  backgroundColor='bg-white-150'
+                  text={currentWord.word}
+                  type={ALL_CONSTANT.WORD}
+                  id={currentWord.id}
+                  audioURL={currentWord.audioURL}
+                />
+              )}
             </div>
             <div className='flex flex-col text-lg'>
-              <span className={'text-black-111'}>
-                {currentWord.meaning_english}
-              </span>
+              <span className={'text-black-111'}>{currentWord.meaning_english}</span>
               <span className={'text-black'}>{currentWord.meaning_punjabi}</span>
             </div>
           </div>

@@ -78,7 +78,7 @@ export default function Information() {
   return (
     <div className='flex flex-col items-center w-full h-full justify-between gap-5'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col h-3/4 justify-between items-center'>
+      <div className='flex flex-col h-3/4 justify-between items-center '>
         <img
           className='w-3/5 h-6'
           src='/icons/pointy_border.svg'
@@ -86,8 +86,8 @@ export default function Information() {
           width={200}
           height={200}
         />
-        <div className='flex flex-row items-center justify-between h-full gap-10 w-full'>
-          <div className='flex flex-col items-left justify-evenly w-1/2 h-full'>
+        <div className='flex flex-col xl:flex-row items-center justify-between h-full gap-10 w-full py-10 overflow-y-auto'>
+          <div className='flex flex-col items-left justify-evenly xl:w-1/2 w-3/4 h-full'>
             <div>
               <div className='flex flex-row items-center justify-between w-4/5'>
                 <div className='flex flex-col gap-5'>
@@ -123,8 +123,10 @@ export default function Information() {
             />
           </div>
           <div className='flex flex-col items-left justify-evenly w-3/4 h-full gap-5'>
-            <div className='flex flex-col items-left text-left justify-between gap-6'>
-              <span className='tracking-widest'>{text('EXAMPLES').toUpperCase()}</span>
+            <div className='flex flex-col items-left text-justify justify-between gap-6'>
+              <span className='tracking-widest text-center xl:text-left'>
+                {text('EXAMPLES').toUpperCase()}
+              </span>
               {currentWord?.sentences &&
                 currentWord.sentences.map((sentence: SentenceType, index: number) => {
                   const highlightedSentence = highlightWord(
