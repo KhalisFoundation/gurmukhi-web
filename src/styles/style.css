@@ -1998,3 +1998,21 @@ body {
     line-height: 1;
   }
 }
+@media (min-width: 1024px) {
+
+  .lg\:h-2\/5 {
+    height: 40%;
+  }
+
+  .lg\:h-4\/5 {
+    height: 80%;
+  }
+
+  .lg\:w-3\/12 {
+    width: 25%;
+  }
+
+  .lg\:flex-row {
+    flex-direction: row;
+  }
+}
