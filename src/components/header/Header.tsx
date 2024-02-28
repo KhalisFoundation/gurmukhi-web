@@ -28,7 +28,7 @@ export default function Header({ ...props }: PropTypes) {
   }, [user]);
 
   return (
-    <header className='flex bg-gradient-to-r sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10'>
+    <header className='flex sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10 header-bg back-bg-image'>
       <a href={ROUTES.DASHBOARD}>
         <main className='flex items-center justify-between'>
           <Shabadavali />
@@ -53,7 +53,7 @@ export default function Header({ ...props }: PropTypes) {
             </li>
             <li>
               <div className='group inline-block'>
-                <button className='outline-none focus:outline-none px-3 py-1 flex items-center min-w-32'>
+                <button className='outline-none focus:outline-none px-3 py-1 flex items-center lg:min-w-32'>
                   <div
                     className={
                       'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'

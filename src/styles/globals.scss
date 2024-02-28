@@ -32,9 +32,12 @@ body,
 * {
   font-family: 'Recoleta';
 }
+.header-bg{
+  background:rgb(244 250 255 / 81%);
+}
 .back-bg {
-  background: rgb(230, 242, 252);
-  background: linear-gradient(90deg, rgba(230, 242, 252, 1) 0%, rgba(159, 203, 227, 1) 0%);
+  background: rgb(184 214 234);
+  // background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(200, 224, 240, 1) 99%);
 }
 .back-bg-image {
   background-image: url('../../public/images/background.png');
