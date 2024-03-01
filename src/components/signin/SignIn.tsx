@@ -142,7 +142,7 @@ export default function SignIn() {
               <h3 className='grey text-lg'>{text('ENTER_DETAILS')}</h3>
             </div>
 
-            <div className='w-3/4 m-auto rounded-full h-12 flex p-5 relative items-center justify-between gap-4 bg-gray-eee'>
+            <div className='w-3/4 m-auto rounded-full h-12 flex p-5 relative items-center justify-between sm:gap-4 gap-1 bg-gray-eee'>
               <div className='w-full flex justify-center grey'>
                 <button className='signin' onClick={(e) => signToggle(e)}>
                   {text('SIGN_IN')}
