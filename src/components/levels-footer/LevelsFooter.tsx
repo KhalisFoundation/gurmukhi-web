@@ -33,7 +33,7 @@ export default function LevelsFooter({
   const numQuestionsLeft = totalNumQuestions - currentLevel;
   const { user } = useUserAuth();
   const footerClass =
-    'flex flex-col-reverse lg:flex-row w-full inset-x-0 bottom-0 bg-white/[.1] items-center justify-between z-10 box-border h-auto back-bg py-4 back-bg-image';
+    'flex flex-col-reverse lg:flex-row w-full inset-x-0 bottom-0 bg-white/[.1] items-center justify-between z-10 box-border h-auto py-4 ';
 
   useEffect(() => {
     const callWorker = async () => {

@@ -28,7 +28,7 @@ export default function Header({ ...props }: PropTypes) {
   }, [user]);
 
   return (
-    <header className='flex sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10 header-bg back-bg-image'>
+    <header className='flex sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10'>
       <a href={ROUTES.DASHBOARD}>
         <main className='flex items-center justify-between'>
           <Shabadavali />
