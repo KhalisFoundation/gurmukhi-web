@@ -142,7 +142,7 @@ export default function SignIn() {
               <h3 className='grey text-lg'>{text('ENTER_DETAILS')}</h3>
             </div>
 
-            <div className='w-3/4 m-auto rounded-full h-12 flex p-5 relative items-center justify-between sm:gap-4 gap-1 bg-gray-eee'>
+            <div className='w-3/4 m-auto rounded-full h-12 flex p-5 relative items-center justify-between gap-4 bg-gray-eee'>
               <div className='w-full flex justify-center grey'>
                 <button className='signin' onClick={(e) => signToggle(e)}>
                   {text('SIGN_IN')}
@@ -206,7 +206,7 @@ export default function SignIn() {
                 <span className='w-1/4 h-[1px] bg-stone-950/[.2] ml-1'></span>
               </div>
               <button
-                className='w-full flex p-4 rounded-lg bg-transparent hover:bg-slate-100 text-black text-lg items-center justify-center gap-4 border border-gray-300'
+                className='w-full flex p-4 rounded-lg bg-transparent hover:bg-slate-100 text-black text-lg items-center justify-center sm:gap-4 gap-1 border border-gray-300'
                 onClick={(e) => handleGoogleSignIn(e)}
               >
                 <img className='w-6 h-6' src='/icons/google.svg' alt='google' />
