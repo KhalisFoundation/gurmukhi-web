@@ -42,7 +42,7 @@ export default function Dashboard() {
         ) : (
           <>
             <Ssa name={user.displayName && userData.displayName} />
-            <div className='flex flex-col lg:flex-row text-center justify-center gap-6 h-full md:h-screen lg:h-3/5 w-full items-center'>
+            <div className='flex flex-col lg:flex-row text-center justify-center gap-6 h-full h-screen lg:h-3/5 w-full items-center'>
               <WordsSnippetBox commonStyle={commonStyle} />
               <CoinBox commonStyle={commonStyle} />
               <WordBox commonStyle={commonStyle} />
