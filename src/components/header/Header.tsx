@@ -44,7 +44,7 @@ export default function Header({ ...props }: PropTypes) {
             <li>
               <div
                 className={
-                  'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
+                  'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 sm:p-1'
                 }
               >
                 <span className='text-[1.125rem] pl-2'>{nanakCoin}</span>
@@ -53,7 +53,7 @@ export default function Header({ ...props }: PropTypes) {
             </li>
             <li>
               <div className='group inline-block'>
-                <button className='outline-none focus:outline-none px-3 py-1 flex items-center lg:min-w-32'>
+                <button className='outline-none focus:outline-none px-1 sm:px-3 py-1 flex items-center lg:min-w-32'>
                   <div
                     className={
                       'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
