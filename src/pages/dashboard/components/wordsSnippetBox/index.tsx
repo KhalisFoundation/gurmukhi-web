@@ -54,7 +54,7 @@ function WordsSnippetBox({
   });
 
   return (
-    <div className={`word-container ${commonStyle} p-4`}>
+    <div className={`word-container ${commonStyle} p-4 overflow-hidden`}>
       <div className='flex justify-center items-center h-full w-full'>
         <div className='word-brick-container'>{wordBrick}</div>
         <div className='content-overlay flex'>

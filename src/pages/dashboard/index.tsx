@@ -34,7 +34,7 @@ export default function Dashboard() {
   }, [user]);
 
   return (
-    <div className='h-full flex flex-col justify-between'>
+    <div className='h-screen overflow-y-auto lg:h-full lg:overflow-hidden flex flex-col justify-between'>
       <Meta title={title} description={description} />
       <div className='flex flex-col text-center recoleta items-center justify-center gap-10 lg:h-4/5 my-10'>
         {isLoading ? (
@@ -42,7 +42,7 @@ export default function Dashboard() {
         ) : (
           <>
             <Ssa name={user.displayName && userData.displayName} />
-            <div className='flex flex-col lg:flex-row text-center justify-center gap-6 h-full lg:h-2/5 w-full items-center'>
+            <div className='flex flex-col lg:flex-row text-center justify-center gap-6 h-full md:h-screen lg:h-3/5 w-full items-center'>
               <WordsSnippetBox commonStyle={commonStyle} />
               <CoinBox commonStyle={commonStyle} />
               <WordBox commonStyle={commonStyle} />
