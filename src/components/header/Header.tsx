@@ -32,13 +32,13 @@ export default function Header({ ...props }: PropTypes) {
       <a href={ROUTES.DASHBOARD}>
         <main className='flex items-center justify-between'>
           <Shabadavali />
-          <h1 className='title'>{text('APP_TITLE')}</h1>
+          <h1 className='title text-xl md:text-2xl'>{text('APP_TITLE')}</h1>
         </main>
       </a>
       <nav>
         {loggedIn ? (
-          <ul className='flex items-center justify-between gap-4 brandon-grotesque dull-blue'>
-            <li>
+          <ul className='flex items-center justify-between md:gap-4 brandon-grotesque dull-blue'>
+            <li className='hidden md:block'>
               <a href={ROUTES.DASHBOARD}>{text('DASHBOARD')}</a>
             </li>
             <li>

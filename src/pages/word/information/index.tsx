@@ -148,7 +148,7 @@ export default function Information() {
             </div>
             <div className='flex items-center justify-around gap-5 w-full h-1/2'>
               <div
-                className={`w-2/5 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                className={`lg:w-2/5 w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
                   currentWord?.synonyms && currentWord.synonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
@@ -163,7 +163,7 @@ export default function Information() {
                           <div
                             key={word.id}
                             className={
-                              'flex h-min w-max p-4 text-black text-sm rounded-lg z-10 bg-white'
+                              'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
                             }
                           >
                             {word.word} ({convertToTitleCase(word.translation ?? '')})
@@ -174,7 +174,7 @@ export default function Information() {
                 </div>
               </div>
               <div
-                className={`w-2/5 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                className={`lg:w-2/5 w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
                   currentWord?.antonyms && currentWord.antonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
@@ -189,7 +189,7 @@ export default function Information() {
                           <div
                             key={word.id}
                             className={
-                              'flex h-min w-max p-4 text-black text-sm rounded-lg z-10 bg-white'
+                              'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
                             }
                           >
                             {word.word} ({convertToTitleCase(word.translation ?? '')})

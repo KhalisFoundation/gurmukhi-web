@@ -36,7 +36,7 @@ export default function Dashboard() {
   return (
     <div className='h-full flex flex-col justify-between'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col text-center recoleta items-center justify-center gap-10 h-full lg:h-4/5 my-10'>
+      <div className='flex flex-col text-center recoleta items-center justify-center gap-10 lg:h-4/5 my-10'>
         {isLoading ? (
           <Loading />
         ) : (
