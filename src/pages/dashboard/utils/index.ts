@@ -62,19 +62,21 @@ export const gameAlgo = async (user: User) => {
   let newQuestionCount = 2;
   let learntCount = 2;
 
-  const learningQuestions = await getRandomQuestions(user, learningCount, false);
+  const learningQuestions = await getRandomQuestions(user, learningCount, false, []);
   if (learningQuestions.length < learningCount) {
     newQuestionCount += learningCount - learningQuestions.length;
     learningCount = learningQuestions.length;
   }
+  console.log('learningQuestions', learningQuestions);
 
   const { game: newQuestions, learningWords } = await getNewQuestions(newQuestionCount, user.uid);
   if (newQuestions.length < newQuestionCount) {
     learntCount += newQuestionCount - newQuestions.length;
     newQuestionCount = newQuestions.length;
   }
-
-  const learntQuestions = await getRandomQuestions(user, learntCount, true);
+  console.log('newQuestions', newQuestions);
+  const questionIdsFromLearningWords = learningQuestions.map((question) => question.key.split('-')[2]);
+  const learntQuestions = await getRandomQuestions(user, learntCount, true, questionIdsFromLearningWords);
   let gameArray: GameScreen[] = [];
   if (learntCount === 0 && learningCount === 0) {
     gameArray = newQuestions as GameScreen[];
@@ -83,8 +85,10 @@ export const gameAlgo = async (user: User) => {
     gameArray = shuffleArray(combinedArrays);
     gameArray = [...gameArray, ...newQuestions];
   }
+  console.log('learntQuestions', learntQuestions);
 
   if (learningWords.length > 0) {
+    console.log('learningWords', learningWords);
     await addWordsBatch(user.uid, learningWords);
   }
   return { gameArray };

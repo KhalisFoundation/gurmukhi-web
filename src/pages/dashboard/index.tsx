@@ -19,7 +19,7 @@ export default function Dashboard() {
   const { user } = useUserAuth();
   const [ userData, setUserData ] = useState<any>(user);
   const [ isLoading, toggleLoading ] = useState<boolean>(true);
-  useGamePlay(user, toggleLoading);
+  useGamePlay(user, toggleLoading); // resetGame = true, resets the game on refresh or page change or after random word is viewed
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
   

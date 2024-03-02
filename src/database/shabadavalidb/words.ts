@@ -86,7 +86,7 @@ export const addWordsBatch = async (
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
       wordData.lastReviewed = Timestamp.fromDate(new Date());
-      const docRef = doc(wordsCollectionRef);
+      const docRef = doc(wordsCollectionRef, wordData.word_id);
       batch.set(docRef, wordData);
     }
   }

@@ -15,17 +15,16 @@ const getOptions = async (wordIDs: string[]) => {
   return options as Option[];
 };
 
-const getQuestionsByWordID = async (wordID: string, count:number, uid: string, needOptions = false) => {
+const getQuestionsByWordID = async (wordID: string, count:number, uid: string, needOptions = false, notInArray: string[] = []) => {
   const randomID = generateRandomId();
   const existingQuestions = await getQuestionIdsFromWordInUser(uid, wordID);
-  const questCondition = existingQuestions.length > 0 ?
-    [where('id', 'not-in', existingQuestions)] :
-    [];
+  let existingQuestionIds = existingQuestions.concat(notInArray);
+  existingQuestionIds = existingQuestionIds.length === 0 ? ['unknown'] : existingQuestionIds;
   const queryRef = query(
     questionCollection,
     where('word_id', '==', wordID),
     where('id', '<=', randomID),
-    ...questCondition,
+    where('id', 'not-in', existingQuestionIds),
     limit(count),
   );
   let questionSnapshots = null;
@@ -36,7 +35,7 @@ const getQuestionsByWordID = async (wordID: string, count:number, uid: string, n
       questionCollection,
       where('word_id', '==', wordID),
       where('id', '>', randomID),
-      ...questCondition,
+      where('id', 'not-in', existingQuestionIds),
       limit(count),
     );
     questionSnapshots = await getDocs(queryRef2);

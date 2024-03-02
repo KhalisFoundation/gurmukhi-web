@@ -34,6 +34,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
     const fetchGamePlay = async () => {
       if (user.progress) {
         try {
+          toggleLoading(true);
           const { gameArray } = await gamePlay();
           if (gameArray) {
             await updateProgress(user.uid, 0, gameArray, 0, toggleLoading);
