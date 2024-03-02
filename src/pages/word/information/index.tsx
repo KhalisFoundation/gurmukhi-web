@@ -78,7 +78,7 @@ export default function Information() {
   return (
     <div className='flex flex-col items-center w-full h-full justify-between gap-5'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col h-3/4 justify-between items-center '>
+      <div className='flex flex-col h-3/4 justify-between items-center'>
         <img
           className='w-3/5 h-6'
           src='/icons/pointy_border.svg'
@@ -86,8 +86,8 @@ export default function Information() {
           width={200}
           height={200}
         />
-        <div className='flex flex-col xl:flex-row items-center justify-between h-full gap-10 w-full py-10 overflow-y-auto'>
-          <div className='flex flex-col items-left justify-evenly xl:w-1/2 w-3/4 h-full'>
+        <div className='flex flex-col items-center justify-between h-full gap-10 w-full py-10 overflow-y-auto xl:flex-row'>
+          <div className='flex flex-col items-left justify-evenly w-3/4 h-full xl:w-1/2'>
             <div>
               <div className='flex flex-row items-center justify-between w-4/5'>
                 <div className='flex flex-col gap-5'>
@@ -148,7 +148,7 @@ export default function Information() {
             </div>
             <div className='flex items-center justify-around gap-5 w-full h-1/2'>
               <div
-                className={`lg:w-2/5 w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                className={`w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5  ${
                   currentWord?.synonyms && currentWord.synonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
@@ -174,7 +174,7 @@ export default function Information() {
                 </div>
               </div>
               <div
-                className={`lg:w-2/5 w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                className={` w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5 ${
                   currentWord?.antonyms && currentWord.antonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
