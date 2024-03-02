@@ -15,7 +15,7 @@ export default function Gurfateh() {
         </div>
         <div className='relative'>
           <img
-            className='w-auto h-auto md:rounded-none rounded-full mx-auto absolute -bottom-1 sm:bottom-0 -left-10'
+            className='w-auto h-auto md:rounded-none rounded-full mx-auto absolute bottom-0 -left-10'
             src={'/images/singhFateh.png'}
             alt='Singh Fateh'
             width={100}
