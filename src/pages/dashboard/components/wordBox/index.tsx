@@ -13,7 +13,7 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
   useEffect(() => {
     const fetchData = async () => {
       // Asynchronous logic here
-      const newWord = await getRandomWord();
+      const newWord = await getRandomWord(['unknown']);
       if (newWord) {
         setRandomWord(newWord);
       }

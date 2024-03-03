@@ -734,9 +734,6 @@ video {
 .h-20 {
   height: 5rem;
 }
-.h-24 {
-  height: 6rem;
-}
 .h-3 {
   height: 0.75rem;
 }
@@ -748,9 +745,6 @@ video {
 }
 .h-5 {
   height: 1.25rem;
-}
-.h-5\/6 {
-  height: 83.333333%;
 }
 .h-6 {
   height: 1.5rem;
@@ -842,6 +836,9 @@ video {
 }
 .w-5 {
   width: 1.25rem;
+}
+.w-5\/6 {
+  width: 83.333333%;
 }
 .w-52 {
   width: 13rem;
@@ -1234,9 +1231,6 @@ video {
 .p-12 {
   padding: 3rem;
 }
-.p-14 {
-  padding: 3.5rem;
-}
 .p-2 {
   padding: 0.5rem;
 }
@@ -1561,7 +1555,9 @@ video {
   font-family: 'Brandon Grotesque';
   src: url('../../public/fonts/Brandon_Grotesque_regular.otf');
 }
-html,body,#root{
+html,
+body,
+#root {
   height: 100%;
 }
 :root {
@@ -1574,16 +1570,11 @@ html,body,#root{
 }
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
     rgb(var(--background-start-rgb));
-  
 }
 body .background-layer::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -1633,17 +1624,16 @@ body {
       opacity: 1;
     }
   }
-  
 }
-body .nanakback{
+body .nanakback {
     background-image: url('../../public/images/coinback.png');
   }
-body .cardImage{
+body .cardImage {
     background-image: url('../../public/images/card.png');
   }
-body .winbadge{
+body .winbadge {
     background-image: url('../../public/images/winShape.png');
-    height:25vh;
+    height: 25vh;
   }
 body .brandon-grotesque {
     font-family: 'Brandon Grotesque' !important;
@@ -1658,7 +1648,7 @@ body .gurmukhi * {
       font-family: 'Baloo Paaji 2' !important;
     }
 body .card-bg::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -1686,23 +1676,23 @@ body form input {
       font-family: 'Brandon Grotesque';
     }
 body .dark-blue * {
-      color: #1F4860;
+      color: #1f4860;
     }
 body .dull-blue * {
-      color: #255C7A;
+      color: #255c7a;
     }
 body .mustard {
-    color: #FBBC05;
+    color: #fbbc05;
   }
 body .grey {
-    color: #999999
+    color: #999999;
   }
 body .black {
     color: #333333;
   }
 body .logo-bg {
-    background-color: #1F4860;
-    border: 2px solid #FFF;
+    background-color: #1f4860;
+    border: 2px solid #fff;
     min-height: 3rem;
     min-width: 3rem;
     margin-right: 0.5rem;
@@ -1716,7 +1706,7 @@ body .fs-rem-2 {
 body header .title {
       font-size: 1.5rem;
       font-family: 'Recoleta' !important;
-      color: #1F4860;
+      color: #1f4860;
     }
 body #sortbox:checked ~ #sortboxmenu {
     opacity: 1;
@@ -1728,16 +1718,25 @@ body .loader {
     width: 15px;
     display: inline-block;
     aspect-ratio: 4;
-    background: radial-gradient(circle closest-side,#1F4860 90%,#0000) 0/calc(100%/3) 100% space;
+    background: radial-gradient(circle closest-side, #1f4860 90%, #0000) 0 / calc(100% / 3) 100%
+      space;
     clip-path: inset(0 100% 0 0);
     animation: loading 1s steps(4) infinite;
   }
 body {
 
-  @keyframes loading {to{clip-path: inset(0 -34% 0 0)}}
+  @keyframes loading {
+    to {
+      clip-path: inset(0 -34% 0 0);
+    }
+  }
 
   @keyframes jump {
-    0%, 20%, 50%, 80%, 100% {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
       transform: translateY(0);
     }
     40% {
@@ -1750,17 +1749,24 @@ body {
 
   /* Define a keyframe animation */
   @keyframes shake {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateX(0) rotate(0deg);
     }
-    10%, 30%, 50%, 70%, 90% {
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
       transform: rotate(-5deg);
     }
-    20%, 40%, 60%, 80% {
+    20%,
+    40%,
+    60%,
+    80% {
       transform: rotate(5deg);
     }
   }
-  
 }
 body .jump-box {
     position: relative;
@@ -1783,9 +1789,9 @@ body {
     }
     100% {
       opacity: 1;
-      background-image: url('../../public/images/card.png'); }
+      background-image: url('../../public/images/card.png');
+    }
   }
-  
 }
 .hover\:relative:hover {
   position: relative;
@@ -1863,17 +1869,47 @@ body {
   --tw-text-opacity: 1;
   color: rgb(249 249 249 / var(--tw-text-opacity));
 }
+@media (min-width: 640px) {
+
+  .sm\:gap-4 {
+    gap: 1rem;
+  }
+}
 @media (min-width: 768px) {
-
-  .md\:h-auto {
-    height: auto;
-  }
-
-  .md\:w-20 {
-    width: 5rem;
-  }
 
   .md\:rounded-none {
     border-radius: 0px;
+  }
+}
+@media (min-width: 1024px) {
+
+  .lg\:h-full {
+    height: 100%;
+  }
+
+  .lg\:w-2\/5 {
+    width: 40%;
+  }
+}
+@media (min-width: 1280px) {
+
+  .xl\:h-5\/6 {
+    height: 83.333333%;
+  }
+
+  .xl\:w-1\/3 {
+    width: 33.333333%;
+  }
+
+  .xl\:flex-row {
+    flex-direction: row;
+  }
+
+  .xl\:justify-start {
+    justify-content: flex-start;
+  }
+
+  .xl\:gap-0 {
+    gap: 0px;
   }
 }

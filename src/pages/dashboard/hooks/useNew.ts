@@ -23,7 +23,7 @@ const addWordIfNotExists = (word: WordType, learningWords: WordShabadavaliDB[], 
   }
 };
 
-const getNewQuestions = async (count: number, uid: string, local = false) => {
+const getNewQuestions = async (count: number, uid: string, notInArray: string[], local = false) => {
   const learningWords: WordShabadavaliDB[] = [];
   const game: GameScreen[] = [];
   if (local) {
@@ -42,7 +42,7 @@ const getNewQuestions = async (count: number, uid: string, local = false) => {
     return { game: seed0, learningWords };
   }
   for (let i = 0; i < count; ) {
-    const word = await getRandomWord();
+    const word = await getRandomWord(notInArray);
     if (word?.id) {
       const questions = await getQuestionsByWordID(word.id, 2, uid, true, []);
       const questionIds = questions.map((question) => question.id).filter((id) => id !== undefined) as string[];

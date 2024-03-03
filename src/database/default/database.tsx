@@ -51,30 +51,51 @@ const getRandomData = async (
   conditions: QueryFieldFilterConstraint[],
   key?: string | null,
   limitVal?: number,
+  random: boolean = true,
 ) => {
   const randomId = generateRandomId();
   const fieldPath = key ? key : documentId();
+  const allConditions = [
+    ...conditions,
+  ] as any[];
+  if (random) {
+    allConditions.push(where(fieldPath, '>=', randomId));
+  }
+
+  let querySnapshot = null;
   const queryRef = limitVal
     ? query(
       collectionRef,
-      where(fieldPath, '>=', randomId),
-      ...conditions,
+      ...allConditions,
       limit(limitVal),
     )
-    : query(collectionRef, where(fieldPath, '>=', randomId), ...conditions);
-  const querySnapshot = await getDocs(queryRef);
+    : query(collectionRef, ...allConditions);
+  querySnapshot = await getDocs(queryRef);
+  console.log('querySnapshot', querySnapshot);
 
-  if (!querySnapshot.empty) {
-    if (limitVal && limitVal > 1) {
-      return querySnapshot.docs.map((doc) => doc.data());
-    } else {
-      return {
-        ...querySnapshot.docs[0].data(),
-        id: querySnapshot.docs[0].id,
-      };
-    }
+  if (querySnapshot.empty) {
+    const altConditions = [
+      ...conditions,
+      where(fieldPath, '<', randomId),
+    ] as any;
+    if (limitVal) altConditions.push(limit(limitVal));
+    const queryRef2 = query(
+      collectionRef,
+      ...altConditions,
+    );
+    querySnapshot = await getDocs(queryRef2);
+    console.log('querySnapshot2: ', querySnapshot);
+  }
+
+  if (limitVal && limitVal > 1) {
+    console.log('querySnapshot.docs', querySnapshot.docs);
+    return querySnapshot.docs.map((doc) => doc.data());
   } else {
-    return null;
+    console.log('querySnapshot.docs[0].data()', querySnapshot.docs[0].data());
+    return {
+      ...querySnapshot.docs[0].data(),
+      id: querySnapshot.docs[0].id,
+    };
   }
 };
 
@@ -135,13 +156,17 @@ const getWordById = async (wordId: string, needExtras = false) => {
   }
 };
 
-const getRandomWord = async () => {
+const getRandomWord = async (notInArray: string[] = ['unknown']) => {
   try {
     const wordData = (await getRandomData(
       wordsCollection,
-      [where('status', '==', 'active')],
+      [
+        where('status', '==', 'active'),
+        where('id', 'not-in', notInArray),
+      ],
       null,
       1,
+      false,
     )) as WordType;
 
     if (wordData) {

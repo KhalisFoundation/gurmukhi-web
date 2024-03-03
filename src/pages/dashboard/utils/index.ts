@@ -50,7 +50,7 @@ export const shuffleArray = (array: GameScreen[]) => {
 
 export const gameAlgo = async (user: User) => {
   if (user && user?.coins === 0 && user?.progress.currentProgress === 0) {
-    const { game, learningWords } = await getNewQuestions(13, user.uid, true);
+    const { game, learningWords } = await getNewQuestions(13, user.uid, ['unknown'], true);
     const gameArray: GameScreen[] = game;
 
     if (learningWords.length > 0) {
@@ -67,9 +67,13 @@ export const gameAlgo = async (user: User) => {
     newQuestionCount += learningCount - learningQuestions.length;
     learningCount = learningQuestions.length;
   }
+  const learningQuestionsWordId = learningQuestions.map((question) => question.key.split('-')[1]);
+  const keysArray = learningQuestions.map((question) => question.key);
+  console.log('keysArray: ', keysArray);
+  console.log('used word ids: ', learningQuestionsWordId);
   console.log('learningQuestions', learningQuestions);
 
-  const { game: newQuestions, learningWords } = await getNewQuestions(newQuestionCount, user.uid);
+  const { game: newQuestions, learningWords } = await getNewQuestions(newQuestionCount, user.uid, learningQuestionsWordId);
   if (newQuestions.length < newQuestionCount) {
     learntCount += newQuestionCount - newQuestions.length;
     newQuestionCount = newQuestions.length;

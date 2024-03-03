@@ -19,19 +19,24 @@ export default function Dashboard() {
   const { user } = useUserAuth();
   const [ userData, setUserData ] = useState<any>(user);
   const [ isLoading, toggleLoading ] = useState<boolean>(true);
-  useGamePlay(user, toggleLoading); // resetGame = true, resets the game on refresh or page change or after random word is viewed
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
+  const localState = useAppSelector((state) => state);
+  useGamePlay(user, toggleLoading, user.uid && currentGamePosition === 0); // resetGame = true, resets the game on refresh or page change or after random word is viewed
   
   useEffect(() => {
-    if (!user) {
-      toggleLoading(true);
-      return;
-    } else {
+    toggleLoading(true);
+    if (user.uid) {
       toggleLoading(false);
       setUserData(user);
     }
   }, [user]);
+
+  useEffect(() => {
+    console.log('currentLevel: ', currentLevel);
+    console.log('currentGamePosition: ', currentGamePosition);
+    console.log('localState: ', localState);
+  }, [currentLevel, currentGamePosition, localState]);
 
   return (
     <div className='h-full flex flex-col justify-between'>

@@ -12,9 +12,7 @@ import { ROUTES } from 'constants/routes';
 import { useUserAuth } from 'auth';
 import {
   getUserData,
-  updateNanakCoin,
-  updateNextSession,
-  updateProgress,
+  updateUserDocument,
 } from 'database/shabadavalidb';
 import { resetGameArray } from 'store/features/gameArraySlice';
 import ALL_CONSTANT from 'constants/constant';
@@ -46,9 +44,15 @@ function WinCoin() {
         dispatch(increment());
         dispatch(resetLevel());
         dispatch(addScreens(nxtSession));
-        await updateNanakCoin(user.uid, nanakCoin + 1);
-        await updateProgress(user.uid, 0, nxtSession, 0);
-        await updateNextSession(user.uid, []);
+        await updateUserDocument(user.uid, {
+          coins: nanakCoin + 1,
+          progress: {
+            currentProgress: 0,
+            gameSession: nxtSession,
+            currentLevel: 0,
+          },
+          next_session: [],
+        });
       }
       toggleIsLoading(false);
     };
