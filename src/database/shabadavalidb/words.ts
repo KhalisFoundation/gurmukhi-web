@@ -10,11 +10,13 @@ import {
   updateDoc,
   Timestamp,
   documentId,
+  arrayUnion,
 } from 'firebase/firestore';
 import { shabadavaliDB } from '../../firebase';
 import { WordShabadavaliDB } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 import { generateRandomId } from 'database/util';
+import { usersCollection } from './users';
 
 const getWordCollectionRef = (uid: string) => {
   return collection(shabadavaliDB, ALL_CONSTANT.USERS, uid, ALL_CONSTANT.WORDS);
@@ -71,8 +73,10 @@ export const addWordsBatch = async (
   words: WordShabadavaliDB[],
 ) => {
   const wordsCollectionRef = getWordCollectionRef(uid);
+  const wordIds = [];
   const batch = writeBatch(shabadavaliDB);
   for (const wordData of words) {
+    wordIds.push(wordData.word_id);
     const q = query(
       wordsCollectionRef,
       where('word_id', '==', wordData.word_id),
@@ -84,6 +88,10 @@ export const addWordsBatch = async (
       batch.set(docRef, wordData);
     }
   }
+  const userDocRef = doc(usersCollection, uid);
+  batch.update(userDocRef, {
+    wordIds: arrayUnion(...wordIds),
+  });
   try {
     await batch.commit();
   } catch (error) {
