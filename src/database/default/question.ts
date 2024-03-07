@@ -13,9 +13,20 @@ const getOptions = async (wordIDs: string[]) => {
   const options = await Promise.all(optionsPromise);
   return options as Option[];
 };
-const getQuestionsByWordID = async (wordID: string, count:number, needOptions = false) => {
+const getQuestionsByWordID = async (
+  wordID: string,
+  count:number,
+  needOptions = false,
+  notInArray: string[] = ['unknown'],
+) => {
   const randomID = generateRandomId();
-  const queryRef = query(questionCollection, where('word_id', '==', wordID), where('id', '<=', randomID), limit(count));
+  const queryRef = query(
+    questionCollection,
+    where('word_id', '==', wordID),
+    where('id', '<=', randomID),
+    where('id', 'not-in', notInArray),
+    limit(count),
+  );
   let questionSnapshots = null;
   questionSnapshots = await getDocs(queryRef);
 

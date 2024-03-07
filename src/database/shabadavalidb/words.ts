@@ -40,7 +40,7 @@ export const getWordsFromUser = async (uid: string, count:number, isLearnt:boole
     const randomID = generateRandomId();
     const q = query(
       wordsCollectionRef,
-      where('isLearnt', '==', false),
+      where('isLearnt', '==', isLearnt),
       where(documentId(), '<=', randomID),
       limit(count),
     );
@@ -68,6 +68,26 @@ export const getWordsFromUser = async (uid: string, count:number, isLearnt:boole
     return [];
   }
 };
+
+export const addQuestionsBatch = async (
+  uid: string,
+  wordToQuestionIdsMap: Map<string, string[]>,
+) => {
+  const wordsCollectionRef = getWordCollectionRef(uid);
+  const batch = writeBatch(shabadavaliDB);
+  wordToQuestionIdsMap.forEach((questionIds, wordId) => {
+    const documentRef = doc(wordsCollectionRef, wordId);
+    batch.update(documentRef, {
+      questionIds: arrayUnion(...questionIds),
+    });
+  });
+  try {
+    await batch.commit();
+  } catch (error) {
+    console.error('Error committing the batch', error);
+  }
+};
+
 export const addWordsBatch = async (
   uid: string,
   words: WordShabadavaliDB[],

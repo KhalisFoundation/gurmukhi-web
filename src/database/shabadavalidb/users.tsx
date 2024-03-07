@@ -133,6 +133,7 @@ export const getUserData = async (uid: string) => {
     email: data.email,
     progress: data.progress,
     nextSession: data.next_session,
+    wordIds: data.wordIds,
   };
   return user;
 };

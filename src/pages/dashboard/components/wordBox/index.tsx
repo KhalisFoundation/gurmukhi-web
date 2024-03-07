@@ -4,16 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { getRandomWord } from 'database/default';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
+import { useUserAuth } from 'auth';
 
 function WordBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
+  const { user } = useUserAuth();
   const [randomWord, setRandomWord] = useState<WordType>();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       // Asynchronous logic here
-      const newWord = await getRandomWord();
+      const newWord = await getRandomWord(user.uid);
       if (newWord) {
         setRandomWord(newWord);
       }

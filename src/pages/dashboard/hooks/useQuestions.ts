@@ -1,5 +1,5 @@
 import { User, GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
-import { getWordsFromUser } from 'database/shabadavalidb';
+import { addQuestionsBatch, getWordsFromUser } from 'database/shabadavalidb';
 import { createGameScreen } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
 import { getQuestionsByWordID } from 'database/default';
@@ -12,28 +12,38 @@ const getRandomQuestions = async (user: User, count: number, isLearnt: boolean) 
   if (words.length === 0) {
     return [];
   }
-  const questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, true));
+  let questionsPromises;
+  if (isLearnt) {
+    questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, true));
+  } else {
+    questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, true, word.questionIds));
+  }
   const questionsResults: QuestionData[][] = await Promise.all(questionsPromises);
   const questions: QuestionData[] = questionsResults.flat();
   if (questions.length === 0) {
     return [];
   }
   const finalCount = Math.min(questions.length, count);
-
+  const wordToQuestionMap = new Map<string, string[]>();
   for (let i = 0; i < finalCount; i++) {
-    if (questions[i].type === 'image') {
-      const foundWord = words.find((wordObj) => wordObj.word_id === questions[i].word_id);
+    const question = questions[i];
+    const wordQuestions = wordToQuestionMap.get(question.word_id) || [];
+    wordQuestions.push(question.id ?? '');
+    wordToQuestionMap.set(question.word_id, wordQuestions);
+    if (question.type === 'image') {
+      const foundWord = words.find((wordObj) => wordObj.word_id === question.word_id);
       if (foundWord) {
-        questions[i].image = foundWord.image;
+        question.image = foundWord.image;
       }
     }
     gameArray.push(
       createGameScreen(
-        `${ALL_CONSTANT.QUESTIONS_SMALL}-${questions[i].word_id}-${questions[i].id}`,
-        questions[i],
+        `${ALL_CONSTANT.QUESTIONS_SMALL}-${question.word_id}-${question.id}`,
+        question,
       ),
     );
   }
+  await addQuestionsBatch(user.uid, wordToQuestionMap);
   return gameArray;
 };
 

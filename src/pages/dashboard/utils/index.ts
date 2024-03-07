@@ -67,7 +67,7 @@ export const gameAlgo = async (user: User) => {
     learningCount = learningQuestions.length;
   }
 
-  const { game: newQuestions, learningWords } = await getNewQuestions(newQuestionCount);
+  const { game: newQuestions, learningWords } = await getNewQuestions(newQuestionCount, false, user.uid);
   if (newQuestions.length < learntCount) {
     learntCount += newQuestionCount - newQuestions.length;
     newQuestionCount = newQuestions.length;
