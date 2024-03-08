@@ -107,7 +107,7 @@ export default function MultipleChoiceQuestion({
   return (
     <div className='flex flex-col items-left justify-evenly text-center'>
       <div className='flex flex-row items-center justify-between gap-5 rounded-lg p-4'>
-        <h1 className='gurmukhi text-black font-semibold leading-snug xl:text-5xl text-4xl'>
+        <h1 className='gurmukhi text-black font-semibold leading-snug xl:text-5xl text-3xl'>
           {highlightWord(questionData.question, questionData.word)}
         </h1>
         <TextToSpeechBtn
@@ -118,15 +118,17 @@ export default function MultipleChoiceQuestion({
         />
       </div>
       {hasImage && (
-        <img
-          alt='word-image'
-          src={
-            questionData?.image
-              ? questionData?.image
-              : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
-          }
-          className='h-60 object-cover rounded-xl'
-        />
+        <div className='w-full h-1/2'>
+          <img
+            alt='word-image'
+            src={
+              questionData?.image
+                ? questionData?.image
+                : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
+            }
+            className='w-full h-full object-cover rounded-xl'
+          />
+        </div>
       )}
       <div className={optionsClass}>{renderOptionButtons()}</div>
     </div>

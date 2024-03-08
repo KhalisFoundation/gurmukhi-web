@@ -89,7 +89,7 @@ export default function Question() {
     <div className='flex flex-col h-full w-full'>
       <Meta title={title} description={description} />
       <div className='flex-1 flex-col'>
-        <div className='flex flex-col items-center h-full justify-between w-5/6 m-auto'>
+        <div className='flex flex-col items-center h-full justify-between w-5/6 lg:w-1/2 m-auto'>
           <img
             className='w-1/3 h-6'
             src='/icons/pointy_border.svg'
