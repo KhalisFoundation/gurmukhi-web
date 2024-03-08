@@ -10,11 +10,13 @@ import {
   updateDoc,
   Timestamp,
   documentId,
+  arrayUnion,
 } from 'firebase/firestore';
 import { shabadavaliDB } from '../../firebase';
 import { WordShabadavaliDB } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 import { generateRandomId } from 'database/util';
+import { usersCollection } from './users';
 
 const getWordCollectionRef = (uid: string) => {
   return collection(shabadavaliDB, ALL_CONSTANT.USERS, uid, ALL_CONSTANT.WORDS);
@@ -38,7 +40,7 @@ export const getWordsFromUser = async (uid: string, count:number, isLearnt:boole
     const randomID = generateRandomId();
     const q = query(
       wordsCollectionRef,
-      where('isLearnt', '==', false),
+      where('isLearnt', '==', isLearnt),
       where(documentId(), '<=', randomID),
       limit(count),
     );
@@ -66,13 +68,35 @@ export const getWordsFromUser = async (uid: string, count:number, isLearnt:boole
     return [];
   }
 };
+
+export const addQuestionsBatch = async (
+  uid: string,
+  wordToQuestionIdsMap: Map<string, string[]>,
+) => {
+  const wordsCollectionRef = getWordCollectionRef(uid);
+  const batch = writeBatch(shabadavaliDB);
+  wordToQuestionIdsMap.forEach((questionIds, wordId) => {
+    const documentRef = doc(wordsCollectionRef, wordId);
+    batch.update(documentRef, {
+      questionIds: arrayUnion(...questionIds),
+    });
+  });
+  try {
+    await batch.commit();
+  } catch (error) {
+    console.error('Error committing the batch', error);
+  }
+};
+
 export const addWordsBatch = async (
   uid: string,
   words: WordShabadavaliDB[],
 ) => {
   const wordsCollectionRef = getWordCollectionRef(uid);
+  const wordIds = [];
   const batch = writeBatch(shabadavaliDB);
   for (const wordData of words) {
+    wordIds.push(wordData.word_id);
     const q = query(
       wordsCollectionRef,
       where('word_id', '==', wordData.word_id),
@@ -84,6 +108,10 @@ export const addWordsBatch = async (
       batch.set(docRef, wordData);
     }
   }
+  const userDocRef = doc(usersCollection, uid);
+  batch.update(userDocRef, {
+    wordIds: arrayUnion(...wordIds),
+  });
   try {
     await batch.commit();
   } catch (error) {

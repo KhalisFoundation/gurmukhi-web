@@ -31,6 +31,7 @@ const StartQuestionBtn = ({
   }`;
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const gameArray = useAppSelector((state) => state.gameArray);
+  const coins = useAppSelector((state) => state.nanakCoin);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useUserAuth();
@@ -46,6 +47,7 @@ const StartQuestionBtn = ({
           navigate,
           user,
           dispatch,
+          coins,
         )
       }
       className={linkClass}
