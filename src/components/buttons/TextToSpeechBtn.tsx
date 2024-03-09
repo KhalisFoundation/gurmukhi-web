@@ -15,6 +15,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string>(audioURL || '');
+  const [slow, setSlow] = useState<boolean>(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const ttsClassname = backgroundColor ? `${backgroundColor} rounded-full p-4` : 'rounded-full p-4';
@@ -72,6 +73,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
       setIsLoading(false);
       if (justSetAudioUrl || !isPlaying) {
         audioRef.current?.play();
+        setSlow(!slow);
       }
     }
   };
@@ -83,13 +85,22 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
     }
   }, [audioRef.current]);
 
+  useEffect(() => {
+    if (audioRef.current) {
+      const newSpeed = slow ? 0.65 : 1;
+      audioRef.current.playbackRate = newSpeed;
+    }
+  }, [slow]);
+
   return (
     <button className={ttsClassname} onClick={onBtnClick} disabled={isLoading}>
       {isLoading ? (
         <Loading size={'5'} />
       ) : (
         <>
-          <img src={'/icons/speaker.svg'} alt='Play' width={24} height={24} />
+          {
+            slow ? <img src={'/icons/fast.svg'} alt='Fast' width={27} height={27} /> : <img src={'/icons/slow.svg'} alt='Slow' width={27} height={27} />
+          }
           {audioUrl && <audio ref={audioRef} src={audioUrl} />}
         </>
       )}

@@ -17,6 +17,7 @@ export interface User {
     currentProgress: number;
   };
   nextSession?: GameScreen[];
+  wordIds: string[];
 }
 export interface WordShabadavaliDB {
   isLearnt: boolean;
@@ -27,4 +28,5 @@ export interface WordShabadavaliDB {
   image?:string;
   id?: string;
   lastReviewed?:Timestamp;
+  questionIds: string[];
 }

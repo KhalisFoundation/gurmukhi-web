@@ -24,11 +24,7 @@ export default function Dashboard() {
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
 
   useEffect(() => {
-    if (!user) {
-      toggleLoading(true);
-      return;
-    } else {
-      toggleLoading(false);
+    if (user) {
       setUserData(user);
     }
   }, [user]);

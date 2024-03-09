@@ -28,11 +28,17 @@ const handleClick = async (
   navigate: any,
   user: User,
   dispatch: any,
+  coins: number,
 ) => {
-  if (currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition]) {
-    if (gameArray.length === 0) {
-      return;
-    }
+  const condition = coins !== 0 ?
+    currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition] :
+    currentLevel < ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition];
+
+  if (gameArray.length === 0) {
+    console.error('Game Array is empty');
+    return;
+  }
+  if (condition) {
     let saveWordID = null;
     const sessionInfo = currentGamePosition !== undefined ? gameArray[currentGamePosition] : null;
     if (sessionInfo) {

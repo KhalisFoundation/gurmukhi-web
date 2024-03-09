@@ -3,7 +3,8 @@ import { wordsdb } from '../../firebase';
 import {
   CollectionReference,
   DocumentData,
-  QueryFieldFilterConstraint,
+  QueryCompositeFilterConstraint,
+  and,
   collection,
   documentId,
   getDocs,
@@ -12,6 +13,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { generateRandomId } from 'database/util';
+import { getUserData } from 'database/shabadavalidb';
 
 const wordsCollection = collection(wordsdb, 'words');
 const sentencesCollection = collection(wordsdb, 'sentences');
@@ -48,30 +50,30 @@ const getDataById = async (
 
 const getRandomData = async (
   collectionRef: CollectionReference<DocumentData, DocumentData>,
-  conditions: QueryFieldFilterConstraint[],
+  conditions: QueryCompositeFilterConstraint,
   key?: string | null,
   limitVal?: number,
 ) => {
   const randomId = generateRandomId();
   const fieldPath = key ? key : documentId();
-  const queryRef = limitVal
-    ? query(
+  const queryRef = limitVal ?
+    query(
       collectionRef,
-      where(fieldPath, '>=', randomId),
-      ...conditions,
+      and(
+        where(fieldPath, '>=', randomId),
+        conditions),
       limit(limitVal),
-    )
-    : query(collectionRef, where(fieldPath, '>=', randomId), ...conditions);
-  const querySnapshot = await getDocs(queryRef);
+    ) : query(collectionRef, and(where(fieldPath, '>=', randomId), conditions));
+  const querySnapshot = await getDocs(queryRef!);
 
   if (!querySnapshot.empty) {
     if (limitVal && limitVal > 1) {
       return querySnapshot.docs.map((doc) => doc.data());
     } else {
-      return {
+      return [{
         ...querySnapshot.docs[0].data(),
         id: querySnapshot.docs[0].id,
-      };
+      }];
     }
   } else {
     return null;
@@ -135,37 +137,64 @@ const getWordById = async (wordId: string, needExtras = false) => {
   }
 };
 
-const getRandomWord = async () => {
+const getRandomWord = async (uid: string) => {
   try {
-    const wordData = (await getRandomData(
-      wordsCollection,
-      [where('status', '==', 'active')],
-      null,
-      1,
-    )) as WordType;
+    const userData = await getUserData(uid);
+    const existingWordIds = userData?.wordIds || ['unknown'];
 
-    if (wordData) {
-      const wordId = wordData.id;
-      if (wordId) {
-        const sentences = await getDataById(
-          wordId,
-          sentencesCollection,
-          'word_id',
-          3,
-        );
-        const { synonyms, antonyms } = await getSemanticsByIds(
-          wordData.synonyms as string[],
-          wordData.antonyms as string[],
-        );
+    const batches = [];
+    for (let i = 0; i < existingWordIds.length; i += 10) {
+      const batchIds = existingWordIds.slice(i, i + 10);
+      const wordData = await getRandomData(
+        wordsCollection,
+        and(
+          where('status', '==', 'active'),
+          where(documentId(), 'not-in', batchIds),
+        ),
+        null,
+        10,
+      );
+      batches.push(wordData);
+    }
 
-        return {
-          ...wordData,
-          id: wordId,
-          sentences,
-          synonyms,
-          antonyms,
-        } as WordType;
+    const resolvedWords = await Promise.all(batches);
+    const wordDataArray = [] as WordType[];
+    let wordData = null;
+    resolvedWords.forEach((words) => {
+      if (words && words.length > 0) {
+        for (const word of words) {
+          if (!existingWordIds.includes(word.id)) {
+            wordDataArray.push(word as WordType);
+          }
+        }
       }
+    });
+    if (wordDataArray.length > 0) {
+      wordData = wordDataArray[0];
+    } else {
+      wordData = (resolvedWords[0] as WordType[])[0];
+    }
+
+    const wordId = wordData.id;
+    if (wordId) {
+      const sentences = await getDataById(
+        wordId,
+        sentencesCollection,
+        'word_id',
+        3,
+      );
+      const { synonyms, antonyms } = await getSemanticsByIds(
+        wordData.synonyms as string[],
+        wordData.antonyms as string[],
+      );
+
+      return {
+        ...wordData,
+        id: wordId,
+        sentences,
+        synonyms,
+        antonyms,
+      } as WordType;
     }
   } catch (error) {
     console.error('No such Document', error);
