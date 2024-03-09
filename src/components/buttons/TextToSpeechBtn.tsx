@@ -98,7 +98,9 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
         <Loading size={'5'} />
       ) : (
         <>
-          <img src={'/icons/speaker.svg'} alt='Play' width={24} height={24} />
+          {
+            slow ? <img src={'/icons/fast.svg'} alt='Fast' width={27} height={27} /> : <img src={'/icons/slow.svg'} alt='Slow' width={27} height={27} />
+          }
           {audioUrl && <audio ref={audioRef} src={audioUrl} />}
         </>
       )}
