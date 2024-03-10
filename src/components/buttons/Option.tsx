@@ -22,17 +22,15 @@ export default function OptionBtn({
   isCorrect,
   disabled,
 }: OptionProps) {
-  const optionClassname = `flex flex-row items-center justify-between gap-5 rounded-lg p-4 ps-6 ${
+  const optionClassname = `flex flex-row items-center justify-between gap-2 rounded-lg p-4 xl:ps-6 ${
     isCorrect
       ? 'bg-lightGreen shadow-sm shadow-green-500'
       : isCorrect === false
         ? 'bg-lightRed shadow-sm shadow-maroon'
-        : `bg-white-125 shadow-sm shadow-skyBlue ${
-          !disabled ? 'hover:bg-white-150' : ''
-        }`
+        : `bg-white-125 shadow-sm shadow-skyBlue ${!disabled ? 'hover:bg-white-150' : ''}`
   }`;
 
-  const textClassname = `gurmukhi font-medium text-2xl ${
+  const textClassname = `gurmukhi font-medium text-lg xl:text-2xl ${
     isCorrect === false ? 'text-brightRed' : 'text-darkBlue'
   }`;
   return (

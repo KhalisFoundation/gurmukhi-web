@@ -28,23 +28,23 @@ export default function Header({ ...props }: PropTypes) {
   }, [user]);
 
   return (
-    <header className='flex bg-gradient-to-r sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10'>
+    <header className='flex sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10'>
       <a href={ROUTES.DASHBOARD}>
         <main className='flex items-center justify-between'>
           <Shabadavali />
-          <h1 className='title'>{text('APP_TITLE')}</h1>
+          <h1 className='title text-xl md:text-2xl'>{text('APP_TITLE')}</h1>
         </main>
       </a>
       <nav>
         {loggedIn ? (
-          <ul className='flex items-center justify-between gap-4 brandon-grotesque dull-blue'>
-            <li>
+          <ul className='flex items-center justify-between md:gap-4 brandon-grotesque dull-blue'>
+            <li className='hidden md:block'>
               <a href={ROUTES.DASHBOARD}>{text('DASHBOARD')}</a>
             </li>
             <li>
               <div
                 className={
-                  'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
+                  'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 sm:p-1'
                 }
               >
                 <span className='text-[1.125rem] pl-2'>{nanakCoin}</span>
@@ -53,7 +53,7 @@ export default function Header({ ...props }: PropTypes) {
             </li>
             <li>
               <div className='group inline-block'>
-                <button className='outline-none focus:outline-none px-3 py-1 flex items-center min-w-32'>
+                <button className='outline-none focus:outline-none px-1 sm:px-3 py-1 flex items-center lg:min-w-32'>
                   <div
                     className={
                       'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'

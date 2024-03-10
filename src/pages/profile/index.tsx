@@ -17,35 +17,30 @@ export default function Profile() {
   const { title, description } = metaTags.PROFILE;
   const { user } = useUserAuth();
 
-  const [ isLoading, setIsLoading ] = useState(true);
-  const [ editMode, setEditMode ] = useState(false);
-  const [ name, setName ] = useState(user.displayName);
-  const [ username, setUsername ] = useState(user.username ?? user.email?.split('@')[0]);
-  const [ usernameError, setUsernameError ] = useState('');
-  const [ photo, setPhoto ] = useState<File | null>(null);
-  const [ preview, setPreview ] = useState<string | undefined>(undefined);
-  const [ photoURL, setPhotoURL ] = useState('/images/profile.jpeg');
-  const [ verifiable, setVerifiable ] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+  const [name, setName] = useState(user.displayName);
+  const [username, setUsername] = useState(user.username ?? user.email?.split('@')[0]);
+  const [usernameError, setUsernameError] = useState('');
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | undefined>(undefined);
+  const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
+  const [verifiable, setVerifiable] = useState(true);
 
   const createdAt = new Date(user.createdAt);
   const lastLoginAt = new Date(user.lastLogInAt);
 
   const getTabData = (heading: string, info: string, children?: JSX.Element) => {
-    const gridColSpan = editMode ? 'grid-cols-6' : 'grid-cols-8';
     return (
-      <div className={editMode ? 'col-span-6' : 'col-span-8'}>
-        <div className={`grid ${gridColSpan} py-1`}>
-          <div className='col-span-2'>
-            <h3 className='text-lg font-bold pr-3'>
-              {heading}
-            </h3>
-          </div>
-          <div className={editMode ? 'col-span-4' : 'col-span-6'}>
-            <h4 className='text-lg'>
-              {info}
-              {children}
-            </h4>
-          </div>
+      <div className='flex'>
+        <div className=''>
+          <h3 className='text-lg font-bold pr-3'>{heading}</h3>
+        </div>
+        <div className={editMode ? 'col-span-4' : 'col-span-6'}>
+          <h4 className='text-lg'>
+            {info}
+            {children}
+          </h4>
         </div>
       </div>
     );
@@ -88,7 +83,12 @@ export default function Profile() {
   const handleSubmit = async () => {
     if (user && usernameError === '') {
       // check if anything has changed
-      if (name === user.displayName && username === user.username && photoURL === user.user.photoURL && !photo) {
+      if (
+        name === user.displayName &&
+        username === user.username &&
+        photoURL === user.user.photoURL &&
+        !photo
+      ) {
         return;
       }
       try {
@@ -107,14 +107,11 @@ export default function Profile() {
               username,
               user: null,
             });
-            await updateProfile(
-              user.user,
-              {
-                displayName: name,
-                photoURL,
-              },
-            );
-            
+            await updateProfile(user.user, {
+              displayName: name,
+              photoURL,
+            });
+
             showToastMessage(text('PROFILE_UPDATED'), toast.POSITION.TOP_CENTER, true);
           }
         } else {
@@ -124,14 +121,11 @@ export default function Profile() {
             photoURL,
             user: null,
           });
-          await updateProfile(
-            user.user,
-            {
-              displayName: name,
-              photoURL,
-            },
-          );
-          
+          await updateProfile(user.user, {
+            displayName: name,
+            photoURL,
+          });
+
           showToastMessage(text('PROFILE_UPDATED'), toast.POSITION.TOP_CENTER, true);
         }
       } catch (error: any) {
@@ -148,7 +142,12 @@ export default function Profile() {
   const linkClass = 'flex flex-row items-center justify-between gap-2 min-w-26';
   const gridColSpan = editMode ? '6' : '8';
 
-  const renderButton = (textValue: string, onClick: () => void, disabled: boolean, sides: boolean) => {
+  const renderButton = (
+    textValue: string,
+    onClick: () => void,
+    disabled: boolean,
+    sides: boolean,
+  ) => {
     const disabledClass = disabled ? 'opacity-50 cursor-not-allowed' : '';
     return (
       <button
@@ -162,11 +161,26 @@ export default function Profile() {
           letterSpacing: '.1rem',
         }}
       >
-        {sides && <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure border border-darkBlue rotate-45' />}
-        <p className={'bg-lightAzure text-darkBlue rounded-lg px-2 py-1 w-26 text-center border border-darkBlue' + disabledClass}>
+        {sides && (
+          <FontAwesomeIcon
+            icon={faDiamond}
+            className='w-2 h-2 text-lightAzure border border-darkBlue rotate-45'
+          />
+        )}
+        <p
+          className={
+            'bg-lightAzure text-darkBlue rounded-lg px-2 py-1 w-26 text-center border border-darkBlue' +
+            disabledClass
+          }
+        >
           {textValue}
         </p>
-        {sides && <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure border border-darkBlue rotate-45' />}
+        {sides && (
+          <FontAwesomeIcon
+            icon={faDiamond}
+            className='w-2 h-2 text-lightAzure border border-darkBlue rotate-45'
+          />
+        )}
       </button>
     );
   };
@@ -174,7 +188,7 @@ export default function Profile() {
   const renderLoader = () => {
     return (
       <span>
-        <svg 
+        <svg
           className='animate-spin h-5 w-5 m-auto'
           viewBox='0 0 24 24'
           style={{
@@ -227,33 +241,32 @@ export default function Profile() {
   }
 
   return (
-    <section className='flex flex-row w-full h-full gap-5 p-12 text-darkBlue pt-28'>
+    <section className='flex flex-row w-full h-full text-darkBlue '>
       <Meta title={title} description={description} />
-      <div className='flex flex-col w-full items-center gap-5 brandon-grotesque'>
+      <div className='flex flex-col items-center m-auto brandon-grotesque'>
         <ToastContainer />
-        <div className='flex flex-col justify-center items-center rounded-lg p-4 cardImage bg-cover bg-sky-100 bg-blend-soft-light aspect-auto'>
+        <div className='flex flex-col justify-center items-center rounded-lg p-4 cardImage bg-cover bg-sky-100 bg-blend-soft-light aspect-auto w-5/6 md:w-full'>
           <h2 className='text-2xl font-bold'>{text('YOUR_DETAILS')}</h2>
-          <div className='flex flex-row items-center justify-between gap-5 rounded-lg p-4 container'>
+          <div className='flex flex-col md:flex-row items-center justify-evenly gap-5 rounded-lg p-4 container'>
             <div className='flex flex-col items-center'>
-              <img src={preview ?? photoURL} alt={'No Profile Picture found!'} className='h-60 w-60 rounded-full m-4' />
-              {editMode ? 
+              <img
+                src={preview ?? photoURL}
+                alt={'No Profile Picture found!'}
+                className='h-30 w-30 rounded-full m-4'
+              />
+              {editMode ? (
                 <div className='flex flex-row justify-center'>
                   <div className='w-[200px]'>
-                    <input
-                      type='file'
-                      accept='.png, .jpeg, .jpg'
-                      onChange={handlePhotoChange}
-                    />
+                    <input type='file' accept='.png, .jpeg, .jpg' onChange={handlePhotoChange} />
                   </div>
                 </div>
-                : null
-              }
+              ) : null}
             </div>
-            <div className={`grid grid-cols-${gridColSpan}`}>
-              <div className={`col-span-${gridColSpan} py-2`}>
-              </div>
-              {getTabData(text('NAME'), '', (
-                editMode ?
+            <div className=''>
+              {getTabData(
+                text('NAME'),
+                '',
+                editMode ? (
                   <div className='h-10 w-full'>
                     <input
                       className='h-full w-full rounded-lg border-2 border-darkBlue focus:outline-none focus:ring-2 focus:ring-darkBlue focus:border-transparent px-2'
@@ -261,44 +274,61 @@ export default function Profile() {
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                  : <span>{name}</span>
-              ))}
-              {getTabData(text('USERNAME'), '', (
-                editMode ?
+                ) : (
+                  <span>{name}</span>
+                ),
+              )}
+              {getTabData(
+                text('USERNAME'),
+                '',
+                editMode ? (
                   <div className='h-10 w-full'>
                     <input
                       className={
-                        'h-full w-full rounded-lg border-2 focus:outline-none focus:ring-2 focus:border-transparent px-2'
-                        + (usernameError ? ' border-red-500 focus:ring-red-500' : ' border-darkBlue focus:ring-darkBlue')
+                        'h-full w-full rounded-lg border-2 focus:outline-none focus:ring-2 focus:border-transparent px-2' +
+                        (usernameError
+                          ? ' border-red-500 focus:ring-red-500'
+                          : ' border-darkBlue focus:ring-darkBlue')
                       }
                       value={username}
                       onChange={handleUsernameChange}
                     />
                   </div>
-                  : <span>{username}</span>
-              ))}
-              {editMode && getTabData('', '', (
-                <span className='text-red-500'>{usernameError}</span>
-              ))}
+                ) : (
+                  <span>{username}</span>
+                ),
+              )}
+              {editMode &&
+                getTabData('', '', <span className='text-red-500'>{usernameError}</span>)}
               {getTabData(text('EMAIL'), user.email)}
-              {
-                user?.emailVerified ?? false
-                  ? getTabData(text('EMAIL_VALIDATED'), text('YES'))
-                  : getTabData(text('EMAIL_VALIDATED'), '', (
-                    renderButton(text('VERIFY'), () => sendEmailVerification(auth.currentUser ?? user).then(() => {
-                      showToastMessage(text('EMAIL_VERIFICATION_SENT'), toast.POSITION.TOP_CENTER, true);
-                      setVerifiable(false);
-                    }), !verifiable, false)
-                  ))
-              }
+              {user?.emailVerified ?? false
+                ? getTabData(text('EMAIL_VALIDATED'), text('YES'))
+                : getTabData(
+                  text('EMAIL_VALIDATED'),
+                  '',
+                  renderButton(
+                    text('VERIFY'),
+                    () =>
+                      sendEmailVerification(auth.currentUser ?? user).then(() => {
+                        showToastMessage(
+                          text('EMAIL_VERIFICATION_SENT'),
+                          toast.POSITION.TOP_CENTER,
+                          true,
+                        );
+                        setVerifiable(false);
+                      }),
+                    !verifiable,
+                    false,
+                  ),
+                )}
               {getTabData(text('CREATED_AT'), createdAt.toLocaleString() ?? 'not defined')}
               {getTabData(text('LAST_LOGIN_AT'), lastLoginAt.toLocaleString() ?? 'not defined')}
 
               <div className={`col-span-${gridColSpan} py-2`}>
                 <div className={`grid grid-cols-${gridColSpan} py-1`}>
                   <div className='col-span-2'>
-                    {editMode ?
-                      renderButton(
+                    {editMode
+                      ? renderButton(
                         text('SAVE'),
                         () => {
                           setEditMode(!editMode);
@@ -306,7 +336,7 @@ export default function Profile() {
                         },
                         false,
                         false,
-                      ) 
+                      )
                       : renderButton(
                         text('EDIT'),
                         () => {
@@ -314,8 +344,7 @@ export default function Profile() {
                         },
                         false,
                         false,
-                      )
-                    }
+                      )}
                   </div>
                 </div>
               </div>

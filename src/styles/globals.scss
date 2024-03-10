@@ -32,6 +32,25 @@ body,
 * {
   font-family: 'Recoleta';
 }
+.back-bg {
+  background: rgb(230, 242, 252);
+  background: linear-gradient(90deg, rgba(230, 242, 252, 1) 0%, rgba(159, 203, 227, 1) 0%);
+}
+.back-bg-image {
+  background-image: url('../../public/images/background.png');
+}
+
+.header-bg {
+  background: rgb(244 250 255 / 81%);
+}
+
+.back-bg {
+  background: rgb(184 214 234);
+}
+
+.back-bg-image {
+  background-image: url('../../public/images/background.png');
+}
 
 body {
   color: rgb(var(--foreground-rgb));
@@ -66,7 +85,6 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     grid-gap: 0.5rem;
     align-content: end;
-    position: absolute;
     z-index: 1;
     width: 100%;
     height: 100%;
@@ -194,7 +212,6 @@ body {
 
   header {
     .title {
-      font-size: 1.5rem;
       font-family: 'Recoleta' !important;
       color: #1f4860;
     }
