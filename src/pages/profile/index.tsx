@@ -243,11 +243,11 @@ export default function Profile() {
   return (
     <section className='flex flex-row w-full h-full text-darkBlue '>
       <Meta title={title} description={description} />
-      <div className='flex flex-col w-full items-center m-auto brandon-grotesque'>
+      <div className='flex flex-col items-center m-auto brandon-grotesque'>
         <ToastContainer />
-        <div className='flex flex-col justify-center items-center rounded-lg p-4 cardImage bg-cover bg-sky-100 bg-blend-soft-light aspect-auto lg:w-1/2 xl:w-1/3 w-5/6'>
+        <div className='flex flex-col justify-center items-center rounded-lg p-4 cardImage bg-cover bg-sky-100 bg-blend-soft-light aspect-auto w-5/6 md:w-full'>
           <h2 className='text-2xl font-bold'>{text('YOUR_DETAILS')}</h2>
-          <div className='flex flex-col md:flex-row items-center justify-between gap-5 rounded-lg p-4 container'>
+          <div className='flex flex-col md:flex-row items-center justify-evenly gap-5 rounded-lg p-4 container'>
             <div className='flex flex-col items-center'>
               <img
                 src={preview ?? photoURL}
