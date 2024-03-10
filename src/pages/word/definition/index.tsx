@@ -56,7 +56,7 @@ export default function Defintion() {
       <Meta title={title} description={description} />
       <div className='flex flex-col h-3/4 justify-center items-center gap-5 w-5/6 m-auto'>
         <img
-          className='w-3/5 h-6'
+          className=' w-5/6 h-6 md:w-3/5'
           src='/icons/pointy_border.svg'
           alt='border-top'
           width={200}
@@ -99,7 +99,7 @@ export default function Defintion() {
           </div>
         </div>
         <img
-          className='w-3/5 h-6 rotate-180'
+          className='w-5/6 h-6 rotate-180 md:w-3/5'
           src='/icons/pointy_border.svg'
           alt='border-top'
           width={200}
