@@ -42,6 +42,7 @@ function WinCoin() {
         dispatch(resetGameArray());
         const data = await getUserData(user.uid);
         const nxtSession = data?.nextSession ?? [];
+        console.log('nxtSession', nxtSession);
         setNextSession(nxtSession);
         dispatch(increment());
         dispatch(resetLevel());
@@ -79,7 +80,6 @@ function WinCoin() {
                   navigate,
                   user,
                   dispatch,
-                  nanakCoin,
                 )
               }
               className='bg-sky-900 text-xs text-white p-3  tracking-widest font-light '
