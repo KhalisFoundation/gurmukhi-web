@@ -12,7 +12,6 @@ const getRandomQuestions = async (user: User, count: number, isLearnt: boolean, 
   if (words.length === 0) {
     words = await getWordsFromUser(user.uid, count, !isLearnt);
   }
-  console.log('words from getRandomQuestions: ', words);
   let questionsPromises;
   if (isLearnt) {
     questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, true, questionIds));

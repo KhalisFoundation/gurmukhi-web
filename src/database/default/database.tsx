@@ -145,7 +145,6 @@ const getRandomWord = async (uid: string, notInArray: any[] = ['unknown'], inclu
     const batches = [];
     for (let i = 0; i < existingWordIds.length; i += 10) {
       const batchIds = existingWordIds.slice(i, i + 10);
-      console.log('Batch ids: ', batchIds);
       const wordData = await getRandomData(
         wordsCollection,
         and(
@@ -173,9 +172,6 @@ const getRandomWord = async (uid: string, notInArray: any[] = ['unknown'], inclu
     if (wordDataArray.length > 0) {
       wordData = wordDataArray[0];
     } else {
-      console.log('New word not found: ', resolvedWords[0] as WordType[]);
-      console.log('existingWordIds: ', existingWordIds);
-      console.log('Resolved words: ', resolvedWords);
       wordData = (resolvedWords[0] as WordType[])[0];
     }
 
