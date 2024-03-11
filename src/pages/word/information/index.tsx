@@ -86,8 +86,8 @@ export default function Information() {
           width={200}
           height={200}
         />
-        <div className='flex flex-row items-center justify-between h-full gap-10 w-full'>
-          <div className='flex flex-col items-left justify-evenly w-1/2 h-full'>
+        <div className='flex flex-col items-center justify-between h-full gap-10 w-full py-10 overflow-y-auto xl:flex-row'>
+          <div className='flex flex-col items-left justify-evenly w-3/4 h-full xl:w-1/2'>
             <div>
               <div className='flex flex-row items-center justify-between w-4/5'>
                 <div className='flex flex-col gap-5'>
@@ -123,8 +123,10 @@ export default function Information() {
             />
           </div>
           <div className='flex flex-col items-left justify-evenly w-3/4 h-full gap-5'>
-            <div className='flex flex-col items-left text-left justify-between gap-6'>
-              <span className='tracking-widest'>{text('EXAMPLES').toUpperCase()}</span>
+            <div className='flex flex-col items-left text-justify justify-between gap-6'>
+              <span className='tracking-widest text-center xl:text-left'>
+                {text('EXAMPLES').toUpperCase()}
+              </span>
               {currentWord?.sentences &&
                 currentWord.sentences.map((sentence: SentenceType, index: number) => {
                   const highlightedSentence = highlightWord(
@@ -146,7 +148,7 @@ export default function Information() {
             </div>
             <div className='flex items-center justify-around gap-5 w-full h-1/2'>
               <div
-                className={`w-2/5 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                className={`w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5  ${
                   currentWord?.synonyms && currentWord.synonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
@@ -161,7 +163,7 @@ export default function Information() {
                           <div
                             key={word.id}
                             className={
-                              'flex h-min w-max p-4 text-black text-sm rounded-lg z-10 bg-white'
+                              'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
                             }
                           >
                             {word.word} ({convertToTitleCase(word.translation ?? '')})
@@ -172,7 +174,7 @@ export default function Information() {
                 </div>
               </div>
               <div
-                className={`w-2/5 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg ${
+                className={` w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5 ${
                   currentWord?.antonyms && currentWord.antonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
@@ -187,7 +189,7 @@ export default function Information() {
                           <div
                             key={word.id}
                             className={
-                              'flex h-min w-max p-4 text-black text-sm rounded-lg z-10 bg-white'
+                              'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
                             }
                           >
                             {word.word} ({convertToTitleCase(word.translation ?? '')})

@@ -14,7 +14,7 @@ import Loading from 'components/loading';
 
 export default function Dashboard() {
   const commonStyle =
-    'w-3/12 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
+    'w-5/6 lg:w-3/12 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   const { title, description } = metaTags.DASHBOARD;
   const { user } = useUserAuth();
   const [userData, setUserData] = useState<any>(user);
@@ -23,7 +23,7 @@ export default function Dashboard() {
   useGamePlay(user, toggleLoading);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
-  
+
   useEffect(() => {
     if (user) {
       setUserData(user);
@@ -41,7 +41,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className='h-full flex flex-col justify-between'>
+    <div className='h-screen overflow-y-auto lg:h-full lg:overflow-hidden flex flex-col justify-between'>
       <Meta title={title} description={description} />
       <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
         { isLoading ? 
@@ -55,7 +55,7 @@ export default function Dashboard() {
           </div> :
           <>
             <Ssa name={user.displayName && userData.displayName} />
-            <div className='flex flex-row text-center justify-center gap-6 h-2/5'>
+            <div className='flex flex-col lg:flex-row text-center justify-center gap-6 h-full h-screen lg:h-3/5 w-full items-center'>
               <WordsSnippetBox commonStyle={commonStyle} />
               <CoinBox commonStyle={commonStyle} />
               <WordBox commonStyle={commonStyle} />
