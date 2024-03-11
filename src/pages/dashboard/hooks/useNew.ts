@@ -42,9 +42,11 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
 
     return { game: seed0, learningWords };
   }
+  const usedWordIds = [];
   for (let i = 0; i < count; ) {
-    const word = await getRandomWord(uid);
+    const word = await getRandomWord(uid, usedWordIds) as WordType;
     if (word?.id) {
+      usedWordIds.push(word.id);
       const questions = await getQuestionsByWordID(word.id, 2, true);
       const questionIds = questions.map((question) => question.id).filter((id) => id !== undefined) as string[];
       addWordIfNotExists(word, learningWords, questionIds);

@@ -17,8 +17,9 @@ export default function Dashboard() {
     'w-3/12 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   const { title, description } = metaTags.DASHBOARD;
   const { user } = useUserAuth();
-  const [ userData, setUserData ] = useState<any>(user);
-  const [ isLoading, toggleLoading ] = useState<boolean>(true);
+  const [userData, setUserData] = useState<any>(user);
+  const [isLoading, toggleLoading] = useState<boolean>(true);
+  const [reloadPrompt, setReloadPrompt] = useState<boolean>(false);
   useGamePlay(user, toggleLoading);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
@@ -29,12 +30,29 @@ export default function Dashboard() {
     }
   }, [user]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setReloadPrompt(true);
+    }, 30000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <div className='h-full flex flex-col justify-between'>
       <Meta title={title} description={description} />
       <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
         { isLoading ? 
-          <Loading /> :
+          <div className='h-screen flex flex-col justify-center items-center'>
+            <div className='text-[#0369a1] text-4xl font-bold mb-8'>Hold on tight, adventurer!</div>
+            <div className='relative w-24 h-24'>
+              <Loading />
+            </div>
+            <div className='text-[#0369a1] text-2xl font-bold mt-8'>Family of Raag rattans🎶 and celestial fairies✨ are singing shabads...</div>
+            {reloadPrompt && <div className='text-[#0369a1] text-2xl font-bold mt-8'>It is taking longer than expected🫨 Please reload the page💫</div>}
+          </div> :
           <>
             <Ssa name={user.displayName && userData.displayName} />
             <div className='flex flex-row text-center justify-center gap-6 h-2/5'>

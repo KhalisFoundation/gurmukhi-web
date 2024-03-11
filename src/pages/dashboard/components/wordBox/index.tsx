@@ -15,7 +15,7 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
   useEffect(() => {
     const fetchData = async () => {
       // Asynchronous logic here
-      const newWord = await getRandomWord(user.uid);
+      const newWord = await getRandomWord(user.uid, ['unknown'], false);
       if (newWord) {
         setRandomWord(newWord);
       }

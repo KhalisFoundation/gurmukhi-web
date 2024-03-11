@@ -34,7 +34,8 @@ export const checkIsFirstTime = (user: User) => {
 };
 
 export const fetchProgress = (user: any) => {
-  return user?.progress.gameSession.length > 0 ? user.progress.gameSession : null;
+  const gameSession = user?.progress.gameSession;
+  return gameSession && gameSession.length > 0 ? gameSession : null;
 };
 
 export const shuffleArray = (array: GameScreen[]) => {
