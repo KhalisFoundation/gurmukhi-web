@@ -22,12 +22,14 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
     const progress: GameScreen[] | null = await fetchProgress(userData);
     if (progress && progress.length > 0) {
       const gameArray: GameScreen[] | null = progress;
-      dispatch(setCurrentGamePosition(userData?.progress.currentProgress));
-      dispatch(setCurrentLevel(userData?.progress.currentLevel));
-      return { gameArray };
+      const currentProgress = userData?.progress.currentProgress || 0;
+      const currentLevel = userData?.progress.currentLevel || 0;
+      dispatch(setCurrentGamePosition(currentProgress));
+      dispatch(setCurrentLevel(currentLevel));
+      return { currentProgress, currentLevel, gameArray };
     }
     const { gameArray } = await gameAlgo(user);
-    return { gameArray };
+    return { currentProgress: 0, currentLevel: 0, gameArray };
   };
 
   useEffect(() => {
@@ -35,9 +37,9 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
       if (user.progress) {
         try {
           toggleLoading(true);
-          const { gameArray } = await gamePlay();
+          const { currentProgress, currentLevel, gameArray } = await gamePlay();
           if (gameArray) {
-            await updateProgress(user.uid, 0, gameArray, 0);
+            await updateProgress(user.uid, currentProgress, gameArray, currentLevel);
             dispatch(addScreens(gameArray));
           }
           toggleLoading(false);
