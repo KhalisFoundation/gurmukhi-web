@@ -45,10 +45,10 @@ export default function LevelsFooter({
       }
       await worker.fetchNextSessionData(userData);
     };
-    if (currentLevel === 10 && user.uid && worker) {
+    if (currentLevel === 10 && user.uid) {
       callWorker();
     }
-  }, [currentLevel, user, worker]);
+  }, [currentLevel, user]);
   const getLevelType = (num: number) => {
     if (num < currentLevel) return 'completed';
     if (num === currentLevel) return 'current';
