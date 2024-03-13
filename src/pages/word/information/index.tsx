@@ -152,10 +152,10 @@ export default function Information() {
                   currentWord?.synonyms && currentWord.synonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
-                <h2 className='text-black tracking-widest ms-2'>
+                <h2 className='text-black tracking-widest ms-2 my-2'>
                   {text('SYNONYMS').toUpperCase()}
                 </h2>
-                <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
+                <div className='w-11/12 flex flex-col gap-2 m-auto'>
                   {currentWord?.synonyms &&
                     currentWord.synonyms.map((word: MiniWord | string) => {
                       if (typeof word !== 'string') {
@@ -178,10 +178,10 @@ export default function Information() {
                   currentWord?.antonyms && currentWord.antonyms.length === 0 ? 'hidden' : ''
                 }`}
               >
-                <h2 className='text-black tracking-widest ms-2'>
+                <h2 className='text-black tracking-widest ms-2 my-2'>
                   {text('ANTONYMS').toUpperCase()}
                 </h2>
-                <div className='grid grid-cols-1 m-2 gap-2 h-fit w-full'>
+                <div className='w-11/12 flex flex-col gap-2 m-auto'>
                   {currentWord?.antonyms &&
                     currentWord.antonyms.map((word: MiniWord | string) => {
                       if (typeof word !== 'string') {
