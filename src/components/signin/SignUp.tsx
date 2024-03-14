@@ -30,8 +30,8 @@ export default function SignUp({ ...props }: SignUpProps) {
         placeholder={text('NAME')}
         type='text'
         icon='name'
-        onChange={
-          (event: React.ChangeEvent<HTMLInputElement>) => props.nameChange(event.target.value)
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          props.nameChange(event.target.value)
         }
       />
       <InputWithIcon
@@ -39,8 +39,8 @@ export default function SignUp({ ...props }: SignUpProps) {
         placeholder={text('EMAIL')}
         type='email'
         icon='email'
-        onChange={
-          (event: React.ChangeEvent<HTMLInputElement>) =>  props.emailChange(event.target.value)
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          props.emailChange(event.target.value)
         }
       />
       <InputWithIcon
@@ -48,8 +48,8 @@ export default function SignUp({ ...props }: SignUpProps) {
         placeholder={text('PASSWORD')}
         type='password'
         border={getErrorColor() ?? text('RED')}
-        onChange={
-          (event: React.ChangeEvent<HTMLInputElement>) =>  props.passwordChange(event.target.value)
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          props.passwordChange(event.target.value)
         }
       />
       <InputWithIcon
@@ -57,12 +57,20 @@ export default function SignUp({ ...props }: SignUpProps) {
         placeholder={text('CONFIRM_PASSWORD')}
         type='password'
         border={getErrorColor()}
-        onChange={
-          (event: React.ChangeEvent<HTMLInputElement>) =>  props.cpasswordChange(event.target.value)
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          props.cpasswordChange(event.target.value)
         }
       />
-      {props.errorMessage && <div className={'text-red-500 text-sm'}>{props.errorMessage.message}</div>}
-      <button type='submit' className='w-full p-4 rounded-lg bg-gradient-to-r from-brightBlue to-softBlue text-white text-lg'>{text('SIGN_UP')}</button>
+      {props.errorMessage && (
+        <div className={'text-red-500 text-sm'}>{props.errorMessage.message}</div>
+      )}
+      <button
+        type='submit'
+        id='btn-signup'
+        className='w-full p-4 rounded-lg bg-gradient-to-r from-brightBlue to-softBlue text-white text-lg'
+      >
+        {text('SIGN_UP')}
+      </button>
     </div>
   );
 }

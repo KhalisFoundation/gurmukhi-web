@@ -53,7 +53,10 @@ export default function Header({ ...props }: PropTypes) {
             </li>
             <li>
               <div className='group inline-block'>
-                <button className='outline-none focus:outline-none px-1 sm:px-3 py-1 flex items-center lg:min-w-32'>
+                <button
+                  id='drop-down-menu'
+                  className='outline-none focus:outline-none px-1 sm:px-3 py-1 flex items-center lg:min-w-32'
+                >
                   <div
                     className={
                       'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
@@ -71,6 +74,7 @@ export default function Header({ ...props }: PropTypes) {
                 <ul className='bg-white border rounded-md transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-24 right-8'>
                   <li>
                     <button
+                      id='btn-profile'
                       onClick={() => {
                         navigate(ROUTES.PROFILE);
                       }}
@@ -81,6 +85,7 @@ export default function Header({ ...props }: PropTypes) {
                   </li>
                   <li>
                     <button
+                      id='btn-logout'
                       onClick={() => {
                         navigate(ROUTES.LOG_OUT);
                       }}

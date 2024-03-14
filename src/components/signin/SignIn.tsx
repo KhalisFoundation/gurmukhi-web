@@ -194,6 +194,7 @@ export default function SignIn() {
                 <button
                   className='w-full p-4 rounded-lg bg-gradient-to-r from-brightBlue to-softBlue text-white text-lg'
                   type='submit'
+                  id='btn-signIn'
                 >
                   {text('SIGN_IN')}
                 </button>
