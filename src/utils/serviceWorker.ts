@@ -9,6 +9,7 @@ export const fetchNextSessionData = async (usr: User) => {
       return;
     }
     const { gameArray } = await gameAlgo(usr);
+    console.log('------', gameArray);
     await updateNextSession(usr.uid, gameArray);
   } catch (error) {
     console.error('Error fetching next session data:', error);
