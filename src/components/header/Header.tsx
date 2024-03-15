@@ -7,17 +7,18 @@ import { ROUTES } from 'constants/routes';
 import { useAppSelector } from 'store/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
+import { getNanakCoin } from 'database/shabadavalidb';
 
 interface PropTypes {
   loggedIn?: boolean;
 }
 
-export default function Header({ ...props }: PropTypes) {
+export default async function Header({ ...props }: PropTypes) {
   const { t: text } = useTranslation();
   const { user } = useUserAuth();
+  const nanakCoin = await getNanakCoin(user.uid) ?? 0;
   const [ photoURL, setPhotoURL ] = React.useState('/images/profile.jpeg');
   const navigate = useNavigate();
-  const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const loggedIn = props.loggedIn ?? false;
   const buttonComonStyle = 'block w-24 px-3 py-2 hover:bg-gray-200';
 

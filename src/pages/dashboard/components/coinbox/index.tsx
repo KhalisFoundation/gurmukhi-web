@@ -4,9 +4,8 @@ import { useAppSelector } from 'store/hooks';
 import ALL_CONSTANT from 'constants/constant';
 import { Counter } from '../Counter';
 
-function CoinBox({ commonStyle }: { commonStyle: string }) {
+function CoinBox({ commonStyle, nanakCoin }: { commonStyle: string, nanakCoin: number}) {
   const { t: text } = useTranslation();
-  const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   return (
     <div className={commonStyle}>

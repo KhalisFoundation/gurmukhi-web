@@ -61,6 +61,16 @@ export const getEmailFromUsername = async (username: string) => {
   return null;
 };
 
+export const getNanakCoin = async (uid: string) => {
+  const userRef = doc(usersCollection, uid);
+  const userDoc = await getDoc(userRef);
+  if (!userDoc.exists()) {
+    return;
+  }
+  const data = userDoc.data();
+  return data.coins;
+}
+
 export const updateNanakCoin = async (uid: string, newCoinValue: number) => {
   try {
     const userRef = doc(usersCollection, uid);

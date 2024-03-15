@@ -7,6 +7,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
+import { getNanakCoin } from 'database/shabadavalidb';
 
 interface Props {
   operation: string;
@@ -31,7 +32,6 @@ const StartQuestionBtn = ({
   }`;
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const gameArray = useAppSelector((state) => state.gameArray);
-  const coins = useAppSelector((state) => state.nanakCoin);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useUserAuth();
@@ -47,7 +47,6 @@ const StartQuestionBtn = ({
           navigate,
           user,
           dispatch,
-          coins,
         )
       }
       className={linkClass}

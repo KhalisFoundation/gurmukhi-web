@@ -5,12 +5,12 @@ import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { resetLevel } from 'store/features/currentLevelSlice';
 import { resetGamePosition } from 'store/features/currentGamePositionSlice';
-import { increment } from 'store/features/nanakCoin';
 import convertNumber from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
 import { useUserAuth } from 'auth';
 import {
+  getNanakCoin,
   getUserData,
   updateNanakCoin,
   updateNextSession,
@@ -29,7 +29,7 @@ function WinCoin() {
   const { t: text } = useTranslation();
   const dispatch = useAppDispatch();
   const { title, description } = metaTags.WIN;
-  const nanakCoin = useAppSelector((state) => state.nanakCoin);
+  const nanakCoin = getNanakCoin(user.uid);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const [isLoading, toggleIsLoading] = useState<boolean>(true);
   const [nextSession, setNextSession] = useState<GameScreen[]>([]);
@@ -43,7 +43,6 @@ function WinCoin() {
         const data = await getUserData(user.uid);
         const nxtSession = data?.nextSession ?? [];
         setNextSession(nxtSession);
-        dispatch(increment());
         dispatch(resetLevel());
         dispatch(addScreens(nxtSession));
         await updateNanakCoin(user.uid, nanakCoin + 1);
@@ -79,7 +78,6 @@ function WinCoin() {
                   navigate,
                   user,
                   dispatch,
-                  nanakCoin,
                 )
               }
               className='bg-sky-900 text-xs text-white p-3  tracking-widest font-light '

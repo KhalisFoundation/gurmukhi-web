@@ -1,7 +1,7 @@
 import { GameScreen } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 import { ROUTES } from 'constants/routes';
-import { updateCurrentProgress } from 'database/shabadavalidb';
+import { getNanakCoin, updateCurrentProgress } from 'database/shabadavalidb';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { User } from 'types/shabadavalidb';
 
@@ -28,8 +28,8 @@ const handleClick = async (
   navigate: any,
   user: User,
   dispatch: any,
-  coins: number,
 ) => {
+  const coins = await getNanakCoin(user?.uid || '');
   const condition = coins !== 0 ?
     currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition] :
     currentLevel < ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition];
