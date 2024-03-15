@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import { getUserData } from 'database/shabadavalidb';
 import Shabadavali from 'assets/icons/Shabadavali';
 import { ROUTES } from 'constants/routes';
 import { useAppSelector } from 'store/hooks';
@@ -19,18 +18,10 @@ export default function Header({ ...props }: PropTypes) {
   const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
   const navigate = useNavigate();
   const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
-  const [coins, setCoins] = useState<number>(nanakCoin);
   const loggedIn = props.loggedIn ?? false;
   const buttonComonStyle = 'block w-24 px-3 py-2 hover:bg-gray-200';
 
   useEffect(() => {
-    const fetchCoins = async () => {
-      const userData: any = await getUserData(user.uid);
-      setCoins(userData.coins);
-    };
-    if (user?.uid) {
-      fetchCoins();
-    }
     if (user?.photoURL) {
       setPhotoURL(user.photoURL);
     }
@@ -56,7 +47,7 @@ export default function Header({ ...props }: PropTypes) {
                   'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 sm:p-1'
                 }
               >
-                <span className='text-[1.125rem] pl-2'>{coins}</span>
+                <span className='text-[1.125rem] pl-2'>{nanakCoin}</span>
                 <img src='/icons/coin.svg' className={'h-8 w-8'} />
               </div>
             </li>

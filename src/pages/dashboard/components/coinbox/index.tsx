@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import ALL_CONSTANT from 'constants/constant';
 import { getUserData } from 'database/shabadavalidb';
 import { Counter } from '../Counter';
 import { useUserAuth } from 'auth';
+import { setNanakCoin } from 'store/features/nanakCoin';
 
 function CoinBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
@@ -12,9 +13,11 @@ function CoinBox({ commonStyle }: { commonStyle: string }) {
   const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
   const [coins, setCoins] = useState<number>(nanakCoin);
   const { user } = useUserAuth();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const fetchCoins = async () => {
       const userData: any = await getUserData(user.uid);
+      dispatch(setNanakCoin(userData.coins));
       setCoins(userData.coins);
     };
     fetchCoins();
