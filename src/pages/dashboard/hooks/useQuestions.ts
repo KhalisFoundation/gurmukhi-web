@@ -19,7 +19,7 @@ const getRandomQuestions = async (user: User, count: number, isLearnt: boolean, 
     questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, true, word.questionIds));
   }
   const questionsResults: QuestionData[][] = await Promise.all(questionsPromises);
-  const questions: QuestionData[] = questionsResults.flat();
+  const questions: QuestionData[] = questionsResults.flat().sort(() => Math.random() - 0.5);
   const finalCount = Math.min(questions.length, count);
   const wordToQuestionMap = new Map<string, string[]>();
   for (let i = 0; i < finalCount; i++) {
