@@ -26,7 +26,6 @@ export const createGameScreen = (key: string, data: QuestionData | WordType): Ga
 
 export const checkIsFirstTime = (user: User) => {
   return (
-    user?.coins === 0 &&
     user?.progress.currentLevel === 0 &&
     user?.progress.currentProgress === 0 &&
     user?.progress.gameSession.length === 0
@@ -50,7 +49,8 @@ export const shuffleArray = (array: GameScreen[]) => {
 };
 
 export const gameAlgo = async (user: User) => {
-  if (user && user?.coins === 0 && user?.progress.currentProgress === 0) {
+  const isFirstTime = checkIsFirstTime(user);
+  if (user && isFirstTime) {
     const { game, learningWords } = await getNewQuestions(13, true);
     const gameArray: GameScreen[] = game;
 

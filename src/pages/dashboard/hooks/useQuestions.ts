@@ -13,10 +13,10 @@ const getRandomQuestions = async (user: User, count: number, isLearnt: boolean, 
     words = await getWordsFromUser(user.uid, count, !isLearnt);
   }
   let questionsPromises;
-  if (isLearnt) {
-    questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, true, questionIds));
+  if (isLearnt && questionIds) {
+    questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, questionIds, true));
   } else {
-    questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, true, word.questionIds));
+    questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, word.questionIds, true));
   }
   const questionsResults: QuestionData[][] = await Promise.all(questionsPromises);
   const questions: QuestionData[] = questionsResults.flat().sort(() => Math.random() - 0.5);

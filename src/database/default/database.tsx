@@ -1,15 +1,16 @@
 import { WordType } from 'types';
 import { wordsdb } from '../../firebase';
 import {
-  CollectionReference,
-  DocumentData,
-  QueryCompositeFilterConstraint,
   and,
   collection,
+  CollectionReference,
   documentId,
+  DocumentData,
   getDocs,
   limit,
   query,
+  QueryCompositeFilterConstraint,
+  QueryFieldFilterConstraint,
   where,
 } from 'firebase/firestore';
 import { generateRandomId } from 'database/util';
@@ -50,7 +51,7 @@ const getDataById = async (
 
 const getRandomData = async (
   collectionRef: CollectionReference<DocumentData, DocumentData>,
-  conditions: QueryCompositeFilterConstraint,
+  conditions: QueryCompositeFilterConstraint | QueryFieldFilterConstraint,
   key?: string | null,
   limitVal?: number,
 ) => {
@@ -137,24 +138,34 @@ const getWordById = async (wordId: string, needExtras = false) => {
   }
 };
 
-const getRandomWord = async (uid: string, notInArray: any[] = ['unknown'], includeUsed = true) => {
+const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true) => {
   try {
     const userData = await getUserData(uid);
     const existingWordIds = includeUsed ? notInArray.concat(userData?.wordIds || []) : notInArray;
 
     const batches = [];
-    for (let i = 0; i < existingWordIds.length; i += 10) {
-      const batchIds = existingWordIds.slice(i, i + 10);
+    if (existingWordIds.length === 0) {
       const wordData = await getRandomData(
         wordsCollection,
-        and(
-          where('status', '==', 'active'),
-          where(documentId(), 'not-in', batchIds),
-        ),
+        where('status', '==', 'active'),
         null,
         10,
       );
       batches.push(wordData);
+    } else {
+      for (let i = 0; i < existingWordIds.length; i += 10) {
+        const batchIds = existingWordIds.slice(i, i + 10);
+        const wordData = await getRandomData(
+          wordsCollection,
+          and(
+            where('status', '==', 'active'),
+            where(documentId(), 'not-in', batchIds),
+          ),
+          null,
+          10,
+        );
+        batches.push(wordData);
+      }
     }
 
     const resolvedWords = await Promise.all(batches);

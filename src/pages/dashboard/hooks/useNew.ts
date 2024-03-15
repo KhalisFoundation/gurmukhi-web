@@ -47,7 +47,7 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
     const word = await getRandomWord(uid, usedWordIds) as WordType;
     if (word?.id) {
       usedWordIds.push(word.id);
-      const questions = await getQuestionsByWordID(word.id, 2, true);
+      const questions = await getQuestionsByWordID(word.id, 2, usedWordIds, true);
       const questionIds = questions.map((question) => question.id).filter((id) => id !== undefined) as string[];
       addWordIfNotExists(word, learningWords, questionIds);
       delete word.created_at;
