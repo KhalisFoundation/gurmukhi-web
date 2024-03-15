@@ -16,7 +16,7 @@ interface PropTypes {
 export default function Header({ ...props }: PropTypes) {
   const { t: text } = useTranslation();
   const { user } = useUserAuth();
-  const [photoURL, setPhotoURL] = React.useState('/images/profile.jpeg');
+  const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
   const navigate = useNavigate();
   const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
   const [coins, setCoins] = useState<number>(nanakCoin);
