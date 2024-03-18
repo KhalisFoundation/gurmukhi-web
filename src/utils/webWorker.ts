@@ -10,7 +10,6 @@ export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorke
       return;
     }
     const { gameArray } = await gameAlgo(usr);
-    console.log('next Session', gameArray);
     await updateNextSession(usr.uid, gameArray);
     dispatch(setWebWorker(false));
   } catch (error) {
