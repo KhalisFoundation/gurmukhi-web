@@ -38,6 +38,9 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
     const q = query(wordsCollectionRef, where('isLearnt', '==', isLearnt), limit(10));
     // may add a time condition
     const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      return [];
+    }
     const documents = querySnapshot.docs.map((document) => ({
       id: document.id,
       ...document.data(),
