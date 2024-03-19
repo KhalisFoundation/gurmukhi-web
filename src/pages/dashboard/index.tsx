@@ -11,6 +11,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 import useGamePlay from './hooks/useGamePlay1';
 import Loading from 'components/loading';
+// import { gameAlgo } from './utils';
 
 export default function Dashboard() {
   const commonStyle =
@@ -23,6 +24,11 @@ export default function Dashboard() {
   useGamePlay(user, toggleLoading);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
+
+  // const fetchAlgorithm = async () => {
+  //   const { gameArray } = await gameAlgo(user);
+  //   console.log(gameArray);
+  // };
 
   useEffect(() => {
     if (user) {
@@ -44,24 +50,32 @@ export default function Dashboard() {
     <div className='h-screen overflow-y-auto lg:h-full lg:overflow-hidden flex flex-col justify-between'>
       <Meta title={title} description={description} />
       <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
-        { isLoading ? 
+        {isLoading ? (
           <div className='h-screen flex flex-col justify-center items-center'>
             <div className='text-[#0369a1] text-4xl font-bold mb-8'>Hold on tight, adventurer!</div>
             <div className='relative w-24 h-24'>
               <Loading />
             </div>
-            <div className='text-[#0369a1] text-2xl font-bold mt-8'>Family of Raag rattans🎶 and celestial fairies✨ are singing shabads...</div>
-            {reloadPrompt && <div className='text-[#0369a1] text-2xl font-bold mt-8'>It is taking longer than expected🫨 Please reload the page💫</div>}
-          </div> :
+            <div className='text-[#0369a1] text-2xl font-bold mt-8'>
+              Family of Raag rattans🎶 and celestial fairies✨ are singing shabads...
+            </div>
+            {reloadPrompt && (
+              <div className='text-[#0369a1] text-2xl font-bold mt-8'>
+                It is taking longer than expected🫨 Please reload the page💫
+              </div>
+            )}
+          </div>
+        ) : (
           <>
             <Ssa name={user.displayName && userData.displayName} />
             <div className='flex flex-col lg:flex-row text-center justify-center gap-6 h-full h-screen lg:h-3/5 w-full items-center'>
               <WordsSnippetBox commonStyle={commonStyle} />
               <CoinBox commonStyle={commonStyle} />
               <WordBox commonStyle={commonStyle} />
+              {/* <button onClick={() => fetchAlgorithm()}>Test Algorithm </button> */}
             </div>
           </>
-        }
+        )}
       </div>
       <LevelsFooter
         operation={ALL_CONSTANT.START_QUESTION}

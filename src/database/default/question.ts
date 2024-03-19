@@ -13,9 +13,43 @@ const getOptions = async (wordIDs: string[]) => {
   const options = await Promise.all(optionsPromise);
   return options as Option[];
 };
+const getQuestions = async (wordID: string, questionIDs: string[], needOptions: boolean = true) => {
+  let queryRef;
+  if (questionIDs.length === 0) {
+    queryRef = query(questionCollection, where('word_id', '==', wordID), limit(2));
+  } else {
+    queryRef = query(
+      questionCollection,
+      where('word_id', '==', wordID),
+      where('id', 'not-in', questionIDs),
+      limit(2),
+    );
+  }
+  const questionSnapshots = await getDocs(queryRef);
+  if (questionSnapshots.empty) {
+    return [];
+  }
+  const questionsData = await Promise.all(
+    questionSnapshots.docs.map(async (doc) => {
+      const questionData = doc.data() as QuestionData;
+
+      if (
+        needOptions &&
+        questionData.options.length > 0 &&
+        typeof questionData.options[0] === 'string'
+      ) {
+        const options = await getOptions(questionData.options as string[]);
+        return { ...questionData, options } as QuestionData;
+      }
+
+      return questionData;
+    }),
+  );
+  return questionsData;
+};
 const getQuestionsByWordID = async (
   wordID: string,
-  count:number,
+  count: number,
   notInArray: string[],
   needOptions = false,
 ) => {
@@ -79,14 +113,11 @@ const getQuestionByID = async (id: string) => {
     return null;
   }
   const questionData = questionSnapshot.docs[0].data();
-  if (
-    questionData.options.length > 0 &&
-    typeof questionData.options[0] === 'string'
-  ) {
+  if (questionData.options.length > 0 && typeof questionData.options[0] === 'string') {
     const options = await getOptions(questionData.options as string[]);
     return { ...questionData, options } as QuestionData;
   }
   return questionData as QuestionData;
 };
 
-export { getQuestionsByWordID, getQuestionByID };
+export { getQuestionsByWordID, getQuestionByID, getQuestions };

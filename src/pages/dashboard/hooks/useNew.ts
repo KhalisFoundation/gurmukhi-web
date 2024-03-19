@@ -1,12 +1,16 @@
 import { GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
 import { getRandomWord } from 'database/default';
-import { getQuestionsByWordID } from 'database/default';
-import {  WordType } from 'types';
+import { getQuestions } from 'database/default';
+import { WordType } from 'types';
 import { createGameScreen } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
 import seed0 from 'data/seed0.json';
 
-const addWordIfNotExists = (word: WordType, learningWords: WordShabadavaliDB[], questionIds: string[]) => {
+const addWordIfNotExists = (
+  word: WordType,
+  learningWords: WordShabadavaliDB[],
+  questionIds: string[],
+) => {
   const exists = learningWords.some((obj) => obj.word_id === word.id);
   if (word.id && word.word && !exists) {
     const learningWord: WordShabadavaliDB = {
@@ -32,10 +36,13 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
           id: wordId,
           ...word.data,
         } as WordType;
-        const questionsOfWord = seed0.map((seed) => 
-          (seed.key.includes('question') && seed.key.includes(wordId)) ?
-            seed.key.split('-')[2] :
-            null).filter((question) => question !== null) as string[];
+        const questionsOfWord = seed0
+          .map((seed) =>
+            seed.key.includes('question') && seed.key.includes(wordId)
+              ? seed.key.split('-')[2]
+              : null,
+          )
+          .filter((question) => question !== null) as string[];
         addWordIfNotExists(wordData as WordType, learningWords, questionsOfWord);
       }
     });
@@ -44,11 +51,13 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
   }
   const usedWordIds = [];
   for (let i = 0; i < count; ) {
-    const word = await getRandomWord(uid, usedWordIds) as WordType;
+    const word = (await getRandomWord(uid, usedWordIds)) as WordType;
     if (word?.id) {
       usedWordIds.push(word.id);
-      const questions = await getQuestionsByWordID(word.id, 2, usedWordIds, true);
-      const questionIds = questions.map((question) => question.id).filter((id) => id !== undefined) as string[];
+      const questions = await getQuestions(word.id, usedWordIds);
+      const questionIds = questions
+        .map((question) => question.id)
+        .filter((id) => id !== undefined) as string[];
       addWordIfNotExists(word, learningWords, questionIds);
       delete word.created_at;
       delete word.updated_at;

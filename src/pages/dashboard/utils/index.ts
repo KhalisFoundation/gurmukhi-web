@@ -37,7 +37,7 @@ export const fetchProgress = (user: any) => {
   return gameSession && gameSession.length > 0 ? gameSession : null;
 };
 
-export const shuffleArray = (array: GameScreen[]) => {
+export const shuffleArray = (array: any[]) => {
   for (let i = array.length - 1; i > 0; i--) {
     // Generate a random index between 0 and i
     const j = Math.floor(Math.random() * (i + 1));
@@ -68,13 +68,18 @@ export const gameAlgo = async (user: User) => {
     learningCount = learningQuestions.length;
   }
 
-  const { game: newQuestions, learningWords } = await getNewQuestions(newQuestionCount, false, user.uid);
-  if (newQuestions.length < learntCount) {
-    learntCount += newQuestionCount - newQuestions.length;
-    newQuestionCount = newQuestions.length;
+  const learntQuestions = await getRandomQuestions(user, learntCount, true);
+  if (learntQuestions.length < learntCount) {
+    newQuestionCount += learntCount - learntQuestions.length;
+    learntCount = learntQuestions.length;
   }
 
-  const learntQuestions = await getRandomQuestions(user, learntCount, true);
+  const { game: newQuestions, learningWords } = await getNewQuestions(
+    newQuestionCount,
+    false,
+    user.uid,
+  );
+
   let gameArray: GameScreen[] = [];
   if (learntCount === 0 && learningCount === 0) {
     gameArray = newQuestions as GameScreen[];

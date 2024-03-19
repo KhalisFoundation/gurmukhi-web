@@ -1,25 +1,29 @@
 import { User, GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
-import { addQuestionsBatch, getWordsFromUser } from 'database/shabadavalidb';
-import { createGameScreen } from '../utils';
+import { addQuestionsBatch, getWords } from 'database/shabadavalidb';
+import { createGameScreen, shuffleArray } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
-import { getQuestionsByWordID } from 'database/default';
+import { getQuestions } from 'database/default';
 import { QuestionData } from 'types';
 
-
-const getRandomQuestions = async (user: User, count: number, isLearnt: boolean, questionIds?: string[]) => {
+const getQuestionsHere = async (
+  user: User,
+  count: number,
+  isLearnt: boolean,
+  questionIds?: string[],
+) => {
   const gameArray: GameScreen[] = [];
-  let words: WordShabadavaliDB[] = await getWordsFromUser(user.uid, count, isLearnt);
+  let words: WordShabadavaliDB[] = await getWords(user.uid, isLearnt);
   if (words.length === 0) {
-    words = await getWordsFromUser(user.uid, count, !isLearnt);
+    words = await getWords(user.uid, !isLearnt);
   }
   let questionsPromises;
   if (isLearnt && questionIds) {
-    questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, questionIds, true));
+    questionsPromises = words.map((word) => getQuestions(word.word_id, questionIds));
   } else {
-    questionsPromises = words.map((word) => getQuestionsByWordID(word.word_id, 2, word.questionIds, true));
+    questionsPromises = words.map((word) => getQuestions(word.word_id, word.questionIds));
   }
   const questionsResults: QuestionData[][] = await Promise.all(questionsPromises);
-  const questions: QuestionData[] = questionsResults.flat().sort(() => Math.random() - 0.5);
+  const questions: QuestionData[] = shuffleArray(questionsResults.flat());
   const finalCount = Math.min(questions.length, count);
   const wordToQuestionMap = new Map<string, string[]>();
   for (let i = 0; i < finalCount; i++) {
@@ -44,4 +48,4 @@ const getRandomQuestions = async (user: User, count: number, isLearnt: boolean, 
   return gameArray;
 };
 
-export default getRandomQuestions;
+export default getQuestionsHere;
