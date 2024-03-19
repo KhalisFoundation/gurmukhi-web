@@ -5,7 +5,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { getQuestions } from 'database/default';
 import { QuestionData } from 'types';
 
-const getQuestionsHere = async (
+const getRandomQuestions = async (
   user: User,
   count: number,
   isLearnt: boolean,
@@ -48,4 +48,4 @@ const getQuestionsHere = async (
   return gameArray;
 };
 
-export default getQuestionsHere;
+export default getRandomQuestions;
