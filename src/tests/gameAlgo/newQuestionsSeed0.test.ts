@@ -1,25 +1,4 @@
 import getNewQuestions from 'pages/dashboard/hooks/useNew';
-// import { QuestionData, WordType } from 'types';
-// import { GameScreen } from 'types/shabadavalidb';
-// import seed0 from 'data/seed0.json';
-// import mockLearningWords from 'tests/mockData/learningWordsSeed0';
-
-// jest.mock('pages/dashboard/utils', () => ({
-//   createGameScreen: jest.fn(
-//     (key: string, data: QuestionData | WordType): GameScreen => ({
-//       key,
-//       data,
-//     }),
-//   ),
-// }));
-// jest.mock('pages/dashboard/hooks/useNew', () => ({
-//   __esModule: true,
-//   default: jest.fn().mockImplementation(async (count: number, isLocal: boolean) => {
-//     const game = isLocal ? seed0 : [];
-//     const learningWords = mockLearningWords;
-//     return { game, learningWords };
-//   }),
-// }));
 
 describe('getNewQuestions', () => {
   beforeEach(() => {
