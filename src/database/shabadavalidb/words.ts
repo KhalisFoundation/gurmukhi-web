@@ -19,7 +19,7 @@ import { generateRandomId } from 'database/util';
 import { usersCollection } from './users';
 import { shuffleArray } from 'pages/dashboard/utils';
 
-const getWordCollectionRef = (uid: string) => {
+export const getWordCollectionRef = (uid: string) => {
   return collection(shabadavaliDB, ALL_CONSTANT.USERS, uid, ALL_CONSTANT.WORDS);
 };
 export const addWordsToSubCollection = async (uid: string, data: WordShabadavaliDB) => {
