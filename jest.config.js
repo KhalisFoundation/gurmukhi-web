@@ -7,4 +7,7 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
+  moduleNameMapper: {
+    '^firebase/app$': '<rootDir>/__mocks__/firebase/app.ts',
+  },
 };

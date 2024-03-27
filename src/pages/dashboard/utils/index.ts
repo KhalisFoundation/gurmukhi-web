@@ -8,15 +8,9 @@ import {
   getRandomWordFromArray,
   createGameScreen,
   fetchProgress,
+  checkIsFirstTime,
 } from './helpers';
 
-const checkIsFirstTime = (user: User) => {
-  return (
-    user?.progress.currentLevel === 0 &&
-    user?.progress.currentProgress === 0 &&
-    user?.progress.gameSession.length === 0
-  );
-};
 
 const gameAlgo = async (user: User) => {
   const isFirstTime = checkIsFirstTime(user);

@@ -1,6 +1,15 @@
 import { WordShabadavaliDB } from 'types/shabadavalidb';
 import { QuestionData, WordType } from 'types';
-import { GameScreen } from 'types/shabadavalidb';
+import { GameScreen, User } from 'types/shabadavalidb';
+
+export const checkIsFirstTime = (user: User) => {
+  return (
+    user?.coins === 0 &&
+    user?.progress.currentLevel === 0 &&
+    user?.progress.currentProgress === 0 &&
+    user?.progress.gameSession.length === 0
+  );
+};
 
 export const shuffleArray = (array: any[]) => {
   for (let i = array.length - 1; i > 0; i--) {
