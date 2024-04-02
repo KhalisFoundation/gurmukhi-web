@@ -17,20 +17,38 @@ import { WordShabadavaliDB } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 import { generateRandomId } from 'database/util';
 import { usersCollection } from './users';
+import { shuffleArray } from 'pages/dashboard/utils';
 
 const getWordCollectionRef = (uid: string) => {
   return collection(shabadavaliDB, ALL_CONSTANT.USERS, uid, ALL_CONSTANT.WORDS);
 };
-export const addWordsToSubCollection = async (
-  uid: string,
-  data: WordShabadavaliDB,
-) => {
+export const addWordsToSubCollection = async (uid: string, data: WordShabadavaliDB) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const docRef = await addDoc(wordsCollectionRef, data);
     console.log('Document added', docRef.id);
   } catch (error) {
     console.error('Error adding document: ', error);
+  }
+};
+
+export const getWords = async (uid: string, isLearnt: boolean) => {
+  try {
+    const wordsCollectionRef = getWordCollectionRef(uid);
+    const q = query(wordsCollectionRef, where('isLearnt', '==', isLearnt), limit(10));
+    // may add a time condition
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      return [];
+    }
+    const documents = querySnapshot.docs.map((document) => ({
+      id: document.id,
+      ...document.data(),
+    }));
+    return shuffleArray(documents);
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 };
 

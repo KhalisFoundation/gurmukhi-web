@@ -46,15 +46,22 @@ export default function Dashboard() {
     <div className='h-screen overflow-y-auto lg:h-full lg:overflow-hidden flex flex-col justify-between'>
       <Meta title={title} description={description} />
       <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
-        { isLoading ? 
+        {isLoading ? (
           <div className='h-screen flex flex-col justify-center items-center'>
             <div className='text-[#0369a1] text-4xl font-bold mb-8'>Hold on tight, adventurer!</div>
             <div className='relative w-24 h-24'>
               <Loading />
             </div>
-            <div className='text-[#0369a1] text-2xl font-bold mt-8'>Family of Raag rattans🎶 and celestial fairies✨ are singing shabads...</div>
-            {reloadPrompt && <div className='text-[#0369a1] text-2xl font-bold mt-8'>It is taking longer than expected🫨 Please reload the page💫</div>}
-          </div> :
+            <div className='text-[#0369a1] text-2xl font-bold mt-8'>
+              Family of Raag rattans🎶 and celestial fairies✨ are singing shabads...
+            </div>
+            {reloadPrompt && (
+              <div className='text-[#0369a1] text-2xl font-bold mt-8'>
+                It is taking longer than expected🫨 Please reload the page💫
+              </div>
+            )}
+          </div>
+        ) : (
           <>
             <Ssa name={user.displayName && userData.displayName} />
             <div className='flex flex-col lg:flex-row text-center justify-center gap-6 h-full h-screen lg:h-3/5 w-full items-center'>
@@ -63,7 +70,7 @@ export default function Dashboard() {
               <WordBox commonStyle={commonStyle} />
             </div>
           </>
-        }
+        )}
       </div>
       <LevelsFooter
         operation={ALL_CONSTANT.START_QUESTION}
