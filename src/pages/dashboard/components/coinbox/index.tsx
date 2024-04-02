@@ -9,7 +9,7 @@ import { setNanakCoin } from 'store/features/nanakCoin';
 
 function CoinBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
-  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const { currentLevel } = useAppSelector((state) => state.progress);
   const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
   const [coins, setCoins] = useState<number>(nanakCoin);
   const { user } = useUserAuth();

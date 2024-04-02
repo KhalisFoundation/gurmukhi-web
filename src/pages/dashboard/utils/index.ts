@@ -28,7 +28,7 @@ export const checkIsFirstTime = (user: User) => {
   return (
     user?.progress.currentLevel === 0 &&
     user?.progress.currentProgress === 0 &&
-    user?.progress.gameSession.length === 0
+    (!user?.progress.gameSession || user?.progress.gameSession.length === 0)
   );
 };
 

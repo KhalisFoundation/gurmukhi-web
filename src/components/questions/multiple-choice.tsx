@@ -4,14 +4,13 @@ import { Option, QuestionData } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
 import {
-  updateCurrentLevel,
   updateWordFromUser,
 } from 'database/shabadavalidb';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
-import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
+import { incrementLevel } from 'store/features/progressSlice';
 
 export default function MultipleChoiceQuestion({
   questionData,
@@ -28,7 +27,7 @@ export default function MultipleChoiceQuestion({
   const [selectedOption, setSelectedOption] = React.useState<Option | null>(
     null,
   );
-  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const { currentLevel } = useAppSelector((state) => state.progress);
   const { user } = useUserAuth();
   const dispatch = useAppDispatch();
 
@@ -43,8 +42,7 @@ export default function MultipleChoiceQuestion({
         setOptionSelected(true);
         if (questionData.options[questionData.answer] === selectedOption) {
           if (currentLevel + 1 <= ALL_CONSTANT.LEVELS_COUNT) {
-            await updateCurrentLevel(user.uid, currentLevel + 1);
-            dispatch(increment());
+            dispatch(incrementLevel({ uid: user.uid, currentLevel }));
           }
           setIsCorrectOption(true);
         } else {
