@@ -12,10 +12,10 @@ import Loading from 'components/loading';
 
 export default function Question() {
   const { title, description } = metaTags.QUESTION;
-  const currentGamePosition = useAppSelector(
-    (state) => state.currentGamePosition,
-  );
-  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const { 
+    currentProgress: currentGamePosition,
+    currentLevel,
+  } = useAppSelector((state) => state.progress);
   const [wordID, setWordID] = useState<string | null>(null);
   const [questionID, setQuestionID] = useState<string | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<QuestionData | null>(

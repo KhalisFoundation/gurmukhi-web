@@ -16,10 +16,10 @@ export default function Defintion() {
   const { title, description } = metaTags.DEFINITION;
   const [wordID, setWordID] = useState<string | null>(null);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
-  const currentGamePosition = useAppSelector(
-    (state) => state.currentGamePosition,
-  );
-  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const { 
+    currentProgress: currentGamePosition,
+    currentLevel,
+  } = useAppSelector((state) => state.progress);
 
   // Extract the "id" parameter from the search string in the URL
   useEffect(() => {

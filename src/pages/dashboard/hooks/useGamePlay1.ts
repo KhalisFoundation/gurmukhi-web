@@ -2,12 +2,10 @@ import { User } from 'types/shabadavalidb';
 import { GameScreen } from 'types/shabadavalidb';
 import { fetchProgress } from '../utils';
 import { useAppDispatch } from 'store/hooks';
-import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
-import { setCurrentLevel } from 'store/features/currentLevelSlice';
-import { getUserData, updateProgress } from 'database/shabadavalidb';
+import { getUserData } from 'database/shabadavalidb';
 import { useEffect } from 'react';
-import { addScreens } from 'store/features/gameArraySlice';
 import { gameAlgo } from '../utils';
+import { setProgress, updateUserProgress } from 'store/features/progressSlice';
 
 const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetGame = true) => {
   const dispatch = useAppDispatch();
@@ -19,13 +17,12 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
       const gameArray: GameScreen[] = [];
       return { gameArray };
     }
-    const progress: GameScreen[] | null = await fetchProgress(userData);
-    if (progress && progress.length > 0) {
-      const gameArray: GameScreen[] | null = progress;
+    const gameSession: GameScreen[] | null = await fetchProgress(userData);
+    if (gameSession && Array.isArray(gameSession) && gameSession.length > 0) {
+      const gameArray: GameScreen[] | null = gameSession;
       const currentProgress = userData?.progress.currentProgress || 0;
       const currentLevel = userData?.progress.currentLevel || 0;
-      dispatch(setCurrentGamePosition(currentProgress));
-      dispatch(setCurrentLevel(currentLevel));
+      dispatch(setProgress(userData));
       return { currentProgress, currentLevel, gameArray };
     }
     const { gameArray } = await gameAlgo(user);
@@ -39,8 +36,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
           toggleLoading(true);
           const { currentProgress, currentLevel, gameArray } = await gamePlay();
           if (gameArray) {
-            await updateProgress(user.uid, currentProgress, gameArray, currentLevel);
-            dispatch(addScreens(gameArray));
+            dispatch(updateUserProgress({ uid: user.uid, currentProgress, gameArray, currentLevel }));
           }
           toggleLoading(false);
         } catch (error) {

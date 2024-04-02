@@ -15,10 +15,11 @@ export default function Examples() {
   const { t: text } = useTranslation();
   const [wordID, setWordID] = useState<string | null>(null);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
-  const currentGamePosition = useAppSelector(
-    (state) => state.currentGamePosition,
-  );
-  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const { 
+    currentProgress: currentGamePosition,
+    currentLevel,
+  } = useAppSelector((state) => state.progress);
+
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
   const { title, description } = metaTags.EXAMPLES;

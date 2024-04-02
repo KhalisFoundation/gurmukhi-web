@@ -1,9 +1,9 @@
 import { GameScreen } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 import { ROUTES } from 'constants/routes';
-import { getNanakCoin, updateCurrentProgress } from 'database/shabadavalidb';
-import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
+import { getNanakCoin } from 'database/shabadavalidb';
 import { User } from 'types/shabadavalidb';
+import { setCurrentGamePosition } from 'store/features/progressSlice';
 
 const navigateTo = (
   navigate: any,
@@ -56,8 +56,7 @@ const handleClick = async (
         return;
       case ALL_CONSTANT.NEXT:
         if (currentGamePosition) {
-          await updateCurrentProgress(user.uid, currentGamePosition);
-          dispatch(setCurrentGamePosition(currentGamePosition));
+          dispatch(setCurrentGamePosition({ uid: user.uid, currentGamePosition }));
         }
         break;
     }

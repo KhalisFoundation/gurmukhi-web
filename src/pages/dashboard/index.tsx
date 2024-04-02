@@ -21,8 +21,10 @@ export default function Dashboard() {
   const [isLoading, toggleLoading] = useState<boolean>(true);
   const [reloadPrompt, setReloadPrompt] = useState<boolean>(false);
   useGamePlay(user, toggleLoading);
-  const currentLevel: number = useAppSelector((state) => state.currentLevel);
-  const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
+  const { 
+    currentProgress: currentGamePosition,
+    currentLevel,
+  } = useAppSelector((state) => state.progress);
 
   useEffect(() => {
     if (user) {

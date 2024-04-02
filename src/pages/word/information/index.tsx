@@ -16,8 +16,10 @@ import Loading from 'components/loading';
 export default function Information() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.INFORMATION;
-  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
-  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const { 
+    currentProgress: currentGamePosition,
+    currentLevel,
+  } = useAppSelector((state) => state.progress);
   const [wordID, setWordID] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);

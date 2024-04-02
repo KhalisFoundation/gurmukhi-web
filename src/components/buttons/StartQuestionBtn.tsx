@@ -7,6 +7,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
+import { GameScreen } from 'types/shabadavalidb';
 
 interface Props {
   operation: string;
@@ -29,8 +30,10 @@ const StartQuestionBtn = ({
   const linkClass = `flex flex-row items-center justify-between gap-2 min-w-52 ${isActive} ${
     isDisabled ? 'cursor-not-allowed' : ''
   }`;
-  const currentLevel = useAppSelector((state) => state.currentLevel);
-  const gameArray = useAppSelector((state) => state.gameArray);
+  const { 
+    gameSession: gameArray,
+    currentLevel,
+  } = useAppSelector((state) => state.progress);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useUserAuth();
@@ -42,7 +45,7 @@ const StartQuestionBtn = ({
           currentGamePosition,
           operation,
           currentLevel,
-          gameArray,
+          gameArray as GameScreen[],
           navigate,
           user,
           dispatch,

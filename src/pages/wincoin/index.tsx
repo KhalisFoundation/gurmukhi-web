@@ -22,6 +22,7 @@ import handleClick from 'components/buttons/hooks/useOnClick';
 import LoaderButton from 'components/buttons/LoaderButton';
 import { addScreens } from 'store/features/gameArraySlice';
 import { GameScreen } from 'types/shabadavalidb';
+import { setCurrentGamePosition } from 'store/features/progressSlice';
 
 function WinCoin() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ function WinCoin() {
   const dispatch = useAppDispatch();
   const { title, description } = metaTags.WIN;
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
-  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const { currentLevel } = useAppSelector((state) => state.progress);
   const [isLoading, toggleIsLoading] = useState<boolean>(true);
   const [nextSession, setNextSession] = useState<GameScreen[]>([]);
 
@@ -38,6 +39,7 @@ function WinCoin() {
     const storeData = async () => {
       toggleIsLoading(true);
       if (currentLevel === ALL_CONSTANT.LEVELS_COUNT) {
+        dispatch(setCurrentGamePosition({ uid: user.uid, currentGamePosition: 0 }));
         dispatch(resetGamePosition());
         dispatch(resetGameArray());
         const data = await getUserData(user.uid);
