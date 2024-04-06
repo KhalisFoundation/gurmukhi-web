@@ -24,41 +24,41 @@ const gameAlgo = async (user: User) => {
     return { gameArray };
   }
   let learningCount = 9;
-  let newQuestionCount = 2;
+  // let newQuestionCount = 2;
   let learntCount = 2;
   const learningQuestions = await getRandomQuestions(user, learningCount, false);
   if (learningQuestions.length < learningCount) {
-    newQuestionCount += learningCount - learningQuestions.length;
+    // newQuestionCount += learningCount - learningQuestions.length;
     learningCount = learningQuestions.length;
   }
 
   const learntQuestions = await getRandomQuestions(user, learntCount, true);
   if (learntQuestions.length < learntCount) {
-    newQuestionCount += learntCount - learntQuestions.length;
+    // newQuestionCount += learntCount - learntQuestions.length;
     learntCount = learntQuestions.length;
   }
 
-  const { game: newQuestions, learningWords } = await getNewQuestions(
-    newQuestionCount,
-    false,
-    user.uid,
-  );
+  // const { game: newQuestions, learningWords } = await getNewQuestions(
+  //   newQuestionCount,
+  //   false,
+  //   user.uid,
+  // );
 
   let gameArray: GameScreen[] = [];
   if (learntCount === 0 && learningCount === 0) {
-    gameArray = newQuestions as GameScreen[];
+    // gameArray = newQuestions as GameScreen[];
   } else {
     const combinedArrays = [
       ...shuffleArray(learningQuestions),
-      ...newQuestions,
+      // ...newQuestions,
       ...shuffleArray(learntQuestions),
     ];
     gameArray = [...combinedArrays];
   }
 
-  if (learningWords.length > 0) {
-    await addWordsBatch(user.uid, learningWords);
-  }
+  // if (learningWords.length > 0) {
+  //   await addWordsBatch(user.uid, learningWords);
+  // }
   return { gameArray };
 };
 
