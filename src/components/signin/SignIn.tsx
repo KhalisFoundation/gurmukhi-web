@@ -31,12 +31,12 @@ export default function SignIn() {
 
   const signToggle = (e: FormEvent) => {
     e.preventDefault();
-    const switchElement = document.getElementsByClassName('switch')[0];
-    
-    if (switchElement?.classList.contains('left-[4px]')) {
+    const switchElement = document.getElementsByClassName('switch')[0] as HTMLElement | null;
+
+    if (switchElement !== null) {
       switchElement.classList.toggle('translate-x-[94%]');
     } else {
-      switchElement.classList.toggle('translate-x-[94%]');
+      console.warn('Switch element not found.');
     }
     setIsNewUser(!isNewUser);
   };
