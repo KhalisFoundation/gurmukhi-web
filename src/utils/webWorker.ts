@@ -1,6 +1,7 @@
 import { gameAlgo } from 'pages/dashboard/utils';
 import { User } from 'types/shabadavalidb';
 import { updateNextSession } from 'database/shabadavalidb';
+import { bugsnagErrorHandler } from 'utils';
 
 export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorker: any) => {
   try {
@@ -13,6 +14,13 @@ export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorke
     await updateNextSession(usr.uid, gameArray);
     dispatch(setWebWorker(false));
   } catch (error) {
-    console.error('Error fetching next session data:', error);
+    bugsnagErrorHandler(
+      'Error fetching next session data' + error?.toString(),
+      usr.uid,
+      'web worker',
+      usr.uid,
+      usr,
+      usr,
+    );
   }
 };

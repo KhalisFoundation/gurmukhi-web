@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { shabadavaliDB as db } from '../../firebase';
 import { GameScreen, User } from 'types/shabadavalidb';
+import { bugsnagErrorHandler } from 'utils';
 
 export const usersCollection = collection(db, 'users');
 
@@ -77,7 +78,13 @@ export const updateNanakCoin = async (uid: string, newCoinValue: number) => {
       coins: newCoinValue,
     });
   } catch (error) {
-    console.error('Error: Unable to update the coin', error);
+    bugsnagErrorHandler(
+      'Error updating nanak coin:' + error?.toString(),
+      uid,
+      'updateNanakCoin in users.tsx',
+      uid,
+      { newCoinValue },
+    );
   }
 };
 
@@ -134,7 +141,7 @@ export const getUserData = async (uid: string) => {
   }
   const data = userDoc.data();
   const user: User = {
-    displaName: data.displayName,
+    displayName: data.displayName,
     role: data.role,
     photoURL: data.photoURL,
     uid: data.uid,
