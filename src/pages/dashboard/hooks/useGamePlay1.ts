@@ -45,13 +45,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
           }
           toggleLoading(false);
         } catch (error) {
-          bugsnagErrorHandler(
-            'Error in Game Play Algo' + error?.toString(),
-            user.uid,
-            'Game Play Algo',
-            user.uid,
-            user,
-          );
+          bugsnagErrorHandler(user.uid, error, 'Game Play Algo', { ...user });
         }
       }
     };

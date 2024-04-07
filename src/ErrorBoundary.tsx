@@ -9,6 +9,7 @@ const BugSnagAPIKey = process.env.REACT_APP_BUGSNAG_API_KEY || '';
 Bugsnag.start({
   apiKey: BugSnagAPIKey,
   plugins: [new BugsnagPluginReact()],
+  releaseStage: 'production',
 });
 
 BugsnagPerformance.start({ apiKey: BugSnagAPIKey });

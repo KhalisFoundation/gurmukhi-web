@@ -63,11 +63,10 @@ const handleClick = async (
             dispatch(setCurrentGamePosition(currentGamePosition));
           } catch (error) {
             bugsnagErrorHandler(
-              'Error updating current progress:' + error?.toString(),
               user.uid,
+              error,
               'handleClick in useOnClick.ts',
-              user.uid,
-              user,
+              { uid: user.uid },
               user,
             );
           }

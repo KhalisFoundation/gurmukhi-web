@@ -11,6 +11,7 @@ import {
 import { shabadavaliDB as db } from '../../firebase';
 import { GameScreen, User } from 'types/shabadavalidb';
 import { bugsnagErrorHandler } from 'utils';
+import nanakCoin from 'store/features/nanakCoin';
 
 export const usersCollection = collection(db, 'users');
 
@@ -78,13 +79,10 @@ export const updateNanakCoin = async (uid: string, newCoinValue: number) => {
       coins: newCoinValue,
     });
   } catch (error) {
-    bugsnagErrorHandler(
-      'Error updating nanak coin:' + error?.toString(),
-      uid,
-      'updateNanakCoin in users.tsx',
-      uid,
-      { newCoinValue },
-    );
+    bugsnagErrorHandler(uid, error, 'updateNanakCoin in users.tsx', {
+      uid: uid,
+      nanakCoin: nanakCoin,
+    });
   }
 };
 

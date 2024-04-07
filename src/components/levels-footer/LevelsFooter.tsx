@@ -7,7 +7,6 @@ import LevelHexagon from '../levels/LevelHexagon';
 import { setWebWorker } from 'store/features/webWorkerSlice';
 import StartQuestionBtn from '../buttons/StartQuestionBtn';
 import { getUserData } from 'database/shabadavalidb';
-import { bugsnagErrorHandler } from 'utils';
 
 interface Props {
   operation: string;
@@ -42,7 +41,6 @@ export default function LevelsFooter({
 
   useEffect(() => {
     const callWorker = async () => {
-      bugsnagErrorHandler('worker is running', user.uid, 'LevelsFoots', user.uid, user);
       const userData = await getUserData(user.uid);
       dispatch(setWebWorker(true));
       if (!userData) {

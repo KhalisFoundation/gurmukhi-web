@@ -14,13 +14,6 @@ export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorke
     await updateNextSession(usr.uid, gameArray);
     dispatch(setWebWorker(false));
   } catch (error) {
-    bugsnagErrorHandler(
-      'Error fetching next session data' + error?.toString(),
-      usr.uid,
-      'web worker',
-      usr.uid,
-      usr,
-      usr,
-    );
+    bugsnagErrorHandler(usr.uid, error, 'web worker', {}, usr);
   }
 };
