@@ -1,4 +1,4 @@
-import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, query, where, documentId } from 'firebase/firestore';
 import { getDataById, wordsCollection } from './database';
 import { wordsdb } from '../../firebase';
 import { Option, QuestionData } from 'types';
@@ -20,7 +20,7 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
     queryRef = query(
       questionCollection,
       where('word_id', '==', wordID),
-      where('id', 'not-in', questionIDs),
+      where(documentId(), 'not-in', questionIDs),
       limit(2),
     );
   }
@@ -47,7 +47,7 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
   return questionsData;
 };
 const getQuestionByID = async (id: string) => {
-  const queryRef = query(questionCollection, where('id', '==', id));
+  const queryRef = query(questionCollection, where(documentId(), '==', id));
   const questionSnapshot = await getDocs(queryRef);
   if (questionSnapshot.empty) {
     return null;
