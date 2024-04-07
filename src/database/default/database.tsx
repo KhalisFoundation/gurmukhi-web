@@ -15,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import { generateRandomId } from 'database/util';
 import { getUserData } from 'database/shabadavalidb';
+import { bugsnagErrorHandler } from 'utils';
 
 const wordsCollection = collection(wordsdb, 'words');
 const sentencesCollection = collection(wordsdb, 'sentences');
@@ -32,19 +33,28 @@ const getDataById = async (
     : query(collectionRef, where(fieldPath, '==', id));
   const querySnapshot = await getDocs(queryRef);
 
-  if (limitVal && limitVal > 1) {
-    return querySnapshot.docs.map((doc) => doc.data());
-  } else {
-    if (miniWord) {
-      const { word, translation } = querySnapshot.docs[0].data();
-
-      return {
-        id,
-        word,
-        translation,
-      };
+  try {
+    if (limitVal && limitVal > 1) {
+      return querySnapshot.docs.map((doc) => doc.data());
+    } else {
+      if (miniWord) {
+        const { word, translation } = querySnapshot.docs[0].data();
+  
+        return {
+          id,
+          word,
+          translation,
+        };
+      }
+      return querySnapshot.docs[0].data();
     }
-    return querySnapshot.docs[0].data();
+  } catch (error) {
+    bugsnagErrorHandler(
+      'tester',
+      error,
+      'getDataById',
+      { id, key, miniWord, querySnapshot, docs: querySnapshot.docs },
+    );
   }
 };
 

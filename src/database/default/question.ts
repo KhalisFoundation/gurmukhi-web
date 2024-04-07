@@ -2,6 +2,7 @@ import { collection, getDocs, limit, query, where, documentId } from 'firebase/f
 import { getDataById, wordsCollection } from './database';
 import { wordsdb } from '../../firebase';
 import { Option, QuestionData } from 'types';
+import { bugsnagErrorHandler } from 'utils';
 
 const questionCollection = collection(wordsdb, 'questions');
 
@@ -37,8 +38,18 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
         questionData.options.length > 0 &&
         typeof questionData.options[0] === 'string'
       ) {
-        const options = await getOptions(questionData.options as string[]);
-        return { ...questionData, options } as QuestionData;
+        try {
+          const options = await getOptions(questionData.options as string[]);
+          return { ...questionData, options } as QuestionData;
+        } catch (error) {
+          bugsnagErrorHandler(
+            'tester',
+            error,
+            'getOptions',
+            { questionData },
+          );
+          return questionData;
+        }
       }
 
       return questionData;
