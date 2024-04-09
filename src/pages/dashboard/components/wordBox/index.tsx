@@ -5,6 +5,7 @@ import { getRandomWord } from 'database/default';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
 import { useUserAuth } from 'auth';
+import { getUserData } from 'database/shabadavalidb';
 
 function WordBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
@@ -14,7 +15,8 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const newWord = await getRandomWord(user.uid, [], false);
+      const userData = await getUserData(user.uid);
+      const newWord = await getRandomWord(user.uid, userData?.wordIds || [], false);
       if (newWord) {
         setRandomWord(newWord);
       }

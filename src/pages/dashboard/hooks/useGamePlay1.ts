@@ -8,6 +8,7 @@ import { getUserData, updateProgress } from 'database/shabadavalidb';
 import { useEffect } from 'react';
 import { addScreens } from 'store/features/gameArraySlice';
 import { gameAlgo } from '../utils';
+import { bugsnagErrorHandler } from 'utils';
 
 const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetGame = true) => {
   const dispatch = useAppDispatch();
@@ -44,7 +45,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
           }
           toggleLoading(false);
         } catch (error) {
-          console.error('Error in Game Play Algo', error);
+          bugsnagErrorHandler(user.uid, error, 'Game Play Algo', { ...user });
         }
       }
     };

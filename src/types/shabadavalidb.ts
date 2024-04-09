@@ -5,7 +5,7 @@ export interface GameScreen {
   data: any;
 }
 export interface User {
-  displaName: string;
+  displayName: string;
   role: string;
   photoURL: string;
   uid: string;

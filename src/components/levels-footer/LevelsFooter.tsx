@@ -41,7 +41,6 @@ export default function LevelsFooter({
 
   useEffect(() => {
     const callWorker = async () => {
-      console.log('worker is running');
       const userData = await getUserData(user.uid);
       dispatch(setWebWorker(true));
       if (!userData) {

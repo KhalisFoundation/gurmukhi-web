@@ -18,6 +18,7 @@ jobs:
       REACT_APP_MEASUREMENT_ID: ${{ secrets.REACT_APP_MEASUREMENT_ID }}
       REACT_APP_BACKEND_API_URL: ${{ secrets.REACT_APP_BACKEND_API_URL }}
       NARAKEET_TTS_API_KEY: ${{ secrets.NARAKEET_TTS_API_KEY }}
+      REACT_APP_BUGSNAG_API_KEY: ${{ secrets.REACT_APP_BUGSNAG_API_KEY }}
     steps:
       - uses: actions/checkout@v3
       - run: yarn install --frozen-lockfile && yarn run build
