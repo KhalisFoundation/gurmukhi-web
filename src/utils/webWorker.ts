@@ -11,6 +11,13 @@ export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorke
       return;
     }
     const { gameArray } = await gameAlgo(usr);
+    bugsnagErrorHandler(
+      usr.uid,
+      new Error('fetching next session'),
+      'fetchNextSessionData',
+      { gameArray },
+      usr,
+    );
     await updateNextSession(usr.uid, gameArray);
     dispatch(setWebWorker(false));
   } catch (error) {

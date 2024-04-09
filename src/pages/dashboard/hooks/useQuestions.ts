@@ -4,6 +4,7 @@ import { createGameScreen, shuffleArray } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
 import { getQuestions } from 'database/default';
 import { QuestionData } from 'types';
+import { bugsnagErrorHandler } from 'utils';
 
 const getRandomQuestions = async (
   user: User,
@@ -12,6 +13,12 @@ const getRandomQuestions = async (
   questionIds?: string[],
 ) => {
   const gameArray: GameScreen[] = [];
+  bugsnagErrorHandler(
+    user.uid || 'undefined',
+    new Error('getRandomQuestions'),
+    'getRandomQuestions',
+    { user },
+  );
   let words: WordShabadavaliDB[] = await getWords(user.uid, isLearnt);
   if (words.length === 0) {
     words = await getWords(user.uid, !isLearnt);

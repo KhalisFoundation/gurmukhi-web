@@ -18,10 +18,12 @@ import ALL_CONSTANT from 'constants/constant';
 import { generateRandomId } from 'database/util';
 import { usersCollection } from './users';
 import { shuffleArray } from 'pages/dashboard/utils';
+import { bugsnagErrorHandler } from 'utils';
 
 const getWordCollectionRef = (uid: string) => {
   return collection(shabadavaliDB, ALL_CONSTANT.USERS, uid, ALL_CONSTANT.WORDS);
 };
+
 export const addWordsToSubCollection = async (uid: string, data: WordShabadavaliDB) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
@@ -47,6 +49,7 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
     }));
     return shuffleArray(documents);
   } catch (error) {
+    bugsnagErrorHandler(uid || 'undefined', error, 'getWords', { uid, isLearnt });
     console.error(error);
     return [];
   }
