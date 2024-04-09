@@ -1,7 +1,8 @@
-import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, query, where, documentId } from 'firebase/firestore';
 import { getDataById, wordsCollection } from './database';
 import { wordsdb } from '../../firebase';
 import { Option, QuestionData } from 'types';
+import { bugsnagErrorHandler } from 'utils';
 
 const questionCollection = collection(wordsdb, 'questions');
 
@@ -20,7 +21,7 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
     queryRef = query(
       questionCollection,
       where('word_id', '==', wordID),
-      where('id', 'not-in', questionIDs),
+      where(documentId(), 'not-in', questionIDs),
       limit(2),
     );
   }
@@ -37,8 +38,18 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
         questionData.options.length > 0 &&
         typeof questionData.options[0] === 'string'
       ) {
-        const options = await getOptions(questionData.options as string[]);
-        return { ...questionData, options } as QuestionData;
+        try {
+          const options = await getOptions(questionData.options as string[]);
+          return { ...questionData, options } as QuestionData;
+        } catch (error) {
+          bugsnagErrorHandler(
+            'tester',
+            error,
+            'getOptions',
+            { questionData },
+          );
+          return questionData;
+        }
       }
 
       return questionData;
@@ -47,7 +58,7 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
   return questionsData;
 };
 const getQuestionByID = async (id: string) => {
-  const queryRef = query(questionCollection, where('id', '==', id));
+  const queryRef = query(questionCollection, where(documentId(), '==', id));
   const questionSnapshot = await getDocs(queryRef);
   if (questionSnapshot.empty) {
     return null;

@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from 'auth/context';
 import { Provider } from 'react-redux';
 import { store, persistor } from 'store/store';
+import ErrorBoundary from 'ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -14,7 +15,9 @@ root.render(
     <AuthProvider>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <App />
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
         </PersistGate>
       </Provider>
     </AuthProvider>

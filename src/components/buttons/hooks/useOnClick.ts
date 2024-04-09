@@ -4,6 +4,8 @@ import { ROUTES } from 'constants/routes';
 import { getNanakCoin, updateCurrentProgress } from 'database/shabadavalidb';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { User } from 'types/shabadavalidb';
+import Bugsnag from '@bugsnag/js';
+import { bugsnagErrorHandler } from 'utils';
 
 const navigateTo = (
   navigate: any,
@@ -34,7 +36,7 @@ const handleClick = async (
     currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition] :
     currentLevel < ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition];
   if (gameArray.length === 0) {
-    console.error('Game Array is empty');
+    Bugsnag.notify(new Error('Game Array is empty'));
     return;
   }
   if (condition) {
@@ -56,8 +58,18 @@ const handleClick = async (
         return;
       case ALL_CONSTANT.NEXT:
         if (currentGamePosition) {
-          await updateCurrentProgress(user.uid, currentGamePosition);
-          dispatch(setCurrentGamePosition(currentGamePosition));
+          try {
+            await updateCurrentProgress(user.uid, currentGamePosition);
+            dispatch(setCurrentGamePosition(currentGamePosition));
+          } catch (error) {
+            bugsnagErrorHandler(
+              user.uid,
+              error,
+              'handleClick in useOnClick.ts',
+              { uid: user.uid },
+              user,
+            );
+          }
         }
         break;
     }

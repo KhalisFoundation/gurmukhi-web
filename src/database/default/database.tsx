@@ -13,8 +13,9 @@ import {
   QueryFieldFilterConstraint,
   where,
 } from 'firebase/firestore';
-import { generateRandomId } from 'database/util';
+// import { generateRandomId } from 'database/util';
 import { getUserData } from 'database/shabadavalidb';
+import { bugsnagErrorHandler } from 'utils';
 
 const wordsCollection = collection(wordsdb, 'words');
 const sentencesCollection = collection(wordsdb, 'sentences');
@@ -32,19 +33,28 @@ const getDataById = async (
     : query(collectionRef, where(fieldPath, '==', id));
   const querySnapshot = await getDocs(queryRef);
 
-  if (limitVal && limitVal > 1) {
-    return querySnapshot.docs.map((doc) => doc.data());
-  } else {
-    if (miniWord) {
-      const { word, translation } = querySnapshot.docs[0].data();
-
-      return {
-        id,
-        word,
-        translation,
-      };
+  try {
+    if (limitVal && limitVal > 1) {
+      return querySnapshot.docs.map((doc) => doc.data());
+    } else {
+      if (miniWord) {
+        const { word, translation } = querySnapshot.docs[0].data();
+  
+        return {
+          id,
+          word,
+          translation,
+        };
+      }
+      return querySnapshot.docs[0].data();
     }
-    return querySnapshot.docs[0].data();
+  } catch (error) {
+    bugsnagErrorHandler(
+      'tester',
+      error,
+      'getDataById',
+      { id, key, miniWord, querySnapshot, docs: querySnapshot.docs },
+    );
   }
 };
 
@@ -55,36 +65,30 @@ const getRandomData = async (
   key?: string | null,
   limitVal?: number,
 ) => {
-  const randomId = generateRandomId();
-  const fieldPath = key ? key : documentId();
-  const queryRef = limitVal ?
-    query(
-      collectionRef,
-      and(
-        where(fieldPath, '>=', randomId),
-        conditions),
-      limit(limitVal),
-    ) : query(collectionRef, and(where(fieldPath, '>=', randomId), conditions));
+  // const randomId = generateRandomId();
+  // const fieldPath = key ? key : documentId();
+  const queryRef = limitVal
+    ? query(collectionRef, and(conditions), limit(limitVal))
+    : query(collectionRef, and(conditions));
   const querySnapshot = await getDocs(queryRef!);
 
   if (!querySnapshot.empty) {
     if (limitVal && limitVal > 1) {
       return querySnapshot.docs.map((doc) => doc.data());
     } else {
-      return [{
-        ...querySnapshot.docs[0].data(),
-        id: querySnapshot.docs[0].id,
-      }];
+      return [
+        {
+          ...querySnapshot.docs[0].data(),
+          id: querySnapshot.docs[0].id,
+        },
+      ];
     }
   } else {
     return null;
   }
 };
 
-const getSemanticsByIds = async (
-  synonymsIds: string[],
-  antonymsIds: string[],
-) => {
+const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) => {
   const synonymsPromises: any = (synonymsIds || []).map((synonym) =>
     getDataById(synonym.toString(), wordsCollection, null, 1, true),
   );
@@ -108,12 +112,7 @@ const getWordById = async (wordId: string, needExtras = false) => {
 
   if (wordData) {
     if (needExtras) {
-      const sentences = await getDataById(
-        wordId,
-        sentencesCollection,
-        'word_id',
-        3,
-      );
+      const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
       const { synonyms, antonyms } = await getSemanticsByIds(
         wordData.synonyms as string[],
         wordData.antonyms as string[],
@@ -157,10 +156,7 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
         const batchIds = existingWordIds.slice(i, i + 10);
         const wordData = await getRandomData(
           wordsCollection,
-          and(
-            where('status', '==', 'active'),
-            where(documentId(), 'not-in', batchIds),
-          ),
+          and(where('status', '==', 'active'), where(documentId(), 'not-in', batchIds)),
           null,
           10,
         );
@@ -170,29 +166,23 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
 
     const resolvedWords = await Promise.all(batches);
     const wordDataArray = [] as WordType[];
-    let wordData = null;
-    resolvedWords.forEach((words) => {
-      if (words && words.length > 0) {
-        for (const word of words) {
-          if (!existingWordIds.includes(word.id)) {
-            wordDataArray.push(word as WordType);
+
+    if (resolvedWords.length > 0) {
+      for (const words of resolvedWords) {
+        if (words && words.length > 0) {
+          for (const word of words) {
+            if (!existingWordIds.includes(word.id)) {
+              wordDataArray.push(word as WordType);
+            }
           }
         }
       }
-    });
-    if (wordDataArray.length > 0) {
-      wordData = wordDataArray[0];
-    } else {
-      wordData = (resolvedWords[0] as WordType[])[0];
     }
+    const wordData =
+      wordDataArray.length > 0 ? wordDataArray[0] : (resolvedWords[0] as WordType[])[0];
 
     const wordId = wordData.id;
-    const sentences = await getDataById(
-      wordId,
-      sentencesCollection,
-      'word_id',
-      3,
-    );
+    const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
     const { synonyms, antonyms } = await getSemanticsByIds(
       wordData.synonyms as string[],
       wordData.antonyms as string[],
