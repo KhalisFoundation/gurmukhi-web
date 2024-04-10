@@ -31,6 +31,7 @@ export const bugsnagErrorHandler = (
   dataType?: string,
   metaData?: MetaData,
   user?: User,
+  severity: 'error' | 'info' | 'warning' = 'error',
 ) => {
   let errorMessage = '';
   if (error instanceof Error) {
@@ -48,7 +49,7 @@ export const bugsnagErrorHandler = (
   }
 
   Bugsnag.notify(new Error(errorMessage), function (event) {
-    event.severity = 'error';
+    event.severity = severity;
     event.setUser(userID, user?.email, user?.displayName);
     if (dataType && metaData && Object.keys(metaData).length > 0) {
       event.addMetadata(dataType, metaData);

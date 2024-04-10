@@ -196,7 +196,10 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
       antonyms,
     } as WordType;
   } catch (error) {
-    console.error('No such Document', error);
+    bugsnagErrorHandler(uid, error, 'database/default/database.tsx/getRandomWord', {
+      notInArray,
+      includeUsed: includeUsed,
+    });
   }
 };
 
