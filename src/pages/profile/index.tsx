@@ -311,23 +311,23 @@ export default function Profile() {
               {user?.emailVerified ?? false
                 ? getTabData(text('EMAIL_VALIDATED'), text('YES'))
                 : getTabData(
-                    text('EMAIL_VALIDATED'),
-                    '',
-                    renderButton(
-                      text('VERIFY'),
-                      () =>
-                        sendEmailVerification(auth.currentUser ?? user).then(() => {
-                          showToastMessage(
-                            text('EMAIL_VERIFICATION_SENT'),
-                            toast.POSITION.TOP_CENTER,
-                            true,
-                          );
-                          setVerifiable(false);
-                        }),
-                      !verifiable,
-                      false,
-                    ),
-                  )}
+                  text('EMAIL_VALIDATED'),
+                  '',
+                  renderButton(
+                    text('VERIFY'),
+                    () =>
+                      sendEmailVerification(auth.currentUser ?? user).then(() => {
+                        showToastMessage(
+                          text('EMAIL_VERIFICATION_SENT'),
+                          toast.POSITION.TOP_CENTER,
+                          true,
+                        );
+                        setVerifiable(false);
+                      }),
+                    !verifiable,
+                    false,
+                  ),
+                )}
               {getTabData(text('CREATED_AT'), formattedCreatedAt)}
               {getTabData(text('LAST_LOGIN_AT'), formattedLastLoginAt)}
 
@@ -336,22 +336,22 @@ export default function Profile() {
                   <div className='col-span-2'>
                     {editMode
                       ? renderButton(
-                          text('SAVE'),
-                          () => {
-                            setEditMode(!editMode);
-                            handleSubmit();
-                          },
-                          false,
-                          false,
-                        )
+                        text('SAVE'),
+                        () => {
+                          setEditMode(!editMode);
+                          handleSubmit();
+                        },
+                        false,
+                        false,
+                      )
                       : renderButton(
-                          text('EDIT'),
-                          () => {
-                            setEditMode(!editMode);
-                          },
-                          false,
-                          false,
-                        )}
+                        text('EDIT'),
+                        () => {
+                          setEditMode(!editMode);
+                        },
+                        false,
+                        false,
+                      )}
                   </div>
                 </div>
               </div>
