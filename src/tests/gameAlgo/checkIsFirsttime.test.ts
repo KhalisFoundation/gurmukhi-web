@@ -2,7 +2,7 @@ import { checkIsFirstTime } from '../../pages/dashboard/utils/helpers';
 describe('checkIsFirstTime', () => {
   it('should return true for first-time users', () => {
     const user = {
-      displaName: 'Amitoj Singh',
+      displayName: 'Amitoj Singh',
       role: 'student',
       photoURL: 'some url',
       uid: 'lakhdsfaoidjfakldnnmadflkjj',
@@ -21,7 +21,7 @@ describe('checkIsFirstTime', () => {
 
   it('should return false for returning users', () => {
     const user = {
-      displaName: 'Amitoj Singh',
+      displayName: 'Amitoj Singh',
       role: 'student',
       photoURL: 'some url',
       uid: 'lakhdsfaoidjfakldnnmadflkjj',

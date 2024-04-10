@@ -10,7 +10,7 @@ describe('getNewQuestions', () => {
   describe('Game Algorithm - New User', () => {
     it('should return seed data', async () => {
       const user: User = {
-        displaName: 'Amitoj Singh',
+        displayName: 'Amitoj Singh',
         role: 'student',
         photoURL: 'some url',
         uid: 'lakhdsfaoidjfakldnnmadflkjj',
