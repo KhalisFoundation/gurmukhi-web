@@ -12,6 +12,8 @@ import {
   QueryCompositeFilterConstraint,
   QueryFieldFilterConstraint,
   where,
+  orderBy,
+  startAfter,
 } from 'firebase/firestore';
 // import { generateRandomId } from 'database/util';
 import { getUserData } from 'database/shabadavalidb';
@@ -39,7 +41,6 @@ const getDataById = async (
     } else {
       if (miniWord) {
         const { word, translation } = querySnapshot.docs[0].data();
-  
         return {
           id,
           word,
@@ -49,15 +50,15 @@ const getDataById = async (
       return querySnapshot.docs[0].data();
     }
   } catch (error) {
-    bugsnagErrorHandler(
-      'tester',
-      error,
-      'getDataById',
-      { id, key, miniWord, querySnapshot, docs: querySnapshot.docs },
-    );
+    bugsnagErrorHandler('tester', error, 'getDataById', {
+      id,
+      key,
+      miniWord,
+      querySnapshot,
+      docs: querySnapshot.docs,
+    });
   }
 };
-
 
 const getRandomData = async (
   collectionRef: CollectionReference<DocumentData, DocumentData>,
@@ -137,6 +138,43 @@ const getWordById = async (wordId: string, needExtras = false) => {
   }
 };
 
+const getNewWord = async (uid: string, lastDocumentID: string) => {
+  try {
+    console.log('lastDocumentID:', lastDocumentID);
+    const queryRef = !lastDocumentID
+      ? query(wordsCollection, where('status', '==', 'active'), orderBy(documentId()), limit(1))
+      : query(
+        wordsCollection,
+        where('status', '==', 'active'),
+        orderBy(documentId()),
+        startAfter(lastDocumentID),
+        limit(1),
+      );
+    const querySnapshot = await getDocs(queryRef);
+    if (querySnapshot.empty) {
+      console.error('No Words Left lasat document ID is', lastDocumentID);
+      return;
+    }
+    const docu = querySnapshot.docs[0];
+    const wordData = docu.data();
+    const wordDocumentID = docu.id;
+    const [sentences, semantics] = await Promise.all([
+      getDataById(wordDocumentID, sentencesCollection, 'word_id', 3),
+      getSemanticsByIds(wordData.synonyms, wordData.antonyms),
+    ]);
+
+    return {
+      ...wordData,
+      id: wordDocumentID,
+      sentences,
+      ...semantics,
+    };
+  } catch (error) {
+    console.error('Error fetching new word:', error);
+    bugsnagErrorHandler(uid, error);
+    return null;
+  }
+};
 const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true) => {
   try {
     const userData = await getUserData(uid);
@@ -208,4 +246,5 @@ export {
   getSemanticsByIds,
   getWordById,
   getRandomWord,
+  getNewWord,
 };
