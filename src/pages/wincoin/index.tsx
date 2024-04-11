@@ -41,7 +41,7 @@ function WinCoin() {
         dispatch(resetGamePosition());
         dispatch(resetGameArray());
         const data = await getUserData(user.uid);
-        const nxtSession = data?.nextSession ?? [];
+        const nxtSession = data?.nextSession || [];
         setNextSession(nxtSession);
         dispatch(increment());
         dispatch(resetLevel());
