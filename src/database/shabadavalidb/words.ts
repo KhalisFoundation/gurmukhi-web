@@ -30,7 +30,6 @@ export const addWordsToSubCollection = async (uid: string, data: WordShabadavali
     await addDoc(wordsCollectionRef, data);
   } catch (error) {
     bugsnagErrorHandler(
-      uid,
       error,
       'database/shabadavalidb/words.ts/addWordsToSubCollection',
       data,
@@ -53,7 +52,7 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
     }));
     return shuffleArray(documents);
   } catch (error) {
-    bugsnagErrorHandler(uid || 'undefined', error, 'database/shabadavalidb/words.ts/getWords', {
+    bugsnagErrorHandler(error, 'database/shabadavalidb/words.ts/getWords', {
       isLearnt: isLearnt,
     });
     return [];
@@ -112,7 +111,6 @@ export const addQuestionsBatch = async (
     await batch.commit();
   } catch (error) {
     bugsnagErrorHandler(
-      uid,
       error,
       'database/shabadavalidb/words.ts/addQuestionBatch',
       addQuestionsBatch,
@@ -142,7 +140,7 @@ export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[]) => 
 
     await batch.commit();
   } catch (error) {
-    bugsnagErrorHandler(uid, error, 'database/shabadavalidb/words.ts/addWordsBatch', words);
+    bugsnagErrorHandler(error, 'database/shabadavalidb/words.ts/addWordsBatch', words);
   }
 };
 

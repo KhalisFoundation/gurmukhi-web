@@ -36,7 +36,6 @@ const getDataById = async (
 
     if (querySnapshot.empty) {
       bugsnagErrorHandler(
-        '',
         new Error('No Document Found'),
         'getDataByID',
         {
@@ -67,7 +66,7 @@ const getDataById = async (
       return querySnapshot.docs[0].data();
     }
   } catch (error) {
-    bugsnagErrorHandler('tester', error, 'getDataById', {
+    bugsnagErrorHandler(error, 'getDataById', {
       id,
       key,
       miniWord,
@@ -212,7 +211,7 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
       antonyms,
     } as WordType;
   } catch (error) {
-    bugsnagErrorHandler(uid, error, 'database/default/database.tsx/getRandomWord', {
+    bugsnagErrorHandler(error, 'database/default/database.tsx/getRandomWord', {
       notInArray,
       includeUsed: includeUsed,
     });

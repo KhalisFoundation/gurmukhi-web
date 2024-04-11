@@ -48,7 +48,6 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
             return { ...questionData, options } as QuestionData;
           } catch (error) {
             bugsnagErrorHandler(
-              'tester',
               error,
               'database/default/question.ts/getOptions',
               { questionData },
@@ -62,7 +61,6 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
     return questionsData;
   } catch (error) {
     bugsnagErrorHandler(
-      'getQuestions',
       error,
       'database/default/question.ts/getQuestions',
       { wordID, questionIDs, filteredQuestionIDs, needOptions },

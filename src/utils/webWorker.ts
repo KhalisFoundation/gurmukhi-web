@@ -12,7 +12,6 @@ export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorke
     }
     const { gameArray } = await gameAlgo(usr);
     bugsnagErrorHandler(
-      usr.uid,
       new Error('Game Algo at Webworker'),
       'web worker',
       gameArray,
@@ -23,7 +22,7 @@ export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorke
     dispatch(setWebWorker(false));
   } catch (error: any) {
     dispatch(setWebWorker(false));
-    bugsnagErrorHandler(usr.uid, {
+    bugsnagErrorHandler({
       ...error,
       location: 'src/utils/webWorker.ts/fetchNextSessionData',
     },

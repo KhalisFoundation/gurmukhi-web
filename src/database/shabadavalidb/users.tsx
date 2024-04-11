@@ -79,7 +79,7 @@ export const updateNanakCoin = async (uid: string, newCoinValue: number) => {
       coins: newCoinValue,
     });
   } catch (error) {
-    bugsnagErrorHandler(uid, error, 'database/shabadavalidb/users.tsx/updateNanakCoin', {
+    bugsnagErrorHandler(error, 'database/shabadavalidb/users.tsx/updateNanakCoin', {
       uid: uid,
       nanakCoin: nanakCoin,
     });

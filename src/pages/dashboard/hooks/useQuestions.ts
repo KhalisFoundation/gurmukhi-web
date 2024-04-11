@@ -50,7 +50,6 @@ const getRandomQuestions = async (
     return gameArray;
   } catch (error) {
     bugsnagErrorHandler(
-      user.uid || 'undefined',
       error,
       'pages/dashboard/hooks/useQuestions.ts/getRandomQuestions',
       { user, count, isLearnt, questionIds },

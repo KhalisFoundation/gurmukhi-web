@@ -54,7 +54,6 @@ export const gameAlgo = async (user: User) => {
   if (user && isFirstTime) {
     const { game, learningWords } = await getNewQuestions(13, true);
     bugsnagErrorHandler(
-      user.uid,
       new Error('New Questions Seed'),
       'pages/dashboard/utils',
       { newQuestions: game, learningWords: learningWords },
@@ -77,7 +76,6 @@ export const gameAlgo = async (user: User) => {
     learningCount = learningQuestions.length;
   }
   bugsnagErrorHandler(
-    user.uid,
     new Error('Learning Questions'),
     'pages/dashboard/utils',
     { learningQuestions: learningQuestions },
@@ -91,7 +89,6 @@ export const gameAlgo = async (user: User) => {
     learntCount = learntQuestions.length;
   }
   bugsnagErrorHandler(
-    user.uid,
     new Error('Learnt Questions'),
     'pages/dashboard/utils',
     { learntQuestions: learntQuestions },
@@ -105,7 +102,6 @@ export const gameAlgo = async (user: User) => {
     user.uid,
   );
   bugsnagErrorHandler(
-    user.uid,
     new Error('New Questions'),
     'pages/dashboard/utils',
     { newQuestions: newQuestions, learningWords: learningWords },

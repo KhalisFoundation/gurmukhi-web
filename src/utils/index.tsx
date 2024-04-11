@@ -26,7 +26,6 @@ export const showToastMessage = (
 };
 
 export const bugsnagErrorHandler = (
-  userID: string,
   error: any,
   dataType?: string,
   metaData?: MetaData,
@@ -49,7 +48,6 @@ export const bugsnagErrorHandler = (
 
   Bugsnag.notify(new Error(errorMessage), function (event) {
     event.severity = severity;
-    event.setUser(userID, user?.email, user?.displayName);
     if (dataType && metaData && Object.keys(metaData).length > 0) {
       event.addMetadata(dataType, metaData);
     }

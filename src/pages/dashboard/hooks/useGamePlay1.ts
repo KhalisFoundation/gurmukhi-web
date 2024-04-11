@@ -45,7 +45,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
           }
           toggleLoading(false);
         } catch (error) {
-          bugsnagErrorHandler(user.uid, error,
+          bugsnagErrorHandler(error,
             'pages/dashboard/hooks/useGamePlay1.ts/useGamePlay',
             { ...user },
           );
