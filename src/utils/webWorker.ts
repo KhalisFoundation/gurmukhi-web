@@ -15,13 +15,13 @@ export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorke
     const { gameArray } = await gameAlgo(usr);
     bugsnagErrorHandler(
       usr.uid,
-      new Error('fetching next session'),
-      'fetchNextSessionData',
-      { gameArray },
+      new Error('Game Algo at Webworker'),
+      'web worker',
+      gameArray,
       usr,
+      'info',
     );
-    dispatch(addScreens(gameArray || seed0));
-    await updateNextSession(usr.uid, gameArray || seed0);
+    await updateNextSession(usr.uid, gameArray);
     dispatch(setWebWorker(false));
   } catch (error) {
     dispatch(setWebWorker(false));

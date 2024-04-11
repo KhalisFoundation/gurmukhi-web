@@ -27,19 +27,37 @@ const getDataById = async (
   limitVal?: number,
   miniWord?: boolean,
 ) => {
-  const fieldPath = key ? key : documentId();
-  const queryRef = limitVal
-    ? query(collectionRef, where(fieldPath, '==', id), limit(limitVal))
-    : query(collectionRef, where(fieldPath, '==', id));
-  const querySnapshot = await getDocs(queryRef);
-
   try {
+    const fieldPath = key || documentId();
+    const queryRef = limitVal
+      ? query(collectionRef, where(fieldPath, '==', id), limit(limitVal))
+      : query(collectionRef, where(fieldPath, '==', id));
+    const querySnapshot = await getDocs(queryRef);
+
+    if (querySnapshot.empty) {
+      bugsnagErrorHandler(
+        '',
+        new Error('No Document Found'),
+        'getDataByID',
+        {
+          id,
+          key,
+          miniWord,
+          querySnapshot,
+          docs: querySnapshot.docs,
+        },
+        undefined,
+        'info',
+      );
+      return null;
+    }
+
     if (limitVal && limitVal > 1) {
       return querySnapshot.docs.map((doc) => doc.data());
     } else {
       if (miniWord) {
         const { word, translation } = querySnapshot.docs[0].data();
-  
+
         return {
           id,
           word,
@@ -49,15 +67,13 @@ const getDataById = async (
       return querySnapshot.docs[0].data();
     }
   } catch (error) {
-    bugsnagErrorHandler(
-      'tester',
-      error,
-      'getDataById',
-      { id, key, miniWord, querySnapshot, docs: querySnapshot.docs },
-    );
+    bugsnagErrorHandler('tester', error, 'getDataById', {
+      id,
+      key,
+      miniWord,
+    });
   }
 };
-
 
 const getRandomData = async (
   collectionRef: CollectionReference<DocumentData, DocumentData>,
@@ -196,7 +212,10 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
       antonyms,
     } as WordType;
   } catch (error) {
-    console.error('No such Document', error);
+    bugsnagErrorHandler(uid, error, 'database/default/database.tsx/getRandomWord', {
+      notInArray,
+      includeUsed: includeUsed,
+    });
   }
 };
 

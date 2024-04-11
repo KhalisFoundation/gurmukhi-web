@@ -27,10 +27,14 @@ const getWordCollectionRef = (uid: string) => {
 export const addWordsToSubCollection = async (uid: string, data: WordShabadavaliDB) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
-    const docRef = await addDoc(wordsCollectionRef, data);
-    console.log('Document added', docRef.id);
+    await addDoc(wordsCollectionRef, data);
   } catch (error) {
-    console.error('Error adding document: ', error);
+    bugsnagErrorHandler(
+      uid,
+      error,
+      'database/shabadavalidb/words.ts/addWordsToSubCollection',
+      data,
+    );
   }
 };
 
@@ -49,13 +53,14 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
     }));
     return shuffleArray(documents);
   } catch (error) {
-    bugsnagErrorHandler(uid || 'undefined', error, 'getWords', { uid, isLearnt });
-    console.error(error);
+    bugsnagErrorHandler(uid || 'undefined', error, 'database/shabadavalidb/words.ts/getWords', {
+      isLearnt: isLearnt,
+    });
     return [];
   }
 };
 
-export const getWordsFromUser = async (uid: string, count:number, isLearnt:boolean) => {
+export const getWordsFromUser = async (uid: string, count: number, isLearnt: boolean) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const randomID = generateRandomId();
@@ -94,49 +99,50 @@ export const addQuestionsBatch = async (
   uid: string,
   wordToQuestionIdsMap: Map<string, string[]>,
 ) => {
-  const wordsCollectionRef = getWordCollectionRef(uid);
-  const batch = writeBatch(shabadavaliDB);
-  wordToQuestionIdsMap.forEach((questionIds, wordId) => {
-    const documentRef = doc(wordsCollectionRef, wordId);
-    batch.update(documentRef, {
-      questionIds: arrayUnion(...questionIds),
-    });
-  });
   try {
+    const wordsCollectionRef = getWordCollectionRef(uid);
+    const batch = writeBatch(shabadavaliDB);
+    wordToQuestionIdsMap.forEach((questionIds, wordId) => {
+      const documentRef = doc(wordsCollectionRef, wordId);
+      batch.update(documentRef, {
+        questionIds: arrayUnion(...questionIds),
+      });
+    });
+
     await batch.commit();
   } catch (error) {
-    console.error('Error committing the batch', error);
+    bugsnagErrorHandler(
+      uid,
+      error,
+      'database/shabadavalidb/words.ts/addQuestionBatch',
+      addQuestionsBatch,
+    );
   }
 };
 
-export const addWordsBatch = async (
-  uid: string,
-  words: WordShabadavaliDB[],
-) => {
-  const wordsCollectionRef = getWordCollectionRef(uid);
-  const wordIds = [];
-  const batch = writeBatch(shabadavaliDB);
-  for (const wordData of words) {
-    wordIds.push(wordData.word_id);
-    const q = query(
-      wordsCollectionRef,
-      where('word_id', '==', wordData.word_id),
-    );
-    const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty) {
-      wordData.lastReviewed = Timestamp.fromDate(new Date());
-      const docRef = doc(wordsCollectionRef, wordData.word_id);
-      batch.set(docRef, wordData);
-    }
-  }
-  const userDocRef = doc(usersCollection, uid);
-  batch.update(userDocRef, {
-    wordIds: arrayUnion(...wordIds),
-  });
+export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[]) => {
   try {
+    const wordsCollectionRef = getWordCollectionRef(uid);
+    const wordIds = [];
+    const batch = writeBatch(shabadavaliDB);
+    for (const wordData of words) {
+      wordIds.push(wordData.word_id);
+      const q = query(wordsCollectionRef, where('word_id', '==', wordData.word_id));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+        wordData.lastReviewed = Timestamp.fromDate(new Date());
+        const docRef = doc(wordsCollectionRef, wordData.word_id);
+        batch.set(docRef, wordData);
+      }
+    }
+    const userDocRef = doc(usersCollection, uid);
+    batch.update(userDocRef, {
+      wordIds: arrayUnion(...wordIds),
+    });
+
     await batch.commit();
   } catch (error) {
-    console.error('Error committing the batch', error);
+    bugsnagErrorHandler(uid, error, 'database/shabadavalidb/words.ts/addWordsBatch', words);
   }
 };
 
