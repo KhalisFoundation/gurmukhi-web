@@ -2,8 +2,6 @@ import { gameAlgo } from 'pages/dashboard/utils';
 import { User } from 'types/shabadavalidb';
 import { updateNextSession } from 'database/shabadavalidb';
 import { bugsnagErrorHandler } from 'utils';
-import seed0 from 'data/seed0.json';
-import { addScreens } from 'store/features/gameArraySlice';
 
 export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorker: any) => {
   try {

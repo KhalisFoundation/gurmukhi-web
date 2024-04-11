@@ -8,7 +8,11 @@ const questionCollection = collection(wordsdb, 'questions');
 
 const getOptions = async (wordIDs: string[]) => {
   const optionsPromise = wordIDs.map((option) => {
-    return getDataById(option.toString(), wordsCollection, null, 1, true);
+    if (typeof option === 'string') {
+      return getDataById(option.toString(), wordsCollection, null, 1, true);
+    } else {
+      return option;
+    }
   });
   const options = await Promise.all(optionsPromise);
   return options as Option[];
@@ -37,8 +41,7 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
   
         if (
           needOptions &&
-          questionData.options.length > 0 &&
-          typeof questionData.options[0] === 'string'
+          questionData.options.length > 0
         ) {
           try {
             const options = await getOptions(questionData.options as string[]);
