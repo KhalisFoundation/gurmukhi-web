@@ -50,7 +50,7 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
             bugsnagErrorHandler(
               'tester',
               error,
-              'getOptions',
+              'database/default/question.ts/getOptions',
               { questionData },
             );
             return questionData;
@@ -64,7 +64,7 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
     bugsnagErrorHandler(
       'getQuestions',
       error,
-      'getQuestions',
+      'database/default/question.ts/getQuestions',
       { wordID, questionIDs, filteredQuestionIDs, needOptions },
     );
     return [];
