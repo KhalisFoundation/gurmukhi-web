@@ -75,7 +75,6 @@ const getDataById = async (
   }
 };
 
-
 const getRandomData = async (
   collectionRef: CollectionReference<DocumentData, DocumentData>,
   conditions: QueryCompositeFilterConstraint | QueryFieldFilterConstraint,
