@@ -104,12 +104,12 @@ const getRandomData = async (
 };
 
 const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) => {
-  const synonymsPromises: any = (synonymsIds || []).map((synonym) =>
+  const synonymsPromises: any = synonymsIds.length > 0 ? (synonymsIds).map((synonym) =>
     getDataById(synonym.toString(), wordsCollection, null, 1, true),
-  );
-  const antonymsPromises: any = (antonymsIds || []).map((antonym) =>
+  ) : [];
+  const antonymsPromises: any = antonymsIds.length > 0 ? (antonymsIds || []).map((antonym) =>
     getDataById(antonym.toString(), wordsCollection, null, 1, true),
-  );
+  ) : [];
 
   const [synonyms, antonyms] = await Promise.all([
     Promise.all(synonymsPromises),
