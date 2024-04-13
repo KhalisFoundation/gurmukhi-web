@@ -18,10 +18,12 @@ const ErrorBoundary = (props: ErrorBoundaryProps) => {
     apiKey: BugSnagAPIKey,
     plugins: [new BugsnagPluginReact()],
     releaseStage: process.env.NODE_ENV,
-    user: {
-      id: props.user?.uid,
-      email: props.user?.email || '',
-      name: props.user?.displayName || '',
+    onError: function (event) {
+      event.setUser(
+        props.user?.uid,
+        props.user?.email || '',
+        props.user?.displayName || '',
+      );
     },
   });
 
