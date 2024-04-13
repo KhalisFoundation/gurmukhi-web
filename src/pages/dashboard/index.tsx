@@ -11,6 +11,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 import useGamePlay from './hooks/useGamePlay1';
 import Loading from 'components/loading';
+import Bugsnag from '@bugsnag/js';
 
 export default function Dashboard() {
   const commonStyle =
@@ -27,6 +28,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (user) {
       setUserData(user);
+      Bugsnag.setUser(user.uid, user.email, user.displayName);
     }
   }, [user]);
 

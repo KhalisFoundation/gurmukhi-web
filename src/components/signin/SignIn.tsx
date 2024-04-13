@@ -21,18 +21,13 @@ export default function SignIn() {
   const { logIn, signUp, signInWithGoogle } = useUserAuth();
 
   const displayToast = (textMsg: string, error = true) => {
-    showToastMessage(
-      textMsg,
-      toast.POSITION.BOTTOM_RIGHT,
-      true,
-      error,
-    );
+    showToastMessage(textMsg, toast.POSITION.BOTTOM_RIGHT, true, error);
   };
 
   const signToggle = (e: FormEvent) => {
     e.preventDefault();
     const switchElement = document.getElementsByClassName('switch')[0];
-    
+
     if (switchElement?.classList.contains('left-[4px]')) {
       switchElement.classList.toggle('translate-x-[94%]');
     } else {
@@ -64,11 +59,7 @@ export default function SignIn() {
       }
 
       if (isNewUser) {
-        if (
-          password !== cpassword
-          && password !== ''
-          && cpassword !== ''
-        ) {
+        if (password !== cpassword && password !== '' && cpassword !== '') {
           valid = false;
           setErrorMessage({
             code: text('ERROR'),
@@ -91,7 +82,7 @@ export default function SignIn() {
           const success = await signUp(name, username, email, password, cpassword, displayToast);
           if (success) {
             navigate(ROUTES.DASHBOARD);
-          } 
+          }
         } else {
           setErrorMessage({
             code: text('ERROR'),
