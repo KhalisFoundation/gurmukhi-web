@@ -8,7 +8,6 @@ import { WordType } from 'types';
 import getRandomQuestions from '../hooks/useQuestions';
 import getNewQuestions from '../hooks/useNew';
 import { addWordsBatch } from 'database/shabadavalidb';
-// import { bugsnagErrorHandler } from 'utils';
 
 export const getRandomElement = (array: string[]) => {
   const randomIndex = Math.floor(Math.random() * array.length);
@@ -53,13 +52,6 @@ export const gameAlgo = async (user: User) => {
   const isFirstTime = checkIsFirstTime(user);
   if (user && isFirstTime) {
     const { game, learningWords } = await getNewQuestions(13, true);
-    // bugsnagErrorHandler(
-    //   new Error('New Questions Seed'),
-    //   'pages/dashboard/utils',
-    //   { newQuestions: game, learningWords: learningWords },
-    //   user,
-    //   'info',
-    // );
     const gameArray: GameScreen[] = game;
 
     if (learningWords.length > 0) {
@@ -75,39 +67,18 @@ export const gameAlgo = async (user: User) => {
     newQuestionCount += learningCount - learningQuestions.length;
     learningCount = learningQuestions.length;
   }
-  // bugsnagErrorHandler(
-  //   new Error('Learning Questions'),
-  //   'pages/dashboard/utils',
-  //   { learningQuestions: learningQuestions },
-  //   user,
-  //   'info',
-  // );
 
   const learntQuestions = await getRandomQuestions(user, learntCount, true);
   if (learntQuestions.length < learntCount) {
     newQuestionCount += learntCount - learntQuestions.length;
     learntCount = learntQuestions.length;
   }
-  // bugsnagErrorHandler(
-  //   new Error('Learnt Questions'),
-  //   'pages/dashboard/utils',
-  //   { learntQuestions: learntQuestions },
-  //   user,
-  //   'info',
-  // );
 
   const { game: newQuestions, learningWords } = await getNewQuestions(
     newQuestionCount,
     false,
     user.uid,
   );
-  // bugsnagErrorHandler(
-  //   new Error('New Questions'),
-  //   'pages/dashboard/utils',
-  //   { newQuestions: newQuestions, learningWords: learningWords },
-  //   user,
-  //   'info',
-  // );
 
   let gameArray: GameScreen[] = [];
   if (learntCount === 0 && learningCount === 0) {

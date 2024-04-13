@@ -35,19 +35,6 @@ const getDataById = async (
     const querySnapshot = await getDocs(queryRef);
 
     if (querySnapshot.empty) {
-      // bugsnagErrorHandler(
-      //   new Error('No Document Found'),
-      //   'getDataByID',
-      //   {
-      //     id,
-      //     key,
-      //     miniWord,
-      //     querySnapshot,
-      //     docs: querySnapshot.docs,
-      //   },
-      //   undefined,
-      //   'info',
-      // );
       return null;
     }
 
