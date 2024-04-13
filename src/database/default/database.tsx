@@ -108,7 +108,7 @@ const getSemanticsByIds = async (
     synonymsIds.length > 0
       ? synonymsIds.map((synonym) => {
         if (typeof synonym === 'string') {
-            return getDataById(synonym.toString(), wordsCollection, null, 1, true) as MiniWord;
+          return getDataById(synonym.toString(), wordsCollection, null, 1, true) as MiniWord;
         } else {
           return synonym;
         }
