@@ -37,7 +37,10 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
     }
     const questionsData = await Promise.all(
       questionSnapshots.docs.map(async (doc) => {
-        const questionData = doc.data() as QuestionData;
+        const questionData = {
+          ...doc.data(),
+          id: doc.id,
+        } as QuestionData;
   
         if (
           needOptions &&

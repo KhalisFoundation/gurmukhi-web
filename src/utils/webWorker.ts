@@ -2,7 +2,6 @@ import { gameAlgo } from 'pages/dashboard/utils';
 import { User } from 'types/shabadavalidb';
 import { updateNextSession } from 'database/shabadavalidb';
 import { bugsnagErrorHandler } from 'utils';
-import { setScreens } from 'store/features/gameArraySlice';
 
 export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorker: any) => {
   try {
@@ -20,7 +19,6 @@ export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorke
       'info',
     );
     await updateNextSession(usr.uid, gameArray);
-    dispatch(setScreens(gameArray));
     dispatch(setWebWorker(false));
   } catch (error: any) {
     dispatch(setWebWorker(false));
