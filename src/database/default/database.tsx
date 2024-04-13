@@ -89,7 +89,10 @@ const getRandomData = async (
 
   if (!querySnapshot.empty) {
     if (limitVal && limitVal > 1) {
-      return querySnapshot.docs.map((doc) => doc.data());
+      return querySnapshot.docs.map((doc) => ({
+        ...doc.data(), 
+        id: doc.id,
+      }));
     } else {
       return [
         {
