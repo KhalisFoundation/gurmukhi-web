@@ -1,4 +1,4 @@
-import React, { Suspense, useContext } from 'react';
+import React, { Suspense } from 'react';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 import CONSTANTS from './constants';
@@ -7,7 +7,6 @@ import { AppRouter } from 'routes';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import ErrorBoundary from 'ErrorBoundary';
-
 
 i18n.use(initReactI18next).init({
   resources: {
