@@ -100,13 +100,30 @@ const getRandomData = async (
   }
 };
 
-const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) => {
-  const synonymsPromises = synonymsIds.length > 0 ? synonymsIds.map((synonym) =>
-    (getDataById(synonym.toString(), wordsCollection, null, 1, true) as MiniWord),
-  ) as MiniWord[] : [];
-  const antonymsPromises = antonymsIds.length > 0 ? (antonymsIds || []).map((antonym) =>
-    getDataById(antonym.toString(), wordsCollection, null, 1, true),
-  ) as MiniWord[]  : [];
+const getSemanticsByIds = async (
+  synonymsIds: (string | MiniWord)[],
+  antonymsIds: (string | MiniWord)[],
+) => {
+  const synonymsPromises =
+    synonymsIds.length > 0
+      ? synonymsIds.map((synonym) => {
+        if (typeof synonym === 'string') {
+            return getDataById(synonym.toString(), wordsCollection, null, 1, true) as MiniWord;
+        } else {
+          return synonym;
+        }
+      })
+      : [];
+  const antonymsPromises =
+    antonymsIds.length > 0
+      ? antonymsIds.map((antonym) => {
+        if (typeof antonym === 'string') {
+          return getDataById(antonym.toString(), wordsCollection, null, 1, true) as MiniWord;
+        } else {
+          return antonym;
+        }
+      })
+      : [];
 
   const [synonyms, antonyms] = await Promise.all([
     Promise.all(synonymsPromises),
@@ -126,8 +143,8 @@ const getWordById = async (wordId: string, needExtras = false) => {
     if (needExtras) {
       const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
       const { synonyms, antonyms } = await getSemanticsByIds(
-        wordData.synonyms as string[],
-        wordData.antonyms as string[],
+        wordData.synonyms as (string | MiniWord)[],
+        wordData.antonyms as (string | MiniWord)[],
       );
 
       return {
