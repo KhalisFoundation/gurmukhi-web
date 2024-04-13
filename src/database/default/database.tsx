@@ -35,19 +35,19 @@ const getDataById = async (
     const querySnapshot = await getDocs(queryRef);
 
     if (querySnapshot.empty) {
-      bugsnagErrorHandler(
-        new Error('No Document Found'),
-        'getDataByID',
-        {
-          id,
-          key,
-          miniWord,
-          querySnapshot,
-          docs: querySnapshot.docs,
-        },
-        undefined,
-        'info',
-      );
+      // bugsnagErrorHandler(
+      //   new Error('No Document Found'),
+      //   'getDataByID',
+      //   {
+      //     id,
+      //     key,
+      //     miniWord,
+      //     querySnapshot,
+      //     docs: querySnapshot.docs,
+      //   },
+      //   undefined,
+      //   'info',
+      // );
       return null;
     }
 
@@ -89,7 +89,10 @@ const getRandomData = async (
 
   if (!querySnapshot.empty) {
     if (limitVal && limitVal > 1) {
-      return querySnapshot.docs.map((doc) => doc.data());
+      return querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
     } else {
       return [
         {
@@ -195,7 +198,6 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
     }
     const wordData =
       wordDataArray.length > 0 ? wordDataArray[0] : (resolvedWords[0] as WordType[])[0];
-
     const wordId = wordData.id;
     const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
     const { synonyms, antonyms } = await getSemanticsByIds(
