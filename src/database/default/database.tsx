@@ -1,4 +1,4 @@
-import { WordType } from 'types';
+import { MiniWord, WordType } from 'types';
 import { wordsdb } from '../../firebase';
 import {
   and,
@@ -52,10 +52,14 @@ const getDataById = async (
     }
 
     if (limitVal && limitVal > 1) {
-      return querySnapshot.docs.map((doc) => doc.data());
+      return querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
     } else {
+      const currentDoc = querySnapshot.docs[0];
       if (miniWord) {
-        const { word, translation } = querySnapshot.docs[0].data();
+        const { word, translation } = currentDoc.data();
 
         return {
           id,
@@ -63,7 +67,10 @@ const getDataById = async (
           translation,
         };
       }
-      return querySnapshot.docs[0].data();
+      return {
+        ...currentDoc.data(),
+        id: currentDoc.id,
+      };
     }
   } catch (error) {
     bugsnagErrorHandler(error, 'getDataById', {
@@ -107,12 +114,12 @@ const getRandomData = async (
 };
 
 const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) => {
-  const synonymsPromises: any = synonymsIds.length > 0 ? (synonymsIds).map((synonym) =>
-    getDataById(synonym.toString(), wordsCollection, null, 1, true),
-  ) : [];
-  const antonymsPromises: any = antonymsIds.length > 0 ? (antonymsIds || []).map((antonym) =>
+  const synonymsPromises = synonymsIds.length > 0 ? synonymsIds.map((synonym) =>
+    (getDataById(synonym.toString(), wordsCollection, null, 1, true) as MiniWord),
+  ) as MiniWord[] : [];
+  const antonymsPromises = antonymsIds.length > 0 ? (antonymsIds || []).map((antonym) =>
     getDataById(antonym.toString(), wordsCollection, null, 1, true),
-  ) : [];
+  ) as MiniWord[]  : [];
 
   const [synonyms, antonyms] = await Promise.all([
     Promise.all(synonymsPromises),
@@ -122,7 +129,7 @@ const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) =
   return {
     synonyms,
     antonyms,
-  };
+  } as { synonyms: MiniWord[]; antonyms: MiniWord[] };
 };
 
 const getWordById = async (wordId: string, needExtras = false) => {

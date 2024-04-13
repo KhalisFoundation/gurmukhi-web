@@ -35,8 +35,8 @@ export interface WordType {
   meaning_punjabi?: string;
   part_of_speech?: string;
   images?: string[];
-  antonyms?: string[];
-  synonyms?: string[];
+  antonyms?: MiniWord[];
+  synonyms?: MiniWord[];
   sentences?: {
     sentence: string;
     translation: string;
