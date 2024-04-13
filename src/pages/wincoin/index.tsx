@@ -21,7 +21,7 @@ import ALL_CONSTANT from 'constants/constant';
 import handleClick from 'components/buttons/hooks/useOnClick';
 import LoaderButton from 'components/buttons/LoaderButton';
 import { addScreens } from 'store/features/gameArraySlice';
-import { GameScreen } from 'types/shabadavalidb';
+import { GameScreen, User } from 'types/shabadavalidb';
 
 function WinCoin() {
   const navigate = useNavigate();
@@ -40,8 +40,9 @@ function WinCoin() {
       if (currentLevel === ALL_CONSTANT.LEVELS_COUNT) {
         dispatch(resetGamePosition());
         dispatch(resetGameArray());
-        const data = await getUserData(user.uid);
+        const data: User | undefined = await getUserData(user.uid);
         const nxtSession = data?.nextSession || [];
+        console.log(data?.nextSession);
         setNextSession(nxtSession);
         dispatch(increment());
         dispatch(resetLevel());
@@ -53,7 +54,7 @@ function WinCoin() {
       toggleIsLoading(false);
     };
     storeData();
-  }, [user]);
+  }, [user.uid]);
 
   return (
     <div className='nanakback h-full bg-cover w-full'>
