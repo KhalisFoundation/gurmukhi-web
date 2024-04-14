@@ -83,7 +83,6 @@ const getQuestionByID = async (id: string) => {
   } catch (error) {
     bugsnagErrorHandler(error, 'getQuestionByID', { id });
   }
-  
 };
 
 export { getQuestionByID, getQuestions };
