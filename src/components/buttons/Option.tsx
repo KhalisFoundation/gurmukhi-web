@@ -46,9 +46,9 @@ export default function OptionBtn({
         disabled={disabled}
       >
         <span className={textClassname}>
-          {option.word
+          {option?.word
             ? addEndingPunctuation(option.word, text('GURMUKHI'))
-            : option.option}
+            : option?.option || ''}
         </span>
       </button>
       <TextToSpeechBtn

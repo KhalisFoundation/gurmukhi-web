@@ -1,4 +1,4 @@
-import { WordType } from 'types';
+import { MiniWord, WordType } from 'types';
 import { wordsdb } from '../../firebase';
 import {
   and,
@@ -27,37 +27,46 @@ const getDataById = async (
   limitVal?: number,
   miniWord?: boolean,
 ) => {
-  const fieldPath = key ? key : documentId();
-  const queryRef = limitVal
-    ? query(collectionRef, where(fieldPath, '==', id), limit(limitVal))
-    : query(collectionRef, where(fieldPath, '==', id));
-  const querySnapshot = await getDocs(queryRef);
-
   try {
+    const fieldPath = key || documentId();
+    const queryRef = limitVal
+      ? query(collectionRef, where(fieldPath, '==', id), limit(limitVal))
+      : query(collectionRef, where(fieldPath, '==', id));
+    const querySnapshot = await getDocs(queryRef);
+
+    if (querySnapshot.empty) {
+      return null;
+    }
+
     if (limitVal && limitVal > 1) {
-      return querySnapshot.docs.map((doc) => doc.data());
+      return querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
     } else {
+      const currentDoc = querySnapshot.docs[0];
       if (miniWord) {
-        const { word, translation } = querySnapshot.docs[0].data();
-  
+        const { word, translation } = currentDoc.data();
+
         return {
           id,
           word,
           translation,
         };
       }
-      return querySnapshot.docs[0].data();
+      return {
+        ...currentDoc.data(),
+        id: currentDoc.id,
+      };
     }
   } catch (error) {
-    bugsnagErrorHandler(
-      'tester',
-      error,
-      'getDataById',
-      { id, key, miniWord, querySnapshot, docs: querySnapshot.docs },
-    );
+    bugsnagErrorHandler(error, 'getDataById', {
+      id,
+      key,
+      miniWord,
+    });
   }
 };
-
 
 const getRandomData = async (
   collectionRef: CollectionReference<DocumentData, DocumentData>,
@@ -74,7 +83,10 @@ const getRandomData = async (
 
   if (!querySnapshot.empty) {
     if (limitVal && limitVal > 1) {
-      return querySnapshot.docs.map((doc) => doc.data());
+      return querySnapshot.docs.map((doc) => ({
+        ...doc.data(), 
+        id: doc.id,
+      }));
     } else {
       return [
         {
@@ -88,13 +100,30 @@ const getRandomData = async (
   }
 };
 
-const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) => {
-  const synonymsPromises: any = (synonymsIds || []).map((synonym) =>
-    getDataById(synonym.toString(), wordsCollection, null, 1, true),
-  );
-  const antonymsPromises: any = (antonymsIds || []).map((antonym) =>
-    getDataById(antonym.toString(), wordsCollection, null, 1, true),
-  );
+const getSemanticsByIds = async (
+  synonymsIds: (string | MiniWord)[],
+  antonymsIds: (string | MiniWord)[],
+) => {
+  const synonymsPromises =
+    synonymsIds.length > 0
+      ? synonymsIds.map((synonym) => {
+        if (typeof synonym === 'string') {
+          return getDataById(synonym.toString(), wordsCollection, null, 1, true) as MiniWord;
+        } else {
+          return synonym;
+        }
+      })
+      : [];
+  const antonymsPromises =
+    antonymsIds.length > 0
+      ? antonymsIds.map((antonym) => {
+        if (typeof antonym === 'string') {
+          return getDataById(antonym.toString(), wordsCollection, null, 1, true) as MiniWord;
+        } else {
+          return antonym;
+        }
+      })
+      : [];
 
   const [synonyms, antonyms] = await Promise.all([
     Promise.all(synonymsPromises),
@@ -104,7 +133,7 @@ const getSemanticsByIds = async (synonymsIds: string[], antonymsIds: string[]) =
   return {
     synonyms,
     antonyms,
-  };
+  } as { synonyms: MiniWord[]; antonyms: MiniWord[] };
 };
 
 const getWordById = async (wordId: string, needExtras = false) => {
@@ -114,8 +143,8 @@ const getWordById = async (wordId: string, needExtras = false) => {
     if (needExtras) {
       const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
       const { synonyms, antonyms } = await getSemanticsByIds(
-        wordData.synonyms as string[],
-        wordData.antonyms as string[],
+        wordData.synonyms as (string | MiniWord)[],
+        wordData.antonyms as (string | MiniWord)[],
       );
 
       return {
@@ -180,7 +209,6 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
     }
     const wordData =
       wordDataArray.length > 0 ? wordDataArray[0] : (resolvedWords[0] as WordType[])[0];
-
     const wordId = wordData.id;
     const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
     const { synonyms, antonyms } = await getSemanticsByIds(
@@ -196,7 +224,10 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
       antonyms,
     } as WordType;
   } catch (error) {
-    console.error('No such Document', error);
+    bugsnagErrorHandler(error, 'database/default/database.tsx/getRandomWord', {
+      notInArray,
+      includeUsed: includeUsed,
+    });
   }
 };
 
