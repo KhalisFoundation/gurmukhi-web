@@ -72,7 +72,7 @@ const getQuestionByID = async (id: string) => {
     const queryRef = query(questionCollection, where(documentId(), '==', id));
     const questionSnapshot = await getDocs(queryRef);
     if (questionSnapshot.empty) {
-      return null;
+      return;
     }
     const questionData = questionSnapshot.docs[0].data();
     if (questionData.options.length > 0 && typeof questionData.options[0] === 'string') {
