@@ -13,7 +13,6 @@ import {
   QueryFieldFilterConstraint,
   where,
 } from 'firebase/firestore';
-// import { generateRandomId } from 'database/util';
 import { getUserData } from 'database/shabadavalidb';
 import { bugsnagErrorHandler } from 'utils';
 

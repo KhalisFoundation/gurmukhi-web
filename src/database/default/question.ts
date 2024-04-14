@@ -68,17 +68,22 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
   }
 };
 const getQuestionByID = async (id: string) => {
-  const queryRef = query(questionCollection, where(documentId(), '==', id));
-  const questionSnapshot = await getDocs(queryRef);
-  if (questionSnapshot.empty) {
-    return null;
+  try {
+    const queryRef = query(questionCollection, where(documentId(), '==', id));
+    const questionSnapshot = await getDocs(queryRef);
+    if (questionSnapshot.empty) {
+      return null;
+    }
+    const questionData = questionSnapshot.docs[0].data();
+    if (questionData.options.length > 0 && typeof questionData.options[0] === 'string') {
+      const options = await getOptions(questionData.options as string[]);
+      return { ...questionData, options } as QuestionData;
+    }
+    return questionData as QuestionData;
+  } catch (error) {
+    bugsnagErrorHandler(error, 'getQuestionByID', { id });
   }
-  const questionData = questionSnapshot.docs[0].data();
-  if (questionData.options.length > 0 && typeof questionData.options[0] === 'string') {
-    const options = await getOptions(questionData.options as string[]);
-    return { ...questionData, options } as QuestionData;
-  }
-  return questionData as QuestionData;
+  
 };
 
 export { getQuestionByID, getQuestions };
