@@ -63,7 +63,6 @@ const handleClick = async (
             dispatch(setCurrentGamePosition(currentGamePosition));
           } catch (error) {
             bugsnagErrorHandler(
-              user.uid,
               error,
               'handleClick in useOnClick.ts',
               { uid: user.uid },

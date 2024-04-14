@@ -93,8 +93,8 @@ export default function Defintion() {
               )}
             </div>
             <div className='flex flex-col text-lg'>
-              <span className={'text-black-111'}>{currentWord.meaning_english}</span>
               <span className={'text-black'}>{currentWord.meaning_punjabi}</span>
+              <span className={'text-black-111'}>{currentWord.meaning_english}</span>
             </div>
           </div>
         </div>

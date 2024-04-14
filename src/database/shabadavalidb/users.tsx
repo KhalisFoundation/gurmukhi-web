@@ -79,7 +79,7 @@ export const updateNanakCoin = async (uid: string, newCoinValue: number) => {
       coins: newCoinValue,
     });
   } catch (error) {
-    bugsnagErrorHandler(uid, error, 'updateNanakCoin in users.tsx', {
+    bugsnagErrorHandler(error, 'database/shabadavalidb/users.tsx/updateNanakCoin', {
       uid: uid,
       nanakCoin: nanakCoin,
     });
@@ -91,7 +91,11 @@ export async function updateUserDocument(uid: string, updateData: object) {
     const userRef = doc(usersCollection, uid);
     await updateDoc(userRef, updateData);
   } catch (error) {
-    console.error(`Error updating user document (UID: ${uid}):`, error);
+    bugsnagErrorHandler(error, 'updateUserDocument', {
+      uid: uid,
+      updateData,
+      location: 'database/shabadavalidb/users.tsx',
+    });
   }
 }
 
@@ -132,22 +136,29 @@ export const updateLevelProgress = async (
 };
 
 export const getUserData = async (uid: string) => {
-  const userRef = doc(usersCollection, uid);
-  const userDoc = await getDoc(userRef);
-  if (!userDoc.exists()) {
-    return;
+  try {
+    const userRef = doc(usersCollection, uid);
+    const userDoc = await getDoc(userRef);
+    if (!userDoc.exists()) {
+      return;
+    }
+    const data = userDoc.data();
+    const user: User = {
+      displayName: data.displayName,
+      role: data.role,
+      photoURL: data.photoURL,
+      uid: data.uid,
+      coins: data.coins,
+      email: data.email,
+      progress: data.progress,
+      nextSession: data.next_session,
+      wordIds: data.wordIds,
+    };
+    return user;
+  } catch (error) {
+    bugsnagErrorHandler(error, 'getUserData', {
+      uid: uid,
+      location: 'database/shabadavalidb/user.tsx/',
+    });
   }
-  const data = userDoc.data();
-  const user: User = {
-    displayName: data.displayName,
-    role: data.role,
-    photoURL: data.photoURL,
-    uid: data.uid,
-    coins: data.coins,
-    email: data.email,
-    progress: data.progress,
-    nextSession: data.next_session,
-    wordIds: data.wordIds,
-  };
-  return user;
 };

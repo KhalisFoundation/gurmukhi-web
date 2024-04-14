@@ -26,11 +26,11 @@ export const showToastMessage = (
 };
 
 export const bugsnagErrorHandler = (
-  userID: string,
   error: any,
   dataType?: string,
   metaData?: MetaData,
   user?: User,
+  severity: 'error' | 'info' | 'warning' = 'error',
 ) => {
   let errorMessage = '';
   if (error instanceof Error) {
@@ -44,12 +44,10 @@ export const bugsnagErrorHandler = (
   }
   if (process.env.NODE_ENV === 'development') {
     console.error(errorMessage);
-    return;
   }
 
   Bugsnag.notify(new Error(errorMessage), function (event) {
-    event.severity = 'error';
-    event.setUser(userID, user?.email, user?.displayName);
+    event.severity = severity;
     if (dataType && metaData && Object.keys(metaData).length > 0) {
       event.addMetadata(dataType, metaData);
     }

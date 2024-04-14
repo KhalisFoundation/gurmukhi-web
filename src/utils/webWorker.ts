@@ -11,10 +11,21 @@ export const fetchNextSessionData = async (usr: User, dispatch: any, setWebWorke
       return;
     }
     const { gameArray } = await gameAlgo(usr);
+    bugsnagErrorHandler(
+      new Error('Game Algo at Webworker'),
+      'web worker',
+      gameArray,
+      usr,
+      'info',
+    );
     await updateNextSession(usr.uid, gameArray);
     dispatch(setWebWorker(false));
-  } catch (error) {
+  } catch (error: any) {
     dispatch(setWebWorker(false));
-    bugsnagErrorHandler(usr.uid, error, 'web worker', {}, usr);
+    bugsnagErrorHandler({
+      ...error,
+      location: 'src/utils/webWorker.ts/fetchNextSessionData',
+    },
+    'web worker', {}, usr);
   }
 };
