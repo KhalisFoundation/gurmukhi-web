@@ -40,8 +40,8 @@ export default function Question() {
       if (!wordID || !questionID) {
         return;
       }
-      const question = await getQuestionByID(questionID);
-      if (question !== null) {
+      const question: QuestionData | undefined = await getQuestionByID(questionID);
+      if (question) {
         setCurrentQuestion(question);
         return;
       }

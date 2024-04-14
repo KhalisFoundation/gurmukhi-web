@@ -16,60 +16,84 @@ import nanakCoin from 'store/features/nanakCoin';
 export const usersCollection = collection(db, 'users');
 
 export const getUser = async (email: string, uid: string) => {
-  // uid is the document id of the user
-  const userRef = doc(usersCollection, uid);
-  const userDoc = await getDoc(userRef);
-  if (userDoc.exists()) {
-    const user = userDoc.data();
-    // check if the email matches
-    if (user.email === email) {
-      return user;
+  try {
+    // uid is the document id of the user
+    const userRef = doc(usersCollection, uid);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      const user = userDoc.data();
+      // check if the email matches
+      if (user.email === email) {
+        return user;
+      }
     }
+    return null;
+  } catch (error) {
+    bugsnagErrorHandler(error, 'getUser', { email, uid });
   }
-  return null;
 };
 
 export const checkUser = async (uid: string, email: string) => {
-  const queryStatement = query(
-    usersCollection,
-    where(documentId(), '==', uid),
-    where('email', '==', email),
-  );
-  const usersSnapshot = await getDocs(queryStatement);
-  if (!usersSnapshot.empty) {
-    return true;
+  try {
+    const queryStatement = query(
+      usersCollection,
+      where(documentId(), '==', uid),
+      where('email', '==', email),
+    );
+    const usersSnapshot = await getDocs(queryStatement);
+    if (!usersSnapshot.empty) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    bugsnagErrorHandler(error, 'checkUser', { uid, email });
   }
-  return false;
 };
 
 export const checkIfUsernameUnique = async (username: string) => {
-  const queryStatement = query(usersCollection, where('username', '==', username));
-  const usersSnapshot = await getDocs(queryStatement);
-  return usersSnapshot.empty;
+  try {
+    const queryStatement = query(usersCollection, where('username', '==', username));
+    const usersSnapshot = await getDocs(queryStatement);
+    return usersSnapshot.empty;
+  } catch (error) {
+    bugsnagErrorHandler(error, 'checkIfUserNameUnique', { username });
+  }
 };
 
 export const checkIfEmailUnique = async (email: string) => {
-  const queryStatement = query(usersCollection, where('email', '==', email));
-  const usersSnapshot = await getDocs(queryStatement);
-  return usersSnapshot.empty;
+  try {
+    const queryStatement = query(usersCollection, where('email', '==', email));
+    const usersSnapshot = await getDocs(queryStatement);
+    return usersSnapshot.empty;
+  } catch (error) {
+    bugsnagErrorHandler(error, 'checkIfEmailUnique', { email });
+  }
 };
 
 export const getEmailFromUsername = async (username: string) => {
-  const queryStatement = query(usersCollection, where('username', '==', username));
-  const usersSnapshot = await getDocs(queryStatement);
-  if (!usersSnapshot.empty) {
-    return usersSnapshot.docs[0].data().email;
+  try {
+    const queryStatement = query(usersCollection, where('username', '==', username));
+    const usersSnapshot = await getDocs(queryStatement);
+    if (!usersSnapshot.empty) {
+      return usersSnapshot.docs[0].data().email;
+    }
+    return null;
+  } catch (error) {
+    bugsnagErrorHandler(error, 'getEmailFromUsername', { username });
   }
-  return null;
 };
 
 export const getNanakCoin = async (uid: string) => {
-  const userRef = doc(usersCollection, uid);
-  const userDoc = await getDoc(userRef);
-  if (userDoc.exists()) {
-    return userDoc.data().coins;
+  try {
+    const userRef = doc(usersCollection, uid);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      return userDoc.data().coins;
+    }
+    return null;
+  } catch (error) {
+    bugsnagErrorHandler(error, 'getNanakCoin', { uid });
   }
-  return null;
 };
 
 export const updateNanakCoin = async (uid: string, newCoinValue: number) => {
