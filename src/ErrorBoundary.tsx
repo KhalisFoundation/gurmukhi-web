@@ -3,10 +3,9 @@ import React, { ReactNode } from 'react';
 import Bugsnag from '@bugsnag/js';
 import BugsnagPluginReact, { BugsnagPluginReactResult } from '@bugsnag/plugin-react';
 import BugsnagPerformance from '@bugsnag/browser-performance';
-import { User } from 'firebase/auth';
+
 
 type ErrorBoundaryProps = {
-  user: User | null;
   children: ReactNode;
 };
 
@@ -18,22 +17,13 @@ const ErrorBoundary = (props: ErrorBoundaryProps) => {
     apiKey: BugSnagAPIKey,
     plugins: [new BugsnagPluginReact()],
     releaseStage: process.env.NODE_ENV,
-    onError: function (event) {
-      event.setUser(
-        props.user?.uid,
-        props.user?.email || '',
-        props.user?.displayName || '',
-      );
-    },
   });
 
-  const ErrorBoundaryWrap = (Bugsnag.getPlugin('react') as BugsnagPluginReactResult).createErrorBoundary(React);
+  const ErrorBoundaryWrap = (
+    Bugsnag.getPlugin('react') as BugsnagPluginReactResult
+  ).createErrorBoundary(React);
 
-  return (
-    <ErrorBoundaryWrap>
-      {props.children}
-    </ErrorBoundaryWrap>
-  );
+  return <ErrorBoundaryWrap>{props.children}</ErrorBoundaryWrap>;
 };
 
 export default ErrorBoundary;
