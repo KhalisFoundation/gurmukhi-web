@@ -1,4 +1,4 @@
-import React, { Suspense, useContext } from 'react';
+import React, { Suspense } from 'react';
 import i18n from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 import CONSTANTS from './constants';
@@ -7,7 +7,6 @@ import { AppRouter } from 'routes';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import ErrorBoundary from 'ErrorBoundary';
-import { AuthContext } from 'auth/context';
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -27,10 +26,9 @@ i18n.use(initReactI18next).init({
 function App() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.ROOT;
-  const { currentUser } = useContext(AuthContext);
 
   return (
-    <ErrorBoundary user={currentUser?.user || null}>
+    <ErrorBoundary>
       <Suspense fallback={<div>{text('LOADING')}</div>}>
         <div className='App h-full'>
           <UserAuthContextProvider>
