@@ -26,9 +26,11 @@ export default function SignIn() {
 
   const signToggle = (e: FormEvent) => {
     e.preventDefault();
+
     const switchElement = document.getElementsByClassName('switch')[0] as HTMLElement | null;
 
     if (switchElement !== null) {
+
       switchElement.classList.toggle('translate-x-[94%]');
     } else {
       console.warn('Switch element not found.');
