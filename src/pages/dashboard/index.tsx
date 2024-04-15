@@ -8,9 +8,11 @@ import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import useGamePlay from './hooks/useGamePlay1';
 import Loading from 'components/loading';
+import Bugsnag from '@bugsnag/js';
+import { setWebWorker } from 'store/features/webWorkerSlice';
 
 export default function Dashboard() {
   const commonStyle =
@@ -23,10 +25,16 @@ export default function Dashboard() {
   useGamePlay(user, toggleLoading);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
+  const webWorker: boolean = useAppSelector((state) => state.webWorker);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (webWorker) {
+      dispatch(setWebWorker(false));
+    }
     if (user) {
       setUserData(user);
+      Bugsnag.setUser(user.uid, user.email, user.displayName);
     }
   }, [user]);
 

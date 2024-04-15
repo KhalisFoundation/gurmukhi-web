@@ -161,20 +161,23 @@ export const updateWordFromUser = async (uid: string, wordID: string) => {
       await updateDoc(documentRef, {
         progress: currentProgress + 1,
         isLearnt: isLearnt,
-        lastReviewed : Timestamp.fromDate(new Date()),
+        lastReviewed: Timestamp.fromDate(new Date()),
       });
-      console.log('updated words doc');
     }
   } catch (error) {
-    console.error('Error updating the doc', error);
+    bugsnagErrorHandler(error, 'updateWordFromUser', { uid, wordID });
   }
 };
 
 export const checkIfWordPresent = async (uid: string, wordID: string) => {
-  const wordsCollectionRef = getWordCollectionRef(uid);
-  const q = query(wordsCollectionRef, where('word_id', '==', wordID));
-  const querySnapshot = await getDocs(q);
-  return !querySnapshot.empty;
+  try {
+    const wordsCollectionRef = getWordCollectionRef(uid);
+    const q = query(wordsCollectionRef, where('word_id', '==', wordID));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  } catch (error) {
+    bugsnagErrorHandler(error, 'checkIfWordPresent', { uid, wordID });
+  }
 };
 
 export const getLearntWords = async (uid: string) => {
@@ -188,7 +191,6 @@ export const getLearntWords = async (uid: string) => {
     }));
     return documents as WordShabadavaliDB[];
   } catch (error) {
-    console.error(error);
-    throw error;
+    bugsnagErrorHandler(error, 'getLearntWords', { uid });
   }
 };

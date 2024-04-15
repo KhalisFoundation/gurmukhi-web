@@ -185,7 +185,7 @@
     "data": {
       "word": "ਸੁਸਤ",
       "translation": "lazy",
-      "meaning_english": "who does not enterprise.",
+      "meaning_english": "Someone who is unwilling to work or use energy",
       "meaning_punjabi": "ਜਿਹੜਾ ਉੱਦਮ ਨਾ ਕਰੇ",
       "images": [
         "https://images.pexels.com/photos/164446/pexels-photo-164446.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -258,7 +258,7 @@
     "data": {
       "word": "ਕਮਜ਼ੋਰ",
       "translation": "Weak",
-      "meaning_english": "Someone who does not have a lot of power",
+      "meaning_english": "Someone who is lacking strength and energy",
       "meaning_punjabi": "ਜਿਸ ਕੋਲ ਬਹੁਤੀ ਤਾਕਤ ਨਾ ਹੋਵੇ",
       "images": [
         "https://images.pexels.com/photos/12442151/pexels-photo-12442151.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
@@ -286,8 +286,8 @@
         {
           "id": "fpfmQv26MR1JhnQw79wZ",
           "word_id": "nsbu0GTy9cwOh0b1jPkK",
-          "translation": "I felt weak after running for a long time.",
-          "sentence": "ਲੰਮੇ ਸਮੇਂ ਤੱਕ ਭੱਜਣ ਕਰਕੇ ਮੈਂ ਕਮਜ਼ੋਰ ਮਹਿਸੂਸ ਕਰ ਰਿਹਾ ਸੀ।"
+          "translation": "The body becomes weak due to lack of exercise.",
+          "sentence": "ਕਸਰਤ ਤੋ ਬਿਨਾਂ ਸਰੀਰ ਕਮਜ਼ੋਰ ਹੋ ਜਾਂਦਾ ਹੈ।"
         }
       ]
     }
@@ -534,7 +534,7 @@
         {
           "id": "Cnv65ynt1MELsrdvOauU",
           "word_id": "bm2uhrLufbY77GgZe9md",
-          "sentence": " ਪੰਜਾਬੀ ਕਹਾਵਤ ਹੈ ਕਿ ਝੂਠ ਦੇ ਪੈਰ ਨਹੀਂ ਹੁੰਦੇ।    ",
+          "sentence": " ਪੰਜਾਬੀ ਕਹਾਵਤ ਹੈ ਕਿ ਝੂਠ ਦੇ ਪੈਰ ਨਹੀਂ ਹੁੰਦੇ।",
           "translation": "There's a Punjabi saying that lies have no legs."
         },
         {
@@ -618,7 +618,7 @@
     "key": "definition-MPjhrzg09ZksfH0U0t5r",
     "data": {
       "word": "ਜ਼ੁਲਮ",
-      "translation": "opression",
+      "translation": "oppression",
       "meaning_english": "To inflict injustice or suffering on someone without reason",
       "meaning_punjabi": "ਕਿਸੇ ਉੱਤੇ ਬੇਇਨਸਾਫੀ ਕਰਨੀ",
       "images": [
@@ -630,7 +630,7 @@
     "key": "sentences-MPjhrzg09ZksfH0U0t5r",
     "data": {
       "word": "ਜ਼ੁਲਮ",
-      "translation": "opression",
+      "translation": "oppression",
       "sentences": [
         {
           "id": "FFimV9O0WmODBomKjsSK",
@@ -680,7 +680,7 @@
         {
           "id": "MPjhrzg09ZksfH0U0t5r",
           "word": "ਜ਼ੁਲਮ",
-          "translation": "opression"
+          "translation": "oppression"
         }
       ],
       "answer": 3,
