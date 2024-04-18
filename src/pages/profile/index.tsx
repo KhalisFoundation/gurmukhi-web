@@ -11,6 +11,7 @@ import { checkIfUsernameUnique, updateUserDocument } from 'database/shabadavalid
 import { auth } from '../../firebase';
 import { showToastMessage } from 'utils';
 import { uploadImage } from 'utils/storage';
+import CONSTANTS from 'constants/constant';
 
 export default function Profile() {
   const { t: text } = useTranslation();
@@ -68,11 +69,11 @@ export default function Profile() {
       setUsernameError('');
       return;
     }
-    if (e.target.value.length < 3) {
+    if (e.target.value.length < CONSTANTS.USERNAME_MIN_LENGTH) {
       setUsernameError(text('USERNAME_TOO_SHORT'));
       return;
     }
-    if (e.target.value.length > 20) {
+    if (e.target.value.length > CONSTANTS.USERNAME_MAX_LENGTH) {
       setUsernameError(text('USERNAME_TOO_LONG'));
       return;
     }
@@ -132,9 +133,11 @@ export default function Profile() {
 
           showToastMessage(text('PROFILE_UPDATED'), toast.POSITION.TOP_CENTER, true);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error(error);
-        showToastMessage(error.message, toast.POSITION.TOP_CENTER, false, true);
+        if (error instanceof Error) {
+          showToastMessage(error.message, toast.POSITION.TOP_CENTER, false, true);
+        }
       } finally {
         setIsLoading(false);
       }

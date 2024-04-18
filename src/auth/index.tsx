@@ -47,9 +47,7 @@ export const UserAuthContextProvider = ({
       return null;
     });
 
-  const signInWithGoogle = async (
-    showToastMessage: (text: string, error?: boolean) => void,
-  ) => {
+  const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider)
       .then((userCredential) => {
@@ -76,7 +74,7 @@ export const UserAuthContextProvider = ({
           setUser(userCredential.user);
         });
       })
-      .catch((error: any) => {
+      .catch((error) => {
         if (Object.keys(errors).includes(error.code)) {
           showToastMessage(errors[error.code]);
         }
@@ -102,11 +100,7 @@ export const UserAuthContextProvider = ({
         showToastMessage(text('USERNAME_TAKEN'));
         return false;
       }
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userData = userCredential.user;
       const { uid, displayName } = userData;
       const localUser = doc(shabadavaliDB, `users/${uid}`);
@@ -136,9 +130,13 @@ export const UserAuthContextProvider = ({
         showToastMessage(text('EMAIL_VERIFICATION_SENT'), false);
       });
       return true;
-    } catch (error: any) {
-      if (Object.keys(errors).includes(error.code)) {
-        showToastMessage(errors[error.code]);
+    } catch (error) {
+      if (typeof error === 'object' && error !== null && 'code' in error) {
+        const errorCode = (error as { code: string }).code;
+
+        if (Object.keys(errors).includes(errorCode)) {
+          showToastMessage(errors[errorCode]);
+        }
       }
       return false;
     }

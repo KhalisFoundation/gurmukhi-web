@@ -14,7 +14,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
   const dispatch = useAppDispatch();
 
   const gamePlay = async () => {
-    const userData: any = await getUserData(user.uid);
+    const userData: User | undefined = await getUserData(user.uid);
 
     if (!userData) {
       const gameArray: GameScreen[] = [];
@@ -39,16 +39,21 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
         try {
           toggleLoading(true);
           const { currentProgress, currentLevel, gameArray } = await gamePlay();
-          if (gameArray) {
+
+          if (
+            gameArray &&
+            gameArray.length > 0 &&
+            currentProgress !== undefined &&
+            currentProgress !== null
+          ) {
             await updateProgress(user.uid, currentProgress, gameArray, currentLevel);
             dispatch(addScreens(gameArray));
           }
           toggleLoading(false);
         } catch (error) {
-          bugsnagErrorHandler(error,
-            'pages/dashboard/hooks/useGamePlay1.ts/useGamePlay',
-            { ...user },
-          );
+          bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay1.ts/useGamePlay', {
+            ...user,
+          });
         }
       }
     };

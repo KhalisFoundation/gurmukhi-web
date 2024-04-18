@@ -49,11 +49,12 @@ const getRandomQuestions = async (
     await addQuestionsBatch(user.uid, wordToQuestionMap);
     return gameArray;
   } catch (error) {
-    bugsnagErrorHandler(
-      error,
-      'pages/dashboard/hooks/useQuestions.ts/getRandomQuestions',
-      { user, count, isLearnt, questionIds },
-    );
+    bugsnagErrorHandler(error, 'pages/dashboard/hooks/useQuestions.ts/getRandomQuestions', {
+      user,
+      count,
+      isLearnt,
+      questionIds,
+    });
     return gameArray;
   }
 };

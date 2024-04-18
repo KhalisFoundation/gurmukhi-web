@@ -6,12 +6,15 @@ import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice'
 import { User } from 'types/shabadavalidb';
 import Bugsnag from '@bugsnag/js';
 import { bugsnagErrorHandler } from 'utils';
+import { Dispatch } from '@reduxjs/toolkit';
+import { DefineWord, QuestionData, SentenceWord, WordType } from 'types';
+import { NavigateFunction } from 'react-router-dom';
 
 const navigateTo = (
-  navigate: any,
+  navigate: NavigateFunction,
   key: string,
   wordID: string,
-  data: any,
+  data: DefineWord | SentenceWord | QuestionData | WordType,
   questionID: string | null = null,
 ) => {
   const routeMap = {
@@ -27,28 +30,38 @@ const handleClick = async (
   operation: string,
   currentLevel: number,
   gameArray: GameScreen[],
-  navigate: any,
+  navigate: NavigateFunction,
   user: User,
-  dispatch: any,
+  dispatch: Dispatch<any>,
 ) => {
   const coins = await getNanakCoin(user.uid);
-  const condition = coins !== 0 ?
-    currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition] :
-    currentLevel < ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition];
+  const condition =
+    coins !== 0
+      ? currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition]
+      : currentLevel < ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition];
   if (gameArray.length === 0) {
     Bugsnag.notify(new Error('Game Array is empty'));
     return;
   }
   if (condition) {
-    let saveWordID = null;
-    const sessionInfo = currentGamePosition !== undefined ? gameArray[currentGamePosition] : null;
-    if (sessionInfo) {
-      const [key, wordID, questionID] = sessionInfo.key.split('-');
-      saveWordID = wordID;
-      if (key) {
-        navigateTo(navigate, key, wordID, sessionInfo.data, questionID);
-      }
+    if (
+      typeof currentGamePosition !== 'number' ||
+      currentGamePosition < 0 ||
+      currentGamePosition >= gameArray.length
+    ) {
+      return;
     }
+    const session = gameArray[currentGamePosition];
+    if (!session) {
+      return;
+    }
+    const [key, wordID, questionID] = session.key.split('-');
+    if (!key) {
+      return;
+    }
+    const saveWordID = wordID;
+    navigateTo(navigate, key, wordID, session.data, questionID);
+
     switch (operation) {
       case ALL_CONSTANT.BACK_TO_DASHBOARD:
         navigate(ROUTES.DASHBOARD);
@@ -62,12 +75,7 @@ const handleClick = async (
             await updateCurrentProgress(user.uid, currentGamePosition);
             dispatch(setCurrentGamePosition(currentGamePosition));
           } catch (error) {
-            bugsnagErrorHandler(
-              error,
-              'handleClick in useOnClick.ts',
-              { uid: user.uid },
-              user,
-            );
+            bugsnagErrorHandler(error, 'handleClick in useOnClick.ts', { uid: user.uid }, user);
           }
         }
         break;

@@ -10,14 +10,13 @@ import ALL_CONSTANT from 'constants/constant';
 import { WordType } from 'types';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
+import CONSTANTS from 'constants/constant';
 
 export default function Examples() {
   const { t: text } = useTranslation();
   const [wordID, setWordID] = useState<string | null>(null);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
-  const currentGamePosition = useAppSelector(
-    (state) => state.currentGamePosition,
-  );
+  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
@@ -50,7 +49,7 @@ export default function Examples() {
     operation: ALL_CONSTANT.NEXT,
     nextText: 'Next',
     absolute: true,
-    currentGamePosition: currentGamePosition + 1,
+    currentGamePosition: currentGamePosition + CONSTANTS.DEFAULT_ONE,
     currentLevel: currentLevel,
     isDisabled: false,
   };

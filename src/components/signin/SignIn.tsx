@@ -108,8 +108,10 @@ export default function SignIn() {
           navigate(ROUTES.DASHBOARD);
         }
       }
-    } catch (error: any) {
-      displayToast(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        displayToast(error.message);
+      }
     }
   };
 
@@ -120,8 +122,10 @@ export default function SignIn() {
       if (success) {
         navigate(ROUTES.DASHBOARD);
       }
-    } catch (error: any) {
-      displayToast(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        displayToast(error.message);
+      }
     }
   };
 

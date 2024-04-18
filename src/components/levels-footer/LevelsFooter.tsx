@@ -7,6 +7,7 @@ import LevelHexagon from '../levels/LevelHexagon';
 import { setWebWorker } from 'store/features/webWorkerSlice';
 import StartQuestionBtn from '../buttons/StartQuestionBtn';
 import { getUserData } from 'database/shabadavalidb';
+import CONSTANTS from 'constants/constant';
 
 interface Props {
   operation: string;
@@ -49,7 +50,7 @@ export default function LevelsFooter({
       }
       await worker.fetchNextSessionData(userData, dispatch, setWebWorker);
     };
-    if (currentLevel === 10 && user.uid && !webWorker) {
+    if (currentLevel === CONSTANTS.WEB_WORKER_LEVEL && user.uid && !webWorker) {
       callWorker();
     }
   }, [currentLevel, user]);
@@ -66,7 +67,7 @@ export default function LevelsFooter({
         </h1>
         <div className='flex flex-row gap-5 flex-wrap justify-center lg:justify-start'>
           {Array.from({ length: totalNumQuestions }).map((_, num) => (
-            <LevelHexagon key={num} number={num + 1} type={getLevelType(num)} />
+            <LevelHexagon key={num} number={num + CONSTANTS.DEFAULT_ONE} type={getLevelType(num)} />
           ))}
         </div>
       </div>

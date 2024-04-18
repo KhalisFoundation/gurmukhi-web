@@ -8,10 +8,11 @@ import { WordType } from 'types';
 import getRandomQuestions from '../hooks/useQuestions';
 import getNewQuestions from '../hooks/useNew';
 import { addWordsBatch } from 'database/shabadavalidb';
+import CONSTANTS from 'constants/constant';
 
 export const getRandomElement = (array: string[]) => {
   const randomIndex = Math.floor(Math.random() * array.length);
-  const removedElement = array.splice(randomIndex, 1)[0];
+  const removedElement = array.splice(randomIndex, CONSTANTS.DEFAULT_ONE)[0];
   return removedElement;
 };
 
@@ -32,15 +33,15 @@ export const checkIsFirstTime = (user: User) => {
   );
 };
 
-export const fetchProgress = (user: any) => {
+export const fetchProgress = (user: User) => {
   const gameSession = user?.progress.gameSession;
   return gameSession && gameSession.length > 0 ? gameSession : null;
 };
 
 export const shuffleArray = (array: any[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
+  for (let i = array.length - CONSTANTS.DEFAULT_ONE; i > 0; i--) {
     // Generate a random index between 0 and i
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(Math.random() * (i + CONSTANTS.DEFAULT_ONE));
 
     // Swap elements at indices i and j
     [array[i], array[j]] = [array[j], array[i]];
@@ -51,7 +52,7 @@ export const shuffleArray = (array: any[]) => {
 export const gameAlgo = async (user: User) => {
   const isFirstTime = checkIsFirstTime(user);
   if (user && isFirstTime) {
-    const { game, learningWords } = await getNewQuestions(13, true);
+    const { game, learningWords } = await getNewQuestions(CONSTANTS.LEVELS_COUNT, true);
     const gameArray: GameScreen[] = game;
 
     if (learningWords.length > 0) {
@@ -59,9 +60,9 @@ export const gameAlgo = async (user: User) => {
     }
     return { gameArray };
   }
-  let learningCount = 9;
-  let newQuestionCount = 2;
-  let learntCount = 2;
+  let learningCount = CONSTANTS.DEFAULT_LEARNING_COUNT;
+  let newQuestionCount = CONSTANTS.DEFAULT_NEW_COUNT;
+  let learntCount = CONSTANTS.DEFAULT_LEARNT_COUNT;
   const learningQuestions = await getRandomQuestions(user, learningCount, false);
   if (learningQuestions.length < learningCount) {
     newQuestionCount += learningCount - learningQuestions.length;

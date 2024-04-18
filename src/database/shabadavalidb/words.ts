@@ -19,6 +19,7 @@ import { generateRandomId } from 'database/util';
 import { usersCollection } from './users';
 import { shuffleArray } from 'pages/dashboard/utils';
 import { bugsnagErrorHandler } from 'utils';
+import CONSTANTS from 'constants/constant';
 
 const getWordCollectionRef = (uid: string) => {
   return collection(shabadavaliDB, ALL_CONSTANT.USERS, uid, ALL_CONSTANT.WORDS);
@@ -29,18 +30,18 @@ export const addWordsToSubCollection = async (uid: string, data: WordShabadavali
     const wordsCollectionRef = getWordCollectionRef(uid);
     await addDoc(wordsCollectionRef, data);
   } catch (error) {
-    bugsnagErrorHandler(
-      error,
-      'database/shabadavalidb/words.ts/addWordsToSubCollection',
-      data,
-    );
+    bugsnagErrorHandler(error, 'database/shabadavalidb/words.ts/addWordsToSubCollection', data);
   }
 };
 
 export const getWords = async (uid: string, isLearnt: boolean) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
-    const q = query(wordsCollectionRef, where('isLearnt', '==', isLearnt), limit(10));
+    const q = query(
+      wordsCollectionRef,
+      where('isLearnt', '==', isLearnt),
+      limit(CONSTANTS.GET_WORD_LIMIT),
+    );
     // may add a time condition
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
@@ -154,12 +155,12 @@ export const updateWordFromUser = async (uid: string, wordID: string) => {
       const wordData = wordDoc.data() as WordShabadavaliDB;
       const currentProgress = wordData.progress;
       let isLearnt = wordData.isLearnt;
-      if (currentProgress + 1 >= 4) {
+      if (currentProgress + CONSTANTS.DEFAULT_ONE >= CONSTANTS.LEARNT_THRESHOLD) {
         isLearnt = true;
       }
       const documentRef = doc(wordsCollectionRef, querySnapshot.docs[0].id);
       await updateDoc(documentRef, {
-        progress: currentProgress + 1,
+        progress: currentProgress + CONSTANTS.DEFAULT_ONE,
         isLearnt: isLearnt,
         lastReviewed: Timestamp.fromDate(new Date()),
       });

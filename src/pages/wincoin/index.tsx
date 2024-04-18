@@ -22,6 +22,7 @@ import handleClick from 'components/buttons/hooks/useOnClick';
 import LoaderButton from 'components/buttons/LoaderButton';
 import { addScreens } from 'store/features/gameArraySlice';
 import { GameScreen, User } from 'types/shabadavalidb';
+import CONSTANTS from 'constants/constant';
 
 function WinCoin() {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ function WinCoin() {
         dispatch(increment());
         dispatch(resetLevel());
         dispatch(addScreens(nxtSession));
-        await updateNanakCoin(user.uid, nanakCoin + 1);
+        await updateNanakCoin(user.uid, nanakCoin + CONSTANTS.DEFAULT_ONE);
         await updateProgress(user.uid, 0, nxtSession, 0);
         await updateNextSession(user.uid, []);
       }

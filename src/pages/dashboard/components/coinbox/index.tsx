@@ -6,6 +6,7 @@ import { getUserData } from 'database/shabadavalidb';
 import { Counter } from '../Counter';
 import { useUserAuth } from 'auth';
 import { setNanakCoin } from 'store/features/nanakCoin';
+import { User } from 'types/shabadavalidb';
 
 function CoinBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
@@ -16,9 +17,11 @@ function CoinBox({ commonStyle }: { commonStyle: string }) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     const fetchCoins = async () => {
-      const userData: any = await getUserData(user.uid);
-      dispatch(setNanakCoin(userData.coins));
-      setCoins(userData.coins);
+      const userData: User | undefined = await getUserData(user.uid);
+      if (userData) {
+        dispatch(setNanakCoin(userData.coins));
+        setCoins(userData.coins);
+      }
     };
     fetchCoins();
   }, [user.uid]);

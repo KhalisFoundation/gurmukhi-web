@@ -18,14 +18,14 @@ export default function LogOut() {
       try {
         await logOut();
         navigate(ROUTES.LOGIN);
-      } catch (error: any) {
-        setErrorMessage(error.message);
-        showToastMessage(
-          errorMessage,
-          toast.POSITION.BOTTOM_RIGHT,
-          true,
-          true,
-        );
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(error.message);
+          showToastMessage(error.message, toast.POSITION.BOTTOM_RIGHT, true, true);
+        } else {
+          setErrorMessage('An unknown error occurred');
+          showToastMessage('An unknown error occurred', toast.POSITION.BOTTOM_RIGHT, true, true);
+        }
       }
     };
     handleLogout();
