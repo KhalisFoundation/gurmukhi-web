@@ -22,15 +22,15 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
     }
     const progress: GameScreen[] | null = await fetchProgress(userData);
     if (progress && progress.length > 0) {
-      const gameArray: GameScreen[] | null = progress;
-      const currentProgress = userData?.progress.currentProgress || 0;
-      const currentLevel = userData?.progress.currentLevel || 0;
+      const gameArray: GameScreen[] = progress;
+      const currentProgress: number = userData?.progress.currentProgress || 0;
+      const currentLevel: number = userData?.progress.currentLevel || 0;
       dispatch(setCurrentGamePosition(currentProgress));
       dispatch(setCurrentLevel(currentLevel));
       return { currentProgress, currentLevel, gameArray };
     }
     const { gameArray } = await gameAlgo(user);
-    return { currentProgress: 0, currentLevel: 0, gameArray };
+    return { gameArray };
   };
 
   useEffect(() => {
@@ -38,17 +38,9 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
       if (user.progress) {
         try {
           toggleLoading(true);
-          const { currentProgress, currentLevel, gameArray } = await gamePlay();
-
-          if (
-            gameArray &&
-            gameArray.length > 0 &&
-            currentProgress !== undefined &&
-            currentProgress !== null
-          ) {
-            await updateProgress(user.uid, currentProgress, gameArray, currentLevel);
-            dispatch(addScreens(gameArray));
-          }
+          const { currentProgress = 0, currentLevel = 0, gameArray = [] } = await gamePlay();
+          await updateProgress(user.uid, currentProgress, gameArray, currentLevel);
+          dispatch(addScreens(gameArray));
           toggleLoading(false);
         } catch (error) {
           bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay1.ts/useGamePlay', {

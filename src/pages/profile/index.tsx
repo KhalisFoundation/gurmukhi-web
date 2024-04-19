@@ -227,9 +227,9 @@ export default function Profile() {
 
     if (user?.uid) {
       setIsLoading(false);
-      setName(user?.displayName ?? '');
-      setUsername(user?.username ?? '');
-      setVerifiable(!(user?.emailVerified ?? true));
+      setName(user?.displayName || '');
+      setUsername(user?.username || '');
+      setVerifiable(!(user?.emailVerified || true));
     }
   }, [user]);
 

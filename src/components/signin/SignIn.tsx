@@ -7,7 +7,7 @@ import SignUp from './SignUp';
 import InputWithIcon from '../input/InputWithIcon';
 import { SignError } from 'types';
 import { ToastContainer, toast } from 'react-toastify';
-import { showToastMessage } from 'utils';
+import { bugsnagErrorHandler, showToastMessage } from 'utils';
 
 export default function SignIn() {
   const { t: text } = useTranslation();
@@ -28,12 +28,10 @@ export default function SignIn() {
     e.preventDefault();
 
     const switchElement = document.getElementsByClassName('switch')[0] as HTMLElement | null;
-
     if (switchElement !== null) {
-
       switchElement.classList.toggle('translate-x-[94%]');
     } else {
-      console.warn('Switch element not found.');
+      bugsnagErrorHandler(new Error('Switch element not found'), 'SwitchSignInToggle', {});
     }
     setIsNewUser(!isNewUser);
   };
