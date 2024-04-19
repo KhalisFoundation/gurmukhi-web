@@ -9,7 +9,7 @@ describe('Reset all mocks', () => {
   describe('Get Random Questions', () => {
     it('should return random questions', async () => {
       const user: User = {
-        displaName: 'Amitoj Singh',
+        displayName: 'Amitoj Singh',
         role: 'student',
         photoURL: 'some url',
         uid: 'lakhdsfaoidjfakldnnmadflkjj',
