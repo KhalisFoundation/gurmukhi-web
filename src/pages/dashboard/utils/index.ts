@@ -4,8 +4,6 @@ import getNewQuestions from '../hooks/useNew';
 import { addWordsBatch } from 'database/shabadavalidb';
 import {
   shuffleArray,
-  getRandomElement,
-  getRandomWordFromArray,
   createGameScreen,
   fetchProgress,
   checkIsFirstTime,
@@ -63,9 +61,7 @@ const gameAlgo = async (user: User) => {
 };
 
 export {
-  getRandomElement,
   gameAlgo,
-  getRandomWordFromArray,
   shuffleArray,
   createGameScreen,
   fetchProgress,
