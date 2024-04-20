@@ -255,18 +255,18 @@ export default function Profile() {
       <Meta title={title} description={description} />
       <div className='flex flex-col items-center m-auto brandon-grotesque'>
         <ToastContainer />
-        <div className='flex flex-col justify-center items-center rounded-lg p-4 cardImage bg-cover bg-sky-100 bg-blend-soft-light aspect-auto w-5/6 md:w-full'>
+        <div className='flex flex-col justify-center items-center rounded-lg p-4 cardImage bg-cover bg-sky-100 bg-blend-soft-light aspect-auto md:w-full'>
           <h2 className='text-2xl font-bold'>{text('YOUR_DETAILS')}</h2>
           <div className='flex flex-col md:flex-row items-center justify-evenly gap-5 rounded-lg p-4 container'>
             <div className='flex flex-col items-center'>
               <img
                 src={preview ?? photoURL}
                 alt={'No Profile Picture found!'}
-                className='h-30 w-30 rounded-full m-4'
+                className='h-64 w-64 rounded-full m-4'
               />
               {editMode ? (
                 <div className='flex flex-row justify-center'>
-                  <div className='w-[200px]'>
+                  <div className='w-64'>
                     <input type='file' accept='.png, .jpeg, .jpg' onChange={handlePhotoChange} />
                   </div>
                 </div>
