@@ -1,5 +1,6 @@
 import React, { Dispatch, FC, useEffect, useRef, useState } from 'react';
 import Loading from 'components/loading';
+import CONSTANTS from 'constants/constant';
 import { generateNarakeetAudio } from 'narakeet';
 
 interface TextToSpeechBtnProps {
@@ -8,10 +9,17 @@ interface TextToSpeechBtnProps {
   audioURL?: string;
   id?: string;
   backgroundColor?: string;
-  setLoading?: Dispatch<boolean>,
+  setLoading?: Dispatch<boolean>;
 }
 
-const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioURL, id, backgroundColor, setLoading }) => {
+const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
+  text = 'word',
+  type,
+  audioURL,
+  id,
+  backgroundColor,
+  setLoading,
+}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string>(audioURL || '');
@@ -87,7 +95,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
 
   useEffect(() => {
     if (audioRef.current) {
-      const newSpeed = slow ? 0.65 : 1;
+      const newSpeed = slow ? CONSTANTS.SLOW_AUDIO_SPEED : CONSTANTS.NORMAL_SPEED;
       audioRef.current.playbackRate = newSpeed;
     }
   }, [slow]);
@@ -98,9 +106,11 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({ text = 'word', type, audioU
         <Loading size={'5'} />
       ) : (
         <>
-          {
-            slow ? <img src={'/icons/fast.svg'} alt='Fast' width={27} height={27} /> : <img src={'/icons/slow.svg'} alt='Slow' width={27} height={27} />
-          }
+          {slow ? (
+            <img src={'/icons/fast.svg'} alt='Fast' width={27} height={27} />
+          ) : (
+            <img src={'/icons/slow.svg'} alt='Slow' width={27} height={27} />
+          )}
           {audioUrl && <audio ref={audioRef} src={audioUrl} />}
         </>
       )}

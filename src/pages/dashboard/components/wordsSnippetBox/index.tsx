@@ -4,17 +4,13 @@ import { Counter } from '../Counter';
 import { useUserAuth } from 'auth';
 import { getLearntWords } from 'database/shabadavalidb';
 import { WordShabadavaliDB } from 'types/shabadavalidb';
+import CONSTANTS from 'constants/constant';
 
-function WordsSnippetBox({
-  commonStyle,
-}: {
-  commonStyle: string;
-}) {
+function WordsSnippetBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
   const [wordsLearnt, setWordsLearnt] = useState<WordShabadavaliDB[]>();
   const { user } = useUserAuth();
   const [fallenWords, setFallenWords] = useState<number>(0);
-  
   useEffect(() => {
     const fetchWords = async () => {
       const words = await getLearntWords(user.uid);
@@ -26,22 +22,24 @@ function WordsSnippetBox({
       fetchWords();
     }
   }, [user.uid]);
-  
+
   useEffect(() => {
     if (wordsLearnt && fallenWords < wordsLearnt.length) {
       setTimeout(() => {
-        setFallenWords((prev) => prev + 1);
-      }, 100);
+        setFallenWords((prev) => prev + CONSTANTS.DEFAULT_ONE);
+      }, CONSTANTS.FALLEN_SPEED);
     }
   }, [fallenWords, wordsLearnt]);
 
   const wordBrick = wordsLearnt?.map((word, index) => {
-    const animationDelay = `${index * 0.1}s`; // Adjust the delay as needed
+    const animationDelay = `${index * CONSTANTS.ANIMATION_DELAY}s`; // Adjust the delay as needed
 
     return (
       <div
         key={word.id}
-        className={`word-fall-animation ${index % 2 === 0 ? 'even' : 'odd'}`}
+        className={`word-fall-animation ${
+          index % CONSTANTS.REMINDER_NUMBER === 0 ? 'even' : 'odd'
+        }`}
         style={{ animationDelay }}
       >
         <div className='bg-white rounded-lg opacity-25 py-1'>

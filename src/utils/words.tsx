@@ -1,20 +1,18 @@
 import React, { MutableRefObject } from 'react';
 import { Draggable, DroppableProvided } from 'react-beautiful-dnd';
+import CONSTANTS from 'constants/constant';
 import { TFunction } from 'i18next';
 import { WordType } from 'types';
 
 const convertToTitleCase = (word: string) => {
-  return word.charAt(0).toUpperCase() + word.slice(1);
+  return word.charAt(0).toUpperCase() + word.slice(CONSTANTS.DEFAULT_ONE);
 };
 
 const addEndingPunctuation = (sentence: string, lang: string) => {
   const punctuation = lang === 'gurmukhi' ? '।' : '.';
   const numberOfSpaces = (sentence.match(/ /g) || []).length;
-  if (numberOfSpaces === 0 && lang === 'gurmukhi')
-    return sentence.replace(/।/g, '');
-  return numberOfSpaces === 0 ||
-    sentence.endsWith(punctuation) ||
-    sentence.endsWith('?')
+  if (numberOfSpaces === 0 && lang === 'gurmukhi') return sentence.replace(/।/g, '');
+  return numberOfSpaces === 0 || sentence.endsWith(punctuation) || sentence.endsWith('?')
     ? sentence
     : sentence + punctuation;
 };
@@ -73,9 +71,7 @@ const createSemanticDraggables = (
                 return (
                   <div
                     draggable
-                    className={
-                      'flex h-min w-max m-4 p-4 text-white text-sm rounded-lg z-10'
-                    }
+                    className={'flex h-min w-max m-4 p-4 text-white text-sm rounded-lg z-10'}
                     {...dragProvided.draggableProps}
                     {...dragProvided.dragHandleProps}
                     ref={(el) => {

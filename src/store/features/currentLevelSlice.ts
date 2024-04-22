@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import CONSTANTS from 'constants/constant';
+
 const currentLevelSlice = createSlice({
   name: 'currentLevel',
   initialState: 0,
@@ -7,7 +9,7 @@ const currentLevelSlice = createSlice({
       return action.payload;
     },
     increment: (state) => {
-      return state + 1;
+      return state + CONSTANTS.DEFAULT_ONE;
     },
     resetLevel: () => {
       return 0;

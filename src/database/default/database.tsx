@@ -15,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import { getUserData } from 'database/shabadavalidb';
 import { bugsnagErrorHandler } from 'utils';
+import CONSTANTS from 'constants/constant';
 
 const wordsCollection = collection(wordsdb, 'words');
 const sentencesCollection = collection(wordsdb, 'sentences');
@@ -37,7 +38,7 @@ const getDataById = async (
       return null;
     }
 
-    if (limitVal && limitVal > 1) {
+    if (limitVal && limitVal > CONSTANTS.DEFAULT_ONE) {
       return querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
@@ -81,9 +82,9 @@ const getRandomData = async (
   const querySnapshot = await getDocs(queryRef!);
 
   if (!querySnapshot.empty) {
-    if (limitVal && limitVal > 1) {
+    if (limitVal && limitVal > CONSTANTS.DEFAULT_ONE) {
       return querySnapshot.docs.map((doc) => ({
-        ...doc.data(), 
+        ...doc.data(),
         id: doc.id,
       }));
     } else {
@@ -107,7 +108,13 @@ const getSemanticsByIds = async (
     synonymsIds.length > 0
       ? synonymsIds.map((synonym) => {
         if (typeof synonym === 'string') {
-          return getDataById(synonym.toString(), wordsCollection, null, 1, true) as MiniWord;
+          return getDataById(
+            synonym.toString(),
+            wordsCollection,
+            null,
+            CONSTANTS.DEFAULT_ONE,
+            true,
+          ) as MiniWord;
         } else {
           return synonym;
         }
@@ -117,7 +124,13 @@ const getSemanticsByIds = async (
     antonymsIds.length > 0
       ? antonymsIds.map((antonym) => {
         if (typeof antonym === 'string') {
-          return getDataById(antonym.toString(), wordsCollection, null, 1, true) as MiniWord;
+          return getDataById(
+            antonym.toString(),
+            wordsCollection,
+            null,
+            CONSTANTS.DEFAULT_ONE,
+            true,
+          ) as MiniWord;
         } else {
           return antonym;
         }
@@ -140,7 +153,12 @@ const getWordById = async (wordId: string, needExtras = false) => {
 
   if (wordData) {
     if (needExtras) {
-      const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
+      const sentences = await getDataById(
+        wordId,
+        sentencesCollection,
+        'word_id',
+        CONSTANTS.DATA_LIMIT,
+      );
       const { synonyms, antonyms } = await getSemanticsByIds(
         wordData.synonyms as (string | MiniWord)[],
         wordData.antonyms as (string | MiniWord)[],
@@ -165,7 +183,7 @@ const getWordById = async (wordId: string, needExtras = false) => {
   }
 };
 
-const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true) => {
+const getRandomWord = async (uid: string, notInArray: string[], includeUsed = true) => {
   try {
     const userData = await getUserData(uid);
     const existingWordIds = includeUsed ? notInArray.concat(userData?.wordIds || []) : notInArray;
@@ -176,17 +194,17 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
         wordsCollection,
         where('status', '==', 'active'),
         null,
-        10,
+        CONSTANTS.RANDOM_WORD_LIMIT,
       );
       batches.push(wordData);
     } else {
-      for (let i = 0; i < existingWordIds.length; i += 10) {
-        const batchIds = existingWordIds.slice(i, i + 10);
+      for (let i = 0; i < existingWordIds.length; i += CONSTANTS.RANDOM_WORD_LIMIT) {
+        const batchIds = existingWordIds.slice(i, i + CONSTANTS.RANDOM_WORD_LIMIT);
         const wordData = await getRandomData(
           wordsCollection,
           and(where('status', '==', 'active'), where(documentId(), 'not-in', batchIds)),
           null,
-          10,
+          CONSTANTS.RANDOM_WORD_LIMIT,
         );
         batches.push(wordData);
       }
@@ -209,7 +227,12 @@ const getRandomWord = async (uid: string, notInArray: any[], includeUsed = true)
     const wordData =
       wordDataArray.length > 0 ? wordDataArray[0] : (resolvedWords[0] as WordType[])[0];
     const wordId = wordData.id;
-    const sentences = await getDataById(wordId, sentencesCollection, 'word_id', 3);
+    const sentences = await getDataById(
+      wordId,
+      sentencesCollection,
+      'word_id',
+      CONSTANTS.DATA_LIMIT,
+    );
     const { synonyms, antonyms } = await getSemanticsByIds(
       wordData.synonyms as string[],
       wordData.antonyms as string[],

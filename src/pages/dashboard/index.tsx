@@ -13,13 +13,15 @@ import useGamePlay from './hooks/useGamePlay1';
 import Loading from 'components/loading';
 import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
+import { User } from 'types/shabadavalidb';
+import CONSTANTS from 'constants/constant';
 
 export default function Dashboard() {
   const commonStyle =
     'w-5/6 lg:w-3/12 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   const { title, description } = metaTags.DASHBOARD;
   const { user } = useUserAuth();
-  const [userData, setUserData] = useState<any>(user);
+  const [userData, setUserData] = useState<User>(user);
   const [isLoading, toggleLoading] = useState<boolean>(true);
   const [reloadPrompt, setReloadPrompt] = useState<boolean>(false);
   useGamePlay(user, toggleLoading);
@@ -41,7 +43,7 @@ export default function Dashboard() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setReloadPrompt(true);
-    }, 30000);
+    }, CONSTANTS.TIMEOUT_NUM);
 
     return () => {
       clearTimeout(timeout);

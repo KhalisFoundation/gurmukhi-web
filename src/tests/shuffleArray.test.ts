@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import { shuffleArray } from '../pages/dashboard/utils/helpers';
 
 describe('shuffleArray', () => {

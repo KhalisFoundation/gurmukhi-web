@@ -9,6 +9,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { getQuestionByID } from 'database/default/question';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
+import CONSTANTS from 'constants/constant';
 
 export default function Question() {
   const { title, description } = metaTags.QUESTION;
@@ -74,7 +75,9 @@ export default function Question() {
         operation={isCorrectOption ? ALL_CONSTANT.NEXT : ALL_CONSTANT.INFORMATION}
         nextText={isCorrectOption === false ? ALL_CONSTANT.LEARN_MORE : ALL_CONSTANT.NEXT}
         currentLevel={currentLevel}
-        currentGamePosition={isCorrectOption ? currentGamePosition + 1 : currentGamePosition}
+        currentGamePosition={
+          isCorrectOption ? currentGamePosition + CONSTANTS.DEFAULT_ONE : currentGamePosition
+        }
         isDisabled={!isOptionSelected}
       />
     );
