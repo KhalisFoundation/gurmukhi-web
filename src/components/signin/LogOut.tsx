@@ -19,9 +19,9 @@ export default function LogOut() {
         await logOut();
         navigate(ROUTES.LOGIN);
       } catch (error) {
-        const eMessage = error instanceof Error ? error.message : 'An Unknown Error Occurred';
-        setErrorMessage(eMessage);
-        showToastMessage(eMessage, toast.POSITION.BOTTOM_RIGHT, true, true);
+        const errorMsg = error instanceof Error ? error.message : 'An Unknown Error Occurred';
+        setErrorMessage(errorMsg);
+        showToastMessage(errorMsg, toast.POSITION.BOTTOM_RIGHT, true, true);
         bugsnagErrorHandler(error, 'handleLogut', {});
       }
     };
