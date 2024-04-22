@@ -40,6 +40,7 @@ export interface WordType {
   sentences?: {
     sentence: string;
     translation: string;
+    audioURL?: string;
   }[];
   questions?: QuestionData[];
   status?: string;
@@ -77,4 +78,5 @@ export interface SignError {
 export interface SentenceType {
   sentence: string;
   translation: string;
+  audioURL?: string;
 }
