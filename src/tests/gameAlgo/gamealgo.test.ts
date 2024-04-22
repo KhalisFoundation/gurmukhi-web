@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import { gameAlgo } from 'pages/dashboard/utils';
 import { User } from 'types/shabadavalidb';
 import seed0 from 'data/seed0.json';

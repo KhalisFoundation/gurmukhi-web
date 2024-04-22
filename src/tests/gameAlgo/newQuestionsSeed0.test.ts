@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import getNewQuestions from 'pages/dashboard/hooks/useNew';
 
 describe('getNewQuestions', () => {
