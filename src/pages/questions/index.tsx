@@ -9,6 +9,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { getQuestionByID } from 'database/default/question';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
+import { shuffleArray } from 'pages/dashboard/utils';
 
 export default function Question() {
   const { title, description } = metaTags.QUESTION;
@@ -55,6 +56,24 @@ export default function Question() {
   }, [wordID, questionID]);
 
   const questionData = useMemo(() => {
+    if (currentQuestion?.options) {
+      const correctOption = currentQuestion.options[currentQuestion.answer];
+      const correctAnswer = typeof correctOption === 'string' ? correctOption : correctOption.word;
+      const shuffledOptions = shuffleArray([...currentQuestion.options]);
+      const answer = shuffledOptions.findIndex((option) => {
+        if (typeof option === 'string') {
+          return option === correctAnswer;
+        } else {
+          return option.word === correctAnswer;
+        }
+      });
+      const newQData = {
+        ...currentQuestion,
+        options: shuffledOptions,
+        answer,
+      } as QuestionData;
+      return newQData;
+    }
     return { ...currentQuestion } as QuestionData;
   }, [currentQuestion]);
 
