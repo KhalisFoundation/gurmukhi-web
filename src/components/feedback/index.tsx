@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useUserAuth } from 'auth';
 import { useTranslation } from 'react-i18next';
-// import { useNavigate } from 'react-router';
-// import { SignError } from 'types';
 import InputWithIcon from 'components/input/InputWithIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -112,7 +110,7 @@ function FeedbackForm({ setShowModal }: { setShowModal: (value: boolean) => void
             <RadioBtn
               id="input_3_1"
               name="q3_feedbackType"
-              value={ALL_CONSTANT.SENTENCE}
+              value={ALL_CONSTANT.SENTENCE_TITLECASE}
             />
           </span>
           <span className='form-radio-item'>

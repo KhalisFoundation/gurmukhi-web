@@ -85,7 +85,7 @@ export default function Examples() {
               );
               return (
                 <div key={index} className='flex flex-col text-xl gap-1'>
-                  <span className='text-black-111'>
+                  <span className='flex text-black-111 items-center gap-2'>
                     {highlightedSentence}
                     {sentence && sentence.sentence && (
                       <TextToSpeechBtn
