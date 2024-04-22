@@ -8,6 +8,7 @@ import {
   fetchProgress,
   checkIsFirstTime,
 } from './helpers';
+import CONSTANTS from 'constants/constant';
 
 const gameAlgo = async (user: User) => {
   const isFirstTime = checkIsFirstTime(user);
