@@ -15,6 +15,7 @@ import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
 import { User } from 'types/shabadavalidb';
 import CONSTANTS from 'constants/constant';
+import { updateUser, updateUserProperties } from 'utils/analytics';
 
 export default function Dashboard() {
   const commonStyle =
@@ -37,6 +38,8 @@ export default function Dashboard() {
     if (user) {
       setUserData(user);
       Bugsnag.setUser(user.uid, user.email, user.displayName);
+      updateUser(user.uid);
+      updateUserProperties({ email: user.email, displayName: user.displayName, uid: user.uid });
     }
   }, [user]);
 

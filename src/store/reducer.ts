@@ -5,6 +5,7 @@ import gameArrayReducer from './features/gameArraySlice';
 import learningWordReducer from './features/learningWordSlice';
 import nanakCoin from './features/nanakCoin';
 import webWorkerReducer from './features/webWorkerSlice';
+import sessionStartReducer from './features/sessionStartSlice';
 
 export const rootReducer = combineReducers({
   currentGamePosition: currentGamePositionReducer,
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
   gameArray: gameArrayReducer,
   nanakCoin: nanakCoin,
   webWorker: webWorkerReducer,
+  sessionStart: sessionStartReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
