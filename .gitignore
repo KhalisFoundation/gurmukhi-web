@@ -30,3 +30,6 @@ functions
 .env.test.local
 *sdk.json
 functions
+firebase-debug.log
+firestore-debug.log
+ui-debug.log

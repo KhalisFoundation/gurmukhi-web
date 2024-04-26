@@ -107,7 +107,11 @@ function FeedbackForm({ setShowModal }: { setShowModal: (value: boolean) => void
             <RadioBtn id='input_3_0' name='q3_feedbackType' value={ALL_CONSTANT.WORD_TITLECASE} />
           </span>
           <span className='form-radio-item'>
-            <RadioBtn id='input_3_1' name='q3_feedbackType' value={ALL_CONSTANT.SENTENCE} />
+            <RadioBtn
+              id="input_3_1"
+              name="q3_feedbackType"
+              value={ALL_CONSTANT.SENTENCE_TITLECASE}
+            />
           </span>
           <span className='form-radio-item'>
             <RadioBtn
