@@ -10,6 +10,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { WordType } from 'types';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
+import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import CONSTANTS from 'constants/constant';
 
 export default function Examples() {
@@ -82,8 +83,18 @@ export default function Examples() {
                 'gurmukhi',
               );
               return (
-                <div key={index} className='flex flex-col text-sm md:text-xl gap-1'>
-                  <span className='text-black-111'>{highlightedSentence}</span>
+                <div key={index} className='flex flex-col text-xl gap-1'>
+                  <span className='flex text-black-111 items-center gap-2'>
+                    {highlightedSentence}
+                    {sentence && sentence.sentence && (
+                      <TextToSpeechBtn
+                        backgroundColor='bg-white-150'
+                        text={sentence.sentence}
+                        type={ALL_CONSTANT.SENTENCE}
+                        id={currentWord.id}
+                      />
+                    )}
+                  </span>
                   <span className='text-black'>
                     {sentence.translation.endsWith('.') || sentence.sentence.endsWith('?')
                       ? sentence.translation
