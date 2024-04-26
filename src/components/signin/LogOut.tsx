@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUserAuth } from 'auth';
 import { ROUTES } from 'constants/routes';
-import { showToastMessage } from 'utils';
+import { bugsnagErrorHandler, showToastMessage } from 'utils';
 
 export default function LogOut() {
   const navigate = useNavigate();
@@ -18,21 +18,15 @@ export default function LogOut() {
       try {
         await logOut();
         navigate(ROUTES.LOGIN);
-      } catch (error: any) {
-        setErrorMessage(error.message);
-        showToastMessage(
-          errorMessage,
-          toast.POSITION.BOTTOM_RIGHT,
-          true,
-          true,
-        );
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : 'An Unknown Error Occurred';
+        setErrorMessage(errorMsg);
+        showToastMessage(errorMsg, toast.POSITION.BOTTOM_RIGHT, true, true);
+        bugsnagErrorHandler(error, 'handleLogut', {});
       }
     };
     handleLogout();
   }, []);
 
-  return (
-    errorMessage ? <ToastContainer /> 
-      : <h2>{text('LOGGING_OUT')}</h2>
-  );
+  return errorMessage ? <ToastContainer /> : <h2>{text('LOGGING_OUT')}</h2>;
 }

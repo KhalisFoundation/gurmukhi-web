@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import CONSTANTS from 'constants/constant';
+
 const nanakCoinSlice = createSlice({
   name: 'nanakCoin',
   initialState: 0,
@@ -7,7 +9,7 @@ const nanakCoinSlice = createSlice({
       return action.payload;
     },
     increment: (state) => {
-      return state + 1;
+      return state + CONSTANTS.DEFAULT_ONE;
     },
     resetCoins: () => {
       return 0;

@@ -1,8 +1,9 @@
 import { Timestamp } from 'firebase/firestore';
+import { DefineWord, QuestionData, SentenceWord, WordType } from 'types';
 
 export interface GameScreen {
   key: string;
-  data: any;
+  data: DefineWord | SentenceWord | QuestionData | WordType;
 }
 export interface User {
   displayName: string;

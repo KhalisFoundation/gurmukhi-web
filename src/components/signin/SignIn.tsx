@@ -7,7 +7,7 @@ import SignUp from './SignUp';
 import InputWithIcon from '../input/InputWithIcon';
 import { SignError } from 'types';
 import { ToastContainer, toast } from 'react-toastify';
-import { showToastMessage } from 'utils';
+import { bugsnagErrorHandler, showToastMessage } from 'utils';
 
 export default function SignIn() {
   const { t: text } = useTranslation();
@@ -26,12 +26,12 @@ export default function SignIn() {
 
   const signToggle = (e: FormEvent) => {
     e.preventDefault();
-    const switchElement = document.getElementsByClassName('switch')[0];
 
-    if (switchElement?.classList.contains('left-[4px]')) {
+    const switchElement = document.getElementsByClassName('switch')[0] as HTMLElement | null;
+    if (switchElement !== null) {
       switchElement.classList.toggle('translate-x-[94%]');
     } else {
-      switchElement.classList.toggle('translate-x-[94%]');
+      bugsnagErrorHandler(new Error('Switch element not found'), 'SwitchSignInToggle', {});
     }
     setIsNewUser(!isNewUser);
   };
@@ -106,8 +106,10 @@ export default function SignIn() {
           navigate(ROUTES.DASHBOARD);
         }
       }
-    } catch (error: any) {
-      displayToast(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        displayToast(error.message);
+      }
     }
   };
 
@@ -118,8 +120,10 @@ export default function SignIn() {
       if (success) {
         navigate(ROUTES.DASHBOARD);
       }
-    } catch (error: any) {
-      displayToast(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        displayToast(error.message);
+      }
     }
   };
 
