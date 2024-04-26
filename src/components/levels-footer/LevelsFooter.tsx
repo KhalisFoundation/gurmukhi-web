@@ -61,7 +61,7 @@ export default function LevelsFooter({
   };
   return (
     <footer className={footerClass}>
-      <div className='flex flex-col items-left justify-between gap-4 m-5 flex-wrap'>
+      <div className='hidden lg:flex flex-col items-left justify-between gap-4 m-5 flex-wrap'>
         <h1 className='opacity-60 text-sm tracking-[.25rem] mb-2 text-center lg:text-left'>
           {numQuestionsLeft} {text('QUESTIONS_TO_GO')}
         </h1>

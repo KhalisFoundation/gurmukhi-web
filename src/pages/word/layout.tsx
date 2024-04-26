@@ -11,7 +11,7 @@ export default function WordsPageLayout() {
         <BackBtn navlink={-1} />
         <EndSessionButton className='' />
       </div>
-      <div className='flex flex-col items-center justify-between gap-5 pb-0 lg:h-full'>
+      <div className='flex flex-col items-center justify-between gap-5 pb-0 h-full'>
         <Outlet />
       </div>
     </>

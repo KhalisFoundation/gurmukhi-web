@@ -2,6 +2,8 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
 @font-face {
   font-family: 'Recoleta';
   src: url('../../public/fonts/Recoleta-Regular.ttf');
@@ -50,6 +52,16 @@ body,
 
 .back-bg-image {
   background-image: url('../../public/images/background.png');
+}
+.cormont-garamond-regular{
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.cormont-garamond-light{
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 300;
+  font-style: normal;
 }
 
 body {
