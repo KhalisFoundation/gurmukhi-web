@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import CONSTANTS from 'constants/constant';
 
 const currentGamePositionSlice = createSlice({
   name: 'currentGamePosition',
@@ -8,7 +9,7 @@ const currentGamePositionSlice = createSlice({
       return action.payload;
     },
     increment: (state) => {
-      return state + 1;
+      return state + CONSTANTS.DEFAULT_ONE;
     },
     resetGamePosition: () => {
       return 0;

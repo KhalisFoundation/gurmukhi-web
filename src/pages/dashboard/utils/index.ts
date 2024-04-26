@@ -8,12 +8,12 @@ import {
   fetchProgress,
   checkIsFirstTime,
 } from './helpers';
-
+import CONSTANTS from 'constants/constant';
 
 const gameAlgo = async (user: User) => {
   const isFirstTime = checkIsFirstTime(user);
   if (user && isFirstTime) {
-    const { game, learningWords } = await getNewQuestions(13, true);
+    const { game, learningWords } = await getNewQuestions(CONSTANTS.LEVELS_COUNT, true);
     const gameArray: GameScreen[] = game;
 
     if (learningWords.length > 0) {
@@ -21,9 +21,9 @@ const gameAlgo = async (user: User) => {
     }
     return { gameArray };
   }
-  let learningCount = 9;
-  let newQuestionCount = 2;
-  let learntCount = 2;
+  let learningCount = CONSTANTS.DEFAULT_LEARNING_COUNT;
+  let newQuestionCount = CONSTANTS.DEFAULT_NEW_COUNT;
+  let learntCount = CONSTANTS.DEFAULT_LEARNT_COUNT;
   const learningQuestions = await getRandomQuestions(user, learningCount, false);
   if (learningQuestions.length < learningCount) {
     newQuestionCount += learningCount - learningQuestions.length;

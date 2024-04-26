@@ -9,6 +9,7 @@ import { getWordById } from 'database/default';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
+import CONSTANTS from 'constants/constant';
 
 export default function Defintion() {
   // Use useLocation to get the search parameters from the URL
@@ -16,9 +17,7 @@ export default function Defintion() {
   const { title, description } = metaTags.DEFINITION;
   const [wordID, setWordID] = useState<string | null>(null);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
-  const currentGamePosition = useAppSelector(
-    (state) => state.currentGamePosition,
-  );
+  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
   const currentLevel = useAppSelector((state) => state.currentLevel);
 
   // Extract the "id" parameter from the search string in the URL
@@ -48,7 +47,7 @@ export default function Defintion() {
 
   if (!currentWord) {
     // Handle case when word is not found
-    return <Loading/>;
+    return <Loading />;
   }
 
   return (
@@ -110,7 +109,7 @@ export default function Defintion() {
         nextText='Next'
         operation={ALL_CONSTANT.NEXT}
         currentLevel={currentLevel}
-        currentGamePosition={currentGamePosition + 1}
+        currentGamePosition={currentGamePosition + CONSTANTS.DEFAULT_ONE}
         isDisabled={false}
       />
     </div>

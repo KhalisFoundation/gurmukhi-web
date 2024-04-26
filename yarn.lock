@@ -5796,6 +5796,11 @@ eslint-plugin-airbnb@^0.0.1-security:
   resolved "https://registry.yarnpkg.com/eslint-plugin-airbnb/-/eslint-plugin-airbnb-0.0.1-security.tgz#c9150fbc5c31ee78f02595edb6079bf591ddb72a"
   integrity sha512-etPWgqKnv1plcSIt2cHZ/wgH5uQTSzFi4rnvr3YKMWdMzKb8Ca7LHP+F2IODv/J3wuzvkq9mCzwGxEG85KsioQ==
 
+eslint-plugin-detect-hard-code@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-detect-hard-code/-/eslint-plugin-detect-hard-code-0.1.0.tgz#fad82a161f09cf963f2e5c81d09dafb4673c6e65"
+  integrity sha512-LRIQH12ibdpTDTXxeQPosiR98qAgdS9EpwxmBVHIJIPWkCTwZ7dKW8ihcVjqIfbV+1P7yesV98+VKcnanElIdw==
+
 eslint-plugin-es@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-es/-/eslint-plugin-es-4.1.0.tgz#f0822f0c18a535a97c3e714e89f88586a7641ec9"

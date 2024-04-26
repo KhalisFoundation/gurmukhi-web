@@ -80,3 +80,24 @@ export interface SentenceType {
   translation: string;
   audioURL?: string;
 }
+
+export interface DefineWord {
+  word: string;
+  translation: string;
+  meaning_english: string;
+  meaning_punjabi: string;
+  images: string[];
+}
+
+export interface Sentences {
+  id?: string;
+  word_id?: string;
+  translation?: string;
+  sentence: string;
+}
+export interface SentenceWord {
+  word: string;
+  translation: string;
+  sentences: Sentences[];
+}
+

@@ -42,8 +42,8 @@ export default function MultipleChoiceQuestion({
       if (selectedOption) {
         setOptionSelected(true);
         if (questionData.options[questionData.answer] === selectedOption) {
-          if (currentLevel + 1 <= ALL_CONSTANT.LEVELS_COUNT) {
-            await updateCurrentLevel(user.uid, currentLevel + 1);
+          if (currentLevel + ALL_CONSTANT.DEFAULT_ONE <= ALL_CONSTANT.LEVELS_COUNT) {
+            await updateCurrentLevel(user.uid, currentLevel + ALL_CONSTANT.DEFAULT_ONE);
             dispatch(increment());
           }
           setIsCorrectOption(true);

@@ -11,6 +11,7 @@ import { checkIfUsernameUnique, updateUserDocument } from 'database/shabadavalid
 import { auth } from '../../firebase';
 import { showToastMessage } from 'utils';
 import { uploadImage } from 'utils/storage';
+import CONSTANTS from 'constants/constant';
 
 export default function Profile() {
   const { t: text } = useTranslation();
@@ -29,6 +30,10 @@ export default function Profile() {
 
   const createdAt = new Date(user.createdAt);
   const lastLoginAt = new Date(user.lastLogInAt);
+
+  const formattedCreatedAt = createdAt instanceof Date ? createdAt.toLocaleString() : 'not defined';
+  const formattedLastLoginAt =
+    lastLoginAt instanceof Date ? lastLoginAt.toLocaleString() : 'not defined';
 
   const getTabData = (heading: string, info: string, children?: JSX.Element) => {
     return (
@@ -64,11 +69,11 @@ export default function Profile() {
       setUsernameError('');
       return;
     }
-    if (e.target.value.length < 3) {
+    if (e.target.value.length < CONSTANTS.USERNAME_MIN_LENGTH) {
       setUsernameError(text('USERNAME_TOO_SHORT'));
       return;
     }
-    if (e.target.value.length > 20) {
+    if (e.target.value.length > CONSTANTS.USERNAME_MAX_LENGTH) {
       setUsernameError(text('USERNAME_TOO_LONG'));
       return;
     }
@@ -128,9 +133,11 @@ export default function Profile() {
 
           showToastMessage(text('PROFILE_UPDATED'), toast.POSITION.TOP_CENTER, true);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error(error);
-        showToastMessage(error.message, toast.POSITION.TOP_CENTER, false, true);
+        if (error instanceof Error) {
+          showToastMessage(error.message, toast.POSITION.TOP_CENTER, false, true);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -212,14 +219,17 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    if (user.user?.photoURL) {
-      setPhotoURL(user.user.photoURL);
+    const userDetails = user.user;
+
+    if (userDetails?.photoURL) {
+      setPhotoURL(userDetails.photoURL);
     }
+
     if (user?.uid) {
       setIsLoading(false);
-      setName(user.displayName);
-      setUsername(user.username);
-      setVerifiable(!user.emailVerified);
+      setName(user?.displayName || '');
+      setUsername(user?.username || '');
+      setVerifiable(!(user?.emailVerified || true));
     }
   }, [user]);
 
@@ -300,7 +310,7 @@ export default function Profile() {
               )}
               {editMode &&
                 getTabData('', '', <span className='text-red-500'>{usernameError}</span>)}
-              {getTabData(text('EMAIL'), user.email)}
+              {user ? getTabData(text('EMAIL'), user.email) : null}
               {user?.emailVerified ?? false
                 ? getTabData(text('EMAIL_VALIDATED'), text('YES'))
                 : getTabData(
@@ -321,8 +331,8 @@ export default function Profile() {
                     false,
                   ),
                 )}
-              {getTabData(text('CREATED_AT'), createdAt.toLocaleString() ?? 'not defined')}
-              {getTabData(text('LAST_LOGIN_AT'), lastLoginAt.toLocaleString() ?? 'not defined')}
+              {getTabData(text('CREATED_AT'), formattedCreatedAt)}
+              {getTabData(text('LAST_LOGIN_AT'), formattedLastLoginAt)}
 
               <div className={`col-span-${gridColSpan} py-2`}>
                 <div className={`grid grid-cols-${gridColSpan} py-1`}>

@@ -3,13 +3,14 @@ import { getDataById, wordsCollection } from './database';
 import { wordsdb } from '../../firebase';
 import { Option, QuestionData } from 'types';
 import { bugsnagErrorHandler } from 'utils';
+import CONSTANTS from 'constants/constant';
 
 const questionCollection = collection(wordsdb, 'questions');
 
 const getOptions = async (wordIDs: string[]) => {
   const optionsPromise = wordIDs.map((option) => {
     if (typeof option === 'string') {
-      return getDataById(option.toString(), wordsCollection, null, 1, true);
+      return getDataById(option.toString(), wordsCollection, null, CONSTANTS.DEFAULT_ONE, true);
     } else {
       return option;
     }
@@ -22,13 +23,17 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
   try {
     let queryRef;
     if (filteredQuestionIDs.length === 0) {
-      queryRef = query(questionCollection, where('word_id', '==', wordID), limit(2));
+      queryRef = query(
+        questionCollection,
+        where('word_id', '==', wordID),
+        limit(CONSTANTS.QUESTIONS_LIMIT),
+      );
     } else {
       queryRef = query(
         questionCollection,
         where('word_id', '==', wordID),
         where(documentId(), 'not-in', filteredQuestionIDs),
-        limit(2),
+        limit(CONSTANTS.QUESTIONS_LIMIT),
       );
     }
     const questionSnapshots = await getDocs(queryRef);
@@ -41,11 +46,8 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
           ...doc.data(),
           id: doc.id,
         } as QuestionData;
-  
-        if (
-          needOptions &&
-          questionData.options.length > 0
-        ) {
+
+        if (needOptions && questionData.options.length > 0) {
           try {
             const options = await getOptions(questionData.options as string[]);
             return { ...questionData, options } as QuestionData;
@@ -59,11 +61,12 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
     );
     return questionsData;
   } catch (error) {
-    bugsnagErrorHandler(
-      error,
-      'database/default/question.ts/getQuestions',
-      { wordID, questionIDs, filteredQuestionIDs, needOptions },
-    );
+    bugsnagErrorHandler(error, 'database/default/question.ts/getQuestions', {
+      wordID,
+      questionIDs,
+      filteredQuestionIDs,
+      needOptions,
+    });
     return [];
   }
 };
