@@ -25,9 +25,7 @@ export default function OptionBtn({
   const optionClassname = `flex flex-row items-center justify-between gap-2 rounded-lg p-3 xl:ps-6 ${
     isCorrect
       ? 'bg-lightGreen shadow-sm shadow-green-500'
-      : isCorrect === false
-      ? 'bg-lightRed shadow-sm shadow-maroon'
-      : `bg-white-125 shadow-sm shadow-skyBlue ${!disabled ? 'hover:bg-white-150' : ''}`
+      : isCorrect === false ? 'bg-lightRed shadow-sm shadow-maroon' : `bg-white-125 shadow-sm shadow-skyBlue ${!disabled ? 'hover:bg-white-150' : ''}`
   }`;
 
   const textClassname = `gurmukhi font-medium text-md xl:text-2xl ${
