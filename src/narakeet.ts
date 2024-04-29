@@ -1,5 +1,6 @@
 import { Dispatch } from 'react';
 import axios from 'axios';
+import { bugsnagErrorHandler } from 'utils';
 
 export const generateNarakeetAudio = async (text: string, type: string, setAudioUrl: Dispatch<string>, id?: string) => {
   try {
@@ -20,7 +21,6 @@ export const generateNarakeetAudio = async (text: string, type: string, setAudio
     setAudioUrl(response.data.audio);
     return response;
   } catch (error) {
-    console.error('Error generating audio:', error);
-    // Handle errors here
+    bugsnagErrorHandler(error, 'generateNarakeetAudio', { text, type, id });
   }
 };
