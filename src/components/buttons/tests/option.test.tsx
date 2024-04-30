@@ -12,7 +12,7 @@ import OptionBtn from '../Option';
 jest.mock('../TextToSpeechBtn', () => {
   return {
     __esModule: true,
-    default: ({ text }: { text: string }) => <div>{'textToSpeech'}</div>,
+    default: () => <div>{'textToSpeech'}</div>,
   };
 });
 
