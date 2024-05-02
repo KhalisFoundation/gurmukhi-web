@@ -1,5 +1,5 @@
 import FeedbackForm from 'components/feedback';
-import { Modal } from 'components/modal';
+import Modal from 'components/modal';
 import React, { useState } from 'react';
 
 const FeedbackBtn: React.FC = () => {

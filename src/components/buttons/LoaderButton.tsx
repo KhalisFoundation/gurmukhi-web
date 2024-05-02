@@ -4,10 +4,7 @@ import ALL_CONSTANT from 'constants/constant';
 interface Props {
   theme:string
 }
-const LoaderButton = ({ theme }:Props)=>{
-
-
-
+const LoaderButton = ({ theme }: Props) => {
   return (
     <span>
       <svg
