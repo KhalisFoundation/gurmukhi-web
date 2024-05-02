@@ -25,7 +25,7 @@ describe('End Session Button', () => {
     expect(mockedNavigate).toHaveBeenCalledWith('/dashboard');
   });
 
-  it('displays the back button with correct text and icon', () => {
+  it('displays the end button with correct text and icon', () => {
     render(<EndSessionButton className='' />);
     expect(screen.getByText(CONSTANTS.END_SESSION)).toBeInTheDocument(); // Checks that the button text is rendered
   });
