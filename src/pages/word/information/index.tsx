@@ -36,6 +36,7 @@ export default function Information() {
     const fetchData = async () => {
       setIsLoading(true);
       if (!wordID) {
+        setIsLoading(false);
         return;
       }
       const words = await getWordById(wordID, true);
@@ -44,12 +45,12 @@ export default function Information() {
       }
       setIsLoading(false);
     };
-    const data = location.state?.data;
+
     if (location.state?.isRandom) {
-      setIsRandom(location.state?.isRandom);
+      setIsRandom(location.state.isRandom);
     }
-    if (data) {
-      setCurrentWord(data);
+    if (location.state?.data) {
+      setCurrentWord(location.state.data);
       setIsLoading(false);
     } else {
       fetchData();
