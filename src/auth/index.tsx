@@ -23,9 +23,9 @@ import {
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 
-const UserAuthContext = createContext<any>(null);
+const AuthContext = createContext<any>(null);
 
-export const UserAuthContextProvider = ({
+export const AuthContextProvider = ({
   children,
 }: {
   children: ReactElement;
@@ -178,7 +178,7 @@ export const UserAuthContextProvider = ({
   }, []);
 
   return (
-    <UserAuthContext.Provider
+    <AuthContext.Provider
       value={{
         user,
         logIn,
@@ -189,8 +189,8 @@ export const UserAuthContextProvider = ({
       }}
     >
       {children}
-    </UserAuthContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
-export const useUserAuth = () => useContext(UserAuthContext);
+export const useUserAuth = () => useContext(AuthContext);
