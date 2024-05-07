@@ -188,45 +188,23 @@ const getRandomWord = async (uid: string, notInArray: string[], includeUsed = tr
     const userData = await getUserData(uid);
     const existingWordIds = includeUsed ? notInArray.concat(userData?.wordIds || []) : notInArray;
 
-    const batches = [];
-    if (existingWordIds.length === 0) {
-      const wordData = await getRandomData(
-        wordsCollection,
-        where('status', '==', 'active'),
-        null,
-        CONSTANTS.RANDOM_WORD_LIMIT,
-      );
-      batches.push(wordData);
-    } else {
-      for (let i = 0; i < existingWordIds.length; i += CONSTANTS.RANDOM_WORD_LIMIT) {
-        const batchIds = existingWordIds.slice(i, i + CONSTANTS.RANDOM_WORD_LIMIT);
-        const wordData = await getRandomData(
-          wordsCollection,
-          and(where('status', '==', 'active'), where(documentId(), 'not-in', batchIds)),
-          null,
-          CONSTANTS.RANDOM_WORD_LIMIT,
-        );
-        batches.push(wordData);
-      }
+    const queryRef = query(wordsCollection, where('status', '==', 'active'));
+    const querySnapshot = await getDocs(queryRef);
+    if (querySnapshot.empty) {
+      return null;
     }
+    const wordsData: WordType[] = querySnapshot.docs
+      .map((doc) => ({
+        ...doc.data(), // If doc.data() contains an 'id', it's spread here
+        id: doc.id, // This 'id' overwrites the previous one
+      }))
+      .filter((word) => !existingWordIds.includes(word.id));
 
-    const resolvedWords = await Promise.all(batches);
-    const wordDataArray = [] as WordType[];
-
-    if (resolvedWords.length > 0) {
-      for (const words of resolvedWords) {
-        if (words && words.length > 0) {
-          for (const word of words) {
-            if (!existingWordIds.includes(word.id)) {
-              wordDataArray.push(word as WordType);
-            }
-          }
-        }
-      }
+    if (wordsData.length === 0) {
+      return null;
     }
-    const wordData =
-      wordDataArray.length > 0 ? wordDataArray[0] : (resolvedWords[0] as WordType[])[0];
-    const wordId = wordData.id;
+    const randomWord = wordsData[0];
+    const wordId = randomWord.id;
     const sentences = await getDataById(
       wordId,
       sentencesCollection,
@@ -234,12 +212,12 @@ const getRandomWord = async (uid: string, notInArray: string[], includeUsed = tr
       CONSTANTS.DATA_LIMIT,
     );
     const { synonyms, antonyms } = await getSemanticsByIds(
-      wordData.synonyms as string[],
-      wordData.antonyms as string[],
+      randomWord.synonyms as string[],
+      randomWord.antonyms as string[],
     );
 
     return {
-      ...wordData,
+      ...randomWord,
       id: wordId,
       sentences,
       synonyms,
