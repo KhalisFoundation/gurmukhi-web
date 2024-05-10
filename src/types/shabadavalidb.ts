@@ -7,7 +7,7 @@ export interface GameScreen {
   data: DefineWord | SentenceWord | QuestionData | WordType;
 }
 export interface User {
-  user?: FirebaseUser;
+  user: FirebaseUser | null;
   displayName: string;
   role: string;
   photoURL: string;

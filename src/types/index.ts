@@ -1,4 +1,15 @@
 import { DocumentReference } from 'firebase/firestore';
+import { User } from './shabadavalidb';
+import { UserCredential } from 'firebase/auth';
+
+export interface AuthContextValue {
+  user: User | null;
+  logIn: (email: string, password: string, showToastMessage: (text: string, error?: boolean) => void) => Promise<UserCredential | null>;
+  signUp: (name: string, username: string, email: string, password: string, confirmPassword: string, showToastMessage: (text: string, error?: boolean) => void) => Promise<boolean>;
+  logOut: () => Promise<void>;
+  signInWithGoogle: (showToastMessage: (text: string, error?: boolean) => void) => Promise<boolean | undefined>;
+  resetPassword: (email: string) => Promise<void>;
+}
 
 export interface Option {
   id?: string;

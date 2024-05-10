@@ -8,7 +8,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   sendPasswordResetEmail,
-  User,
+  User as FirebaseUser,
 } from 'firebase/auth';
 import {
   Timestamp, doc, setDoc, // query, where, documentId, getDocs,
@@ -22,15 +22,17 @@ import {
 } from 'database/shabadavalidb';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
+import { AuthContextValue } from 'types';
+import { User } from 'types/shabadavalidb';
 
-const AuthContext = createContext<any>(null);
+const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthContextProvider = ({
   children,
 }: {
   children: ReactElement;
 }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState<User | null>(null);
   const { t: text } = useTranslation();
 
   const logIn = async (
@@ -48,38 +50,53 @@ export const AuthContextProvider = ({
     });
 
   const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider)
-      .then((userCredential) => {
-        const { uid, email, displayName } = userCredential.user;
-        return checkUser(uid, email ?? '').then((found) => {
-          if (!found) {
-            const localUser = doc(shabadavaliDB, `users/${uid}`);
-            setDoc(localUser, {
-              role: roles.student,
-              email,
-              coins: 0,
-              progress: {
-                currentProgress: 0,
-                gameSession: [],
-                currentLevel: 0,
-              },
-              displayName: displayName ?? email?.split('@')[0],
-              created_at: Timestamp.now(),
-              updated_at: Timestamp.now(),
-            }).then(() => true);
-          } else {
-            return true;
-          }
-          setUser(userCredential.user);
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const { uid, email, displayName } = userCredential.user;
+
+      const found = await checkUser(uid, email ?? '');
+
+      if (!found) {
+        const localUser = doc(shabadavaliDB, `users/${uid}`);
+        await setDoc(localUser, {
+          role: roles.student,
+          email,
+          coins: 0,
+          progress: {
+            currentProgress: 0,
+            gameSession: [],
+            currentLevel: 0,
+          },
+          displayName: displayName ?? email?.split('@')[0],
+          created_at: Timestamp.now(),
+          updated_at: Timestamp.now(),
         });
-      })
-      .catch((error) => {
-        if (Object.keys(errors).includes(error.code)) {
-          showToastMessage(errors[error.code]);
+      }
+
+      const userData = {
+        ...userCredential.user,
+        role: roles.student,
+        coins: 0,
+        progress: {
+          currentProgress: 0,
+          gameSession: [],
+          currentLevel: 0,
+        },
+        wordIds: [],
+        user: userCredential.user,
+      } as User;
+
+      setUser(userData);
+      return true;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (Object.keys(errors).includes(error.message)) {
+          showToastMessage(errors[error.message]);
         }
-        return false;
-      });
+      }
+      return false;
+    }
   };
 
   const signUp = async (
@@ -111,6 +128,8 @@ export const AuthContextProvider = ({
         email,
         username,
         displayName: displayName || name,
+        wordIds: [],
+        photoURL: '',
         coins: 0,
         progress: {
           currentProgress: 0,
@@ -119,7 +138,7 @@ export const AuthContextProvider = ({
         },
         created_at: Timestamp.now(),
         updated_at: Timestamp.now(),
-        user: null as User | null,
+        user: null as FirebaseUser | null,
       };
       await setDoc(localUser, userDataForState);
 
@@ -147,12 +166,12 @@ export const AuthContextProvider = ({
   const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentuser: any) => {
-      if (currentuser !== null) {
-        const { uid, email, emailVerified, metadata } = currentuser;
+    const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
+      if (currentUser !== null) {
+        const { uid, email, emailVerified, metadata } = currentUser as FirebaseUser;
         getUser(email ?? '', uid).then((data) => {
           const usr = {
-            user: currentuser,
+            user: currentUser,
             uid,
             name: data?.name,
             coins: data?.coins,
@@ -165,11 +184,12 @@ export const AuthContextProvider = ({
             username: data?.username,
             createdAt: metadata.creationTime,
             lastLogInAt: metadata.lastSignInTime,
-          };
+            wordIds: data?.wordIds || [],
+          } as User;
           setUser(usr);
         });
       }
-      setUser(currentuser);
+      setUser(null);
     });
 
     return () => {
