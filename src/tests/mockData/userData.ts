@@ -2,6 +2,7 @@ import { User } from 'types/shabadavalidb';
 
 const mockUserData: User[] = [
   {
+    user: null,
     displayName: 'Amitoj Singh',
     role: 'student',
     photoURL: 'some url',
@@ -91,6 +92,7 @@ const mockUserData: User[] = [
     wordIds: ['vIi5VzvEsecyECMc0shq'],
   },
   {
+    user: null,
     displayName: 'Amitoj Singh',
     role: 'student',
     photoURL: 'some url',

@@ -24,6 +24,7 @@ describe('getNewQuestions', () => {
         },
         nextSession: [],
         wordIds: [],
+        user:null,
       };
       const { gameArray } = await gameAlgo(user);
       const questionObjects = gameArray.filter(

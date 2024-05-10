@@ -15,6 +15,7 @@ describe('checkIsFirstTime', () => {
       },
       nextSession: [],
       wordIds: [],
+      user:null,
     };
     expect(checkIsFirstTime(user)).toBeTruthy();
   });
@@ -34,6 +35,7 @@ describe('checkIsFirstTime', () => {
       },
       nextSession: [],
       wordIds: [],
+      user:null,
     };
     expect(checkIsFirstTime(user)).toBeTruthy();
   });
@@ -53,6 +55,7 @@ describe('checkIsFirstTime', () => {
       },
       nextSession: [],
       wordIds: [],
+      user:null,
     };
     expect(checkIsFirstTime(user)).toBeFalsy();
   });

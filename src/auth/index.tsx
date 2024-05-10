@@ -33,7 +33,7 @@ export const AuthContextProvider = ({
   children: ReactElement;
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const { t: text } = useTranslation();
+  const { t: translate } = useTranslation();
 
   const logIn = async (
     email: string,
@@ -44,7 +44,7 @@ export const AuthContextProvider = ({
       if (Object.keys(errors).includes(error.code)) {
         showToastMessage(errors[error.code]);
       } else {
-        showToastMessage(text('ERROR') + error.code + error.message);
+        showToastMessage(translate('ERROR') + error.code + error.message);
       }
       return null;
     });
@@ -109,12 +109,12 @@ export const AuthContextProvider = ({
   ) => {
     try {
       if (password !== confirmPassword) {
-        showToastMessage(text('PASSWORDS_DONT_MATCH'));
+        showToastMessage(translate('PASSWORDS_DONT_MATCH'));
         return false;
       }
       const unique = checkIfUsernameUnique(username);
       if (!unique) {
-        showToastMessage(text('USERNAME_TAKEN'));
+        showToastMessage(translate('USERNAME_TAKEN'));
         return false;
       }
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -146,7 +146,7 @@ export const AuthContextProvider = ({
       setUser(userDataForState);
 
       sendEmailVerification(auth.currentUser ?? userData).then(() => {
-        showToastMessage(text('EMAIL_VERIFICATION_SENT'), false);
+        showToastMessage(translate('EMAIL_VERIFICATION_SENT'), false);
       });
       return true;
     } catch (error) {
