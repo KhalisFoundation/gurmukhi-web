@@ -13,7 +13,7 @@ import {
   arrayUnion,
 } from 'firebase/firestore';
 import { shabadavaliDB } from '../../firebase';
-import { WordShabadavaliDB } from 'types/shabadavalidb';
+import { WordShabadavaliDB } from 'types';
 import ALL_CONSTANT from 'constants/constant';
 import { generateRandomId } from 'database/util';
 import { usersCollection } from './users';

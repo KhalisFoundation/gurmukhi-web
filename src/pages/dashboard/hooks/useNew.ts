@@ -1,4 +1,4 @@
-import { GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
+import { GameScreen, WordShabadavaliDB } from 'types';
 import { getRandomWord } from 'database/default';
 import { getQuestions } from 'database/default';
 import { WordType } from 'types';

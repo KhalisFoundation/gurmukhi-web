@@ -1,4 +1,4 @@
-import { User } from 'types/shabadavalidb';
+import { User } from 'types';
 
 const mockUserData: User[] = [
   {

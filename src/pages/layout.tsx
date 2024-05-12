@@ -6,10 +6,11 @@ import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { useUserAuth } from 'auth';
 import FeedbackBtn from 'components/buttons/OpenFeedbackBtn';
+import { User } from 'types';
 
 export default function RootLayout() {
   const { title, description } = metaTags.ROOT;
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
   return (
     <main className='flex flex-col background-layer h-full'>
       <Meta title={title} description={description} />

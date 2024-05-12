@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GameScreen } from 'types/shabadavalidb';
+import { GameScreen } from 'types';
 
 const gameArraySlice = createSlice({
   name: 'gameArray',

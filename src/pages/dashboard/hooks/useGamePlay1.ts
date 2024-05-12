@@ -1,13 +1,11 @@
-import { User } from 'types/shabadavalidb';
-import { GameScreen } from 'types/shabadavalidb';
-import { fetchProgress } from '../utils';
+import { useEffect } from 'react';
+import { GameScreen, User } from 'types';
 import { useAppDispatch } from 'store/hooks';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { setCurrentLevel } from 'store/features/currentLevelSlice';
 import { getUserData, updateProgress } from 'database/shabadavalidb';
-import { useEffect } from 'react';
 import { addScreens } from 'store/features/gameArraySlice';
-import { gameAlgo } from '../utils';
+import { fetchProgress, gameAlgo } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
 
 const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetGame = true) => {

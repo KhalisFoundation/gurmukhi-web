@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import { gameAlgo } from 'pages/dashboard/utils';
-import { User } from 'types/shabadavalidb';
+import { User } from 'types';
 import seed0 from 'data/seed0.json';
 
 describe('getNewQuestions', () => {
@@ -24,7 +24,7 @@ describe('getNewQuestions', () => {
         },
         nextSession: [],
         wordIds: [],
-        user:null,
+        user: null,
       };
       const { gameArray } = await gameAlgo(user);
       const questionObjects = gameArray.filter(

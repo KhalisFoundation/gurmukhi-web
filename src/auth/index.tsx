@@ -22,8 +22,8 @@ import {
 } from 'database/shabadavalidb';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
-import { AuthContextValue } from 'types';
-import { User } from 'types/shabadavalidb';
+import { AuthContextValue, User } from 'types';
+import { bugsnagErrorHandler } from 'utils';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -189,7 +189,6 @@ export const AuthContextProvider = ({
           setUser(usr);
         });
       }
-      setUser(null);
     });
 
     return () => {
@@ -213,4 +212,11 @@ export const AuthContextProvider = ({
   );
 };
 
-export const useUserAuth = () => useContext(AuthContext);
+export const useUserAuth = (): AuthContextValue => {
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    bugsnagErrorHandler(new Error('useAuth must be used within an AuthContextProvider'), 'useUserAuth', {});
+    throw new Error('useAuth must be used within an AuthContextProvider');
+  }
+  return authContext;
+};

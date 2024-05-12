@@ -112,3 +112,4 @@ export interface SentenceWord {
   sentences: Sentences[];
 }
 
+export * from './shabadavalidb';

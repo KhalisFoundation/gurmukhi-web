@@ -1,9 +1,8 @@
-import { User, GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
-import { addQuestionsBatch, getWords } from 'database/shabadavalidb';
-import { createGameScreen, shuffleArray } from '../utils';
-import ALL_CONSTANT from 'constants/constant';
 import { getQuestions } from 'database/default';
-import { QuestionData } from 'types';
+import { addQuestionsBatch, getWords } from 'database/shabadavalidb';
+import ALL_CONSTANT from 'constants/constant';
+import { QuestionData, User, GameScreen, WordShabadavaliDB } from 'types';
+import { createGameScreen, shuffleArray } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
 
 const getRandomQuestions = async (

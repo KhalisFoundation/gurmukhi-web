@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Counter } from '../Counter';
 import { useUserAuth } from 'auth';
 import { getLearntWords } from 'database/shabadavalidb';
-import { WordShabadavaliDB } from 'types/shabadavalidb';
+import { User, WordShabadavaliDB } from 'types';
 import CONSTANTS from 'constants/constant';
 
 function WordsSnippetBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
   const [wordsLearnt, setWordsLearnt] = useState<WordShabadavaliDB[]>();
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
   const [fallenWords, setFallenWords] = useState<number>(0);
   useEffect(() => {
     const fetchWords = async () => {

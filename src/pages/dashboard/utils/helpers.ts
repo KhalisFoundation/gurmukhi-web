@@ -1,5 +1,4 @@
-import { QuestionData, WordType } from 'types';
-import { GameScreen, User } from 'types/shabadavalidb';
+import { QuestionData, WordType, GameScreen, User } from 'types';
 import CONSTANTS from 'constants/constant';
 
 export const checkIsFirstTime = (user: User) => {

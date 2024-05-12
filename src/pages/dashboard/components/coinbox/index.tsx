@@ -6,14 +6,14 @@ import { getUserData } from 'database/shabadavalidb';
 import { Counter } from '../Counter';
 import { useUserAuth } from 'auth';
 import { setNanakCoin } from 'store/features/nanakCoin';
-import { User } from 'types/shabadavalidb';
+import { User } from 'types';
 
 function CoinBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
   const [coins, setCoins] = useState<number>(nanakCoin);
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
   const dispatch = useAppDispatch();
   useEffect(() => {
     const fetchCoins = async () => {

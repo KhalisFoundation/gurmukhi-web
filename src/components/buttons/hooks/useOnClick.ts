@@ -1,9 +1,8 @@
-import { GameScreen } from 'types/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 import { ROUTES } from 'constants/routes';
 import { getNanakCoin, updateCurrentProgress } from 'database/shabadavalidb';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
-import { User } from 'types/shabadavalidb';
+import { GameScreen, User } from 'types';
 import Bugsnag from '@bugsnag/js';
 import { bugsnagErrorHandler } from 'utils';
 import { Dispatch } from '@reduxjs/toolkit';

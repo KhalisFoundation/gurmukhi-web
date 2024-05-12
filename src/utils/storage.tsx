@@ -1,8 +1,8 @@
+import { Dispatch } from 'react';
 import { storage } from '../firebase';
 import { updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { Dispatch } from 'react';
-import { User } from 'types/shabadavalidb';
+import { User } from 'types';
 
 export const uploadImage = async (
   file: File,

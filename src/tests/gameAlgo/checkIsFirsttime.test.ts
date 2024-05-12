@@ -1,4 +1,5 @@
 import { checkIsFirstTime } from '../../pages/dashboard/utils/helpers';
+
 describe('checkIsFirstTime', () => {
   it('should return true for first-time users', () => {
     const user = {
@@ -15,7 +16,7 @@ describe('checkIsFirstTime', () => {
       },
       nextSession: [],
       wordIds: [],
-      user:null,
+      user: null,
     };
     expect(checkIsFirstTime(user)).toBeTruthy();
   });
@@ -35,7 +36,7 @@ describe('checkIsFirstTime', () => {
       },
       nextSession: [],
       wordIds: [],
-      user:null,
+      user: null,
     };
     expect(checkIsFirstTime(user)).toBeTruthy();
   });
@@ -55,7 +56,7 @@ describe('checkIsFirstTime', () => {
       },
       nextSession: [],
       wordIds: [],
-      user:null,
+      user: null,
     };
     expect(checkIsFirstTime(user)).toBeFalsy();
   });

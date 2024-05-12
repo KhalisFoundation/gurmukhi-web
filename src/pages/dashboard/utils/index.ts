@@ -1,4 +1,4 @@
-import { GameScreen, User } from 'types/shabadavalidb';
+import { GameScreen, User } from 'types';
 import getRandomQuestions from '../hooks/useQuestions';
 import getNewQuestions from '../hooks/useNew';
 import { addWordsBatch } from 'database/shabadavalidb';

@@ -21,12 +21,12 @@ import ALL_CONSTANT from 'constants/constant';
 import handleClick from 'components/buttons/hooks/useOnClick';
 import LoaderButton from 'components/buttons/LoaderButton';
 import { addScreens } from 'store/features/gameArraySlice';
-import { GameScreen, User } from 'types/shabadavalidb';
+import { GameScreen, User } from 'types';
 import CONSTANTS from 'constants/constant';
 
 function WinCoin() {
   const navigate = useNavigate();
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
   const { t: text } = useTranslation();
   const dispatch = useAppDispatch();
   const { title, description } = metaTags.WIN;
