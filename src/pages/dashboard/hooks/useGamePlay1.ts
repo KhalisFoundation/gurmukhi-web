@@ -12,7 +12,7 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
   const dispatch = useAppDispatch();
 
   const gamePlay = async () => {
-    const userData: User | undefined = await getUserData(user.uid);
+    const userData = await getUserData(user.uid);
 
     if (!userData) {
       const gameArray: GameScreen[] = [];

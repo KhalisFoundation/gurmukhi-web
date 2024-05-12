@@ -17,7 +17,7 @@ function CoinBox({ commonStyle }: { commonStyle: string }) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     const fetchCoins = async () => {
-      const userData: User | undefined = await getUserData(user.uid);
+      const userData = await getUserData(user.uid);
       if (userData) {
         dispatch(setNanakCoin(userData.coins));
         setCoins(userData.coins);

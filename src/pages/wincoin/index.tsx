@@ -41,7 +41,7 @@ function WinCoin() {
       if (currentLevel === ALL_CONSTANT.LEVELS_COUNT) {
         dispatch(resetGamePosition());
         dispatch(resetGameArray());
-        const data: User | undefined = await getUserData(user.uid);
+        const data = await getUserData(user.uid);
         const nxtSession = data?.nextSession || [];
         setNextSession(nxtSession);
         dispatch(increment());
