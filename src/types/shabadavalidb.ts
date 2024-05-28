@@ -19,6 +19,7 @@ export interface User {
   };
   nextSession?: GameScreen[];
   wordIds: string[];
+  learntWordIds: string[];
 }
 export interface WordShabadavaliDB {
   isLearnt: boolean;

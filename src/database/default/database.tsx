@@ -230,7 +230,15 @@ const getRandomWord = async (uid: string, notInArray: string[], includeUsed = tr
     });
   }
 };
-
+const getActiveWords = async () => {
+  const qSnapshot = query(wordsCollection, where('status', '==', 'active'));
+  const querySnapshot = await getDocs(qSnapshot);
+  if (querySnapshot.empty) {
+    return null;
+  }
+  const wordData = querySnapshot.docs.map((item) => ({ id: item.id, ...item.data() } as WordType));
+  return wordData;
+};
 export {
   wordsCollection,
   sentencesCollection,
@@ -239,4 +247,5 @@ export {
   getSemanticsByIds,
   getWordById,
   getRandomWord,
+  getActiveWords,
 };

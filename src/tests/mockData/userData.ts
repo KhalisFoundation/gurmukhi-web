@@ -89,8 +89,10 @@ const mockUserData: User[] = [
       },
     ],
     wordIds: ['vIi5VzvEsecyECMc0shq'],
+    learntWordIds: [],
   },
   {
+    learntWordIds: [],
     displayName: 'Amitoj Singh',
     role: 'student',
     photoURL: 'some url',

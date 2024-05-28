@@ -177,6 +177,7 @@ export const getUserData = async (uid: string) => {
       progress: data.progress,
       nextSession: data.next_session,
       wordIds: data.wordIds,
+      learntWordIds: data.learntWordIds,
     };
     return user;
   } catch (error) {
