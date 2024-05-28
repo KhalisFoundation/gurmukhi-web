@@ -31,10 +31,11 @@ export default function OptionBtn({
   const textClassname = `gurmukhi font-medium text-md xl:text-2xl ${
     isCorrect === false ? 'text-brightRed' : 'text-darkBlue'
   }`;
+  if (!option) {
+    return;
+  }
   return (
-    <div
-      className={optionClassname}
-    >
+    <div className={optionClassname}>
       <button
         className={'h-full w-full'}
         onClick={() => {
@@ -57,4 +58,5 @@ export default function OptionBtn({
       />
     </div>
   );
+
 }
