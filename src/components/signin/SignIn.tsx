@@ -128,13 +128,13 @@ export default function SignIn() {
   };
 
   return (
-    <main className='bg-white lg:h-full rounded-3xl cormont-garamond-regular w-5/6 xl:w-1/3 self-center'>
+    <main className='bg-white lg:h-full rounded-3xl brandon-grotesque w-5/6 xl:w-1/3 self-center'>
       <div className='flex flex-col w-2/3 m-auto my-0 h-full justify-center'>
         <div className='flex flex-col my-4 gap-4 xl:gap-0 h-auto overflow-y-auto'>
           <div className='flex flex-col gap-4'>
             <div className='text-center'>
               <h1 className='fs-rem-2 recoleta'>{text('WELCOME')}</h1>
-              <h3 className='grey text-lg cormont-garamond-light'>{text('ENTER_DETAILS')}</h3>
+              <h3 className='grey text-lg'>{text('ENTER_DETAILS')}</h3>
             </div>
 
             <div className='w-3/4 m-auto rounded-full h-12 flex p-5 relative items-center justify-between gap-4 bg-gray-eee'>

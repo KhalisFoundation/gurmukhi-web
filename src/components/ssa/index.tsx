@@ -8,7 +8,7 @@ export default function Ssa({ name }: { name: string }) {
     <div>
       <p className='text-2xl lg:text-3xl text-[#112D3D]'>
         <span className='font-medium gurmukhi'>{text('SSA_PUNJABI')}</span>{' '}
-        <span className='cormont-garamond-light capitalize'>
+        <span className='capitalize'>
           <a href={ROUTES.PROFILE}>{name}</a>
         </span>
       </p>
