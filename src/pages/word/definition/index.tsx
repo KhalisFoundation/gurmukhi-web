@@ -37,9 +37,9 @@ export default function Defintion() {
         setCurrentWord(words);
       }
     };
-    const data = location.state.data;
-    if (data) {
-      setCurrentWord(data);
+
+    if (location.state?.data) {
+      setCurrentWord(location.state.data);
     } else {
       fetchData();
     }
