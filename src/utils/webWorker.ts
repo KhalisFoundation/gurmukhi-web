@@ -1,13 +1,13 @@
-import { Dispatch } from '@reduxjs/toolkit';
 import { updateNextSession } from 'database/shabadavalidb';
 import { gameAlgo } from 'pages/dashboard/utils';
+import { setWebWorker } from 'store/features/webWorkerSlice';
+import { AppDispatch } from 'store/store';
 import { User } from 'types';
 import { bugsnagErrorHandler } from 'utils';
 
 export const fetchNextSessionData = async (
   user: User,
-  dispatch: Dispatch<any>,
-  setWebWorker: (a: boolean) => void,
+  dispatch: AppDispatch,
 ) => {
   try {
     const nextSession = user?.nextSession ?? [];

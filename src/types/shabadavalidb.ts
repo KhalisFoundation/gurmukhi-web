@@ -8,12 +8,14 @@ export interface GameScreen {
 }
 export interface User {
   user: FirebaseUser | null;
+  username?: string;
   displayName: string;
   role: string;
   photoURL: string;
   uid: string;
   coins: number;
   email: string;
+  emailVerified: boolean;
   progress: {
     gameSession: GameScreen[];
     currentLevel: number;
@@ -21,7 +23,11 @@ export interface User {
   };
   nextSession?: GameScreen[];
   wordIds: string[];
+  created_at: Timestamp | string;
+  updated_at: Timestamp;
+  lastLogInAt: Timestamp | string;
 }
+
 export interface WordShabadavaliDB {
   isLearnt: boolean;
   progress: number;

@@ -23,7 +23,6 @@ import {
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
-import { bugsnagErrorHandler } from 'utils';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -32,22 +31,28 @@ export const AuthContextProvider = ({
 }: {
   children: ReactElement;
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState({});
   const { t: translate } = useTranslation();
 
   const logIn = async (
     email: string,
     password: string,
     showToastMessage: (text: string, error?: boolean) => void,
-  ) =>
-    signInWithEmailAndPassword(auth, email, password).catch((error: any) => {
-      if (Object.keys(errors).includes(error.code)) {
-        showToastMessage(errors[error.code]);
-      } else {
-        showToastMessage(translate('ERROR') + error.code + error.message);
+  ) => {
+    try {
+      const userData = await signInWithEmailAndPassword(auth, email, password);
+      return userData;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (Object.keys(errors).includes(error.name)) {
+          showToastMessage(errors[error.name]);
+        } else {
+          showToastMessage(translate('ERROR') + error.name + error.message);
+        }
       }
       return null;
-    });
+    }
+  };
 
   const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
     try {
@@ -85,6 +90,9 @@ export const AuthContextProvider = ({
         },
         wordIds: [],
         user: userCredential.user,
+        created_at: Timestamp.now(),
+        updated_at: Timestamp.now(),
+        lastLogInAt: Timestamp.now(),
       } as User;
 
       setUser(userData);
@@ -126,6 +134,7 @@ export const AuthContextProvider = ({
         name,
         role: roles.student,
         email,
+        emailVerified: false,
         username,
         displayName: displayName || name,
         wordIds: [],
@@ -138,6 +147,7 @@ export const AuthContextProvider = ({
         },
         created_at: Timestamp.now(),
         updated_at: Timestamp.now(),
+        lastLogInAt: Timestamp.now(),
         user: null as FirebaseUser | null,
       };
       await setDoc(localUser, userDataForState);
@@ -166,7 +176,7 @@ export const AuthContextProvider = ({
   const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser: FirebaseUser | null) => {
       if (currentUser !== null) {
         const { uid, email, emailVerified, metadata } = currentUser as FirebaseUser;
         getUser(email ?? '', uid).then((data) => {
@@ -182,7 +192,8 @@ export const AuthContextProvider = ({
             photoURL: '',
             role: data?.role,
             username: data?.username,
-            createdAt: metadata.creationTime,
+            created_at: metadata.creationTime,
+            updated_at: Timestamp.now(),
             lastLogInAt: metadata.lastSignInTime,
             wordIds: data?.wordIds || [],
           } as User;
@@ -212,11 +223,4 @@ export const AuthContextProvider = ({
   );
 };
 
-export const useUserAuth = (): AuthContextValue => {
-  const authContext = useContext(AuthContext);
-  if (!authContext) {
-    bugsnagErrorHandler(new Error('useAuth must be used within an AuthContextProvider'), 'useUserAuth', {});
-    throw new Error('useAuth must be used within an AuthContextProvider');
-  }
-  return authContext;
-};
+export const useUserAuth = () => useContext(AuthContext) as AuthContextValue;

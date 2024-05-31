@@ -1,4 +1,5 @@
 import { checkIsFirstTime } from '../../pages/dashboard/utils/helpers';
+import { currentTimestamp } from 'tests/mockData/userData';
 
 describe('checkIsFirstTime', () => {
   it('should return true for first-time users', () => {
@@ -17,6 +18,10 @@ describe('checkIsFirstTime', () => {
       nextSession: [],
       wordIds: [],
       user: null,
+      emailVerified: true,
+      created_at: currentTimestamp,
+      updated_at: currentTimestamp,
+      lastLogInAt: currentTimestamp,
     };
     expect(checkIsFirstTime(user)).toBeTruthy();
   });
@@ -37,6 +42,10 @@ describe('checkIsFirstTime', () => {
       nextSession: [],
       wordIds: [],
       user: null,
+      emailVerified: true,
+      created_at: currentTimestamp,
+      updated_at: currentTimestamp,
+      lastLogInAt: currentTimestamp,
     };
     expect(checkIsFirstTime(user)).toBeTruthy();
   });
@@ -57,6 +66,10 @@ describe('checkIsFirstTime', () => {
       nextSession: [],
       wordIds: [],
       user: null,
+      emailVerified: true,
+      created_at: currentTimestamp,
+      updated_at: currentTimestamp,
+      lastLogInAt: currentTimestamp,
     };
     expect(checkIsFirstTime(user)).toBeFalsy();
   });

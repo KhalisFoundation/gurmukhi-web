@@ -3,7 +3,7 @@ import { User } from './shabadavalidb';
 import { UserCredential } from 'firebase/auth';
 
 export interface AuthContextValue {
-  user: User | null;
+  user: User | null | object;
   logIn: (email: string, password: string, showToastMessage: (text: string, error?: boolean) => void) => Promise<UserCredential | null>;
   signUp: (name: string, username: string, email: string, password: string, confirmPassword: string, showToastMessage: (text: string, error?: boolean) => void) => Promise<boolean>;
   logOut: () => Promise<void>;

@@ -174,10 +174,14 @@ export const getUserData = async (uid: string) => {
       uid: data.uid,
       coins: data.coins,
       email: data.email,
+      emailVerified: data.emailVerified,
       progress: data.progress,
       nextSession: data.next_session,
       wordIds: data.wordIds,
       user: null,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      lastLogInAt: data.lastLogInAt,
     };
     return user;
   } catch (error) {

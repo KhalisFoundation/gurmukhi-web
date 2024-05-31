@@ -5,9 +5,9 @@ import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice'
 import { GameScreen, User } from 'types';
 import Bugsnag from '@bugsnag/js';
 import { bugsnagErrorHandler } from 'utils';
-import { Dispatch } from '@reduxjs/toolkit';
 import { DefineWord, QuestionData, SentenceWord, WordType } from 'types';
 import { NavigateFunction } from 'react-router-dom';
+import { AppDispatch } from 'store/store';
 
 const navigateTo = (
   navigate: NavigateFunction,
@@ -31,7 +31,7 @@ const handleClick = async (
   gameArray: GameScreen[],
   navigate: NavigateFunction,
   user: User,
-  dispatch: Dispatch<any>,
+  dispatch: AppDispatch,
 ) => {
   const coins = await getNanakCoin(user.uid);
   const condition =

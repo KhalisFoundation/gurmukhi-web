@@ -50,10 +50,10 @@ export default function LevelsFooter({
       const userData = await getUserData(user.uid);
       dispatch(setWebWorker(true));
       if (!userData) {
-        await worker.fetchNextSessionData(user, dispatch, setWebWorker);
+        await worker.fetchNextSessionData(user, dispatch);
         return;
       }
-      await worker.fetchNextSessionData(userData, dispatch, setWebWorker);
+      await worker.fetchNextSessionData(userData, dispatch);
     };
     if (currentLevel === CONSTANTS.WEB_WORKER_LEVEL && user.uid && !webWorker) {
       callWorker();

@@ -7,11 +7,11 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import ALL_CONSTANT from 'constants/constant';
 import RadioBtn from 'components/buttons/RadioBtn';
 import CONSTANTS from 'constants/constant';
-import { SignError } from 'types';
+import { SignError, User } from 'types';
 
 function FeedbackForm({ setShowModal }: { setShowModal: (value: boolean) => void }) {
   const { t: text } = useTranslation();
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
   const [action, setAction] = useState('');
   const [name, setName] = useState(user ? user.displayName : '');
   const [email, setEmail] = useState(user ? user.email : '');

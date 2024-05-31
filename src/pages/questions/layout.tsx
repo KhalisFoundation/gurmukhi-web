@@ -1,6 +1,6 @@
-import EndSessionButton from 'components/buttons/EndSessionBtn';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import EndSessionButton from 'components/buttons/EndSessionBtn';
 
 export default function QuestionsPageLayout() {
   // check if children contains
