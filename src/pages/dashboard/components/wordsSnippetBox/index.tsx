@@ -37,7 +37,7 @@ function WordsSnippetBox({ commonStyle }: { commonStyle: string }) {
     return (
       <div
         key={word.id}
-        className={`word-fall-animation ${
+        className={`md:block word-fall-animation hidden ${
           index % CONSTANTS.REMINDER_NUMBER === 0 ? 'even' : 'odd'
         }`}
         style={{ animationDelay }}
@@ -60,7 +60,7 @@ function WordsSnippetBox({ commonStyle }: { commonStyle: string }) {
         <div className={`${wordsLearnt && wordsLearnt?.length > 0 ? 'content-overlay' : ''} flex`}>
           <div className=' m-auto'>
             <p className='font-serif text-sm text-sky-700 mb-4'>{text('WORDS_YOU_LEARNT')}</p>
-            <Counter n={wordsLearnt?.length ?? 0} className={'text-6xl text-sky-800'} />
+            <Counter n={wordsLearnt?.length ?? 0} className={'text-3xl md:text-6xl text-sky-800'} />
           </div>
         </div>
       </div>

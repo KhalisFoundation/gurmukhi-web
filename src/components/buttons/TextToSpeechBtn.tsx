@@ -26,7 +26,9 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
   const [slow, setSlow] = useState<boolean>(true);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const ttsClassname = backgroundColor ? `${backgroundColor} rounded-full p-4` : 'rounded-full p-4';
+  const ttsClassname = backgroundColor
+    ? `${backgroundColor} rounded-full p-2 md:p-4`
+    : 'rounded-full p-2 md:p-4 ';
   const betterText = text.replace(/_+/g, 'ਡੈਸ਼');
 
   useEffect(() => {
