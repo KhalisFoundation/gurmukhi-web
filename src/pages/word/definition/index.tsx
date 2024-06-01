@@ -64,20 +64,18 @@ export default function Defintion() {
         <div className='flex flex-col lg:flex-row items-center justify-between gap-5'>
           <img
             alt='word-image'
-            height={296}
-            width={524}
             src={
               currentWord.images && currentWord.images?.length > 0
                 ? currentWord.images[0]
                 : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
             }
-            className='object-cover rounded-xl'
+            className='w-[524px] h-[256] md:h-[276px] object-contain rounded-xl'
           />
           <div className='flex flex-col lg:h-[296px] items-left justify-center lg:justify-evenly '>
             <div className='flex flex-row items-center justify-between gap-5'>
               <div className='flex flex-col'>
-                <h1 className={'text-5xl gurmukhi text-black'}>{currentWord.word}</h1>
-                <h2 className='text-2xl brandon-grotesque italic text-gray-4e4'>
+                <h1 className={'text-3xl md:text-5xl gurmukhi text-black'}>{currentWord.word}</h1>
+                <h2 className='text-xl md:text-2xl brandon-grotesque italic text-gray-4e4'>
                   {currentWord.translation}
                 </h2>
               </div>
@@ -91,7 +89,7 @@ export default function Defintion() {
                 />
               )}
             </div>
-            <div className='flex flex-col text-lg'>
+            <div className='flex flex-col text-md md:text-lg'>
               <span className={'text-black'}>{currentWord.meaning_punjabi}</span>
               <span className={'text-black-111'}>{currentWord.meaning_english}</span>
             </div>
