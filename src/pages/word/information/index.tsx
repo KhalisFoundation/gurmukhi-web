@@ -79,7 +79,7 @@ export default function Information() {
   return (
     <div className='flex flex-col items-center w-full h-full justify-between gap-5'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col h-3/4 justify-between items-center'>
+      <div className='flex flex-col h-full justify-between items-center'>
         <img
           className='w-3/5 h-6'
           src='/icons/pointy_border.svg'

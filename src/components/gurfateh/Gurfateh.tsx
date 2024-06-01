@@ -5,13 +5,13 @@ export default function Gurfateh() {
   const { t: text } = useTranslation();
 
   return (
-    <main className='relative flex lg:w-2/5 w-2/3 justify-center xl:justify-start self-center'>
-      <div className='bg-slate-100/75 shadow rounded-3xl flex-col text-left gap-4 '>
-        <div className='flex-grow w-2/3 m-auto my-2 p-3'>
-          <h1 className='text-xl font-medium text-black text-left gurmukhi'>
+    <main className='relative flex lg:w-2/5 md:w-2/3 justify-center xl:justify-start self-center'>
+      <div className='bg-[#d6e9f3] drop-shadow-xl rounded-[50px] flex-col text-left gap-4 w-2/3'>
+        <div className='flex-grow w-3/4 m-auto my-2 p-4 md:p-10'>
+          <h1 className='text-lg font-medium text-left text-[#333] gurmukhi'>
             {text('GURFATEH_PUNJABI')}
           </h1>
-          <p className='whitespace-pre-line'>{text('LOGIN_INFO')}</p>
+          <p className='text-lg text-[#1F4860] mt-2 leading-none'>{text('LOGIN_INFO')}</p>
         </div>
         <div className='relative'>
           <img
