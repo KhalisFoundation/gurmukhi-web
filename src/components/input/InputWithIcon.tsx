@@ -46,7 +46,7 @@ export default function InputWithIcon({ ...props }: InputWithIconProps) {
     }
   };
 
-  const inputClassName = props.border ? `w-full p-4 rounded-lg bg-gray-eee border border-${props.border}` : 'w-full p-4 rounded-lg bg-gray-eee';
+  const inputClassName = 'w-full p-4 rounded-lg bg-[#f2f2f2] border border-2';
   return (
     <div className='relative mb-4'>
       {props.icon === '' ? null : (

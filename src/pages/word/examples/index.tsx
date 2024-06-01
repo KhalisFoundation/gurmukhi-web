@@ -60,11 +60,11 @@ export default function Examples() {
   }
 
   return (
-    <div className='flex flex-col items-center gap-5 w-full h-full'>
+    <div className='flex flex-col justify-center items-center gap-5 w-full h-full'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col h-full justify-center items-center gap-5 brandon-grotesque w-5/6'>
-        <h1 className='text-4xl gurmukhi text-black'>{currentWord.word}</h1>
-        <h2 className='text-2xl italic text-gray-e4'>{currentWord.translation}</h2>
+      <div className='flex flex-col h-full justify-center items-center gap-2 md:gap-5 brandon-grotesque w-5/6'>
+        <h1 className='text-xl md:text-4xl gurmukhi text-black'>{currentWord.word}</h1>
+        <h2 className='text-sm md:text-2xl italic text-gray-e4'>{currentWord.translation}</h2>
         <img
           className='w-3/5 h-6'
           src='/icons/pointy_border.svg'
@@ -73,8 +73,8 @@ export default function Examples() {
           height={200}
         />
         <div className='flex flex-col items-center justify-between gap-5'>
-          <span className='tracking-widest'>{text('EXAMPLES').toUpperCase()}</span>
-          <div className='flex flex-col items-left text-left justify-evenly p-8 gap-5'>
+          <span className='text-sm tracking-widest'>{text('EXAMPLES').toUpperCase()}</span>
+          <div className='flex flex-col items-left text-left justify-evenly md:p-8 gap-5'>
             {currentWord.sentences?.map((sentence, index) => {
               const highlightedSentence = highlightWord(
                 sentence.sentence,

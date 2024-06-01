@@ -9,7 +9,7 @@ const EndSessionButton = ({ className = '' }: { className: string }) => {
     <div className={className}>
       <button
         onClick={() => navigate(ROUTES.DASHBOARD)}
-        className='bg-sky-100 border-sky-900 border-2 text-xs text-sky-900 p-3  tracking-widest font-light'
+        className='bg-sky-100 border-sky-900 border-2 text-xs text-sky-900 p-2 tracking-widest font-light'
       >
         {ALL_CONSTANT.END_SESSION}
       </button>
