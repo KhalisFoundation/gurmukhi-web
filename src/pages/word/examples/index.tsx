@@ -62,7 +62,7 @@ export default function Examples() {
   return (
     <div className='flex flex-col justify-center items-center gap-5 w-full h-full'>
       <Meta title={title} description={description} />
-      <div className='flex flex-col h-full justify-center items-center gap-2 md:gap-5 brandon-grotesque w-5/6'>
+      <div className='flex flex-col h-full justify-center items-center gap-1 brandon-grotesque w-5/6'>
         <h1 className='text-xl md:text-4xl gurmukhi text-black'>{currentWord.word}</h1>
         <h2 className='text-sm md:text-2xl italic text-gray-e4'>{currentWord.translation}</h2>
         <img
@@ -72,7 +72,7 @@ export default function Examples() {
           width={200}
           height={200}
         />
-        <div className='flex flex-col items-center justify-between gap-5'>
+        <div className='flex flex-col items-center justify-between md:gap-5 gap-2'>
           <span className='text-sm tracking-widest'>{text('EXAMPLES').toUpperCase()}</span>
           <div className='flex flex-col items-left text-left justify-evenly md:p-8 gap-5'>
             {currentWord.sentences?.map((sentence, index) => {
@@ -82,7 +82,7 @@ export default function Examples() {
                 'gurmukhi',
               );
               return (
-                <div key={index} className='flex flex-col text-xl gap-1'>
+                <div key={index} className='flex flex-col text-sm lg:text-xl '>
                   <span className='flex text-black-111 items-center gap-2'>
                     {highlightedSentence}
                     {sentence && sentence.sentence && (
@@ -91,6 +91,7 @@ export default function Examples() {
                         text={sentence.sentence}
                         type={ALL_CONSTANT.SENTENCE}
                         id={currentWord.id}
+                        size={20}
                       />
                     )}
                   </span>
