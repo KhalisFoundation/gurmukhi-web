@@ -17,11 +17,6 @@ import { QuestionData } from 'types';
 //   word_id: string;
 //   word: string;
 
-// Mocking useMemo hook
-jest.mock('pages/dashboard/utils', () => ({
-  shuffleArray: jest.fn((array) => [...array]),
-}));
-
 const currentQuestion: QuestionData = {
   id: '1',
   options: ['option1', 'option2', 'option3'],
@@ -29,24 +24,11 @@ const currentQuestion: QuestionData = {
   word: 'word',
   word_id: 'word_id',
   question: 'question',
-} as QuestionData;
+};
 
 describe('useQuestionData', () => {
   afterEach(() => {
     jest.clearAllMocks();
-  });
-
-  it('should return the same data if no options are provided', () => {
-    const question: QuestionData = {
-      id: '1',
-      options: ['option1', 'option2', 'option3'],
-      answer: 0,
-      word: 'word',
-      word_id: 'word_id',
-      question: 'question',
-    } as QuestionData;
-    const { result } = renderHook(() => useQuestionData(question));
-    expect(result.current).toEqual(question);
   });
 
   it('should correctly process question data', () => {
@@ -60,5 +42,12 @@ describe('useQuestionData', () => {
   it('should shuffle options and return all the options', () => {
     const { result } = renderHook(() => useQuestionData(currentQuestion));
     expect(result.current.options.length).toEqual(currentQuestion.options.length);
+  });
+
+  it('should shuffle options and check the answers if matches', () => {
+    const { result } = renderHook(() => useQuestionData(currentQuestion));
+    expect(result.current.options[result.current.answer]).toEqual(
+      currentQuestion.options[currentQuestion.answer],
+    );
   });
 });
