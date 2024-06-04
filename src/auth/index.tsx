@@ -15,23 +15,17 @@ import {
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
-import {
-  checkIfUsernameUnique,
-  checkUser,
-  getUser,
-} from 'database/shabadavalidb';
+import { checkIfUsernameUnique, checkUser, getUserData } from 'database/shabadavalidb';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
+import PageLoading from 'components/pageLoading';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export const AuthContextProvider = ({
-  children,
-}: {
-  children: ReactElement;
-}) => {
-  const [user, setUser] = useState({});
+export const AuthContextProvider = ({ children }: { children: ReactElement }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const { t: translate } = useTranslation();
 
   const logIn = async (
@@ -41,6 +35,15 @@ export const AuthContextProvider = ({
   ) => {
     try {
       const userData = await signInWithEmailAndPassword(auth, email, password);
+      if (!userData.user.uid) {
+        return null;
+      }
+      const userDetails = await getUserData(userData.user.uid);
+      if (!userDetails) {
+        return null;
+      }
+      setUser(userDetails);
+      setLoading(false);
       return userData;
     } catch (error) {
       if (error instanceof Error) {
@@ -78,24 +81,24 @@ export const AuthContextProvider = ({
           updated_at: Timestamp.now(),
         });
       }
+      const userDetails = await getUserData(uid);
+      if (!userDetails) {
+        return false;
+      }
 
       const userData = {
         ...userCredential.user,
         role: roles.student,
-        coins: 0,
-        progress: {
-          currentProgress: 0,
-          gameSession: [],
-          currentLevel: 0,
-        },
-        wordIds: [],
+        coins: userDetails.coins,
+        progress: userDetails.progress,
+        wordIds: userDetails.wordIds,
         user: userCredential.user,
         created_at: Timestamp.now(),
         updated_at: Timestamp.now(),
         lastLogInAt: Timestamp.now(),
       } as User;
-
       setUser(userData);
+      setLoading(false);
       return true;
     } catch (error) {
       if (error instanceof Error) {
@@ -120,11 +123,12 @@ export const AuthContextProvider = ({
         showToastMessage(translate('PASSWORDS_DONT_MATCH'));
         return false;
       }
-      const unique = checkIfUsernameUnique(username);
+      const unique = await checkIfUsernameUnique(username);
       if (!unique) {
         showToastMessage(translate('USERNAME_TAKEN'));
         return false;
       }
+      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userData = userCredential.user;
       const { uid, displayName } = userData;
@@ -154,6 +158,7 @@ export const AuthContextProvider = ({
 
       userDataForState = { ...userDataForState, user: userData };
       setUser(userDataForState);
+      setLoading(false);
 
       sendEmailVerification(auth.currentUser ?? userData).then(() => {
         showToastMessage(translate('EMAIL_VERIFICATION_SENT'), false);
@@ -171,34 +176,44 @@ export const AuthContextProvider = ({
     }
   };
 
-  const logOut = () => signOut(auth);
+  const logOut = async () => {
+    await signOut(auth);
+    setUser(null);
+    setLoading(false);
+  };
 
   const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser: FirebaseUser | null) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser: FirebaseUser | null) => {
       if (currentUser !== null) {
-        const { uid, email, emailVerified, metadata } = currentUser as FirebaseUser;
-        getUser(email ?? '', uid).then((data) => {
-          const usr = {
-            user: currentUser,
-            uid,
-            name: data?.name,
-            coins: data?.coins,
-            progress: data?.progress,
-            email: data?.email,
-            emailVerified: emailVerified ?? false,
-            displayName: data?.displayName,
-            photoURL: '',
-            role: data?.role,
-            username: data?.username,
-            created_at: metadata.creationTime,
-            updated_at: Timestamp.now(),
-            lastLogInAt: metadata.lastSignInTime,
-            wordIds: data?.wordIds || [],
-          } as User;
-          setUser(usr);
-        });
+        const { uid, emailVerified, metadata } = currentUser as FirebaseUser;
+        const userDetails = await getUserData(uid);
+        if (!userDetails) {
+          return null;
+        }
+        const usr = {
+          user: currentUser,
+          uid,
+          // name: userDetails?.name,
+          coins: userDetails?.coins,
+          progress: userDetails?.progress,
+          email: userDetails?.email,
+          emailVerified: emailVerified ?? false,
+          displayName: userDetails?.displayName,
+          photoURL: '',
+          role: userDetails?.role,
+          username: userDetails?.username,
+          created_at: metadata.creationTime,
+          updated_at: Timestamp.now(),
+          lastLogInAt: metadata.lastSignInTime,
+          wordIds: userDetails?.wordIds || [],
+        } as User;
+        setUser(usr);
+        setLoading(false);
+      } else {
+        setUser(null);
+        setLoading(false);
       }
     });
 
@@ -206,6 +221,10 @@ export const AuthContextProvider = ({
       unsubscribe();
     };
   }, []);
+
+  if (loading) {
+    return <PageLoading />;
+  }
 
   return (
     <AuthContext.Provider
