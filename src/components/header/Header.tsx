@@ -23,7 +23,10 @@ export default function Header({ ...props }: PropTypes) {
   const buttonComonStyle = 'block w-24 px-3 py-2 hover:bg-gray-200';
 
   useEffect(() => {
-    setPhotoURL(user?.photoURL ?? user?.user?.photoURL);
+    const photo = user?.photoURL || user?.user?.photoURL;
+    if (photo) {
+      setPhotoURL(photo);
+    }
   }, [user?.photoURL, user?.user]);
 
   return (
