@@ -6,7 +6,7 @@ import metaTags from 'constants/meta';
 import { getQuestionByID } from 'database/default/question';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
-import useQuestionData from './hooks/useQuestionData';
+import { useQuestionData } from './hooks/useQuestionData';
 import { getQuestionElement, renderFooter } from './utils';
 
 export default function Question() {
