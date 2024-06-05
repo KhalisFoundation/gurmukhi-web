@@ -6,17 +6,23 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useUserAuth } from 'auth';
 import { ROUTES } from 'constants/routes';
 import { bugsnagErrorHandler, showToastMessage } from 'utils';
+import { useAppSelector } from 'store/hooks';
+import { logSessionTime } from 'utils/analytics';
 
 export default function LogOut() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
   const { logOut } = useUserAuth();
   const { t: text } = useTranslation();
+  const sessionStart = useAppSelector((state) => state.sessionStart);
 
   useEffect(() => {
     const handleLogout = async () => {
       try {
         await logOut();
+        const sessionEnd = Date.now();
+        const sessionDuration = sessionEnd - sessionStart;
+        logSessionTime(sessionDuration);
         navigate(ROUTES.LOGIN);
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : 'An Unknown Error Occurred';

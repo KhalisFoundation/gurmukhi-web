@@ -8,6 +8,7 @@ import InputWithIcon from '../input/InputWithIcon';
 import { SignError } from 'types';
 import { ToastContainer, toast } from 'react-toastify';
 import { bugsnagErrorHandler, showToastMessage } from 'utils';
+import { resetSessionStart } from 'store/features/sessionStartSlice';
 
 export default function SignIn() {
   const { t: text } = useTranslation();
@@ -102,6 +103,7 @@ export default function SignIn() {
         else return;
 
         const success = await logIn(email, password, displayToast);
+        resetSessionStart();
         if (success) {
           navigate(ROUTES.DASHBOARD);
         }
@@ -117,6 +119,7 @@ export default function SignIn() {
     event.preventDefault();
     try {
       const success = await signInWithGoogle(displayToast);
+      resetSessionStart();
       if (success) {
         navigate(ROUTES.DASHBOARD);
       }
