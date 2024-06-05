@@ -31,11 +31,12 @@ export default function Profile() {
   const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
   const [verifiable, setVerifiable] = useState(true);
 
-  const createdAt = new Date(typeof (user.created_at) == 'string' ? user.created_at : user.created_at.toDate());
-  const lastLoginAt = new Date(typeof (user.lastLogInAt) == 'string' ? user.lastLogInAt : user.lastLogInAt.toDate());
-
-  const formattedCreatedAt = createdAt instanceof Date ? createdAt.toLocaleString() : 'not defined';
-  const formattedLastLoginAt = lastLoginAt instanceof Date ? lastLoginAt.toLocaleString() : 'not defined';
+  const formattedCreatedAt = user.created_at
+    ? (typeof user.created_at === 'string' ? new Date(user.created_at) : user.created_at?.toDate()).toLocaleString()
+    : 'not defined';
+  const formattedLastLoginAt = user.lastLogInAt
+    ? (typeof user.lastLogInAt === 'string' ? new Date(user.lastLogInAt) : user.lastLogInAt?.toDate()).toLocaleString()
+    : 'not defined';
 
   const getTabData = (heading: string, info: string, children?: JSX.Element) => {
     return (
@@ -93,7 +94,7 @@ export default function Profile() {
       if (
         name === user.displayName &&
         username === user.username &&
-        photoURL === user.photoURL &&
+        photoURL === user.user?.photoURL &&
         !photo
       ) {
         return;
