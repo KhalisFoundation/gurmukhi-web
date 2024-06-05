@@ -24,7 +24,7 @@ export default function BackBtn({ navlink }: BackProps) {
       className='flex ml-5 items-center gap-1 brandon-grotesque'
     >
       <FontAwesomeIcon icon={faChevronLeft} className='w-3 h-3' />
-      <span className='text-base text-black'>{text('BACK')}</span>
+      <span className='text-base text-xs md:text-sm text-black'>{text('BACK')}</span>
     </button>
   );
 }
