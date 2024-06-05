@@ -1,19 +1,23 @@
 import { useMemo } from 'react';
-import { QuestionData } from 'types';
+import { Option, QuestionData } from 'types';
 import { shuffleArray } from 'pages/dashboard/utils';
+
+const getOptionValue = (option: string | Option) => {
+  if (typeof option === 'string') {
+    return option;
+  }
+  return option.word ?? option.option;
+};
 
 const useQuestionData = (currentQuestion: QuestionData | null) => {
   const memoizedQuestionData = useMemo(() => {
     if (currentQuestion?.options) {
       const correctOption = currentQuestion.options[currentQuestion.answer];
-      const correctAnswer = typeof correctOption === 'string' ? correctOption : correctOption.word;
+      const correctAnswer = getOptionValue(correctOption);
       const shuffledOptions = shuffleArray([...currentQuestion.options]);
       const answer = shuffledOptions.findIndex((option) => {
-        if (typeof option === 'string') {
-          return option === correctAnswer;
-        } else {
-          return option.word === correctAnswer;
-        }
+        const optionValue = getOptionValue(option);
+        return optionValue === correctAnswer;
       });
       const newQData = {
         ...currentQuestion,
@@ -27,4 +31,4 @@ const useQuestionData = (currentQuestion: QuestionData | null) => {
   return memoizedQuestionData;
 };
 
-export default useQuestionData;
+export { getOptionValue, useQuestionData };
