@@ -1,13 +1,21 @@
-import { User } from 'types/shabadavalidb';
+import { Timestamp } from 'firebase/firestore';
+import { User } from 'types';
+
+export const currentTimestamp = {
+  seconds: 1631113200,
+  nanoseconds: 0,
+} as Timestamp;
 
 const mockUserData: User[] = [
   {
+    user: null,
     displayName: 'Amitoj Singh',
     role: 'student',
     photoURL: 'some url',
     uid: 'lakhdsfaoidjfakldnnmadflkjj',
     coins: 3,
     email: 'amitojsingh@shabadavali.ca',
+    emailVerified: true,
     progress: {
       gameSession: [
         {
@@ -90,15 +98,19 @@ const mockUserData: User[] = [
     ],
     wordIds: ['vIi5VzvEsecyECMc0shq'],
     learntWordIds: [],
+    created_at: currentTimestamp,
+    updated_at: currentTimestamp,
+    lastLogInAt: currentTimestamp,
   },
   {
-    learntWordIds: [],
+    user: null,
     displayName: 'Amitoj Singh',
     role: 'student',
     photoURL: 'some url',
     uid: 'lakhdsfaoidjfakldnnmadflkjj',
     coins: 0,
     email: 'amitojsingh@shabadavali.ca',
+    emailVerified: false,
     progress: {
       gameSession: [],
       currentLevel: 0,
@@ -106,6 +118,10 @@ const mockUserData: User[] = [
     },
     nextSession: [],
     wordIds: [],
+    created_at: currentTimestamp,
+    updated_at: currentTimestamp,
+    lastLogInAt: currentTimestamp,
+    learntWordIds:[],
   },
 ];
 

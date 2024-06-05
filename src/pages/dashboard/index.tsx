@@ -11,20 +11,18 @@ import ALL_CONSTANT from 'constants/constant';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import useFetchWords from './hooks/useFetchWords';
 import useGamePlay from './hooks/useGamePlay1';
-import Loading from 'components/loading';
 import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
-import { User } from 'types/shabadavalidb';
-import CONSTANTS from 'constants/constant';
+import { User } from 'types';
+import PageLoading from 'components/pageLoading';
 
 export default function Dashboard() {
   const commonStyle =
     'w-[167px] h-[134px] md:w-[255px] md:h-[204px] xl:w-[380px] xl:h-[304px] md:grow-0 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   const { title, description } = metaTags.DASHBOARD;
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
   const [userData, setUserData] = useState<User>(user);
   const [isLoading, toggleLoading] = useState<boolean>(true);
-  const [reloadPrompt, setReloadPrompt] = useState<boolean>(false);
   useFetchWords(user, toggleLoading);
   useGamePlay(user, toggleLoading);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
@@ -42,35 +40,12 @@ export default function Dashboard() {
     }
   }, [user]);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setReloadPrompt(true);
-    }, CONSTANTS.TIMEOUT_NUM);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
-
   return (
     <div className='h-full lg:overflow-hidden flex flex-col justify-between'>
       <Meta title={title} description={description} />
       <div className='flex flex-col text-center recoleta justify-center gap-10 h-4/5'>
         {isLoading ? (
-          <div className='h-screen flex flex-col justify-center items-center'>
-            <div className='text-[#0369a1] text-4xl font-bold mb-8'>Hold on tight, adventurer!</div>
-            <div className='relative w-24 h-24'>
-              <Loading />
-            </div>
-            <div className='text-[#0369a1] text-2xl font-bold mt-8'>
-              Family of Raag rattans🎶 and celestial fairies✨ are singing shabads...
-            </div>
-            {reloadPrompt && (
-              <div className='text-[#0369a1] text-2xl font-bold mt-8'>
-                It is taking longer than expected🫨 Please reload the page💫
-              </div>
-            )}
-          </div>
+          <PageLoading />
         ) : (
           <>
             <Ssa name={user.displayName && userData.displayName} />

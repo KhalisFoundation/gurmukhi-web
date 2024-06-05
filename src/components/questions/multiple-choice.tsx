@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Option, QuestionData } from 'types';
+import { Option, QuestionData, User } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
 import {
@@ -29,8 +29,8 @@ export default function MultipleChoiceQuestion({
     null,
   );
   const currentLevel = useAppSelector((state) => state.currentLevel);
-  const { user } = useUserAuth();
   const dispatch = useAppDispatch();
+  const user = useUserAuth().user as User;
 
   useEffect(() => {
     setSelectedOption(null);

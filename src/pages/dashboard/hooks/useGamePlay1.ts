@@ -1,20 +1,18 @@
-import { User } from 'types/shabadavalidb';
-import { GameScreen } from 'types/shabadavalidb';
-import { fetchProgress } from '../utils';
+import { useEffect } from 'react';
+import { GameScreen, User } from 'types';
 import { useAppDispatch } from 'store/hooks';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { setCurrentLevel } from 'store/features/currentLevelSlice';
 import { getUserData, updateProgress } from 'database/shabadavalidb';
-import { useEffect } from 'react';
 import { addScreens } from 'store/features/gameArraySlice';
-import { gameAlgo } from '../utils';
+import { fetchProgress, gameAlgo } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
 
 const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetGame = true) => {
   const dispatch = useAppDispatch();
 
   const gamePlay = async () => {
-    const userData: User | undefined = await getUserData(user.uid);
+    const userData = await getUserData(user.uid);
 
     if (!userData) {
       const gameArray: GameScreen[] = [];

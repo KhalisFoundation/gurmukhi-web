@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { WordShabadavaliDB } from 'types/shabadavalidb';
+import { WordShabadavaliDB } from 'types';
 
 const learningWordSlice = createSlice({
   name: 'learningWords',

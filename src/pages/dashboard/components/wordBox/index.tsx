@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { WordType } from 'types';
+import { User, WordType } from 'types';
 import { useTranslation } from 'react-i18next';
 import { getRandomWord } from 'database/default';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { getUserData } from 'database/shabadavalidb';
 
 function WordBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
   const [randomWord, setRandomWord] = useState<WordType>();
   const navigate = useNavigate();
 

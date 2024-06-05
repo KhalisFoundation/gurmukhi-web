@@ -7,6 +7,7 @@ import { ROUTES } from 'constants/routes';
 import { useAppSelector } from 'store/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
+import { User } from 'types';
 
 interface PropTypes {
   loggedIn?: boolean;
@@ -14,7 +15,7 @@ interface PropTypes {
 
 export default function Header({ ...props }: PropTypes) {
   const { t: text } = useTranslation();
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
   const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
   const navigate = useNavigate();
   const nanakCoin: number = useAppSelector((state) => state.nanakCoin);

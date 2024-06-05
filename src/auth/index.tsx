@@ -8,78 +8,106 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   sendPasswordResetEmail,
-  User,
+  User as FirebaseUser,
 } from 'firebase/auth';
 import {
   Timestamp, doc, setDoc, // query, where, documentId, getDocs,
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
-import {
-  checkIfUsernameUnique,
-  checkUser,
-  getUser,
-} from 'database/shabadavalidb';
+import { checkIfUsernameUnique, checkUser, getUserData } from 'database/shabadavalidb';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
+import { AuthContextValue, User } from 'types';
+import PageLoading from 'components/pageLoading';
 
-const UserAuthContext = createContext<any>(null);
+const AuthContext = createContext<AuthContextValue | null>(null);
 
-export const UserAuthContextProvider = ({
-  children,
-}: {
-  children: ReactElement;
-}) => {
-  const [user, setUser] = useState({});
-  const { t: text } = useTranslation();
+export const AuthContextProvider = ({ children }: { children: ReactElement }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { t: translate } = useTranslation();
 
   const logIn = async (
     email: string,
     password: string,
     showToastMessage: (text: string, error?: boolean) => void,
-  ) =>
-    signInWithEmailAndPassword(auth, email, password).catch((error: any) => {
-      if (Object.keys(errors).includes(error.code)) {
-        showToastMessage(errors[error.code]);
-      } else {
-        showToastMessage(text('ERROR') + error.code + error.message);
+  ) => {
+    try {
+      const userData = await signInWithEmailAndPassword(auth, email, password);
+      if (!userData.user.uid) {
+        return null;
+      }
+      const userDetails = await getUserData(userData.user.uid);
+      if (!userDetails) {
+        return null;
+      }
+      setUser(userDetails);
+      setLoading(false);
+      return userData;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (Object.keys(errors).includes(error.name)) {
+          showToastMessage(errors[error.name]);
+        } else {
+          showToastMessage(translate('ERROR') + error.name + error.message);
+        }
       }
       return null;
-    });
+    }
+  };
 
   const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider)
-      .then((userCredential) => {
-        const { uid, email, displayName } = userCredential.user;
-        return checkUser(uid, email ?? '').then((found) => {
-          if (!found) {
-            const localUser = doc(shabadavaliDB, `users/${uid}`);
-            setDoc(localUser, {
-              role: roles.student,
-              email,
-              coins: 0,
-              progress: {
-                currentProgress: 0,
-                gameSession: [],
-                currentLevel: 0,
-              },
-              displayName: displayName ?? email?.split('@')[0],
-              created_at: Timestamp.now(),
-              updated_at: Timestamp.now(),
-            }).then(() => true);
-          } else {
-            return true;
-          }
-          setUser(userCredential.user);
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const { uid, email, displayName } = userCredential.user;
+
+      const found = await checkUser(uid, email ?? '');
+
+      if (!found) {
+        const localUser = doc(shabadavaliDB, `users/${uid}`);
+        await setDoc(localUser, {
+          role: roles.student,
+          email,
+          coins: 0,
+          progress: {
+            currentProgress: 0,
+            gameSession: [],
+            currentLevel: 0,
+          },
+          displayName: displayName ?? email?.split('@')[0],
+          created_at: Timestamp.now(),
+          updated_at: Timestamp.now(),
         });
-      })
-      .catch((error) => {
-        if (Object.keys(errors).includes(error.code)) {
-          showToastMessage(errors[error.code]);
-        }
+      }
+      const userDetails = await getUserData(uid);
+      if (!userDetails) {
         return false;
-      });
+      }
+
+      const userData = {
+        ...userCredential.user,
+        role: roles.student,
+        coins: userDetails.coins,
+        progress: userDetails.progress,
+        wordIds: userDetails.wordIds,
+        user: userCredential.user,
+        created_at: Timestamp.now(),
+        updated_at: Timestamp.now(),
+        lastLogInAt: Timestamp.now(),
+      } as User;
+      setUser(userData);
+      setLoading(false);
+      return true;
+    } catch (error) {
+      if (error instanceof Error) {
+        if (Object.keys(errors).includes(error.message)) {
+          showToastMessage(errors[error.message]);
+        }
+      }
+      return false;
+    }
   };
 
   const signUp = async (
@@ -92,14 +120,15 @@ export const UserAuthContextProvider = ({
   ) => {
     try {
       if (password !== confirmPassword) {
-        showToastMessage(text('PASSWORDS_DONT_MATCH'));
+        showToastMessage(translate('PASSWORDS_DONT_MATCH'));
         return false;
       }
-      const unique = checkIfUsernameUnique(username);
+      const unique = await checkIfUsernameUnique(username);
       if (!unique) {
-        showToastMessage(text('USERNAME_TAKEN'));
+        showToastMessage(translate('USERNAME_TAKEN'));
         return false;
       }
+      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userData = userCredential.user;
       const { uid, displayName } = userData;
@@ -109,8 +138,11 @@ export const UserAuthContextProvider = ({
         name,
         role: roles.student,
         email,
+        emailVerified: false,
         username,
         displayName: displayName || name,
+        wordIds: [],
+        photoURL: '',
         coins: 0,
         progress: {
           currentProgress: 0,
@@ -119,15 +151,17 @@ export const UserAuthContextProvider = ({
         },
         created_at: Timestamp.now(),
         updated_at: Timestamp.now(),
-        user: null as User | null,
+        lastLogInAt: Timestamp.now(),
+        user: null as FirebaseUser | null,
       };
       await setDoc(localUser, userDataForState);
 
       userDataForState = { ...userDataForState, user: userData };
       setUser(userDataForState);
+      setLoading(false);
 
       sendEmailVerification(auth.currentUser ?? userData).then(() => {
-        showToastMessage(text('EMAIL_VERIFICATION_SENT'), false);
+        showToastMessage(translate('EMAIL_VERIFICATION_SENT'), false);
       });
       return true;
     } catch (error) {
@@ -142,34 +176,45 @@ export const UserAuthContextProvider = ({
     }
   };
 
-  const logOut = () => signOut(auth);
+  const logOut = async () => {
+    await signOut(auth);
+    setUser(null);
+    setLoading(false);
+  };
 
   const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentuser: any) => {
-      if (currentuser !== null) {
-        const { uid, email, emailVerified, metadata } = currentuser;
-        getUser(email ?? '', uid).then((data) => {
-          const usr = {
-            user: currentuser,
-            uid,
-            name: data?.name,
-            coins: data?.coins,
-            progress: data?.progress,
-            email: data?.email,
-            emailVerified: emailVerified ?? false,
-            displayName: data?.displayName,
-            photoURL: '',
-            role: data?.role,
-            username: data?.username,
-            createdAt: metadata.creationTime,
-            lastLogInAt: metadata.lastSignInTime,
-          };
-          setUser(usr);
-        });
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser: FirebaseUser | null) => {
+      if (currentUser !== null) {
+        const { uid, emailVerified, metadata } = currentUser as FirebaseUser;
+        const userDetails = await getUserData(uid);
+        if (!userDetails) {
+          return null;
+        }
+        const usr = {
+          user: currentUser,
+          uid,
+          // name: userDetails?.name,
+          coins: userDetails?.coins,
+          progress: userDetails?.progress,
+          email: userDetails?.email,
+          emailVerified: emailVerified ?? false,
+          displayName: userDetails?.displayName,
+          photoURL: '',
+          role: userDetails?.role,
+          username: userDetails?.username,
+          created_at: metadata.creationTime,
+          updated_at: Timestamp.now(),
+          lastLogInAt: metadata.lastSignInTime,
+          wordIds: userDetails?.wordIds || [],
+        } as User;
+        setUser(usr);
+        setLoading(false);
+      } else {
+        setUser(null);
+        setLoading(false);
       }
-      setUser(currentuser);
     });
 
     return () => {
@@ -177,8 +222,12 @@ export const UserAuthContextProvider = ({
     };
   }, []);
 
+  if (loading) {
+    return <PageLoading />;
+  }
+
   return (
-    <UserAuthContext.Provider
+    <AuthContext.Provider
       value={{
         user,
         logIn,
@@ -189,8 +238,8 @@ export const UserAuthContextProvider = ({
       }}
     >
       {children}
-    </UserAuthContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
-export const useUserAuth = () => useContext(UserAuthContext);
+export const useUserAuth = () => useContext(AuthContext) as AuthContextValue;

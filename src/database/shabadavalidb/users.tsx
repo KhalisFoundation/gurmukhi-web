@@ -9,7 +9,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { shabadavaliDB as db } from '../../firebase';
-import { GameScreen, User } from 'types/shabadavalidb';
+import { GameScreen, User } from 'types';
 import { bugsnagErrorHandler } from 'utils';
 import nanakCoin from 'store/features/nanakCoin';
 
@@ -174,10 +174,15 @@ export const getUserData = async (uid: string) => {
       uid: data.uid,
       coins: data.coins,
       email: data.email,
+      emailVerified: data.emailVerified,
       progress: data.progress,
       nextSession: data.next_session,
       wordIds: data.wordIds,
       learntWordIds: data.learntWordIds,
+      user: null,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      lastLogInAt: data.lastLogInAt,
     };
     return user;
   } catch (error) {

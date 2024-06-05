@@ -12,7 +12,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { shabadavaliDB } from '../../firebase';
-import { WordShabadavaliDB } from 'types/shabadavalidb';
+import { WordShabadavaliDB } from 'types';
 import ALL_CONSTANT from 'constants/constant';
 import { usersCollection } from './users';
 import { shuffleArray } from 'pages/dashboard/utils';

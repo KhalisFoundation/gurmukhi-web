@@ -4,7 +4,7 @@ import { ROUTES } from 'constants/routes';
 import { useUserAuth } from 'auth';
 
 export default function RequireAuth({ children }: { children: JSX.Element }) {
-  const { user } = useUserAuth();
+  const user = useUserAuth().user;
   const location = useLocation();
 
   if (user === null) {

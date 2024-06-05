@@ -7,6 +7,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
+import { User } from 'types';
 
 interface Props {
   operation: string;
@@ -33,7 +34,7 @@ const StartQuestionBtn = ({
   const gameArray = useAppSelector((state) => state.gameArray);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
 
   return (
     <button

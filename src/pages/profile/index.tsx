@@ -12,15 +12,18 @@ import { auth } from '../../firebase';
 import { showToastMessage } from 'utils';
 import { uploadImage } from 'utils/storage';
 import CONSTANTS from 'constants/constant';
+import { User } from 'types';
 
 export default function Profile() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.PROFILE;
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
+
+  const currentUser = user?.user || auth.currentUser || null;
 
   const [isLoading, setIsLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [name, setName] = useState(user.displayName);
+  const [name, setName] = useState(user?.displayName);
   const [username, setUsername] = useState(user.username ?? user.email?.split('@')[0]);
   const [usernameError, setUsernameError] = useState('');
   const [photo, setPhoto] = useState<File | null>(null);
@@ -28,12 +31,12 @@ export default function Profile() {
   const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
   const [verifiable, setVerifiable] = useState(true);
 
-  const createdAt = new Date(user.createdAt);
-  const lastLoginAt = new Date(user.lastLogInAt);
-
-  const formattedCreatedAt = createdAt instanceof Date ? createdAt.toLocaleString() : 'not defined';
-  const formattedLastLoginAt =
-    lastLoginAt instanceof Date ? lastLoginAt.toLocaleString() : 'not defined';
+  const formattedCreatedAt = user.created_at
+    ? (typeof user.created_at === 'string' ? new Date(user.created_at) : user.created_at?.toDate()).toLocaleString()
+    : 'not defined';
+  const formattedLastLoginAt = user.lastLogInAt
+    ? (typeof user.lastLogInAt === 'string' ? new Date(user.lastLogInAt) : user.lastLogInAt?.toDate()).toLocaleString()
+    : 'not defined';
 
   const getTabData = (heading: string, info: string, children?: JSX.Element) => {
     return (
@@ -91,7 +94,7 @@ export default function Profile() {
       if (
         name === user.displayName &&
         username === user.username &&
-        photoURL === user.user.photoURL &&
+        photoURL === user.user?.photoURL &&
         !photo
       ) {
         return;
@@ -112,11 +115,12 @@ export default function Profile() {
               username,
               user: null,
             });
-            await updateProfile(user.user, {
-              displayName: name,
-              photoURL,
-            });
-
+            if (currentUser) {
+              await updateProfile(currentUser, {
+                displayName: name,
+                photoURL,
+              });
+            }
             showToastMessage(text('PROFILE_UPDATED'), toast.POSITION.TOP_CENTER, true);
           }
         } else {
@@ -126,11 +130,12 @@ export default function Profile() {
             photoURL,
             user: null,
           });
-          await updateProfile(user.user, {
-            displayName: name,
-            photoURL,
-          });
-
+          if (currentUser) {
+            await updateProfile(currentUser, {
+              displayName: name,
+              photoURL,
+            });
+          }
           showToastMessage(text('PROFILE_UPDATED'), toast.POSITION.TOP_CENTER, true);
         }
       } catch (error) {
@@ -318,15 +323,18 @@ export default function Profile() {
                   '',
                   renderButton(
                     text('VERIFY'),
-                    () =>
-                      sendEmailVerification(auth.currentUser ?? user).then(() => {
-                        showToastMessage(
-                          text('EMAIL_VERIFICATION_SENT'),
-                          toast.POSITION.TOP_CENTER,
-                          true,
-                        );
-                        setVerifiable(false);
-                      }),
+                    () => {
+                      if (currentUser) {
+                        sendEmailVerification(currentUser).then(() => {
+                          showToastMessage(
+                            text('EMAIL_VERIFICATION_SENT'),
+                            toast.POSITION.TOP_CENTER,
+                            true,
+                          );
+                          setVerifiable(false);
+                        });
+                      }
+                    },
                     !verifiable,
                     false,
                   ),
