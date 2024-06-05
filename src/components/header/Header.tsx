@@ -23,10 +23,8 @@ export default function Header({ ...props }: PropTypes) {
   const buttonComonStyle = 'block w-24 px-3 py-2 hover:bg-gray-200';
 
   useEffect(() => {
-    if (user?.photoURL) {
-      setPhotoURL(user.photoURL);
-    }
-  }, [user.photoURL, user.user]);
+    setPhotoURL(user?.photoURL ?? user?.user?.photoURL);
+  }, [user?.photoURL, user?.user]);
 
   return (
     <header className='flex sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10'>
