@@ -182,6 +182,7 @@ export const getUserData = async (uid: string) => {
       created_at: data.created_at,
       updated_at: data.updated_at,
       lastLogInAt: data.lastLogInAt,
+      username: data.username,
     };
     return user;
   } catch (error) {

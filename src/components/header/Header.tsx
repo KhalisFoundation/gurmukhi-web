@@ -26,7 +26,7 @@ export default function Header({ ...props }: PropTypes) {
     if (user?.photoURL) {
       setPhotoURL(user.photoURL);
     }
-  }, [user]);
+  }, [user.photoURL, user.user]);
 
   return (
     <header className='flex sticky inset-x-0 top-0 from-transparent items-center justify-between p-4 z-10'>
