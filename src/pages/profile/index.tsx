@@ -114,6 +114,7 @@ export default function Profile() {
         name === user.displayName &&
         username === user.username &&
         photoURL === user.user?.photoURL &&
+        photoURL === user.photoURL &&
         !photo;
       if (isUnchanged) {
         return;
