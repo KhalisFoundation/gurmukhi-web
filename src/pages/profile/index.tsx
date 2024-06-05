@@ -15,6 +15,7 @@ import CONSTANTS from 'constants/constant';
 import { User } from 'types';
 import { Timestamp } from 'firebase/firestore';
 
+
 export default function Profile() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.PROFILE;
@@ -90,12 +91,12 @@ export default function Profile() {
     }
   };
 
-  async function updateUserAndProfile(usr: User, displayName: string, pURL: string, uname: string) {
+  async function updateUserAndProfile(displayName: string) {
     const updatedUserData = {
-      ...usr,
+      ...user,
       displayName,
-      pURL,
-      uname: uname !== usr.username ? uname : usr.username,
+      photoURL,
+      uname: username !== user.username ? username : user.username,
       user: null,
     };
 
@@ -129,7 +130,7 @@ export default function Profile() {
           }
         }
 
-        await updateUserAndProfile(user, name, photoURL, username);
+        await updateUserAndProfile(name);
       } catch (error) {
         console.error(error);
         if (error instanceof Error) {
@@ -217,7 +218,6 @@ export default function Profile() {
 
   useEffect(() => {
     const userDetails = user.user;
-    console.log(user);
 
     if (userDetails?.photoURL) {
       setPhotoURL(userDetails.photoURL);
@@ -312,26 +312,26 @@ export default function Profile() {
               {user?.emailVerified ?? false
                 ? getTabData(text('EMAIL_VALIDATED'), text('YES'))
                 : getTabData(
-                    text('EMAIL_VALIDATED'),
-                    '',
-                    renderButton(
-                      text('VERIFY'),
-                      () => {
-                        if (currentUser) {
-                          sendEmailVerification(currentUser).then(() => {
-                            showToastMessage(
-                              text('EMAIL_VERIFICATION_SENT'),
-                              toast.POSITION.TOP_CENTER,
-                              true,
-                            );
-                            setVerifiable(false);
-                          });
-                        }
-                      },
-                      !verifiable,
-                      false,
-                    ),
-                  )}
+                  text('EMAIL_VALIDATED'),
+                  '',
+                  renderButton(
+                    text('VERIFY'),
+                    () => {
+                      if (currentUser) {
+                        sendEmailVerification(currentUser).then(() => {
+                          showToastMessage(
+                            text('EMAIL_VERIFICATION_SENT'),
+                            toast.POSITION.TOP_CENTER,
+                            true,
+                          );
+                          setVerifiable(false);
+                        });
+                      }
+                    },
+                    !verifiable,
+                    false,
+                  ),
+                )}
               {getTabData(text('CREATED_AT'), formattedCreatedAt)}
               {getTabData(text('LAST_LOGIN_AT'), formattedLastLoginAt)}
 
@@ -340,22 +340,22 @@ export default function Profile() {
                   <div className='col-span-2'>
                     {editMode
                       ? renderButton(
-                          text('SAVE'),
-                          () => {
-                            setEditMode(!editMode);
-                            handleSubmit();
-                          },
-                          false,
-                          false,
-                        )
+                        text('SAVE'),
+                        () => {
+                          setEditMode(!editMode);
+                          handleSubmit();
+                        },
+                        false,
+                        false,
+                      )
                       : renderButton(
-                          text('EDIT'),
-                          () => {
-                            setEditMode(!editMode);
-                          },
-                          false,
-                          false,
-                        )}
+                        text('EDIT'),
+                        () => {
+                          setEditMode(!editMode);
+                        },
+                        false,
+                        false,
+                      )}
                   </div>
                 </div>
               </div>
