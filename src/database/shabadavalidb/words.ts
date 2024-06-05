@@ -185,7 +185,6 @@ export const updateWordRead = async (uid: string, wordID: string) => {
 
 export const getNewWords = async (uid: string) => {
   try {
-    console.log(uid);
     const wordsCollectionRef = getWordCollectionRef(uid);
     const queryRef = query(
       wordsCollectionRef,
