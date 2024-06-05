@@ -35,17 +35,16 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
     const fetchGamePlay = async () => {
       if (user.progress) {
         try {
-          toggleLoading(true);
           const { currentProgress = 0, currentLevel = 0, gameArray = [] } = await gamePlay();
           await updateProgress(user.uid, currentProgress, gameArray, currentLevel);
           dispatch(addScreens(gameArray));
-          toggleLoading(false);
         } catch (error) {
           bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay1.ts/useGamePlay', {
             ...user,
           });
         }
       }
+      toggleLoading(false);
     };
     if (resetGame === true) {
       fetchGamePlay();

@@ -1,10 +1,10 @@
-import { GameScreen, WordShabadavaliDB } from 'types';
-import { getRandomWord } from 'database/default';
+import { GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
 import { getQuestions } from 'database/default';
 import { WordType } from 'types';
 import { createGameScreen } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
 import seed0 from 'data/seed0.json';
+import { getNewWords } from 'database/shabadavalidb';
 
 const addWordIfNotExists = (
   word: WordType,
@@ -16,7 +16,7 @@ const addWordIfNotExists = (
     const learningWord: WordShabadavaliDB = {
       isLearnt: false,
       progress: 0,
-      isWordRead: false,
+      isWordRead: true,
       word_id: word.id,
       word: word.word,
       image: word.images ? word.images[0] : '',
@@ -51,7 +51,7 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
   }
   const usedWordIds = [];
   for (let i = 0; i < count; ) {
-    const word = (await getRandomWord(uid, usedWordIds)) as WordType;
+    const word = (await getNewWords(uid)) as WordType;
     if (word?.id) {
       usedWordIds.push(word.id);
       const questions = await getQuestions(word.id, usedWordIds);

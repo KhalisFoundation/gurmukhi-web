@@ -9,6 +9,7 @@ import metaTags from 'constants/meta';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+import useFetchWords from './hooks/useFetchWords';
 import useGamePlay from './hooks/useGamePlay1';
 import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
@@ -22,7 +23,7 @@ export default function Dashboard() {
   const user = useUserAuth().user as User;
   const [userData, setUserData] = useState<User>(user);
   const [isLoading, toggleLoading] = useState<boolean>(true);
-
+  useFetchWords(user, toggleLoading);
   useGamePlay(user, toggleLoading);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);

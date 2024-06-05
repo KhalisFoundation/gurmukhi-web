@@ -26,6 +26,7 @@ describe('getNewQuestions', () => {
         },
         nextSession: [],
         wordIds: [],
+        learntWordIds: [],
         user: null,
         created_at: currentTimestamp,
         updated_at: currentTimestamp,
