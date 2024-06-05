@@ -6,17 +6,6 @@ import { renderHook } from '@testing-library/react';
 import useQuestionData from 'pages/questions/hooks/useQuestionData';
 import { QuestionData } from 'types';
 
-// QuestionData
-//   id?: string;
-//   question: string;
-//   translation?: string;
-//   image?: string;
-//   type?: string;
-//   options: Option[] | string[];
-//   answer: number;
-//   word_id: string;
-//   word: string;
-
 const currentQuestion: QuestionData = {
   id: '1',
   options: ['option1', 'option2', 'option3'],
