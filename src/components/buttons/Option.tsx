@@ -4,6 +4,7 @@ import TextToSpeechBtn from './TextToSpeechBtn';
 import { Option } from 'types';
 import { addEndingPunctuation } from 'utils';
 import ALL_CONSTANT from 'constants/constant';
+import { getOptionValue } from 'pages/questions/hooks/useQuestionData';
 
 interface OptionProps {
   option: Option;
@@ -22,6 +23,7 @@ export default function OptionBtn({
   isCorrect,
   disabled,
 }: OptionProps) {
+  const optionValue = getOptionValue(option);
   const optionClassname = `flex flex-row items-center justify-between gap-2 rounded-lg p-3 xl:ps-6 ${
     isCorrect
       ? 'bg-lightGreen shadow-sm shadow-green-500'
@@ -45,14 +47,14 @@ export default function OptionBtn({
         disabled={disabled}
       >
         <span className={textClassname}>
-          {option?.word
-            ? addEndingPunctuation(option.word, text('GURMUKHI'))
-            : option?.option || ''}
+          {
+            addEndingPunctuation(optionValue, text('GURMUKHI'))
+          }
         </span>
       </button>
       <TextToSpeechBtn
         backgroundColor='bg-white-175'
-        text={option.word ? option.word : option.option ?? ''}
+        text={optionValue}
         type={ALL_CONSTANT.OPTION}
         id={option.id}
       />

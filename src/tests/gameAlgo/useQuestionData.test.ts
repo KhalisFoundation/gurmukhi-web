@@ -3,7 +3,7 @@
  */
 /* eslint-disable no-magic-numbers */
 import { renderHook } from '@testing-library/react';
-import useQuestionData from 'pages/questions/hooks/useQuestionData';
+import { useQuestionData } from 'pages/questions/hooks/useQuestionData';
 import { QuestionData } from 'types';
 
 const currentQuestion: QuestionData = {
