@@ -10,6 +10,7 @@ interface TextToSpeechBtnProps {
   id?: string;
   backgroundColor?: string;
   setLoading?: Dispatch<boolean>;
+  size?: number;
 }
 
 const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
@@ -19,6 +20,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
   id,
   backgroundColor,
   setLoading,
+  size = CONSTANTS.TEXT_TO_SPEECH_BTN_SIZE,
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -27,8 +29,8 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const ttsClassname = backgroundColor
-    ? `${backgroundColor} rounded-full p-2 md:p-4`
-    : 'rounded-full p-2 md:p-4 ';
+    ? `${backgroundColor} rounded-full p-2 md:p-3`
+    : 'rounded-full p-2 md:p-3 ';
   const betterText = text.replace(/_+/g, 'ਡੈਸ਼');
 
   useEffect(() => {
@@ -109,9 +111,9 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
       ) : (
         <>
           {slow ? (
-            <img src={'/icons/fast.svg'} alt='Fast' width={27} height={27} />
+            <img src={'/icons/fast.svg'} alt='Fast' width={size} height={size} />
           ) : (
-            <img src={'/icons/slow.svg'} alt='Slow' width={27} height={27} />
+            <img src={'/icons/slow.svg'} alt='Slow' width={size} height={size} />
           )}
           {audioUrl && <audio ref={audioRef} src={audioUrl} />}
         </>
