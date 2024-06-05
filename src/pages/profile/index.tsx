@@ -95,7 +95,7 @@ export default function Profile() {
       ...user,
       displayName,
       photoURL,
-      uname: username !== user.username ? username : user.username,
+      username: username !== user.username ? username : user.username,
       user: null,
     };
 
