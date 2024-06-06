@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Option, QuestionData, User } from 'types';
 import OptionBtn from 'components/buttons/Option';
