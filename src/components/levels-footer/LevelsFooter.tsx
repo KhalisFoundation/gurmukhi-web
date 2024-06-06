@@ -19,7 +19,7 @@ interface Props {
   currentGamePosition: number;
   currentLevel: number;
   isDisabled: boolean;
-  isLoading?: boolean;
+  isLoading: boolean | null;
 }
 
 const createWorker = createWorkerFactory(() => import('utils/webWorker'));

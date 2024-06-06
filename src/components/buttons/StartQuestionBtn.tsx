@@ -15,7 +15,7 @@ interface Props {
   active?: boolean;
   currentGamePosition: number;
   isDisabled?: boolean;
-  isLoading?: boolean;
+  isLoading: boolean | null;
 }
 
 const StartQuestionBtn = ({

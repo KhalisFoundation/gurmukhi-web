@@ -19,7 +19,7 @@ export default function Information() {
   const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const [wordID, setWordID] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean | null>(null);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
   const [isRandom, setIsRandom] = useState<boolean>(false);
   // Use useLocation to get the search parameters from the URL
@@ -67,6 +67,7 @@ export default function Information() {
         currentLevel={currentLevel}
         currentGamePosition={currentGamePosition}
         isDisabled={false}
+        isLoading={isLoading}
       />
     );
   };

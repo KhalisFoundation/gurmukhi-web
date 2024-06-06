@@ -19,6 +19,7 @@ export default function Examples() {
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
   const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
   const currentLevel = useAppSelector((state) => state.currentLevel);
+  const [isLoading, toggleLoading] = useState<boolean | null>(null);
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
   const { title, description } = metaTags.EXAMPLES;
@@ -30,13 +31,16 @@ export default function Examples() {
 
   useEffect(() => {
     const fetchData = async () => {
+      toggleLoading(true);
       if (!wordID) {
+        toggleLoading(false);
         return;
       }
       const words = await getWordById(wordID, true);
       if (words !== null) {
         setCurrentWord(words);
       }
+      toggleLoading(false);
     };
     if (location.state?.data) {
       setCurrentWord(location.state.data);
@@ -52,6 +56,7 @@ export default function Examples() {
     currentGamePosition: currentGamePosition + CONSTANTS.DEFAULT_ONE,
     currentLevel: currentLevel,
     isDisabled: false,
+    isLoading: isLoading,
   };
 
   if (!currentWord) {
