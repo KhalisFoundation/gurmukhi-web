@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { User, WordType } from 'types';
 import { useTranslation } from 'react-i18next';
-import { getRandomWord } from 'database/default';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
 import { useUserAuth } from 'auth';
-import { getUserData } from 'database/shabadavalidb';
+import { getNewWords } from 'database/shabadavalidb';
 
 function WordBox({ commonStyle }: { commonStyle: string }) {
   const { t: text } = useTranslation();
@@ -15,8 +14,7 @@ function WordBox({ commonStyle }: { commonStyle: string }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userData = await getUserData(user.uid);
-      const newWord = await getRandomWord(user.uid, userData?.wordIds || [], false);
+      const newWord = await getNewWords(user.uid);
       if (newWord) {
         setRandomWord(newWord);
       }
