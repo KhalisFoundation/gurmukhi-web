@@ -1,27 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { User, WordType } from 'types';
+import React from 'react';
+import { WordType } from 'types';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
-import { useUserAuth } from 'auth';
-import { getNewWords } from 'database/shabadavalidb';
 
-function WordBox({ commonStyle }: { commonStyle: string }) {
+function WordBox({
+  commonStyle,
+  randomWord,
+}: {
+  commonStyle: string;
+  randomWord: WordType | null;
+}) {
   const { t: text } = useTranslation();
-  const user = useUserAuth().user as User;
-  const [randomWord, setRandomWord] = useState<WordType>();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const newWord = await getNewWords(user.uid, false);
-      if (newWord) {
-        setRandomWord(newWord);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div className={commonStyle}>

@@ -11,6 +11,7 @@ function useFetchWords(user: User, toggleLoading: (value: boolean) => void) {
     if (user.uid) {
       fetchWords();
     }
+    toggleLoading(false);
   }, [user]);
 }
 

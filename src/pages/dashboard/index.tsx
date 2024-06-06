@@ -13,8 +13,10 @@ import useFetchWords from './hooks/useFetchWords';
 import useGamePlay from './hooks/useGamePlay1';
 import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
-import { User } from 'types';
+import { User, WordShabadavaliDB, WordType } from 'types';
 import PageLoading from 'components/pageLoading';
+import useNewWord from './hooks/useNewWord';
+import useLearntWords from './hooks/useLearntWords';
 
 export default function Dashboard() {
   const commonStyle =
@@ -23,8 +25,14 @@ export default function Dashboard() {
   const user = useUserAuth().user as User;
   const [userData, setUserData] = useState<User>(user);
   const [isLoading, toggleLoading] = useState<boolean>(true);
-  useFetchWords(user, toggleLoading);
-  useGamePlay(user, toggleLoading);
+  const [isFetchWordsLoading, toggleFetchWords] = useState<boolean>(true);
+  const [isGamePlayLoading, toggleGamePlayLoading] = useState<boolean>(true);
+  const [isLearntWords, toggleLearntWords] = useState<boolean>(true);
+  const [isNewWord, toggleNewWord] = useState<boolean>(true);
+  useFetchWords(user, toggleFetchWords);
+  useGamePlay(user, toggleGamePlayLoading);
+  const randomWord: WordType | null = useNewWord(user, toggleNewWord);
+  const learntWords: WordShabadavaliDB[] | null = useLearntWords(user, toggleLearntWords);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
   const webWorker: boolean = useAppSelector((state) => state.webWorker);
@@ -40,6 +48,13 @@ export default function Dashboard() {
     }
   }, [user]);
 
+  useEffect(() => {
+    // Update overall loading state based on individual states
+    if (!isFetchWordsLoading && !isGamePlayLoading && !isLearntWords && !isNewWord) {
+      toggleLoading(false);
+    }
+  }, [isFetchWordsLoading, isGamePlayLoading, isNewWord, isLearntWords]);
+
   return (
     <div className='h-full lg:overflow-hidden flex flex-col justify-between'>
       <Meta title={title} description={description} />
@@ -50,9 +65,9 @@ export default function Dashboard() {
           <>
             <Ssa name={user.displayName && userData.displayName} />
             <div className='flex flex-wrap text-center justify-center gap-6 items-center'>
-              <WordsSnippetBox commonStyle={commonStyle} />
+              <WordsSnippetBox commonStyle={commonStyle} wordsLearnt={learntWords} />
               <CoinBox commonStyle={commonStyle} />
-              <WordBox commonStyle={commonStyle} />
+              <WordBox commonStyle={commonStyle} randomWord={randomWord} />
             </div>
           </>
         )}
