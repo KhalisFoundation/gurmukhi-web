@@ -77,7 +77,7 @@ export default function Information() {
   }
 
   return (
-    <div className='flex flex-col items-center w-full h-full justify-between gap-5'>
+    <div className='flex flex-col items-center w-full lg:h-full justify-between gap-5'>
       <Meta title={title} description={description} />
       <div className='flex flex-col h-full justify-between items-center'>
         <img
