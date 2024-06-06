@@ -102,7 +102,7 @@ export default function Header({ ...props }: PropTypes) {
           ) : null}
         </nav>
       </div>
-      {location.pathname !== ROUTES.DASHBOARD && location.pathname !== ROUTES.PROFILE && (
+      {location.pathname === ROUTES.WORD && location.pathname === ROUTES.QUESTION && (
         <div className=' flex-row flex justify-between mx-3'>
           {location.pathname !== ROUTES.QUESTION && <BackBtn navlink={-1} />}
           <EndSessionButton className='ml-auto' />
