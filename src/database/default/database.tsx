@@ -13,7 +13,6 @@ import {
   QueryFieldFilterConstraint,
   where,
 } from 'firebase/firestore';
-import { getUserData } from 'database/shabadavalidb';
 import { bugsnagErrorHandler } from 'utils';
 import CONSTANTS from 'constants/constant';
 
@@ -183,53 +182,6 @@ const getWordById = async (wordId: string, needExtras = false) => {
   }
 };
 
-const getRandomWord = async (uid: string, notInArray: string[], includeUsed = true) => {
-  try {
-    const userData = await getUserData(uid);
-    const existingWordIds = includeUsed ? notInArray.concat(userData?.wordIds || []) : notInArray;
-
-    const queryRef = query(wordsCollection, where('status', '==', 'active'));
-    const querySnapshot = await getDocs(queryRef);
-    if (querySnapshot.empty) {
-      return null;
-    }
-    const wordsData: WordType[] = querySnapshot.docs
-      .map((doc) => ({
-        ...doc.data(), // If doc.data() contains an 'id', it's spread here
-        id: doc.id, // This 'id' overwrites the previous one
-      }))
-      .filter((word) => !existingWordIds.includes(word.id));
-
-    if (wordsData.length === 0) {
-      return null;
-    }
-    const randomWord = wordsData[0];
-    const wordId = randomWord.id;
-    const sentences = await getDataById(
-      wordId,
-      sentencesCollection,
-      'word_id',
-      CONSTANTS.DATA_LIMIT,
-    );
-    const { synonyms, antonyms } = await getSemanticsByIds(
-      randomWord.synonyms as string[],
-      randomWord.antonyms as string[],
-    );
-
-    return {
-      ...randomWord,
-      id: wordId,
-      sentences,
-      synonyms,
-      antonyms,
-    } as WordType;
-  } catch (error) {
-    bugsnagErrorHandler(error, 'database/default/database.tsx/getRandomWord', {
-      notInArray,
-      includeUsed: includeUsed,
-    });
-  }
-};
 const getActiveWords = async () => {
   const qSnapshot = query(wordsCollection, where('status', '==', 'active'));
   const querySnapshot = await getDocs(qSnapshot);
@@ -246,6 +198,5 @@ export {
   getRandomData,
   getSemanticsByIds,
   getWordById,
-  getRandomWord,
   getActiveWords,
 };
