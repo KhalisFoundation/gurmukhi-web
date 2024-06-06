@@ -183,7 +183,7 @@ export const updateWordRead = async (uid: string, wordID: string) => {
   }
 };
 
-export const getNewWords = async (uid: string) => {
+export const getNewWords = async (uid: string, isUpdateWordRead: boolean = true) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const queryRef = query(
@@ -208,7 +208,11 @@ export const getNewWords = async (uid: string) => {
       return;
     }
     const wordDefination = await getWordById(wordID, true);
-    await updateWordRead(uid, wordID);
+
+    // Update the isWordRead only while the word is used in the gameSession
+    if (isUpdateWordRead) {
+      await updateWordRead(uid, wordID);
+    }
 
     return wordDefination;
   } catch (error) {
