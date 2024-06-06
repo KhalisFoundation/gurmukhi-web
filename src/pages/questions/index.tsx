@@ -45,9 +45,8 @@ export default function Question() {
         return;
       }
     };
-    const data = location.state.data;
-    if (data) {
-      setCurrentQuestion(data);
+    if (location.state?.data) {
+      setCurrentQuestion(location.state.data);
     } else {
       fetchData();
     }
