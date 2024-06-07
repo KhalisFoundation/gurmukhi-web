@@ -9,6 +9,7 @@ const getQuestionElement = (
   currentQuestion: QuestionData | null,
   setIsCorrectOption: (value: boolean) => void,
   setIsOptionSelected: (value: boolean) => void,
+  toggleLoading: (value: boolean) => void,
 ): JSX.Element => {
   return (
     <MultipleChoiceQuestion
@@ -16,15 +17,17 @@ const getQuestionElement = (
       hasImage={currentQuestion?.type === 'image'}
       setOptionSelected={setIsOptionSelected}
       setIsCorrectOption={setIsCorrectOption}
+      toggleLoading={toggleLoading}
     />
   );
 };
-  
+
 const renderFooter = (
   currentLevel: number,
   currentGamePosition: number,
   isCorrectOption: boolean | null,
   isOptionSelected: boolean | null,
+  isLoading: boolean | null,
 ): JSX.Element => {
   return (
     <LevelsFooter
@@ -35,6 +38,7 @@ const renderFooter = (
         isCorrectOption ? currentGamePosition + ALL_CONSTANT.DEFAULT_ONE : currentGamePosition
       }
       isDisabled={!isOptionSelected}
+      isLoading={isLoading}
     />
   );
 };

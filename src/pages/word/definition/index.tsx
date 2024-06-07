@@ -19,6 +19,7 @@ export default function Defintion() {
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
   const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
   const currentLevel = useAppSelector((state) => state.currentLevel);
+  const [isLoading, toggleLoading] = useState<boolean | null>(null);
 
   // Extract the "id" parameter from the search string in the URL
   useEffect(() => {
@@ -30,12 +31,15 @@ export default function Defintion() {
   useEffect(() => {
     const fetchData = async () => {
       if (!wordID) {
+        toggleLoading(false);
         return;
       }
+      toggleLoading(true);
       const words = await getWordById(wordID);
       if (words !== null) {
         setCurrentWord(words);
       }
+      toggleLoading(false);
     };
 
     if (location.state?.data) {
@@ -109,6 +113,7 @@ export default function Defintion() {
         currentLevel={currentLevel}
         currentGamePosition={currentGamePosition + CONSTANTS.DEFAULT_ONE}
         isDisabled={false}
+        isLoading={isLoading}
       />
     </div>
   );

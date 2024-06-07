@@ -17,9 +17,8 @@ export default function Question() {
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const [wordID, setWordID] = useState<string | null>(null);
   const [questionID, setQuestionID] = useState<string | null>(null);
-  const [currentQuestion, setCurrentQuestion] = useState<QuestionData | null>(
-    null,
-  );
+  const [currentQuestion, setCurrentQuestion] = useState<QuestionData | null>(null);
+  const [isLoading, toggleLoading] = useState<boolean | null>(null);
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
   const [isCorrectOption, setIsCorrectOption] = useState<boolean | null>(null);
   const location = useLocation();
@@ -53,8 +52,20 @@ export default function Question() {
   }, [wordID, questionID]);
 
   const questionData = useQuestionData(currentQuestion);
-  const questionElement = getQuestionElement(questionData, currentQuestion, setIsCorrectOption, setIsOptionSelected);
-  const footerElement = renderFooter(currentLevel, currentGamePosition, isCorrectOption, isOptionSelected);
+  const questionElement = getQuestionElement(
+    questionData,
+    currentQuestion,
+    setIsCorrectOption,
+    setIsOptionSelected,
+    toggleLoading,
+  );
+  const footerElement = renderFooter(
+    currentLevel,
+    currentGamePosition,
+    isCorrectOption,
+    isOptionSelected,
+    isLoading,
+  );
 
   if (!currentQuestion) {
     // Handle case when word is not found

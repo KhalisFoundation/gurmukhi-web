@@ -3,10 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Option, QuestionData, User } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
-import {
-  updateCurrentLevel,
-  updateWordFromUser,
-} from 'database/shabadavalidb';
+import { updateCurrentLevel, updateWordFromUser } from 'database/shabadavalidb';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -18,16 +15,16 @@ export default function MultipleChoiceQuestion({
   hasImage,
   setOptionSelected,
   setIsCorrectOption,
+  toggleLoading,
 }: {
   questionData: QuestionData;
   hasImage?: boolean;
   setOptionSelected: (value: boolean) => void;
   setIsCorrectOption: (value: boolean) => void;
+  toggleLoading: (value: boolean) => void;
 }) {
   const { t: text } = useTranslation();
-  const [selectedOption, setSelectedOption] = React.useState<Option | null>(
-    null,
-  );
+  const [selectedOption, setSelectedOption] = React.useState<Option | null>(null);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const dispatch = useAppDispatch();
   const user = useUserAuth().user as User;
@@ -43,7 +40,9 @@ export default function MultipleChoiceQuestion({
         setOptionSelected(true);
         if (questionData.options[questionData.answer] === selectedOption) {
           if (currentLevel + ALL_CONSTANT.DEFAULT_ONE <= ALL_CONSTANT.LEVELS_COUNT) {
+            toggleLoading(true);
             await updateCurrentLevel(user.uid, currentLevel + ALL_CONSTANT.DEFAULT_ONE);
+            toggleLoading(false);
             dispatch(increment());
           }
           setIsCorrectOption(true);
@@ -81,10 +80,7 @@ export default function MultipleChoiceQuestion({
   }
   const renderOptionButtons = () => {
     return questionData.options.map((option, idx) => {
-      const key =
-        typeof option === 'object' && option !== null && 'id' in option
-          ? option.id
-          : idx;
+      const key = typeof option === 'object' && option !== null && 'id' in option ? option.id : idx;
       const isSelected = selectedOption && option === selectedOption;
       return (
         <OptionBtn
@@ -94,9 +90,7 @@ export default function MultipleChoiceQuestion({
           selector={setSelectedOption}
           setOptionSelected={setOptionSelected}
           isCorrect={
-            isSelected
-              ? questionData.options[questionData.answer] === selectedOption
-              : undefined
+            isSelected ? questionData.options[questionData.answer] === selectedOption : undefined
           }
           disabled={!!selectedOption}
         />
@@ -134,4 +128,3 @@ export default function MultipleChoiceQuestion({
     </div>
   );
 }
-
