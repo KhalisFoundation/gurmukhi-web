@@ -11,7 +11,7 @@ import {
   User as FirebaseUser,
 } from 'firebase/auth';
 import {
-  Timestamp, doc, setDoc, // query, where, documentId, getDocs,
+  Timestamp, doc, setDoc,
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
@@ -38,12 +38,13 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       if (!userData.user.uid) {
         return null;
       }
-      const userDetails = await getUserData(userData.user.uid);
-      if (!userDetails) {
-        return null;
-      }
-      setUser(userDetails);
-      setLoading(false);
+      getUserData(userData.user.uid, (userDetails) => {
+        if (!userDetails) {
+          return null;
+        }
+        setUser(userDetails);
+        setLoading(false);
+      });
       return userData;
     } catch (error) {
       if (error instanceof Error) {
@@ -63,44 +64,45 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const userCredential = await signInWithPopup(auth, provider);
       const { uid, email, displayName } = userCredential.user;
 
-      const found = await checkUser(uid, email ?? '');
+      checkUser(uid, email ?? '', async (found) => {
+        if (!found) {
+          const localUser = doc(shabadavaliDB, `users/${uid}`);
+          await setDoc(localUser, {
+            role: roles.student,
+            email,
+            coins: 0,
+            progress: {
+              currentProgress: 0,
+              gameSession: [],
+              currentLevel: 0,
+            },
+            displayName: displayName ?? email?.split('@')[0],
+            created_at: Timestamp.now(),
+            updated_at: Timestamp.now(),
+          });
+        }
+      });
+      getUserData(uid, (userDetails) => {
+        if (!userDetails) {
+          return false;
+        }
 
-      if (!found) {
-        const localUser = doc(shabadavaliDB, `users/${uid}`);
-        await setDoc(localUser, {
+        const userData = {
+          ...userCredential.user,
           role: roles.student,
-          email,
-          coins: 0,
-          progress: {
-            currentProgress: 0,
-            gameSession: [],
-            currentLevel: 0,
-          },
-          displayName: displayName ?? email?.split('@')[0],
+          coins: userDetails.coins,
+          progress: userDetails.progress,
+          wordIds: userDetails.wordIds,
+          user: userCredential.user,
+          learntWordIds: userDetails.learntWordIds ?? [],
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
-        });
-      }
-      const userDetails = await getUserData(uid);
-      if (!userDetails) {
-        return false;
-      }
-
-      const userData = {
-        ...userCredential.user,
-        role: roles.student,
-        coins: userDetails.coins,
-        progress: userDetails.progress,
-        wordIds: userDetails.wordIds,
-        user: userCredential.user,
-        learntWordIds: userDetails.learntWordIds ?? [],
-        created_at: Timestamp.now(),
-        updated_at: Timestamp.now(),
-        lastLogInAt: Timestamp.now(),
-      } as User;
-      setUser(userData);
-      setLoading(false);
-      return true;
+          lastLogInAt: Timestamp.now(),
+        } as User;
+        setUser(userData);
+        setLoading(false);
+        return true;
+      });
     } catch (error) {
       if (error instanceof Error) {
         if (Object.keys(errors).includes(error.message)) {
@@ -124,11 +126,12 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         showToastMessage(translate('PASSWORDS_DONT_MATCH'));
         return false;
       }
-      const unique = await checkIfUsernameUnique(username);
-      if (!unique) {
-        showToastMessage(translate('USERNAME_TAKEN'));
-        return false;
-      }
+      checkIfUsernameUnique(username, (unique) => {
+        if (!unique) {
+          showToastMessage(translate('USERNAME_TAKEN'));
+          return false;
+        }
+      });
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userData = userCredential.user;
@@ -190,29 +193,30 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
     const unsubscribe = onAuthStateChanged(auth, async (currentUser: FirebaseUser | null) => {
       if (currentUser !== null) {
         const { uid, emailVerified, metadata } = currentUser as FirebaseUser;
-        const userDetails = await getUserData(uid);
-        if (!userDetails) {
-          return null;
-        }
-        const usr = {
-          user: currentUser,
-          uid,
-          // name: userDetails?.name,
-          coins: userDetails.coins,
-          progress: userDetails.progress,
-          email: userDetails.email,
-          emailVerified: emailVerified ?? false,
-          displayName: userDetails.displayName,
-          photoURL: userDetails.photoURL,
-          role: userDetails.role,
-          username: userDetails.username,
-          created_at: metadata.creationTime,
-          updated_at: Timestamp.now(),
-          lastLogInAt: metadata.lastSignInTime,
-          wordIds: userDetails.wordIds || [],
-        } as User;
-        setUser(usr);
-        setLoading(false);
+        getUserData(uid, (userDetails) => {
+          if (!userDetails) {
+            return null;
+          }
+          const usr = {
+            user: currentUser,
+            uid,
+            // name: userDetails?.name,
+            coins: userDetails?.coins,
+            progress: userDetails?.progress,
+            email: userDetails?.email,
+            emailVerified: emailVerified ?? false,
+            displayName: userDetails?.displayName,
+            photoURL: '',
+            role: userDetails?.role,
+            username: userDetails?.username,
+            created_at: metadata.creationTime,
+            updated_at: Timestamp.now(),
+            lastLogInAt: metadata.lastSignInTime,
+            wordIds: userDetails?.wordIds || [],
+          } as User;
+          setUser(usr);
+          setLoading(false);
+        });
       } else {
         setUser(null);
         setLoading(false);

@@ -11,14 +11,13 @@ import { bugsnagErrorHandler } from 'utils';
 const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetGame = true) => {
   const dispatch = useAppDispatch();
 
-  const gamePlay = async () => {
-    const userData = await getUserData(user.uid);
+  const gamePlay = async (userData: User | undefined) => {
 
     if (!userData) {
       const gameArray: GameScreen[] = [];
       return { gameArray };
     }
-    const progress: GameScreen[] | null = await fetchProgress(userData);
+    const progress: GameScreen[] | null = fetchProgress(userData);
     if (progress && progress.length > 0) {
       const gameArray: GameScreen[] = progress;
       const currentProgress: number = userData?.progress.currentProgress || 0;
@@ -35,9 +34,12 @@ const useGamePlay = (user: User, toggleLoading: (value: boolean) => void, resetG
     const fetchGamePlay = async () => {
       if (user.progress) {
         try {
-          const { currentProgress = 0, currentLevel = 0, gameArray = [] } = await gamePlay();
-          await updateProgress(user.uid, currentProgress, gameArray, currentLevel);
-          dispatch(addScreens(gameArray));
+          getUserData(user.uid, async (userData) => {
+            const { currentProgress = 0, currentLevel = 0, gameArray = [] } = await gamePlay(userData);
+            await updateProgress(user.uid, currentProgress, gameArray, currentLevel);
+            dispatch(addScreens(gameArray));
+          });
+
         } catch (error) {
           bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay1.ts/useGamePlay', {
             ...user,

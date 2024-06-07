@@ -17,11 +17,12 @@ function CoinBox({ commonStyle }: { commonStyle: string }) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     const fetchCoins = async () => {
-      const userData = await getUserData(user.uid);
-      if (userData) {
-        dispatch(setNanakCoin(userData.coins));
-        setCoins(userData.coins);
-      }
+      getUserData(user.uid, (userData) => {
+        if (userData) {
+          dispatch(setNanakCoin(userData.coins));
+          setCoins(userData.coins);
+        }
+      });
     };
     fetchCoins();
   }, [user.uid]);

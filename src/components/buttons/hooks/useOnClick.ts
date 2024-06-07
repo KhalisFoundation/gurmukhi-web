@@ -24,7 +24,7 @@ const navigateTo = (
   navigate(routeMap[key], { state: { data: data } });
 };
 
-const handleClick = async (
+const handleClick = (
   currentGamePosition: number,
   operation: string,
   currentLevel: number,
@@ -33,55 +33,61 @@ const handleClick = async (
   user: User,
   dispatch: AppDispatch,
 ) => {
-  const coins = await getNanakCoin(user.uid);
-  const condition =
-    coins !== 0
-      ? currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition]
-      : currentLevel < ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition];
-  if (gameArray.length === 0) {
-    Bugsnag.notify(new Error('Game Array is empty'));
-    return;
-  }
-  if (condition) {
-    if (
-      typeof currentGamePosition !== 'number' ||
-      currentGamePosition < 0 ||
-      currentGamePosition >= gameArray.length
-    ) {
-      return;
-    }
-    const session = gameArray[currentGamePosition];
-    if (!session) {
-      return;
-    }
-    const [key, wordID, questionID] = session.key.split('-');
-    if (!key) {
-      return;
-    }
-    const saveWordID = wordID;
-    navigateTo(navigate, key, wordID, session.data, questionID);
+  getNanakCoin(user.uid, async (coins) => {
+    const condition =
+      coins !== 0
+        ? currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition]
+        : currentLevel < ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition];
 
-    switch (operation) {
-      case ALL_CONSTANT.BACK_TO_DASHBOARD:
-        navigate(ROUTES.DASHBOARD);
-        return;
-      case ALL_CONSTANT.INFORMATION:
-        navigate(`${ROUTES.WORD + ROUTES.INFORMATION}?id=${saveWordID}`);
-        return;
-      case ALL_CONSTANT.NEXT:
-        if (currentGamePosition) {
-          try {
-            await updateCurrentProgress(user.uid, currentGamePosition);
-            dispatch(setCurrentGamePosition(currentGamePosition));
-          } catch (error) {
-            bugsnagErrorHandler(error, 'handleClick in useOnClick.ts', { uid: user.uid }, user);
-          }
-        }
-        break;
+    if (gameArray.length === 0) {
+      Bugsnag.notify(new Error('Game Array is empty'));
+      return;
     }
-  } else {
-    navigate(`${ROUTES.WINCOIN}`);
-  }
+
+    if (condition) {
+      if (
+        typeof currentGamePosition !== 'number' ||
+        currentGamePosition < 0 ||
+        currentGamePosition >= gameArray.length
+      ) {
+        return;
+      }
+
+      const session = gameArray[currentGamePosition];
+      if (!session) {
+        return;
+      }
+
+      const [key, wordID, questionID] = session.key.split('-');
+      if (!key) {
+        return;
+      }
+
+      const saveWordID = wordID;
+      navigateTo(navigate, key, wordID, session.data, questionID);
+
+      switch (operation) {
+        case ALL_CONSTANT.BACK_TO_DASHBOARD:
+          navigate(ROUTES.DASHBOARD);
+          return;
+        case ALL_CONSTANT.INFORMATION:
+          navigate(`${ROUTES.WORD + ROUTES.INFORMATION}?id=${saveWordID}`);
+          return;
+        case ALL_CONSTANT.NEXT:
+          if (currentGamePosition) {
+            try {
+              await updateCurrentProgress(user.uid, currentGamePosition);
+              dispatch(setCurrentGamePosition(currentGamePosition));
+            } catch (error) {
+              bugsnagErrorHandler(error, 'handleClick in useOnClick.ts', { uid: user.uid }, user);
+            }
+          }
+          break;
+      }
+    } else {
+      navigate(`${ROUTES.WINCOIN}`);
+    }
+  });
 };
 
 export default handleClick;

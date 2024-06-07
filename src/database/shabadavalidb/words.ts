@@ -26,6 +26,7 @@ export const getWordCollectionRef = (uid: string) => {
 
 export const addWordsToSubCollection = async (uid: string, data: WordShabadavaliDB) => {
   try {
+    console.log('');
     const wordsCollectionRef = getWordCollectionRef(uid);
     await addDoc(wordsCollectionRef, data);
   } catch (error) {
@@ -35,6 +36,7 @@ export const addWordsToSubCollection = async (uid: string, data: WordShabadavali
 
 export const getWords = async (uid: string, isLearnt: boolean) => {
   try {
+    console.log('function getWords');
     const wordsCollectionRef = getWordCollectionRef(uid);
     const q = query(
       wordsCollectionRef,
@@ -64,6 +66,7 @@ export const addQuestionsBatch = async (
   uid: string,
   wordToQuestionIdsMap: Map<string, string[]>,
 ) => {
+  console.log('function addQuestionsBatch');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const batch = writeBatch(shabadavaliDB);
@@ -85,6 +88,7 @@ export const addQuestionsBatch = async (
 };
 
 export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[]) => {
+  console.log('function addWordsBatch');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const wordIds = [];
@@ -117,6 +121,7 @@ export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[]) => 
 };
 
 export const updateWordFromUser = async (uid: string, wordID: string) => {
+  console.log('function updateWordFromUser');
   const wordsCollectionRef = getWordCollectionRef(uid);
   const batch = writeBatch(shabadavaliDB);
   try {
@@ -148,6 +153,7 @@ export const updateWordFromUser = async (uid: string, wordID: string) => {
 };
 
 export const checkIfWordPresent = async (uid: string, wordID: string) => {
+  console.log('function checkIfWordPresent');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const q = query(wordsCollectionRef, where('word_id', '==', wordID));
@@ -159,6 +165,7 @@ export const checkIfWordPresent = async (uid: string, wordID: string) => {
 };
 
 export const getLearntWords = async (uid: string) => {
+  console.log('function getLearntWords');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const q = query(wordsCollectionRef, where('isLearnt', '==', true));
@@ -174,6 +181,7 @@ export const getLearntWords = async (uid: string) => {
 };
 
 export const updateWordRead = async (uid: string, wordID: string) => {
+  console.log('function updateWordRead');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const docRef = doc(wordsCollectionRef, wordID);
@@ -184,6 +192,7 @@ export const updateWordRead = async (uid: string, wordID: string) => {
 };
 
 export const getNewWords = async (uid: string, isUpdateWordRead: boolean = true) => {
+  console.log('function getNewWords');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const queryRef = query(
@@ -221,6 +230,7 @@ export const getNewWords = async (uid: string, isUpdateWordRead: boolean = true)
 };
 
 export const checkIfWordCollectionExists = async (uid: string) => {
+  console.log('function checkIfWordCollectionExists');
   try {
     const wordsCollectionData = await getDocs(getWordCollectionRef(uid));
     if (wordsCollectionData.empty) {
@@ -233,6 +243,7 @@ export const checkIfWordCollectionExists = async (uid: string) => {
 };
 
 export const setWordIds = async (uid: string) => {
+  console.log('function setWordIDs');
   try {
     const batch = writeBatch(shabadavaliDB);
     const wordsCollectionRef = getWordCollectionRef(uid);

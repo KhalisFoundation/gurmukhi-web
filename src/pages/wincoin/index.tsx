@@ -41,15 +41,16 @@ function WinCoin() {
       if (currentLevel === ALL_CONSTANT.LEVELS_COUNT) {
         dispatch(resetGamePosition());
         dispatch(resetGameArray());
-        const data = await getUserData(user.uid);
-        const nxtSession = data?.nextSession || [];
-        setNextSession(nxtSession);
-        dispatch(increment());
-        dispatch(resetLevel());
-        dispatch(addScreens(nxtSession));
-        await updateNanakCoin(user.uid, nanakCoin + CONSTANTS.DEFAULT_ONE);
-        await updateProgress(user.uid, 0, nxtSession, 0);
-        await updateNextSession(user.uid, []);
+        getUserData(user.uid, async (userData) => {
+          const nxtSession = userData?.nextSession || [];
+          setNextSession(nxtSession);
+          dispatch(increment());
+          dispatch(resetLevel());
+          dispatch(addScreens(nxtSession));
+          await updateNanakCoin(user.uid, nanakCoin + CONSTANTS.DEFAULT_ONE);
+          await updateProgress(user.uid, 0, nxtSession, 0);
+          await updateNextSession(user.uid, []);
+        });
       }
       toggleIsLoading(false);
     };

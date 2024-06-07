@@ -82,12 +82,13 @@ export default function Profile() {
       setUsernameError(text('USERNAME_TOO_LONG'));
       return;
     }
-    const unique = await checkIfUsernameUnique(e.target.value);
-    if (!unique) {
-      setUsernameError(text('USERNAME_TAKEN'));
-    } else {
-      setUsernameError('');
-    }
+    checkIfUsernameUnique(e.target.value, (isUnique: boolean) => {
+      if (!isUnique) {
+        setUsernameError(text('USERNAME_TAKEN'));
+      } else {
+        setUsernameError('');
+      }
+    });
   };
 
   async function updateUserAndProfile(displayName: string) {
@@ -123,11 +124,12 @@ export default function Profile() {
         handleUpload();
 
         if (username !== user.username) {
-          const isUnique = await checkIfUsernameUnique(username);
-          if (!isUnique) {
-            showToastMessage(text('USERNAME_TAKEN'), toast.POSITION.TOP_CENTER, false);
-            return;
-          }
+          checkIfUsernameUnique(username, (isUnique: boolean) => {
+            if (!isUnique) {
+              showToastMessage(text('USERNAME_TAKEN'), toast.POSITION.TOP_CENTER, false);
+              return;
+            }
+          });
         }
 
         await updateUserAndProfile(name);

@@ -47,13 +47,14 @@ export default function LevelsFooter({
 
   useEffect(() => {
     const callWorker = async () => {
-      const userData = await getUserData(user.uid);
-      dispatch(setWebWorker(true));
-      if (!userData) {
-        await worker.fetchNextSessionData(user, dispatch);
-        return;
-      }
-      await worker.fetchNextSessionData(userData, dispatch);
+      getUserData(user.uid, async (userData) => {
+        dispatch(setWebWorker(true));
+        if (!userData) {
+          await worker.fetchNextSessionData(user, dispatch);
+          return;
+        }
+        await worker.fetchNextSessionData(userData, dispatch);
+      });
     };
     if (currentLevel === CONSTANTS.WEB_WORKER_LEVEL && user.uid && !webWorker) {
       callWorker();

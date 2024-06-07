@@ -10,7 +10,11 @@ const questionCollection = collection(wordsdb, 'questions');
 const getOptions = async (wordIDs: string[]) => {
   const optionsPromise = wordIDs.map((option) => {
     if (typeof option === 'string') {
-      return getDataById(option.toString(), wordsCollection, null, CONSTANTS.DEFAULT_ONE, true);
+      const optionPromise = new Promise(async (resolve) => {
+        const data = getDataById(option, wordsCollection, null, CONSTANTS.DEFAULT_ONE, true);
+        resolve(data);
+      });
+      return optionPromise;
     } else {
       return option;
     }
