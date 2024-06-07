@@ -2,6 +2,7 @@ import { getLearntWords } from 'database/shabadavalidb';
 import { useEffect, useState } from 'react';
 import { User } from 'types/shabadavalidb';
 import { WordShabadavaliDB } from 'types';
+
 function useLearntWords(user: User, toggleLoading: (value: boolean) => void) {
   const [wordsLearnt, setWordsLearnt] = useState<WordShabadavaliDB[] | null>(null);
   useEffect(() => {

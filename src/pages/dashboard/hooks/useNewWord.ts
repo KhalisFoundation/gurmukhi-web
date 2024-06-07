@@ -2,6 +2,7 @@ import { getNewWords } from 'database/shabadavalidb';
 import { useEffect, useState } from 'react';
 import { User } from 'types/shabadavalidb';
 import { WordType } from 'types';
+
 function useNewWord(user: User, toggleLoading: (value: boolean) => void) {
   const [randomWord, setRandomWord] = useState<WordType | null>(null);
   useEffect(() => {

@@ -25,6 +25,7 @@ const addWordIfNotExists = (
     learningWords.push(learningWord);
   }
 };
+
 const getNewQuestions = async (count: number, local = false, uid: string = '') => {
   const learningWords: WordShabadavaliDB[] = [];
   const game: GameScreen[] = [];
@@ -85,4 +86,5 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
 
   return { game, learningWords };
 };
+
 export default getNewQuestions;
