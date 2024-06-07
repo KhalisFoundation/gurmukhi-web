@@ -24,7 +24,9 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
   setLoading,
   size = CONSTANTS.TEXT_TO_SPEECH_BTN_SIZE,
 }) => {
-  console.log(text, type, audioURL, id, backgroundColor, setLoading, size);
+  if (!text) {
+    console.log(text, type, audioURL, id, backgroundColor, setLoading, size);
+  }
   return <></>;
 };
 

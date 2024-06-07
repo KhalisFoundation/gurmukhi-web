@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import CONSTANTS from 'constants/constant';
 import Loading from 'components/loading';
+
 function PageLoading() {
   const [reloadPrompt, setReloadPrompt] = useState<boolean>(false);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setReloadPrompt(true);
@@ -12,6 +14,7 @@ function PageLoading() {
       clearTimeout(timeout);
     };
   }, []);
+
   return (
     <div className='h-screen flex flex-col justify-center items-center'>
       <div className='text-[#0369a1] text-4xl font-bold mb-8'>Hold on tight, adventurer!</div>

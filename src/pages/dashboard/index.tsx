@@ -13,10 +13,35 @@ import useFetchWords from './hooks/useFetchWords';
 import useGamePlay from './hooks/useGamePlay1';
 import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
-import { User, WordShabadavaliDB, WordType } from 'types';
+import { GameScreen, SentenceWord, User, WordShabadavaliDB, WordType } from 'types';
 import PageLoading from 'components/pageLoading';
-import useNewWord from './hooks/useNewWord';
 import useLearntWords from './hooks/useLearntWords';
+
+const getRandomWord = (gameArray: GameScreen[]): WordType | null => {
+  if (gameArray.length === 0) {
+    return null;
+  }
+  const filteredArray = gameArray.filter((item) => item.key.includes('definition'));
+  const randomIndex = Math.floor(Math.random() * filteredArray.length);
+  const wordId = filteredArray[randomIndex].key.split('-')[1];
+  const sentences = gameArray.filter((item) => item.key.includes('sentence') && item.key.includes(wordId))[0].data as SentenceWord;
+  const sentencesArray = sentences.sentences.map((sentence) => {
+    return {
+      'sentence': sentence.sentence,
+      'translation': sentence.translation ?? '',
+    } as {
+      sentence: string;
+      translation: string;
+      audioURL?: string;
+    };
+  });
+  const randomWord = filteredArray[randomIndex].data;
+  return {
+    id: wordId,
+    ...randomWord,
+    sentences: sentencesArray,
+  } as WordType;
+};
 
 export default function Dashboard() {
   const commonStyle =
@@ -28,10 +53,10 @@ export default function Dashboard() {
   const [isFetchWordsLoading, toggleFetchWords] = useState<boolean>(true);
   const [isGamePlayLoading, toggleGamePlayLoading] = useState<boolean>(true);
   const [isLearntWords, toggleLearntWords] = useState<boolean>(true);
-  const [isNewWord, toggleNewWord] = useState<boolean>(true);
   useFetchWords(user, toggleFetchWords);
   useGamePlay(user, toggleGamePlayLoading);
-  const randomWord: WordType | null = useNewWord(user, toggleNewWord);
+  const gameArray = useAppSelector((state) => state.gameArray);
+  const randomWord: WordType | null = getRandomWord(gameArray);
   const learntWords: WordShabadavaliDB[] | null = useLearntWords(user, toggleLearntWords);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
@@ -50,10 +75,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     // Update overall loading state based on individual states
-    if (!isFetchWordsLoading && !isGamePlayLoading && !isLearntWords && !isNewWord) {
+    if (!isFetchWordsLoading && !isGamePlayLoading && !isLearntWords) {
       toggleLoading(false);
     }
-  }, [isFetchWordsLoading, isGamePlayLoading, isNewWord, isLearntWords]);
+  }, [isFetchWordsLoading, isGamePlayLoading, isLearntWords]);
 
   return (
     <div className='h-full lg:overflow-hidden flex flex-col justify-between'>
@@ -67,7 +92,7 @@ export default function Dashboard() {
             <div className='flex flex-wrap text-center justify-center gap-6 items-center'>
               <WordsSnippetBox commonStyle={commonStyle} wordsLearnt={learntWords} />
               <CoinBox commonStyle={commonStyle} />
-              <WordBox commonStyle={commonStyle} randomWord={randomWord} />
+              {randomWord && <WordBox commonStyle={commonStyle} randomWord={randomWord} />}
             </div>
           </>
         )}
