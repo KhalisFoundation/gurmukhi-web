@@ -4,10 +4,23 @@ import { UserCredential } from 'firebase/auth';
 
 export interface AuthContextValue {
   user: User | null | object;
-  logIn: (email: string, password: string, showToastMessage: (text: string, error?: boolean) => void) => Promise<UserCredential | null>;
-  signUp: (name: string, username: string, email: string, password: string, confirmPassword: string, showToastMessage: (text: string, error?: boolean) => void) => Promise<boolean>;
+  logIn: (
+    email: string,
+    password: string,
+    showToastMessage: (text: string, error?: boolean) => void
+  ) => Promise<UserCredential | null>;
+  signUp: (
+    name: string,
+    username: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    showToastMessage: (text: string, error?: boolean) => void
+  ) => Promise<boolean>;
   logOut: () => Promise<void>;
-  signInWithGoogle: (showToastMessage: (text: string, error?: boolean) => void) => Promise<boolean | undefined>;
+  signInWithGoogle: (
+    showToastMessage: (text: string, error?: boolean) => void
+  ) => Promise<boolean | undefined>;
   resetPassword: (email: string) => Promise<void>;
 }
 
