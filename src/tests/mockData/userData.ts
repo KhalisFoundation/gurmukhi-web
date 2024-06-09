@@ -97,7 +97,6 @@ const mockUserData: User[] = [
       },
     ],
     wordIds: ['vIi5VzvEsecyECMc0shq'],
-    learntWordIds: [],
     created_at: currentTimestamp,
     updated_at: currentTimestamp,
     lastLogInAt: currentTimestamp,
@@ -121,7 +120,6 @@ const mockUserData: User[] = [
     created_at: currentTimestamp,
     updated_at: currentTimestamp,
     lastLogInAt: currentTimestamp,
-    learntWordIds:[],
   },
 ];
 

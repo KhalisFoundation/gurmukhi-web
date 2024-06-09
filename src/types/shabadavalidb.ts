@@ -23,7 +23,6 @@ export interface User {
   };
   nextSession?: GameScreen[];
   wordIds: string[];
-  learntWordIds: string[];
   created_at: Timestamp | string;
   updated_at: Timestamp;
   lastLogInAt: Timestamp | string;

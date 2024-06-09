@@ -34,6 +34,7 @@ export default function LevelsFooter({
 }: Props) {
   const { t: text } = useTranslation();
   const worker = useWorker(createWorker);
+  const nextSession = useAppSelector((state) => state.nextSession);
   const webWorker = useAppSelector((state) => state.webWorker);
   const dispatch = useAppDispatch();
   const totalNumQuestions = Number(text('TOTAL_NUM_QUESTIONS'));
@@ -50,10 +51,10 @@ export default function LevelsFooter({
       const userData = await getUserData(user.uid);
       dispatch(setWebWorker(true));
       if (!userData) {
-        await worker.fetchNextSessionData(user, dispatch);
+        await worker.fetchNextSessionData(user, nextSession, dispatch);
         return;
       }
-      await worker.fetchNextSessionData(userData, dispatch);
+      await worker.fetchNextSessionData(userData, nextSession, dispatch);
     };
     if (currentLevel === CONSTANTS.WEB_WORKER_LEVEL && user.uid && !webWorker) {
       callWorker();

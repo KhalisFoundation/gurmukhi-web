@@ -11,18 +11,17 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
 import { useUserAuth } from 'auth';
 import {
-  getUserData,
-  updateNanakCoin,
-  updateNextSession,
-  updateProgress,
+  updateUserDocument,
+  updateWordsFromUser,
 } from 'database/shabadavalidb';
 import { resetGameArray } from 'store/features/gameArraySlice';
 import ALL_CONSTANT from 'constants/constant';
 import handleClick from 'components/buttons/hooks/useOnClick';
 import LoaderButton from 'components/buttons/LoaderButton';
 import { addScreens } from 'store/features/gameArraySlice';
-import { GameScreen, User } from 'types';
+import { User } from 'types';
 import CONSTANTS from 'constants/constant';
+import { resetNextSession } from 'store/features/nextSessionSlice';
 
 function WinCoin() {
   const navigate = useNavigate();
@@ -32,8 +31,10 @@ function WinCoin() {
   const { title, description } = metaTags.WIN;
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const currentLevel = useAppSelector((state) => state.currentLevel);
+  const learntWordIds = useAppSelector((state) => state.learntWordIds);
+  const nextSession = useAppSelector((state) => state.nextSession);
+  const gameArray = useAppSelector((state) => state.gameArray);
   const [isLoading, toggleIsLoading] = useState<boolean>(true);
-  const [nextSession, setNextSession] = useState<GameScreen[]>([]);
 
   useEffect(() => {
     const storeData = async () => {
@@ -41,20 +42,36 @@ function WinCoin() {
       if (currentLevel === ALL_CONSTANT.LEVELS_COUNT) {
         dispatch(resetGamePosition());
         dispatch(resetGameArray());
-        const data = await getUserData(user.uid);
-        const nxtSession = data?.nextSession || [];
-        setNextSession(nxtSession);
-        dispatch(increment());
         dispatch(resetLevel());
-        dispatch(addScreens(nxtSession));
-        await updateNanakCoin(user.uid, nanakCoin + CONSTANTS.DEFAULT_ONE);
-        await updateProgress(user.uid, 0, nxtSession, 0);
-        await updateNextSession(user.uid, []);
+        dispatch(increment());
+
+        await updateUserDocument(user.uid, {
+          wordIds: learntWordIds,
+          coins: nanakCoin + CONSTANTS.DEFAULT_ONE,
+          progress: {
+            currentLevel: 0,
+            currentGamePosition: 0,
+            gameSession: nextSession,
+          },
+          nextSession: [],
+        }).then(() => {
+          console.log('User data updated');
+        });
+
+        dispatch(addScreens(nextSession || []));
+        dispatch(resetNextSession());
+        await updateWordsFromUser(user.uid, learntWordIds);
       }
       toggleIsLoading(false);
     };
     storeData();
   }, [user.uid]);
+
+  useEffect(() => {
+    console.log('nanakCoin updated:', nanakCoin);
+    console.log('nextSession updated:', nextSession);
+    console.log('gameArray updated:', gameArray);
+  }, [nextSession, gameArray, nanakCoin]);
 
   return (
     <div className='nanakback h-full bg-cover w-full'>
@@ -73,10 +90,11 @@ function WinCoin() {
               disabled={isLoading && nextSession.length === 0}
               onClick={() =>
                 handleClick(
+                  nanakCoin,
                   0,
                   ALL_CONSTANT.GET_ONE_MORE,
                   currentLevel,
-                  nextSession,
+                  gameArray,
                   navigate,
                   user,
                   dispatch,

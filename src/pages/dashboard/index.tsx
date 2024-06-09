@@ -13,35 +13,10 @@ import useFetchWords from './hooks/useFetchWords';
 import useGamePlay from './hooks/useGamePlay1';
 import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
-import { GameScreen, SentenceWord, User, WordShabadavaliDB, WordType } from 'types';
+import { User, WordShabadavaliDB, WordType } from 'types';
 import PageLoading from 'components/pageLoading';
 import useLearntWords from './hooks/useLearntWords';
-
-const getRandomWord = (gameArray: GameScreen[]): WordType | null => {
-  if (gameArray.length === 0) {
-    return null;
-  }
-  const filteredArray = gameArray.filter((item) => item.key.includes('definition'));
-  const randomIndex = Math.floor(Math.random() * filteredArray.length);
-  const wordId = filteredArray[randomIndex].key.split('-')[1];
-  const sentences = gameArray.filter((item) => item.key.includes('sentence') && item.key.includes(wordId))[0].data as SentenceWord;
-  const sentencesArray = sentences.sentences.map((sentence) => {
-    return {
-      'sentence': sentence.sentence,
-      'translation': sentence.translation ?? '',
-    } as {
-      sentence: string;
-      translation: string;
-      audioURL?: string;
-    };
-  });
-  const randomWord = filteredArray[randomIndex].data;
-  return {
-    id: wordId,
-    ...randomWord,
-    sentences: sentencesArray,
-  } as WordType;
-};
+import { getRandomWord } from './utils';
 
 export default function Dashboard() {
   const commonStyle =
@@ -53,13 +28,13 @@ export default function Dashboard() {
   const [isFetchWordsLoading, toggleFetchWords] = useState<boolean>(true);
   const [isGamePlayLoading, toggleGamePlayLoading] = useState<boolean>(true);
   const [isLearntWords, toggleLearntWords] = useState<boolean>(true);
-  useFetchWords(user, toggleFetchWords);
-  useGamePlay(user, toggleGamePlayLoading);
+  const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
+  const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const gameArray = useAppSelector((state) => state.gameArray);
+  useFetchWords(user, toggleFetchWords);
+  useGamePlay(user, currentGamePosition, currentLevel, toggleGamePlayLoading);
   const randomWord: WordType | null = getRandomWord(gameArray);
   const learntWords: WordShabadavaliDB[] | null = useLearntWords(user, toggleLearntWords);
-  const currentLevel: number = useAppSelector((state) => state.currentLevel);
-  const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
   const webWorker: boolean = useAppSelector((state) => state.webWorker);
   const dispatch = useAppDispatch();
 
@@ -69,6 +44,7 @@ export default function Dashboard() {
     }
     if (user) {
       setUserData(user);
+      console.log('User in context:', user);
       Bugsnag.setUser(user.uid, user.email, user.displayName);
     }
   }, [user]);

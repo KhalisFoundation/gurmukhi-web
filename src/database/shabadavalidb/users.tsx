@@ -16,6 +16,7 @@ import nanakCoin from 'store/features/nanakCoin';
 export const usersCollection = collection(db, 'users');
 
 export const getUser = async (email: string, uid: string) => {
+  console.log('function getUser');
   try {
     // uid is the document id of the user
     const userRef = doc(usersCollection, uid);
@@ -34,6 +35,7 @@ export const getUser = async (email: string, uid: string) => {
 };
 
 export const checkUser = async (uid: string, email: string) => {
+  console.log('function checkUser');
   try {
     const queryStatement = query(
       usersCollection,
@@ -51,6 +53,7 @@ export const checkUser = async (uid: string, email: string) => {
 };
 
 export const checkIfUsernameUnique = async (username: string) => {
+  console.log('function checkIfUsernameUnique');
   try {
     const queryStatement = query(usersCollection, where('username', '==', username));
     const usersSnapshot = await getDocs(queryStatement);
@@ -61,6 +64,7 @@ export const checkIfUsernameUnique = async (username: string) => {
 };
 
 export const checkIfEmailUnique = async (email: string) => {
+  console.log('function checkIfEmailUnique');
   try {
     const queryStatement = query(usersCollection, where('email', '==', email));
     const usersSnapshot = await getDocs(queryStatement);
@@ -71,6 +75,7 @@ export const checkIfEmailUnique = async (email: string) => {
 };
 
 export const getEmailFromUsername = async (username: string) => {
+  console.log('function getEmailFromUsername');
   try {
     const queryStatement = query(usersCollection, where('username', '==', username));
     const usersSnapshot = await getDocs(queryStatement);
@@ -84,6 +89,7 @@ export const getEmailFromUsername = async (username: string) => {
 };
 
 export const getNanakCoin = async (uid: string) => {
+  console.log('function getNanakCoin');
   try {
     const userRef = doc(usersCollection, uid);
     const userDoc = await getDoc(userRef);
@@ -97,6 +103,7 @@ export const getNanakCoin = async (uid: string) => {
 };
 
 export const updateNanakCoin = async (uid: string, newCoinValue: number) => {
+  console.log('function updateNanakCoin');
   try {
     const userRef = doc(usersCollection, uid);
     await updateDoc(userRef, {
@@ -111,6 +118,7 @@ export const updateNanakCoin = async (uid: string, newCoinValue: number) => {
 };
 
 export async function updateUserDocument(uid: string, updateData: object) {
+  console.log('function updateUserDocument');
   try {
     const userRef = doc(usersCollection, uid);
     await updateDoc(userRef, updateData);
@@ -129,22 +137,26 @@ export const updateProgress = async (
   gameSession: GameScreen[],
   currentLevel: number,
 ) => {
+  console.log('function updateProgress');
   const progress = { currentProgress, gameSession, currentLevel };
   await updateUserDocument(uid, { progress });
   console.log('Document is updated successfully');
 };
 
 export const updateNextSession = async (uid: string, gameArray: GameScreen[]) => {
-  await updateUserDocument(uid, { next_session: gameArray });
+  console.log('function updateNextSession');
+  await updateUserDocument(uid, { nextSession: gameArray });
 };
 
 export const updateCurrentProgress = async (uid: string, currentProgress: number) => {
+  console.log('function updateCurrentProgress');
   await updateUserDocument(uid, {
     'progress.currentProgress': currentProgress,
   });
 };
 
 export const updateCurrentLevel = async (uid: string, currentLevel: number) => {
+  console.log('function updateCurrentLevel');
   await updateUserDocument(uid, { 'progress.currentLevel': currentLevel });
 };
 
@@ -153,6 +165,7 @@ export const updateLevelProgress = async (
   currentLevel: number,
   currentGamePosition: number,
 ) => {
+  console.log('function updateLevelProgress');
   await updateUserDocument(uid, {
     'progress.currentLevel': currentLevel,
     'progress.currentProgress': currentGamePosition,
@@ -160,6 +173,7 @@ export const updateLevelProgress = async (
 };
 
 export const getUserData = async (uid: string) => {
+  console.log('function getUserData');
   try {
     const userRef = doc(usersCollection, uid);
     const userDoc = await getDoc(userRef);
@@ -176,9 +190,8 @@ export const getUserData = async (uid: string) => {
       email: data.email,
       emailVerified: data.emailVerified,
       progress: data.progress,
-      nextSession: data.next_session,
+      nextSession: data.nextSession,
       wordIds: data.wordIds,
-      learntWordIds: data.learntWordIds,
       user: null,
       created_at: data.created_at,
       updated_at: data.updated_at,

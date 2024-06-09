@@ -18,7 +18,9 @@ const getOptions = async (wordIDs: string[]) => {
   const options = await Promise.all(optionsPromise);
   return options as Option[];
 };
+
 const getQuestions = async (wordID: string, questionIDs: string[], needOptions: boolean = true) => {
+  console.log('function getQuestions');
   const filteredQuestionIDs = questionIDs.filter((id) => id !== '');
   try {
     let queryRef;
@@ -71,6 +73,7 @@ const getQuestions = async (wordID: string, questionIDs: string[], needOptions: 
   }
 };
 const getQuestionByID = async (id: string) => {
+  console.log('function getQuestionByID');
   try {
     const queryRef = query(questionCollection, where(documentId(), '==', id));
     const questionSnapshot = await getDocs(queryRef);

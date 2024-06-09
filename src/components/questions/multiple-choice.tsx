@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Option, QuestionData, User } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
-import { updateCurrentLevel, updateWordFromUser } from 'database/shabadavalidb';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
+import { addLearntWordIds } from 'store/features/learntWordIdsSlice';
 
 export default function MultipleChoiceQuestion({
   questionData,
@@ -41,9 +41,8 @@ export default function MultipleChoiceQuestion({
         if (questionData.options[questionData.answer] === selectedOption) {
           if (currentLevel + ALL_CONSTANT.DEFAULT_ONE <= ALL_CONSTANT.LEVELS_COUNT) {
             toggleLoading(true);
-            await updateCurrentLevel(user.uid, currentLevel + ALL_CONSTANT.DEFAULT_ONE);
-            toggleLoading(false);
             dispatch(increment());
+            toggleLoading(false);
           }
           setIsCorrectOption(true);
         } else {
@@ -64,7 +63,7 @@ export default function MultipleChoiceQuestion({
         questionData.id &&
         selectedOption === questionData.options[questionData.answer]
       ) {
-        await updateWordFromUser(user.uid, questionData.word_id);
+        dispatch(addLearntWordIds(questionData.word_id));
       }
     };
     storeData();

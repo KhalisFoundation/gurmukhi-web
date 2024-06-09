@@ -31,6 +31,7 @@ const StartQuestionBtn = ({
     isDisabled ? 'cursor-not-allowed' : ''
   }`;
   const currentLevel = useAppSelector((state) => state.currentLevel);
+  const coins = useAppSelector((state) => state.nanakCoin);
   const gameArray = useAppSelector((state) => state.gameArray);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ const StartQuestionBtn = ({
     <button
       onClick={() =>
         handleClick(
+          coins,
           currentGamePosition,
           operation,
           currentLevel,

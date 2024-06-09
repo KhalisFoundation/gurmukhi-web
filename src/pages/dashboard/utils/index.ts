@@ -1,4 +1,4 @@
-import { GameScreen, User } from 'types';
+import { GameScreen, SentenceWord, User, WordType } from 'types';
 import getRandomQuestions from '../hooks/useQuestions';
 import getNewQuestions from '../hooks/useNew';
 import { addWordsBatch } from 'database/shabadavalidb';
@@ -60,10 +60,37 @@ const gameAlgo = async (user: User) => {
   return { gameArray };
 };
 
+const getRandomWord = (gameArray: GameScreen[]): WordType | null => {
+  if (gameArray.length === 0) {
+    return null;
+  }
+  const filteredArray = gameArray.filter((item) => item.key.includes('definition'));
+  const randomIndex = Math.floor(Math.random() * filteredArray.length);
+  const wordId = filteredArray[randomIndex].key.split('-')[1];
+  const sentences = gameArray.filter((item) => item.key.includes('sentence') && item.key.includes(wordId))[0].data as SentenceWord;
+  const sentencesArray = sentences.sentences.map((sentence) => {
+    return {
+      'sentence': sentence.sentence,
+      'translation': sentence.translation ?? '',
+    } as {
+      sentence: string;
+      translation: string;
+      audioURL?: string;
+    };
+  });
+  const randomWord = filteredArray[randomIndex].data;
+  return {
+    id: wordId,
+    ...randomWord,
+    sentences: sentencesArray,
+  } as WordType;
+};
+
 export {
   gameAlgo,
   shuffleArray,
   createGameScreen,
   fetchProgress,
   checkIsFirstTime,
+  getRandomWord,
 };

@@ -1,6 +1,5 @@
 import ALL_CONSTANT from 'constants/constant';
 import { ROUTES } from 'constants/routes';
-import { getNanakCoin, updateCurrentProgress } from 'database/shabadavalidb';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { GameScreen, User } from 'types';
 import Bugsnag from '@bugsnag/js';
@@ -25,6 +24,7 @@ const navigateTo = (
 };
 
 const handleClick = async (
+  coins: number,
   currentGamePosition: number,
   operation: string,
   currentLevel: number,
@@ -33,7 +33,11 @@ const handleClick = async (
   user: User,
   dispatch: AppDispatch,
 ) => {
-  const coins = await getNanakCoin(user.uid);
+  console.log('handleClick');
+  console.log('currentLevel: ', currentLevel);
+  console.log('currentGamePosition: ', currentGamePosition);
+  console.log('gameArray: ', gameArray);
+  console.log('coins: ', coins);
   const condition =
     coins !== 0
       ? currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition]
@@ -71,7 +75,6 @@ const handleClick = async (
       case ALL_CONSTANT.NEXT:
         if (currentGamePosition) {
           try {
-            await updateCurrentProgress(user.uid, currentGamePosition);
             dispatch(setCurrentGamePosition(currentGamePosition));
           } catch (error) {
             bugsnagErrorHandler(error, 'handleClick in useOnClick.ts', { uid: user.uid }, user);
