@@ -39,3 +39,14 @@ export interface WordShabadavaliDB {
   lastReviewed?: Timestamp;
   questionIds: string[];
 }
+
+export interface ProgressData {
+  wordIds?: string[],
+  coins: number,
+  progress: {
+    currentLevel: number,
+    currentProgress: number,
+    gameSession: GameScreen[],
+  },
+  nextSession: GameScreen[],
+}

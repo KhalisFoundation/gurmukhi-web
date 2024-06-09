@@ -12,7 +12,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { shabadavaliDB } from '../../firebase';
-import { WordShabadavaliDB } from 'types';
+import { ProgressData, WordShabadavaliDB } from 'types';
 import ALL_CONSTANT from 'constants/constant';
 import { usersCollection } from './users';
 import { shuffleArray } from 'pages/dashboard/utils';
@@ -34,7 +34,6 @@ export const addWordsToSubCollection = async (uid: string, data: WordShabadavali
 };
 
 export const getWords = async (uid: string, isLearnt: boolean) => {
-  console.log('function getWords');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const q = query(
@@ -65,7 +64,6 @@ export const addQuestionsBatch = async (
   uid: string,
   wordToQuestionIdsMap: Map<string, string[]>,
 ) => {
-  console.log('function addQuestionsBatch');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const batch = writeBatch(shabadavaliDB);
@@ -87,7 +85,6 @@ export const addQuestionsBatch = async (
 };
 
 export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[]) => {
-  console.log('function addWordsBatch');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const wordIds = [];
@@ -119,44 +116,15 @@ export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[]) => 
   }
 };
 
-export const updateWordFromUser = async (uid: string, wordID: string) => {
-  console.log('function updateWordFromUser');
+export const updateUserWithWords = async (uid: string, updateData: ProgressData, learntWordIds: string[]) => {
+  const userRef = doc(usersCollection, uid);
   const wordsCollectionRef = getWordCollectionRef(uid);
   const batch = writeBatch(shabadavaliDB);
+  batch.update(userRef, {
+    ...updateData,
+  });
   try {
-    const q = query(wordsCollectionRef, where('word_id', '==', wordID));
-    const querySnapshot = await getDocs(q);
-    if (!querySnapshot.empty) {
-      const wordDoc = querySnapshot.docs[0];
-      const wordData = wordDoc.data() as WordShabadavaliDB;
-      const currentProgress = wordData.progress;
-      let isLearnt = wordData.isLearnt;
-      if (currentProgress + CONSTANTS.DEFAULT_ONE >= CONSTANTS.LEARNT_THRESHOLD && !isLearnt) {
-        const userDocRef = doc(usersCollection, uid);
-        batch.update(userDocRef, {
-          wordIds: arrayUnion(wordID),
-        });
-        isLearnt = true;
-      }
-      const documentRef = doc(wordsCollectionRef, querySnapshot.docs[0].id);
-      batch.update(documentRef, {
-        progress: currentProgress + CONSTANTS.DEFAULT_ONE,
-        isLearnt: isLearnt,
-        lastReviewed: Timestamp.fromDate(new Date()),
-      });
-      await batch.commit();
-    }
-  } catch (error) {
-    bugsnagErrorHandler(error, 'updateWordFromUser', { uid, wordID });
-  }
-};
-
-export const updateWordsFromUser = async (uid: string, wordIDs: string[]) => {
-  console.log('function updateWordsFromUser: wordIDs: ', wordIDs);
-  const wordsCollectionRef = getWordCollectionRef(uid);
-  const batch = writeBatch(shabadavaliDB);
-  try {
-    for (const wordID of wordIDs) {
+    for (const wordID of learntWordIds) {
       const q = query(wordsCollectionRef, where('word_id', '==', wordID));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
@@ -165,8 +133,7 @@ export const updateWordsFromUser = async (uid: string, wordIDs: string[]) => {
         const currentProgress = wordData.progress;
         let isLearnt = wordData.isLearnt;
         if (currentProgress + CONSTANTS.DEFAULT_ONE >= CONSTANTS.LEARNT_THRESHOLD && !isLearnt) {
-          const userDocRef = doc(usersCollection, uid);
-          batch.update(userDocRef, {
+          batch.update(userRef, {
             wordIds: arrayUnion(wordID),
           });
           isLearnt = true;
@@ -181,12 +148,11 @@ export const updateWordsFromUser = async (uid: string, wordIDs: string[]) => {
     }
     await batch.commit();
   } catch (error) {
-    bugsnagErrorHandler(error, 'updateWordsFromUser', { uid, wordIDs });
+    bugsnagErrorHandler(error, 'updateUserWithWords', { uid, updateData, learntWordIds });
   }
 };
 
 export const checkIfWordPresent = async (uid: string, wordID: string) => {
-  console.log('function checkIfWordPresent');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const q = query(wordsCollectionRef, where('word_id', '==', wordID));
@@ -198,7 +164,6 @@ export const checkIfWordPresent = async (uid: string, wordID: string) => {
 };
 
 export const getLearntWords = async (uid: string) => {
-  console.log('function getLearntWords');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const q = query(wordsCollectionRef, where('isLearnt', '==', true));
@@ -214,7 +179,6 @@ export const getLearntWords = async (uid: string) => {
 };
 
 export const updateWordRead = async (uid: string, wordID: string) => {
-  console.log('function updateWordRead');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const docRef = doc(wordsCollectionRef, wordID);
@@ -225,7 +189,6 @@ export const updateWordRead = async (uid: string, wordID: string) => {
 };
 
 export const getNewWords = async (uid: string, isUpdateWordRead: boolean = true) => {
-  console.log('function getNewWords');
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const queryRef = query(
@@ -263,7 +226,6 @@ export const getNewWords = async (uid: string, isUpdateWordRead: boolean = true)
 };
 
 export const checkIfWordCollectionExists = async (uid: string) => {
-  console.log('function checkIfWordCollectionExists');
   try {
     const wordsCollectionData = await getDocs(getWordCollectionRef(uid));
     if (wordsCollectionData.empty) {
@@ -276,7 +238,6 @@ export const checkIfWordCollectionExists = async (uid: string) => {
 };
 
 export const setWordIds = async (uid: string) => {
-  console.log('function setWordIds');
   try {
     const batch = writeBatch(shabadavaliDB);
     const wordsCollectionRef = getWordCollectionRef(uid);

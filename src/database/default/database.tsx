@@ -26,7 +26,6 @@ const getDataById = async (
   limitVal?: number,
   miniWord?: boolean,
 ) => {
-  console.log('function getDataById');
   try {
     const fieldPath = key || documentId();
     const queryRef = limitVal
@@ -74,7 +73,6 @@ const getRandomData = async (
   key?: string | null,
   limitVal?: number,
 ) => {
-  console.log('function getRandomData');
   // const randomId = generateRandomId();
   // const fieldPath = key ? key : documentId();
   const queryRef = limitVal
@@ -105,7 +103,6 @@ const getSemanticsByIds = async (
   synonymsIds: (string | MiniWord)[],
   antonymsIds: (string | MiniWord)[],
 ) => {
-  console.log('function getSemanticsByIds');
   const synonymsPromises =
     synonymsIds.length > 0
       ? synonymsIds.map((synonym) => {
@@ -151,7 +148,6 @@ const getSemanticsByIds = async (
 };
 
 const getWordById = async (wordId: string, needExtras = false) => {
-  console.log('function getWordById');
   const wordData = (await getDataById(wordId, wordsCollection)) as WordType;
 
   if (wordData) {
@@ -187,7 +183,6 @@ const getWordById = async (wordId: string, needExtras = false) => {
 };
 
 const getActiveWords = async () => {
-  console.log('function getActiveWords');
   const qSnapshot = query(wordsCollection, where('status', '==', 'active'));
   const querySnapshot = await getDocs(qSnapshot);
   if (querySnapshot.empty) {

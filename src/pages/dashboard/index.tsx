@@ -44,7 +44,6 @@ export default function Dashboard() {
     }
     if (user) {
       setUserData(user);
-      console.log('User in context:', user);
       Bugsnag.setUser(user.uid, user.email, user.displayName);
     }
   }, [user]);

@@ -33,11 +33,6 @@ const handleClick = async (
   user: User,
   dispatch: AppDispatch,
 ) => {
-  console.log('handleClick');
-  console.log('currentLevel: ', currentLevel);
-  console.log('currentGamePosition: ', currentGamePosition);
-  console.log('gameArray: ', gameArray);
-  console.log('coins: ', coins);
   const condition =
     coins !== 0
       ? currentLevel <= ALL_CONSTANT.LEVELS_COUNT && gameArray[currentGamePosition]

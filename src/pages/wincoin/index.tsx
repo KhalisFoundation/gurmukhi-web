@@ -10,10 +10,7 @@ import convertNumber from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
 import { useUserAuth } from 'auth';
-import {
-  updateUserDocument,
-  updateWordsFromUser,
-} from 'database/shabadavalidb';
+import { updateUserWithWords } from 'database/shabadavalidb';
 import { resetGameArray } from 'store/features/gameArraySlice';
 import ALL_CONSTANT from 'constants/constant';
 import handleClick from 'components/buttons/hooks/useOnClick';
@@ -44,34 +41,22 @@ function WinCoin() {
         dispatch(resetGameArray());
         dispatch(resetLevel());
         dispatch(increment());
-
-        await updateUserDocument(user.uid, {
-          wordIds: learntWordIds,
+        dispatch(addScreens(nextSession || []));
+        dispatch(resetNextSession());
+        await updateUserWithWords(user.uid, {
           coins: nanakCoin + CONSTANTS.DEFAULT_ONE,
           progress: {
             currentLevel: 0,
-            currentGamePosition: 0,
+            currentProgress: 0,
             gameSession: nextSession,
           },
           nextSession: [],
-        }).then(() => {
-          console.log('User data updated');
-        });
-
-        dispatch(addScreens(nextSession || []));
-        dispatch(resetNextSession());
-        await updateWordsFromUser(user.uid, learntWordIds);
+        }, learntWordIds);
       }
       toggleIsLoading(false);
     };
     storeData();
   }, [user.uid]);
-
-  useEffect(() => {
-    console.log('nanakCoin updated:', nanakCoin);
-    console.log('nextSession updated:', nextSession);
-    console.log('gameArray updated:', gameArray);
-  }, [nextSession, gameArray, nanakCoin]);
 
   return (
     <div className='nanakback h-full bg-cover w-full'>
