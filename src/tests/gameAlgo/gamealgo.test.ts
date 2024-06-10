@@ -3,6 +3,8 @@ import { gameAlgo } from 'pages/dashboard/utils';
 import { User } from 'types';
 import seed0 from 'data/seed0.json';
 import { currentTimestamp } from 'tests/mockData/userData';
+import { getBatch } from '../../../__mocks__/database/shabadavalidb';
+import { WriteBatch } from 'firebase/firestore';
 
 describe('getNewQuestions', () => {
   beforeEach(() => {
@@ -31,7 +33,8 @@ describe('getNewQuestions', () => {
         updated_at: currentTimestamp,
         lastLogInAt: currentTimestamp,
       };
-      const { gameArray } = await gameAlgo(user);
+      const batch: WriteBatch = getBatch();
+      const { gameArray } = await gameAlgo(user, batch);
       const questionObjects = gameArray.filter(
         (obj) => obj.key && obj.key.startsWith('questions-') && obj.key.split('-').length === 3,
       );

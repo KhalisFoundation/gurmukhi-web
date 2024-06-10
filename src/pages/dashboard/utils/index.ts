@@ -2,35 +2,31 @@ import { GameScreen, SentenceWord, User, WordType } from 'types';
 import getRandomQuestions from '../hooks/useQuestions';
 import getNewQuestions from '../hooks/useNew';
 import { addWordsBatch } from 'database/shabadavalidb';
-import {
-  shuffleArray,
-  createGameScreen,
-  fetchProgress,
-  checkIsFirstTime,
-} from './helpers';
+import { shuffleArray, createGameScreen, fetchProgress, checkIsFirstTime } from './helpers';
 import CONSTANTS from 'constants/constant';
+import { WriteBatch } from 'firebase/firestore';
 
-const gameAlgo = async (user: User) => {
+const gameAlgo = async (user: User, batch: WriteBatch) => {
   const isFirstTime = checkIsFirstTime(user);
   if (user && isFirstTime) {
     const { game, learningWords } = await getNewQuestions(CONSTANTS.LEVELS_COUNT, true);
     const gameArray: GameScreen[] = game;
 
     if (learningWords.length > 0) {
-      await addWordsBatch(user.uid, learningWords);
+      await addWordsBatch(user.uid, learningWords, batch);
     }
     return { gameArray };
   }
   let learningCount = CONSTANTS.DEFAULT_LEARNING_COUNT;
   let newQuestionCount = CONSTANTS.DEFAULT_NEW_COUNT;
   let learntCount = CONSTANTS.DEFAULT_LEARNT_COUNT;
-  const learningQuestions = await getRandomQuestions(user, learningCount, false);
+  const learningQuestions = await getRandomQuestions(user, learningCount, false, batch);
   if (learningQuestions.length < learningCount) {
     newQuestionCount += learningCount - learningQuestions.length;
     learningCount = learningQuestions.length;
   }
 
-  const learntQuestions = await getRandomQuestions(user, learntCount, true);
+  const learntQuestions = await getRandomQuestions(user, learntCount, true, batch);
   if (learntQuestions.length < learntCount) {
     newQuestionCount += learntCount - learntQuestions.length;
     learntCount = learntQuestions.length;
@@ -55,7 +51,7 @@ const gameAlgo = async (user: User) => {
   }
 
   if (learningWords.length > 0) {
-    await addWordsBatch(user.uid, learningWords);
+    await addWordsBatch(user.uid, learningWords, batch);
   }
   return { gameArray };
 };

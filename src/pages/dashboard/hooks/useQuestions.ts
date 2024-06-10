@@ -4,11 +4,13 @@ import ALL_CONSTANT from 'constants/constant';
 import { QuestionData, User, GameScreen, WordShabadavaliDB } from 'types';
 import { createGameScreen, shuffleArray } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
+import { WriteBatch } from 'firebase/firestore';
 
 const getRandomQuestions = async (
   user: User,
   count: number,
   isLearnt: boolean,
+  batch: WriteBatch,
   questionIds?: string[],
 ) => {
   const gameArray: GameScreen[] = [];
@@ -45,7 +47,7 @@ const getRandomQuestions = async (
         ),
       );
     }
-    await addQuestionsBatch(user.uid, wordToQuestionMap);
+    await addQuestionsBatch(user.uid, wordToQuestionMap, batch);
     return gameArray;
   } catch (error) {
     bugsnagErrorHandler(error, 'pages/dashboard/hooks/useQuestions.ts/getRandomQuestions', {

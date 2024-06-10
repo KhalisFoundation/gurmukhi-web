@@ -10,6 +10,7 @@ import {
   arrayUnion,
   writeBatch,
   updateDoc,
+  WriteBatch,
 } from 'firebase/firestore';
 import { shabadavaliDB } from '../../firebase';
 import { ProgressData, WordShabadavaliDB } from 'types';
@@ -18,10 +19,22 @@ import { usersCollection } from './users';
 import { shuffleArray } from 'pages/dashboard/utils';
 import { bugsnagErrorHandler } from 'utils';
 import CONSTANTS from 'constants/constant';
-import { getActiveWords, getWordById } from 'database/default';
+import { getActiveWords } from 'database/default';
 
 export const getWordCollectionRef = (uid: string) => {
   return collection(shabadavaliDB, ALL_CONSTANT.USERS, uid, ALL_CONSTANT.WORDS);
+};
+
+export const getBatch = () => {
+  return writeBatch(shabadavaliDB);
+};
+
+export const commitBatch = async (batch: WriteBatch) => {
+  try {
+    await batch.commit();
+  } catch (error) {
+    bugsnagErrorHandler(error, 'database/shabadavalidb/words.ts/commitBatch', batch);
+  }
 };
 
 export const addWordsToSubCollection = async (uid: string, data: WordShabadavaliDB) => {
@@ -63,18 +76,16 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
 export const addQuestionsBatch = async (
   uid: string,
   wordToQuestionIdsMap: Map<string, string[]>,
+  batch: WriteBatch,
 ) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
-    const batch = writeBatch(shabadavaliDB);
     wordToQuestionIdsMap.forEach((questionIds, wordId) => {
       const documentRef = doc(wordsCollectionRef, wordId);
       batch.update(documentRef, {
         questionIds: arrayUnion(...questionIds),
       });
     });
-
-    await batch.commit();
   } catch (error) {
     bugsnagErrorHandler(
       error,
@@ -84,11 +95,10 @@ export const addQuestionsBatch = async (
   }
 };
 
-export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[]) => {
+export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[], batch: WriteBatch) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
     const wordIds = [];
-    const batch = writeBatch(shabadavaliDB);
     for (const wordData of words) {
       wordIds.push(wordData.word_id);
       const q = query(wordsCollectionRef, where('word_id', '==', wordData.word_id));
@@ -109,14 +119,16 @@ export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[]) => 
     batch.update(userDocRef, {
       wordIds: arrayUnion(...wordIds),
     });
-
-    await batch.commit();
   } catch (error) {
     bugsnagErrorHandler(error, 'database/shabadavalidb/words.ts/addWordsBatch', words);
   }
 };
 
-export const updateUserWithWords = async (uid: string, updateData: ProgressData, learntWordIds: string[]) => {
+export const updateUserWithWords = async (
+  uid: string,
+  updateData: ProgressData,
+  learntWordIds: string[],
+) => {
   const userRef = doc(usersCollection, uid);
   const wordsCollectionRef = getWordCollectionRef(uid);
   const batch = writeBatch(shabadavaliDB);
@@ -188,14 +200,10 @@ export const updateWordRead = async (uid: string, wordID: string) => {
   }
 };
 
-export const getNewWords = async (uid: string, isUpdateWordRead: boolean = true) => {
+export const getNewWords = async (uid: string, count: number) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
-    const queryRef = query(
-      wordsCollectionRef,
-      where('isWordRead', '==', false),
-      limit(CONSTANTS.DEFAULT_ONE),
-    );
+    const queryRef = query(wordsCollectionRef, where('isWordRead', '==', false), limit(count));
     const snapshot = await getDocs(queryRef);
 
     if (snapshot.empty) {
@@ -208,20 +216,10 @@ export const getNewWords = async (uid: string, isUpdateWordRead: boolean = true)
     if (shabadavaliWordData.length === 0) {
       return null;
     }
-    const wordID: string | null = shabadavaliWordData[0].id ? shabadavaliWordData[0].id : null;
-    if (!wordID) {
-      return;
-    }
-    const wordDefination = await getWordById(wordID, true);
-
-    // Update the isWordRead only while the word is used in the gameSession
-    if (isUpdateWordRead) {
-      await updateWordRead(uid, wordID);
-    }
-
-    return wordDefination;
+    return shabadavaliWordData;
   } catch (error) {
     bugsnagErrorHandler(error, 'getNewWords', { uid });
+    return null;
   }
 };
 
