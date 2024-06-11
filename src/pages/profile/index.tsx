@@ -12,15 +12,19 @@ import { auth } from '../../firebase';
 import { showToastMessage } from 'utils';
 import { uploadImage } from 'utils/storage';
 import CONSTANTS from 'constants/constant';
+import { User } from 'types';
+import { Timestamp } from 'firebase/firestore';
 
 export default function Profile() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.PROFILE;
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
+
+  const currentUser = user?.user || auth.currentUser || null;
 
   const [isLoading, setIsLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [name, setName] = useState(user.displayName);
+  const [name, setName] = useState(user?.displayName);
   const [username, setUsername] = useState(user.username ?? user.email?.split('@')[0]);
   const [usernameError, setUsernameError] = useState('');
   const [photo, setPhoto] = useState<File | null>(null);
@@ -28,12 +32,13 @@ export default function Profile() {
   const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
   const [verifiable, setVerifiable] = useState(true);
 
-  const createdAt = new Date(user.createdAt);
-  const lastLoginAt = new Date(user.lastLogInAt);
+  const formatDate = (date: string | Timestamp) => {
+    if (!date) return 'not defined';
+    return (typeof date === 'string' ? new Date(date) : date.toDate()).toLocaleString();
+  };
 
-  const formattedCreatedAt = createdAt instanceof Date ? createdAt.toLocaleString() : 'not defined';
-  const formattedLastLoginAt =
-    lastLoginAt instanceof Date ? lastLoginAt.toLocaleString() : 'not defined';
+  const formattedCreatedAt = formatDate(user.created_at);
+  const formattedLastLoginAt = formatDate(user.lastLogInAt);
 
   const getTabData = (heading: string, info: string, children?: JSX.Element) => {
     return (
@@ -85,54 +90,47 @@ export default function Profile() {
     }
   };
 
+  async function updateUserAndProfile(displayName: string) {
+    const updatedUserData = {
+      ...user,
+      displayName,
+      photoURL,
+      username: username !== user.username ? username : user.username,
+      user: null,
+    };
+
+    await updateUserDocument(user.uid, updatedUserData);
+
+    if (currentUser) {
+      await updateProfile(currentUser, { displayName, photoURL });
+    }
+  }
+
   const handleSubmit = async () => {
     if (user && usernameError === '') {
       // check if anything has changed
-      if (
+      const isUnchanged =
         name === user.displayName &&
         username === user.username &&
-        photoURL === user.user.photoURL &&
-        !photo
-      ) {
+        photoURL === user.user?.photoURL &&
+        photoURL === user.photoURL &&
+        !photo;
+      if (isUnchanged) {
         return;
       }
       try {
         setIsLoading(true);
         handleUpload();
+
         if (username !== user.username) {
-          const unique = checkIfUsernameUnique(username);
-          if (!unique) {
+          const isUnique = await checkIfUsernameUnique(username);
+          if (!isUnique) {
             showToastMessage(text('USERNAME_TAKEN'), toast.POSITION.TOP_CENTER, false);
             return;
-          } else {
-            await updateUserDocument(user.uid, {
-              ...user,
-              displayName: name,
-              photoURL,
-              username,
-              user: null,
-            });
-            await updateProfile(user.user, {
-              displayName: name,
-              photoURL,
-            });
-
-            showToastMessage(text('PROFILE_UPDATED'), toast.POSITION.TOP_CENTER, true);
           }
-        } else {
-          await updateUserDocument(user.uid, {
-            ...user,
-            displayName: name,
-            photoURL,
-            user: null,
-          });
-          await updateProfile(user.user, {
-            displayName: name,
-            photoURL,
-          });
-
-          showToastMessage(text('PROFILE_UPDATED'), toast.POSITION.TOP_CENTER, true);
         }
+
+        await updateUserAndProfile(name);
       } catch (error) {
         console.error(error);
         if (error instanceof Error) {
@@ -231,7 +229,7 @@ export default function Profile() {
       setUsername(user?.username || '');
       setVerifiable(!(user?.emailVerified || true));
     }
-  }, [user]);
+  }, [user.uid]);
 
   useEffect(() => {
     if (!photo) {
@@ -318,15 +316,18 @@ export default function Profile() {
                   '',
                   renderButton(
                     text('VERIFY'),
-                    () =>
-                      sendEmailVerification(auth.currentUser ?? user).then(() => {
-                        showToastMessage(
-                          text('EMAIL_VERIFICATION_SENT'),
-                          toast.POSITION.TOP_CENTER,
-                          true,
-                        );
-                        setVerifiable(false);
-                      }),
+                    () => {
+                      if (currentUser) {
+                        sendEmailVerification(currentUser).then(() => {
+                          showToastMessage(
+                            text('EMAIL_VERIFICATION_SENT'),
+                            toast.POSITION.TOP_CENTER,
+                            true,
+                          );
+                          setVerifiable(false);
+                        });
+                      }
+                    },
                     !verifiable,
                     false,
                   ),

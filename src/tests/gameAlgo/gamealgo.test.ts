@@ -1,7 +1,8 @@
 /* eslint-disable no-magic-numbers */
 import { gameAlgo } from 'pages/dashboard/utils';
-import { User } from 'types/shabadavalidb';
+import { User } from 'types';
 import seed0 from 'data/seed0.json';
+import { currentTimestamp } from 'tests/mockData/userData';
 
 describe('getNewQuestions', () => {
   beforeEach(() => {
@@ -17,6 +18,7 @@ describe('getNewQuestions', () => {
         uid: 'lakhdsfaoidjfakldnnmadflkjj',
         coins: 0,
         email: 'amitojsingh@shabadavali.ca',
+        emailVerified: true,
         progress: {
           gameSession: [],
           currentLevel: 0,
@@ -24,6 +26,10 @@ describe('getNewQuestions', () => {
         },
         nextSession: [],
         wordIds: [],
+        user: null,
+        created_at: currentTimestamp,
+        updated_at: currentTimestamp,
+        lastLogInAt: currentTimestamp,
       };
       const { gameArray } = await gameAlgo(user);
       const questionObjects = gameArray.filter(

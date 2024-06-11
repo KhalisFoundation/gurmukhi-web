@@ -1,6 +1,6 @@
 import Bugsnag from '@bugsnag/js';
 import { ToastPosition, toast } from 'react-toastify';
-import { User } from 'types/shabadavalidb';
+import { User } from 'types';
 
 interface MetaData {
   [key: string]: any;

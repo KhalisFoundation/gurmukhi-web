@@ -9,7 +9,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { shabadavaliDB as db } from '../../firebase';
-import { GameScreen, User } from 'types/shabadavalidb';
+import { GameScreen, User } from 'types';
 import { bugsnagErrorHandler } from 'utils';
 import nanakCoin from 'store/features/nanakCoin';
 
@@ -131,11 +131,10 @@ export const updateProgress = async (
 ) => {
   const progress = { currentProgress, gameSession, currentLevel };
   await updateUserDocument(uid, { progress });
-  console.log('Document is updated successfully');
 };
 
 export const updateNextSession = async (uid: string, gameArray: GameScreen[]) => {
-  await updateUserDocument(uid, { next_session: gameArray });
+  await updateUserDocument(uid, { nextSession: gameArray });
 };
 
 export const updateCurrentProgress = async (uid: string, currentProgress: number) => {
@@ -174,9 +173,15 @@ export const getUserData = async (uid: string) => {
       uid: data.uid,
       coins: data.coins,
       email: data.email,
+      emailVerified: data.emailVerified,
       progress: data.progress,
-      nextSession: data.next_session,
+      nextSession: data.nextSession,
       wordIds: data.wordIds,
+      user: null,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      lastLogInAt: data.lastLogInAt,
+      username: data.username,
     };
     return user;
   } catch (error) {

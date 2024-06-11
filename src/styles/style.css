@@ -510,10 +510,10 @@ video {
     max-width: 768px;
   }
 }
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
 
   .container {
-    max-width: 1024px;
+    max-width: 1025px;
   }
 }
 @media (min-width: 1280px) {
@@ -627,10 +627,6 @@ video {
   margin-left: 0.75rem;
   margin-right: 0.75rem;
 }
-.mx-4 {
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
 .mx-5 {
   margin-left: 1.25rem;
   margin-right: 1.25rem;
@@ -678,6 +674,9 @@ video {
 }
 .ml-5 {
   margin-left: 1.25rem;
+}
+.ml-auto {
+  margin-left: auto;
 }
 .mr-1 {
   margin-right: 0.25rem;
@@ -817,14 +816,14 @@ video {
 .w-11\/12 {
   width: 91.666667%;
 }
-.w-12 {
-  width: 3rem;
-}
 .w-2 {
   width: 0.5rem;
 }
 .w-2\/3 {
   width: 66.666667%;
+}
+.w-2\/5 {
+  width: 40%;
 }
 .w-24 {
   width: 6rem;
@@ -998,9 +997,6 @@ video {
 .flex-col {
   flex-direction: column;
 }
-.flex-col-reverse {
-  flex-direction: column-reverse;
-}
 .flex-wrap {
   flex-wrap: wrap;
 }
@@ -1082,6 +1078,9 @@ video {
 .border-2 {
   border-width: 2px;
 }
+.border-\[1px\] {
+  border-width: 1px;
+}
 .border-darkBlue {
   --tw-border-opacity: 1;
   border-color: rgb(31 72 96 / var(--tw-border-opacity));
@@ -1109,6 +1108,10 @@ video {
 .border-zinc-950 {
   --tw-border-opacity: 1;
   border-color: rgb(9 9 11 / var(--tw-border-opacity));
+}
+.bg-\[\#bfdbea\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(191 219 234 / var(--tw-bg-opacity));
 }
 .bg-\[\#d6e9f3\] {
   --tw-bg-opacity: 1;
@@ -1297,10 +1300,6 @@ video {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-.py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
 .pb-0 {
   padding-bottom: 0px;
 }
@@ -1330,9 +1329,6 @@ video {
 }
 .text-center {
   text-align: center;
-}
-.text-right {
-  text-align: right;
 }
 .text-justify {
   text-align: justify;
@@ -2024,8 +2020,8 @@ body {
     padding: 2.5rem;
   }
 
-  .md\:p-4 {
-    padding: 1rem;
+  .md\:p-3 {
+    padding: 0.75rem;
   }
 
   .md\:p-8 {
@@ -2062,10 +2058,14 @@ body {
     line-height: 1.25rem;
   }
 }
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
 
   .lg\:flex {
     display: flex;
+  }
+
+  .lg\:hidden {
+    display: none;
   }
 
   .lg\:h-\[296px\] {
@@ -2104,6 +2104,15 @@ body {
     overflow: hidden;
   }
 
+  .lg\:bg-transparent {
+    background-color: transparent;
+  }
+
+  .lg\:py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
   .lg\:text-left {
     text-align: left;
   }
@@ -2111,6 +2120,11 @@ body {
   .lg\:text-3xl {
     font-size: 1.875rem;
     line-height: 2.25rem;
+  }
+
+  .lg\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 @media (min-width: 1280px) {

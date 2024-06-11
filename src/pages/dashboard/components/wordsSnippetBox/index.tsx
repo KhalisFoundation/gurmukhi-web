@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Counter } from '../Counter';
-import { useUserAuth } from 'auth';
-import { getLearntWords } from 'database/shabadavalidb';
-import { WordShabadavaliDB } from 'types/shabadavalidb';
+import { WordShabadavaliDB } from 'types';
 import CONSTANTS from 'constants/constant';
 
-function WordsSnippetBox({ commonStyle }: { commonStyle: string }) {
+function WordsSnippetBox({
+  commonStyle,
+  wordsLearnt,
+}: {
+  commonStyle: string;
+  wordsLearnt: WordShabadavaliDB[] | null;
+}) {
   const { t: text } = useTranslation();
-  const [wordsLearnt, setWordsLearnt] = useState<WordShabadavaliDB[]>();
-  const { user } = useUserAuth();
   const [fallenWords, setFallenWords] = useState<number>(0);
-  useEffect(() => {
-    const fetchWords = async () => {
-      const words = await getLearntWords(user.uid);
-      if (words) {
-        setWordsLearnt(words);
-      }
-    };
-    if (user.uid) {
-      fetchWords();
-    }
-  }, [user.uid]);
 
   useEffect(() => {
     if (wordsLearnt && fallenWords < wordsLearnt.length) {

@@ -13,7 +13,6 @@ import {
   QueryFieldFilterConstraint,
   where,
 } from 'firebase/firestore';
-import { getUserData } from 'database/shabadavalidb';
 import { bugsnagErrorHandler } from 'utils';
 import CONSTANTS from 'constants/constant';
 
@@ -183,74 +182,14 @@ const getWordById = async (wordId: string, needExtras = false) => {
   }
 };
 
-const getRandomWord = async (uid: string, notInArray: string[], includeUsed = true) => {
-  try {
-    const userData = await getUserData(uid);
-    const existingWordIds = includeUsed ? notInArray.concat(userData?.wordIds || []) : notInArray;
-
-    const batches = [];
-    if (existingWordIds.length === 0) {
-      const wordData = await getRandomData(
-        wordsCollection,
-        where('status', '==', 'active'),
-        null,
-        CONSTANTS.RANDOM_WORD_LIMIT,
-      );
-      batches.push(wordData);
-    } else {
-      for (let i = 0; i < existingWordIds.length; i += CONSTANTS.RANDOM_WORD_LIMIT) {
-        const batchIds = existingWordIds.slice(i, i + CONSTANTS.RANDOM_WORD_LIMIT);
-        const wordData = await getRandomData(
-          wordsCollection,
-          and(where('status', '==', 'active'), where(documentId(), 'not-in', batchIds)),
-          null,
-          CONSTANTS.RANDOM_WORD_LIMIT,
-        );
-        batches.push(wordData);
-      }
-    }
-
-    const resolvedWords = await Promise.all(batches);
-    const wordDataArray = [] as WordType[];
-
-    if (resolvedWords.length > 0) {
-      for (const words of resolvedWords) {
-        if (words && words.length > 0) {
-          for (const word of words) {
-            if (!existingWordIds.includes(word.id)) {
-              wordDataArray.push(word as WordType);
-            }
-          }
-        }
-      }
-    }
-    const wordData =
-      wordDataArray.length > 0 ? wordDataArray[0] : (resolvedWords[0] as WordType[])[0];
-    const wordId = wordData.id;
-    const sentences = await getDataById(
-      wordId,
-      sentencesCollection,
-      'word_id',
-      CONSTANTS.DATA_LIMIT,
-    );
-    const { synonyms, antonyms } = await getSemanticsByIds(
-      wordData.synonyms as string[],
-      wordData.antonyms as string[],
-    );
-
-    return {
-      ...wordData,
-      id: wordId,
-      sentences,
-      synonyms,
-      antonyms,
-    } as WordType;
-  } catch (error) {
-    bugsnagErrorHandler(error, 'database/default/database.tsx/getRandomWord', {
-      notInArray,
-      includeUsed: includeUsed,
-    });
+const getActiveWords = async () => {
+  const qSnapshot = query(wordsCollection, where('status', '==', 'active'));
+  const querySnapshot = await getDocs(qSnapshot);
+  if (querySnapshot.empty) {
+    return null;
   }
+  const wordData = querySnapshot.docs.map((item) => ({ id: item.id, ...item.data() } as WordType));
+  return wordData;
 };
 
 export {
@@ -260,5 +199,5 @@ export {
   getRandomData,
   getSemanticsByIds,
   getWordById,
-  getRandomWord,
+  getActiveWords,
 };

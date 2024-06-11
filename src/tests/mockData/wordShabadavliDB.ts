@@ -1,4 +1,5 @@
-import { WordShabadavaliDB } from 'types/shabadavalidb';
+import { WordShabadavaliDB } from 'types';
+
 const mockWords: WordShabadavaliDB[] = [
   {
     isLearnt: true,

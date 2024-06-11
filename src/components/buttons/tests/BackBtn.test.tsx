@@ -13,7 +13,7 @@ jest.mock('@fortawesome/react-fontawesome', () => ({
 
 // Mock the react-i18next hook
 jest.mock('react-i18next', () => ({
-  useTranslation: (): { t: any } => ({
+  useTranslation: (): { t: (key: string) => string } => ({
     t: (key: string): string => key, // Mock the translation function to return the key
   }),
 }));

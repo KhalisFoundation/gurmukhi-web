@@ -1,36 +1,33 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Option, QuestionData } from 'types';
+import { Option, QuestionData, User } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
-import {
-  updateCurrentLevel,
-  updateWordFromUser,
-} from 'database/shabadavalidb';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
+import { addLearntWordIds } from 'store/features/learntWordIdsSlice';
 
 export default function MultipleChoiceQuestion({
   questionData,
   hasImage,
   setOptionSelected,
   setIsCorrectOption,
+  toggleLoading,
 }: {
   questionData: QuestionData;
   hasImage?: boolean;
   setOptionSelected: (value: boolean) => void;
   setIsCorrectOption: (value: boolean) => void;
+  toggleLoading: (value: boolean) => void;
 }) {
   const { t: text } = useTranslation();
-  const [selectedOption, setSelectedOption] = React.useState<Option | null>(
-    null,
-  );
+  const [selectedOption, setSelectedOption] = React.useState<Option | null>(null);
   const currentLevel = useAppSelector((state) => state.currentLevel);
-  const { user } = useUserAuth();
   const dispatch = useAppDispatch();
+  const user = useUserAuth().user as User;
 
   useEffect(() => {
     setSelectedOption(null);
@@ -43,8 +40,9 @@ export default function MultipleChoiceQuestion({
         setOptionSelected(true);
         if (questionData.options[questionData.answer] === selectedOption) {
           if (currentLevel + ALL_CONSTANT.DEFAULT_ONE <= ALL_CONSTANT.LEVELS_COUNT) {
-            await updateCurrentLevel(user.uid, currentLevel + ALL_CONSTANT.DEFAULT_ONE);
+            toggleLoading(true);
             dispatch(increment());
+            toggleLoading(false);
           }
           setIsCorrectOption(true);
         } else {
@@ -65,7 +63,7 @@ export default function MultipleChoiceQuestion({
         questionData.id &&
         selectedOption === questionData.options[questionData.answer]
       ) {
-        await updateWordFromUser(user.uid, questionData.word_id);
+        dispatch(addLearntWordIds(questionData.word_id));
       }
     };
     storeData();
@@ -81,10 +79,7 @@ export default function MultipleChoiceQuestion({
   }
   const renderOptionButtons = () => {
     return questionData.options.map((option, idx) => {
-      const key =
-        typeof option === 'object' && option !== null && 'id' in option
-          ? option.id
-          : idx;
+      const key = typeof option === 'object' && option !== null && 'id' in option ? option.id : idx;
       const isSelected = selectedOption && option === selectedOption;
       return (
         <OptionBtn
@@ -94,9 +89,7 @@ export default function MultipleChoiceQuestion({
           selector={setSelectedOption}
           setOptionSelected={setOptionSelected}
           isCorrect={
-            isSelected
-              ? questionData.options[questionData.answer] === selectedOption
-              : undefined
+            isSelected ? questionData.options[questionData.answer] === selectedOption : undefined
           }
           disabled={!!selectedOption}
         />
@@ -126,7 +119,7 @@ export default function MultipleChoiceQuestion({
                 ? questionData?.image
                 : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
             }
-            className='w-1/2 m-auto object-contain rounded-xl'
+            className='w-2/5 lg:w-1/2 m-auto object-contain rounded-xl'
           />
         </div>
       )}
@@ -134,4 +127,3 @@ export default function MultipleChoiceQuestion({
     </div>
   );
 }
-

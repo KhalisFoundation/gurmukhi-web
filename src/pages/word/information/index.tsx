@@ -19,7 +19,7 @@ export default function Information() {
   const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const [wordID, setWordID] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean | null>(null);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
   const [isRandom, setIsRandom] = useState<boolean>(false);
   // Use useLocation to get the search parameters from the URL
@@ -67,6 +67,7 @@ export default function Information() {
         currentLevel={currentLevel}
         currentGamePosition={currentGamePosition}
         isDisabled={false}
+        isLoading={isLoading}
       />
     );
   };
@@ -77,7 +78,7 @@ export default function Information() {
   }
 
   return (
-    <div className='flex flex-col items-center w-full h-full justify-between gap-5'>
+    <div className='flex flex-col items-center w-full lg:h-full justify-between gap-5'>
       <Meta title={title} description={description} />
       <div className='flex flex-col h-full justify-between items-center'>
         <img
@@ -158,58 +159,52 @@ export default function Information() {
                 })}
             </div>
             <div className='flex items-center justify-around gap-5 w-full h-1/2'>
-              <div
-                className={`w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5  ${
-                  currentWord?.synonyms && currentWord.synonyms.length === 0 ? 'hidden' : ''
-                }`}
-              >
-                <h2 className='text-black tracking-widest ms-2 my-2'>
-                  {text('SYNONYMS').toUpperCase()}
-                </h2>
-                <div className='w-11/12 flex flex-col gap-2 m-auto'>
-                  {currentWord?.synonyms &&
-                    currentWord.synonyms.map((word: MiniWord | string) => {
-                      if (typeof word !== 'string') {
-                        return (
-                          <div
-                            key={word.id}
-                            className={
-                              'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
-                            }
-                          >
-                            {word.word} ({convertToTitleCase(word.translation ?? '')})
-                          </div>
-                        );
-                      }
-                    })}
-                </div>
-              </div>
-              <div
-                className={` w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5 ${
-                  currentWord?.antonyms && currentWord.antonyms.length === 0 ? 'hidden' : ''
-                }`}
-              >
-                <h2 className='text-black tracking-widest ms-2 my-2'>
-                  {text('ANTONYMS').toUpperCase()}
-                </h2>
-                <div className='w-11/12 flex flex-col gap-2 m-auto'>
-                  {currentWord?.antonyms &&
-                    currentWord.antonyms.map((word: MiniWord | string) => {
-                      if (typeof word !== 'string') {
-                        return (
-                          <div
-                            key={word.id}
-                            className={
-                              'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
-                            }
-                          >
-                            {word.word} ({convertToTitleCase(word.translation ?? '')})
-                          </div>
-                        );
-                      }
-                    })}
-                </div>
-              </div>
+              {currentWord?.synonyms && currentWord.synonyms.length === 0 && (
+                <div className={'w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5'}>
+                  <h2 className='text-black tracking-widest ms-2 my-2'>
+                    {text('SYNONYMS').toUpperCase()}
+                  </h2>
+                  <div className='w-11/12 flex flex-col gap-2 m-auto'>
+                    {currentWord?.synonyms &&
+                      currentWord.synonyms.map((word: MiniWord | string) => {
+                        if (typeof word !== 'string') {
+                          return (
+                            <div
+                              key={word.id}
+                              className={
+                                'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
+                              }
+                            >
+                              {word.word} ({convertToTitleCase(word.translation ?? '')})
+                            </div>
+                          );
+                        }
+                      })}
+                  </div>
+                </div>)}
+              {currentWord?.antonyms && currentWord.antonyms.length === 0 && (
+                <div className={'w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5'}>
+                  <h2 className='text-black tracking-widest ms-2 my-2'>
+                    {text('ANTONYMS').toUpperCase()}
+                  </h2>
+                  <div className='w-11/12 flex flex-col gap-2 m-auto'>
+                    {currentWord?.antonyms &&
+                      currentWord.antonyms.map((word: MiniWord | string) => {
+                        if (typeof word !== 'string') {
+                          return (
+                            <div
+                              key={word.id}
+                              className={
+                                'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
+                              }
+                            >
+                              {word.word} ({convertToTitleCase(word.translation ?? '')})
+                            </div>
+                          );
+                        }
+                      })}
+                  </div>
+                </div>)}
             </div>
           </div>
         </div>

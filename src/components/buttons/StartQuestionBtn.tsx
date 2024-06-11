@@ -7,6 +7,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
+import { User } from 'types';
 
 interface Props {
   operation: string;
@@ -14,7 +15,7 @@ interface Props {
   active?: boolean;
   currentGamePosition: number;
   isDisabled?: boolean;
-  isLoading?: boolean;
+  isLoading: boolean | null;
 }
 
 const StartQuestionBtn = ({
@@ -30,15 +31,17 @@ const StartQuestionBtn = ({
     isDisabled ? 'cursor-not-allowed' : ''
   }`;
   const currentLevel = useAppSelector((state) => state.currentLevel);
+  const coins = useAppSelector((state) => state.nanakCoin);
   const gameArray = useAppSelector((state) => state.gameArray);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { user } = useUserAuth();
+  const user = useUserAuth().user as User;
 
   return (
     <button
       onClick={() =>
         handleClick(
+          coins,
           currentGamePosition,
           operation,
           currentLevel,

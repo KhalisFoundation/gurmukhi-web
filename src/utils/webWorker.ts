@@ -1,23 +1,25 @@
-import { gameAlgo } from 'pages/dashboard/utils';
-import { User } from 'types/shabadavalidb';
 import { updateNextSession } from 'database/shabadavalidb';
+import { gameAlgo } from 'pages/dashboard/utils';
+import { addNextScreens } from 'store/features/nextSessionSlice';
+import { setWebWorker } from 'store/features/webWorkerSlice';
+import { AppDispatch } from 'store/store';
+import { GameScreen, User } from 'types';
 import { bugsnagErrorHandler } from 'utils';
-import { Dispatch } from '@reduxjs/toolkit';
 
 export const fetchNextSessionData = async (
-  usr: User,
-  dispatch: Dispatch<any>,
-  setWebWorker: (a: boolean) => void,
+  user: User,
+  nextSession: GameScreen[],
+  dispatch: AppDispatch,
 ) => {
   try {
-    const nextSession = usr?.nextSession ?? [];
     if (nextSession.length > 0) {
       dispatch(setWebWorker(false));
       return;
     }
-    const { gameArray } = await gameAlgo(usr);
-    bugsnagErrorHandler(new Error('Game Algo at Webworker'), 'web worker', gameArray, usr, 'info');
-    await updateNextSession(usr.uid, gameArray);
+    const { gameArray } = await gameAlgo(user);
+    bugsnagErrorHandler(new Error('Game Algo at Webworker'), 'web worker', gameArray, user, 'info');
+    dispatch(addNextScreens(gameArray));
+    await updateNextSession(user.uid, gameArray);
     dispatch(setWebWorker(false));
   } catch (error) {
     dispatch(setWebWorker(false));
@@ -28,7 +30,7 @@ export const fetchNextSessionData = async (
       },
       'web worker',
       {},
-      usr,
+      user,
     );
   }
 };

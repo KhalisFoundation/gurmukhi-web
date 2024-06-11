@@ -18,6 +18,7 @@ const getOptions = async (wordIDs: string[]) => {
   const options = await Promise.all(optionsPromise);
   return options as Option[];
 };
+
 const getQuestions = async (wordID: string, questionIDs: string[], needOptions: boolean = true) => {
   const filteredQuestionIDs = questionIDs.filter((id) => id !== '');
   try {
