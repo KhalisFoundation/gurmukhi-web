@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, setLogLevel } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 import {
   getAuth,
@@ -24,9 +24,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-export const userStateListener = (
-  callback:NextOrObserver<User>,
-) => onAuthStateChanged(auth, callback);
+export const userStateListener = (callback: NextOrObserver<User>) =>
+  onAuthStateChanged(auth, callback);
 
 export const logOut = async () => signOut(auth);
 
@@ -34,6 +33,7 @@ export const passwordReset = async (email: string) => sendPasswordResetEmail(aut
 
 export const wordsdb = getFirestore(app);
 export const shabadavaliDB = getFirestore(app, 'shabadavali');
+setLogLevel('debug');
 export const analytics = getAnalytics(app);
 export const storage = getStorage(app);
 
