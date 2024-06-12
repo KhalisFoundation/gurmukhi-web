@@ -54,24 +54,20 @@ export default function Semantics() {
   useEffect(() => {
     const synonymIds = new Set(synonyms.map((synonym) => synonym.id));
     const antonymIds = new Set(antonyms.map((antonym) => antonym.id));
-    if (!currentWord) {
+    if (!currentWord?.synonyms) {
       return;
     }
-    const synonymFound =
-      currentWord.synonyms && currentWord.synonyms.length > 0
-        ? currentWord.synonyms.map((synonymId) => {
-            if (synonymId.id) {
-              synonymIds.has(synonymId.id);
-            }
-          })
-        : [];
+    const synonymFound = currentWord.synonyms.map((synonym) => {
+      return synonym.id ? synonymIds.has(synonym.id) : false;
+    });
 
-    const antonymFound =
-      currentWord.antonyms && currentWord.antonyms.length > 0
-        ? currentWord.antonyms.map((antonymId) => {
-            if (antonymId.id) antonymIds.has(antonymId.id);
-          })
-        : [];
+    if (!currentWord.antonyms) {
+      return;
+    }
+
+    const antonymFound = currentWord.antonyms.map((antonym) => {
+      return antonym.id ? antonymIds.has(antonym.id) : false;
+    });
 
     const allWords = [...synonymFound, ...antonymFound];
     // if all words are found, show confetti
@@ -96,10 +92,10 @@ export default function Semantics() {
       }
       toggleLoading(true);
       const wordData = await getWordById(wordID, true);
-      console.log('wordData', wordData);
-      if (wordData !== null) {
-        setCurrentWord(wordData);
+      if (!wordData) {
+        setCurrentWord(null);
       }
+      setCurrentWord(wordData);
       toggleLoading(false);
     };
 
