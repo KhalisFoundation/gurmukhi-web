@@ -30,6 +30,7 @@ export interface Option {
   option?: string;
   label?: string;
   translation?: string;
+  audioURL?: string;
   word: string;
 }
 
@@ -43,6 +44,7 @@ export interface QuestionData {
   answer: number;
   word_id: string;
   word: string;
+  audioURL?: string;
 }
 
 export interface Translation {

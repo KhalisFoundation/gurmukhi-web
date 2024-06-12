@@ -56,6 +56,7 @@ export default function OptionBtn({
         backgroundColor='bg-white-175'
         text={optionValue}
         type={ALL_CONSTANT.OPTION}
+        audioURL={option.audioURL}
         id={option.id}
       />
     </div>

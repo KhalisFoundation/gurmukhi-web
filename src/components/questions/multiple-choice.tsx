@@ -107,6 +107,7 @@ export default function MultipleChoiceQuestion({
           backgroundColor='bg-white-175'
           text={questionData.question}
           type={ALL_CONSTANT.QUESTION}
+          audioURL={questionData.audioURL}
           id={questionData.id}
         />
       </div>

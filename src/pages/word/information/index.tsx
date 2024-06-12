@@ -104,7 +104,7 @@ export default function Information() {
                     text={currentWord.word}
                     type={ALL_CONSTANT.WORD}
                     id={currentWord.id}
-                    audioURL={currentWord?.audioURL}
+                    audioURL={currentWord.audioURL}
                   />
                 )}
               </div>
@@ -145,6 +145,7 @@ export default function Information() {
                             backgroundColor='bg-white-150'
                             text={sentence.sentence}
                             type={ALL_CONSTANT.SENTENCE}
+                            audioURL={sentence.audioURL}
                             id={currentWord.id}
                           />
                         )}
