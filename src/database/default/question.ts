@@ -7,7 +7,7 @@ import CONSTANTS from 'constants/constant';
 
 const questionCollection = collection(wordsdb, 'questions');
 
-const getOptions = async (wordIDs: string[]) => {
+export const getOptions = async (wordIDs: string[] | Option[]) => {
   const optionsPromise = wordIDs.map((option) => {
     if (typeof option === 'string') {
       return getDataById(option.toString(), wordsCollection, null, CONSTANTS.DEFAULT_ONE, true);

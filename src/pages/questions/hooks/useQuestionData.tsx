@@ -3,10 +3,17 @@ import { Option, QuestionData } from 'types';
 import { shuffleArray } from 'pages/dashboard/utils';
 
 const getOptionValue = (option: string | Option) => {
-  if (typeof option === 'string') {
-    return option;
+  if (!option) {
+    return null;
   }
-  return option.word ?? option.option;
+  switch (typeof option) {
+    case 'string':
+      return option;
+    case 'object':
+      return option.word ?? option.option;
+    default:
+      return option;
+  }
 };
 
 const useQuestionData = (currentQuestion: QuestionData | null) => {

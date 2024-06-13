@@ -7,6 +7,7 @@ import {
   query,
   where,
   updateDoc,
+  WriteBatch,
 } from 'firebase/firestore';
 import { shabadavaliDB as db } from '../../firebase';
 import { GameScreen, User } from 'types';
@@ -128,13 +129,20 @@ export const updateProgress = async (
   currentProgress: number,
   gameSession: GameScreen[],
   currentLevel: number,
+  batch: WriteBatch,
 ) => {
   const progress = { currentProgress, gameSession, currentLevel };
-  await updateUserDocument(uid, { progress });
+  const userRef = doc(usersCollection, uid);
+  batch.update(userRef, { progress: progress });
 };
 
-export const updateNextSession = async (uid: string, gameArray: GameScreen[]) => {
-  await updateUserDocument(uid, { nextSession: gameArray });
+export const updateNextSession = async (
+  uid: string,
+  gameArray: GameScreen[],
+  batch: WriteBatch,
+) => {
+  const userRef = doc(usersCollection, uid);
+  batch.update(userRef, { nextSession: gameArray });
 };
 
 export const updateCurrentProgress = async (uid: string, currentProgress: number) => {
