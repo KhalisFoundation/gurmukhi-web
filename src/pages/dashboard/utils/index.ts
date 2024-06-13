@@ -32,19 +32,15 @@ const gameAlgo = async (user: User, batch: WriteBatch) => {
     learntCount = learntQuestions.length;
   }
 
-  const { game: newQuestions, learningWords } = await getNewQuestions(
-    newQuestionCount,
-    false,
-    user.uid,
-  );
+  const { game, learningWords } = await getNewQuestions(newQuestionCount, false, user.uid);
 
   let gameArray: GameScreen[] = [];
   if (learntCount === 0 && learningCount === 0) {
-    gameArray = newQuestions as GameScreen[];
+    gameArray = game as GameScreen[];
   } else {
     const combinedArrays = [
       ...shuffleArray(learningQuestions),
-      ...newQuestions,
+      ...game,
       ...shuffleArray(learntQuestions),
     ];
     gameArray = [...combinedArrays];

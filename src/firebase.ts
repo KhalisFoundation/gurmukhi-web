@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, setLogLevel } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 import {
   getAuth,
@@ -33,7 +33,7 @@ export const passwordReset = async (email: string) => sendPasswordResetEmail(aut
 
 export const wordsdb = getFirestore(app);
 export const shabadavaliDB = getFirestore(app, 'shabadavali');
-setLogLevel('debug');
+// setLogLevel('debug');
 export const analytics = getAnalytics(app);
 export const storage = getStorage(app);
 

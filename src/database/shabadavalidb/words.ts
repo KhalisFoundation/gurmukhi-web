@@ -55,7 +55,6 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
       where('isWordRead', '==', true),
       limit(CONSTANTS.GET_WORD_LIMIT),
     );
-    // may add a time condition
     const querySnapshot = await getDocs(q);
     if (querySnapshot.empty) {
       return [];
@@ -73,7 +72,7 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
   }
 };
 
-export const addQuestionsBatch = async (
+export const addQuestionsBatch = (
   uid: string,
   wordToQuestionIdsMap: Map<string, string[]>,
   batch: WriteBatch,
