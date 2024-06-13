@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
@@ -18,7 +18,12 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState<SignError | null>(null);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
-  const { logIn, signUp, signInWithGoogle } = useUserAuth();
+  const { logIn, signUp, signInWithGoogle, user } = useUserAuth();
+  useEffect(() => {
+    if (user) {
+      navigate(ROUTES.DASHBOARD);
+    }
+  }, [user]);
 
   const displayToast = (textMsg: string, error = true) => {
     showToastMessage(textMsg, toast.POSITION.BOTTOM_RIGHT, true, error);
