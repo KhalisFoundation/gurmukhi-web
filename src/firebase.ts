@@ -33,7 +33,6 @@ export const passwordReset = async (email: string) => sendPasswordResetEmail(aut
 
 export const wordsdb = getFirestore(app);
 export const shabadavaliDB = getFirestore(app, 'shabadavali');
-// setLogLevel('debug');
 export const analytics = getAnalytics(app);
 export const storage = getStorage(app);
 
