@@ -61,7 +61,7 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
     if (questionCount >= count) {
       break;
     }
-    const wordDefination: WordType | null = await getWordById(word.word_id, true);
+    const wordDefinition: WordType | null = await getWordById(word.word_id, true);
     usedWordIds.push(word.word_id);
     const questions = await getQuestions(word.word_id, usedWordIds);
     if (questions.length === 0) {
@@ -70,21 +70,21 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
     const questionIds = questions
       .map((question) => question.id)
       .filter((id) => id !== undefined) as string[];
-    if (wordDefination === null) {
+    if (wordDefinition === null) {
       continue;
     }
-    addWordIfNotExists(wordDefination, learningWords, questionIds);
-    delete wordDefination.created_at;
-    delete wordDefination.updated_at;
-    game.push(createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, wordDefination));
-    game.push(createGameScreen(`${ALL_CONSTANT.SENTENCES}-${word.id}`, wordDefination));
+    addWordIfNotExists(wordDefinition, learningWords, questionIds);
+    delete wordDefinition.created_at;
+    delete wordDefinition.updated_at;
+    game.push(createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, wordDefinition));
+    game.push(createGameScreen(`${ALL_CONSTANT.SENTENCES}-${word.id}`, wordDefinition));
 
     for (const question of questions) {
       if (word.word) {
         question.word = word.word;
       }
-      if (question.type === 'image' && !question.image && wordDefination.images) {
-        question.image = wordDefination.images[0];
+      if (question.type === 'image' && !question.image && wordDefinition.images) {
+        question.image = wordDefinition.images[0];
       }
       if (questionCount < count) {
         game.push(

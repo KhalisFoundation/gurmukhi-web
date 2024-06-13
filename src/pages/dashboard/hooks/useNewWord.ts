@@ -17,12 +17,12 @@ function useNewWord(user: User, toggleLoading: (value: boolean) => void) {
         setRandomWord(null);
         return;
       }
-      const wordDefination: WordType | null = await getWordById(newWord[0].word_id, true);
-      if (wordDefination === null) {
+      const wordDefinition: WordType | null = await getWordById(newWord[0].word_id, true);
+      if (wordDefinition === null) {
         setRandomWord(null);
         return null;
       }
-      setRandomWord(wordDefination);
+      setRandomWord(wordDefinition);
 
       toggleLoading(false);
     };
