@@ -1,12 +1,12 @@
-import React from 'react';
-import Header from 'components/header/Header';
+import React, { lazy } from 'react';
 import 'styles/globals.scss';
 import { Outlet } from 'react-router-dom';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { useUserAuth } from 'auth';
-import FeedbackBtn from 'components/buttons/OpenFeedbackBtn';
 import { User } from 'types';
+const Header = lazy(() => import('components/header/Header'));
+const FeedbackBtn = lazy(() => import('components/buttons/OpenFeedbackBtn'));
 
 export default function RootLayout() {
   const { title, description } = metaTags.ROOT;

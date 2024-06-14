@@ -1,13 +1,13 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, lazy, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
 import { ROUTES } from 'constants/routes';
-import SignUp from './SignUp';
-import InputWithIcon from '../input/InputWithIcon';
 import { SignError } from 'types';
 import { ToastContainer, toast } from 'react-toastify';
 import { bugsnagErrorHandler, showToastMessage } from 'utils';
+const SignUp = lazy(() => import('./SignUp'));
+const InputWithIcon = lazy(() => import('../input/InputWithIcon'));
 
 export default function SignIn() {
   const { t: text } = useTranslation();
