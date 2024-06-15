@@ -10,7 +10,9 @@ function ResetGame() {
     const batch = getBatch();
     const { gameArray } = await gameAlgo(user, batch);
     await commitBatch(batch);
-    console.log(gameArray);
+    if (!gameArray) {
+      console.log(gameArray);
+    }
   };
   return (
     <div>
