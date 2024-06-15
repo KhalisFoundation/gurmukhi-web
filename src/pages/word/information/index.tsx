@@ -12,7 +12,7 @@ import { SentenceType } from 'types';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
-import SemanticsBox from './components/Semantics';
+import SemanticsBox from './components/semantics';
 
 export default function Information() {
   const { t: text } = useTranslation();
@@ -52,7 +52,6 @@ export default function Information() {
     }
     if (location.state?.data) {
       setCurrentWord(location.state.data);
-      console.log(location.state.data);
       setIsLoading(false);
     } else {
       fetchData();

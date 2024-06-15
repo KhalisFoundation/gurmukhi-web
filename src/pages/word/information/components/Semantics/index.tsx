@@ -2,6 +2,7 @@ import React from 'react';
 import { MiniWord } from 'types';
 import { useTranslation } from 'react-i18next';
 import { convertToTitleCase } from 'utils';
+
 function SemanticsBox({ title, semantics }: { title: string; semantics: MiniWord[] | string[] }) {
   const { t: text } = useTranslation();
   return (
