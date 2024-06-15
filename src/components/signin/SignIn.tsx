@@ -19,6 +19,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
   const { logIn, signUp, signInWithGoogle, user } = useUserAuth();
+
   useEffect(() => {
     if (user) {
       navigate(ROUTES.DASHBOARD);
