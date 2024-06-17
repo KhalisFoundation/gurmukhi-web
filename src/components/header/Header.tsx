@@ -54,7 +54,7 @@ export default function Header({ ...props }: PropTypes) {
                   }
                 >
                   <span className='text-[1.125rem] pl-2'>{nanakCoin}</span>
-                  <img src='/icons/coin.svg' className={'h-8 w-8'} />
+                  <img src='/icons/coin.svg' className={'h-8 w-8'} alt='coin' />
                 </div>
               </li>
               <li>
@@ -65,7 +65,7 @@ export default function Header({ ...props }: PropTypes) {
                         'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
                       }
                     >
-                      <img src={photoURL} className={'h-8 w-8 rounded-full'} />
+                      <img src={photoURL} className={'h-8 w-8 rounded-full'} alt='default Photo' />
                     </div>
                     <span>
                       <FontAwesomeIcon
