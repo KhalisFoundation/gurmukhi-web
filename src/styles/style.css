@@ -1505,6 +1505,12 @@ video {
 .text-zinc-950\/40 {
   color: rgb(9 9 11 / 0.4);
 }
+.underline {
+  text-decoration-line: underline;
+}
+.underline-offset-8 {
+  text-underline-offset: 8px;
+}
 .opacity-25 {
   opacity: 0.25;
 }

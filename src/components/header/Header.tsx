@@ -65,7 +65,7 @@ export default function Header({ ...props }: PropTypes) {
                         'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
                       }
                     >
-                      <img src={photoURL} className={'h-8 w-8 rounded-full'} alt='default Photo' />
+                      <img src={photoURL} className={'h-8 w-8 rounded-full'} alt='profile picture' />
                     </div>
                     <span>
                       <FontAwesomeIcon
