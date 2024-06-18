@@ -35,7 +35,7 @@ export default function OptionBtn({
   }`;
 
   if (!optionValue) {
-    return;
+    return null;
   } else {
     return (
       <div className={optionClassname}>
