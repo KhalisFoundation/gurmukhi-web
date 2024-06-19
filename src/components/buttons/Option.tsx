@@ -62,4 +62,32 @@ export default function OptionBtn({
     </div>
   );
 
+  if (!optionValue) {
+    return null;
+  } else {
+    return (
+      <div className={optionClassname}>
+        <button
+          className={'h-full w-full'}
+          onClick={() => {
+            selector(option);
+            setOptionSelected(true);
+          }}
+          disabled={disabled}
+        >
+          <span className={textClassname}>
+            {
+              addEndingPunctuation(optionValue, text('GURMUKHI'))
+            }
+          </span>
+        </button>
+        <TextToSpeechBtn
+          backgroundColor='bg-white-175'
+          text={optionValue}
+          type={ALL_CONSTANT.OPTION}
+          id={option.id}
+        />
+      </div>
+    );
+  }
 }

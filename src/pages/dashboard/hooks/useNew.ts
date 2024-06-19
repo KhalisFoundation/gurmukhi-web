@@ -1,5 +1,5 @@
 import { GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
-import { getQuestions } from 'database/default';
+import { getQuestions, getWordById } from 'database/default';
 import { WordType } from 'types';
 import { createGameScreen } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
@@ -21,6 +21,7 @@ const addWordIfNotExists = (
       word: word.word,
       image: word.images ? word.images[0] : '',
       questionIds: questionIds,
+      id: word.id,
     };
     learningWords.push(learningWord);
   }
@@ -51,35 +52,47 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
     return { game: seed0, learningWords };
   }
   const usedWordIds = [];
-  for (let i = 0; i < count; ) {
-    const word = (await getNewWords(uid)) as WordType;
-    if (word?.id) {
-      usedWordIds.push(word.id);
-      const questions = await getQuestions(word.id, usedWordIds);
-      const questionIds = questions
-        .map((question) => question.id)
-        .filter((id) => id !== undefined) as string[];
-      addWordIfNotExists(word, learningWords, questionIds);
-      delete word.created_at;
-      delete word.updated_at;
-      game.push(createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, word));
-      game.push(createGameScreen(`${ALL_CONSTANT.SENTENCES}-${word.id}`, word));
-      if (questions.length === 0) {
-        i++;
+  const words: WordShabadavaliDB[] | null = await getNewWords(uid, count);
+  if (!words) {
+    return { game: seed0, learningWords };
+  }
+  let questionCount = 0;
+  for (const word of words) {
+    if (questionCount >= count) {
+      break;
+    }
+    const wordDefinition: WordType | null = await getWordById(word.word_id, true);
+    usedWordIds.push(word.word_id);
+    const questions = await getQuestions(word.word_id, usedWordIds);
+    if (questions.length === 0) {
+      continue;
+    }
+    const questionIds = questions
+      .map((question) => question.id)
+      .filter((id) => id !== undefined) as string[];
+    if (wordDefinition === null) {
+      continue;
+    }
+    addWordIfNotExists(wordDefinition, learningWords, questionIds);
+    delete wordDefinition.created_at;
+    delete wordDefinition.updated_at;
+    game.push(createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, wordDefinition));
+    game.push(createGameScreen(`${ALL_CONSTANT.SENTENCES}-${word.id}`, wordDefinition));
+
+    for (const question of questions) {
+      if (word.word) {
+        question.word = word.word;
       }
-      for (const question of questions) {
-        if (word.word) {
-          question.word = word.word;
-        }
-        if (question.type === 'image' && !question.image && word.images) {
-          question.image = word.images[0];
-        }
-        if (i < count) {
-          game.push(
-            createGameScreen(`${ALL_CONSTANT.QUESTIONS_SMALL}-${word.id}-${question.id}`, question),
-          );
-          i++;
-        }
+      if (question.type === 'image' && !question.image && wordDefinition.images) {
+        question.image = wordDefinition.images[0];
+      }
+      if (questionCount < count) {
+        game.push(
+          createGameScreen(`${ALL_CONSTANT.QUESTIONS_SMALL}-${word.id}-${question.id}`, question),
+        );
+        questionCount++;
+      } else {
+        break;
       }
     }
   }

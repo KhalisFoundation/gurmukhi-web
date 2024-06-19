@@ -1,7 +1,7 @@
-import moment from 'moment';
+import { localeData } from 'moment';
 
 const convertNumber = (num: number) => {
-  return `You got your ${moment.localeData().ordinal(num)} Nanak Coin!`;
+  return `You got your ${localeData().ordinal(num)} Nanak Coin!`;
 };
 
 export default convertNumber;

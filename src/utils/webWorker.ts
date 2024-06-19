@@ -1,4 +1,4 @@
-import { updateNextSession } from 'database/shabadavalidb';
+import { commitBatch, getBatch, updateNextSession } from 'database/shabadavalidb';
 import { gameAlgo } from 'pages/dashboard/utils';
 import { addNextScreens } from 'store/features/nextSessionSlice';
 import { setWebWorker } from 'store/features/webWorkerSlice';
@@ -16,10 +16,12 @@ export const fetchNextSessionData = async (
       dispatch(setWebWorker(false));
       return;
     }
-    const { gameArray } = await gameAlgo(user);
+    const batch = getBatch();
+    const { gameArray } = await gameAlgo(user, batch);
     bugsnagErrorHandler(new Error('Game Algo at Webworker'), 'web worker', gameArray, user, 'info');
     dispatch(addNextScreens(gameArray));
-    await updateNextSession(user.uid, gameArray);
+    updateNextSession(user.uid, gameArray, batch);
+    await commitBatch(batch);
     dispatch(setWebWorker(false));
   } catch (error) {
     dispatch(setWebWorker(false));
