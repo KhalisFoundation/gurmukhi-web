@@ -43,29 +43,29 @@ export default function Header({ ...props }: PropTypes) {
         </a>
         <nav>
           {loggedIn ? (
-            <ul className='flex items-center justify-between md:gap-4 brandon-grotesque dull-blue'>
+            <ul className='flex items-center justify-between gap-2 md:gap-4 brandon-grotesque dull-blue'>
               <li className='hidden md:block'>
                 <a href={ROUTES.DASHBOARD}>{text('DASHBOARD')}</a>
               </li>
               <li>
                 <div
                   className={
-                    'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 sm:p-1'
+                    'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
                   }
                 >
                   <span className='text-[1.125rem] pl-2'>{nanakCoin}</span>
-                  <img src='/icons/coin.svg' className={'h-8 w-8'} />
+                  <img src='/icons/coin.svg' className={'h-8 w-8'} alt='coin' />
                 </div>
               </li>
               <li>
                 <div className='group inline-block'>
-                  <button className='outline-none focus:outline-none px-1 sm:px-3 py-1 flex items-center lg:min-w-32'>
+                  <button className='outline-none focus:outline-none sm:px-1 py-1 flex items-center gap-2'>
                     <div
                       className={
-                        'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 p-1'
+                        'flex bg-white h-10 w-auto rounded-full shadow items-center justify-evenly gap-2 sm:gap-1 p-1'
                       }
                     >
-                      <img src={photoURL} className={'h-8 w-8 rounded-full'} />
+                      <img src={photoURL} className={'h-8 w-8 rounded-full'} alt='profile picture' />
                     </div>
                     <span>
                       <FontAwesomeIcon
@@ -74,7 +74,7 @@ export default function Header({ ...props }: PropTypes) {
                       />
                     </span>
                   </button>
-                  <ul className='bg-white border rounded-md transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-24 right-8'>
+                  <ul className='bg-white border rounded-md transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-24 right-6'>
                     <li>
                       <button
                         onClick={() => {

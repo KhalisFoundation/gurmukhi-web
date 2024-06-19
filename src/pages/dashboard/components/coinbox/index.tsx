@@ -18,7 +18,13 @@ function CoinBox({ commonStyle }: { commonStyle: string }) {
     <div className={commonStyle}>
       <div className='flex justify-center items-center h-full'>
         <div>
-          <img className='mx-auto my-2' src='/images/nanakCoin.png' alt='Nanak Coin' />
+          <img
+            className='mx-auto my-2'
+            src='/images/nanakCoinlg.png'
+            alt='Nanak Coin'
+            width={65}
+            height={65}
+          />
           <p className='font-serif text-xs md:text-sm text-sky-700 mb-2 my-0'>
             {text('COINS_DESC')}
           </p>

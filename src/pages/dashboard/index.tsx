@@ -1,9 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import LevelsFooter from 'components/levels-footer/LevelsFooter';
-import Ssa from 'components/ssa';
-import WordsSnippetBox from './components/wordsSnippetBox';
-import WordBox from './components/wordBox';
-import CoinBox from './components/coinbox';
+import React, { lazy, useEffect, useState } from 'react';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { useUserAuth } from 'auth';
@@ -14,9 +9,15 @@ import useGamePlay from './hooks/useGamePlay1';
 import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
 import { User, WordShabadavaliDB, WordType } from 'types';
-import PageLoading from 'components/pageLoading';
 import useLearntWords from './hooks/useLearntWords';
 import { getRandomWord } from './utils';
+
+const Ssa = lazy(() => import('components/ssa'));
+const WordBox = lazy(() => import('./components/wordBox'));
+const WordsSnippetBox = lazy(() => import('./components/wordsSnippetBox'));
+const LevelsFooter = lazy(() => import('components/levels-footer/LevelsFooter'));
+const CoinBox = lazy(() => import('./components/coinbox'));
+const PageLoading = lazy(() => import('components/pageLoading'));
 
 export default function Dashboard() {
   const commonStyle =
