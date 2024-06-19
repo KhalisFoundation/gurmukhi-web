@@ -33,34 +33,6 @@ export default function OptionBtn({
   const textClassname = `gurmukhi font-medium text-md xl:text-2xl ${
     isCorrect === false ? 'text-brightRed' : 'text-darkBlue'
   }`;
-  if (!option) {
-    return;
-  }
-  return (
-    <div className={optionClassname}>
-      <button
-        className={'h-full w-full'}
-        onClick={() => {
-          selector(option);
-          setOptionSelected(true);
-        }}
-        disabled={disabled}
-      >
-        <span className={textClassname}>
-          {
-            addEndingPunctuation(optionValue, text('GURMUKHI'))
-          }
-        </span>
-      </button>
-      <TextToSpeechBtn
-        backgroundColor='bg-white-175'
-        text={optionValue}
-        type={ALL_CONSTANT.OPTION}
-        audioURL={option.audioURL}
-        id={option.id}
-      />
-    </div>
-  );
 
   if (!optionValue) {
     return null;
