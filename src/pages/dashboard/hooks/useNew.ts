@@ -19,6 +19,7 @@ const addWordIfNotExists = (
       isWordRead: true,
       word_id: word.id,
       word: word.word,
+      audioURL: word.audioURL,
       image: word.images ? word.images[0] : '',
       questionIds: questionIds,
       id: word.id,

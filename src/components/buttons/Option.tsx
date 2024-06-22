@@ -55,6 +55,7 @@ export default function OptionBtn({
         </button>
         <TextToSpeechBtn
           backgroundColor='bg-white-175'
+          audioURL={option.audioURL}
           text={optionValue}
           type={ALL_CONSTANT.OPTION}
           id={option.id}
