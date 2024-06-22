@@ -34,6 +34,7 @@ export interface WordShabadavaliDB {
   isWordRead: boolean;
   word_id: string;
   word: string;
+  audioURL?: string;
   image?: string;
   id?: string;
   lastReviewed?: Timestamp;
