@@ -20,6 +20,7 @@ const ALL_CONSTANT = {
   DARK: 'DARK',
   INFORMATION: 'information',
   START_LEARNING: 'START LEARNING',
+  SEMANTICS: 'semantics',
   SENTENCE: 'sentence',
   SENTENCE_TITLECASE: 'Sentence',
   OPTION: 'option',

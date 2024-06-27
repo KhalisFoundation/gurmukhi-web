@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import { WordType } from 'types';
-import { convertToTitleCase, highlightWord } from 'utils';
+import { highlightWord } from 'utils';
 import { getWordById } from 'database/default';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
-import { MiniWord, SentenceType } from 'types';
+import { SentenceType } from 'types';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
+const SemanticsBox = lazy(() => import('./components/semanticsBox'));
 
 export default function Information() {
   const { t: text } = useTranslation();
@@ -56,6 +57,7 @@ export default function Information() {
       fetchData();
     }
   }, [wordID]);
+
   const renderFooter = () => {
     const operation = isRandom ? ALL_CONSTANT.START_QUESTION : ALL_CONSTANT.NEXT;
     const nextText = isRandom ? ALL_CONSTANT.START_LEARNING : 'Next';
@@ -159,52 +161,8 @@ export default function Information() {
                 })}
             </div>
             <div className='flex items-center justify-around gap-5 w-full h-1/2'>
-              {currentWord?.synonyms && currentWord.synonyms.length === 0 && (
-                <div className={'w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5'}>
-                  <h2 className='text-black tracking-widest ms-2 my-2'>
-                    {text('SYNONYMS').toUpperCase()}
-                  </h2>
-                  <div className='w-11/12 flex flex-col gap-2 m-auto'>
-                    {currentWord?.synonyms &&
-                      currentWord.synonyms.map((word: MiniWord | string) => {
-                        if (typeof word !== 'string') {
-                          return (
-                            <div
-                              key={word.id}
-                              className={
-                                'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
-                              }
-                            >
-                              {word.word} ({convertToTitleCase(word.translation ?? '')})
-                            </div>
-                          );
-                        }
-                      })}
-                  </div>
-                </div>)}
-              {currentWord?.antonyms && currentWord.antonyms.length === 0 && (
-                <div className={'w-5/6 h-full cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200 shadow-lg rounded-lg lg:w-2/5'}>
-                  <h2 className='text-black tracking-widest ms-2 my-2'>
-                    {text('ANTONYMS').toUpperCase()}
-                  </h2>
-                  <div className='w-11/12 flex flex-col gap-2 m-auto'>
-                    {currentWord?.antonyms &&
-                      currentWord.antonyms.map((word: MiniWord | string) => {
-                        if (typeof word !== 'string') {
-                          return (
-                            <div
-                              key={word.id}
-                              className={
-                                'flex h-min w-full p-4 text-black text-sm rounded-lg z-10 bg-white'
-                              }
-                            >
-                              {word.word} ({convertToTitleCase(word.translation ?? '')})
-                            </div>
-                          );
-                        }
-                      })}
-                  </div>
-                </div>)}
+              <SemanticsBox text={text('SYNONYMS').toUpperCase()} semantics={currentWord?.synonyms ?? []} />
+              <SemanticsBox text={text('ANTONYMS').toUpperCase()} semantics={currentWord?.antonyms ?? []} />
             </div>
           </div>
         </div>

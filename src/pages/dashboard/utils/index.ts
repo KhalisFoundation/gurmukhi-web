@@ -14,7 +14,7 @@ const gameAlgo = async (user: User) => {
   const isFirstTime = checkIsFirstTime(user);
   if (user && isFirstTime) {
     const { game, learningWords } = await getNewQuestions(CONSTANTS.LEVELS_COUNT, true);
-    const gameArray: GameScreen[] = game;
+    const gameArray = game as GameScreen[];
 
     if (learningWords.length > 0) {
       await addWordsBatch(user.uid, learningWords);
@@ -67,8 +67,8 @@ const getRandomWord = (gameArray: GameScreen[]): WordType | null => {
   const filteredArray = gameArray.filter((item) => item.key.includes('definition'));
   const randomIndex = Math.floor(Math.random() * filteredArray.length);
   const wordId = filteredArray[randomIndex].key.split('-')[1];
-  const sentences = gameArray.filter((item) => item.key.includes('sentence') && item.key.includes(wordId))[0].data as SentenceWord;
-  const sentencesArray = sentences.sentences.map((sentence) => {
+  const sentencesObj = gameArray.filter((item) => item.key.includes('sentence') && item.key.includes(wordId))[0].data as SentenceWord;
+  const sentencesArray = sentencesObj.sentences.map((sentence) => {
     return {
       'sentence': sentence.sentence,
       'translation': sentence.translation ?? '',

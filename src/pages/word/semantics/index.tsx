@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { lazy, useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useLocation } from 'react-router-dom';
 import Confetti from 'react-confetti';
@@ -9,20 +9,23 @@ import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { getWordById } from 'database/default';
-import { showToastMessage, createSemanticDraggables } from 'utils';
+import { showToastMessage } from 'utils';
 import { processWords, semanticsOnDrag } from './hooks';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 import { WordType } from 'types';
 import CONSTANTS from 'constants/constant';
+import Loading from 'components/loading';
+const SemanticDraggables = lazy(() => import('./components/SemanticDraggables'));
+import semanticWords from 'data/words.json';
 
 export default function Semantics() {
   const { t: text } = useTranslation();
   const location = useLocation();
   const { title, description } = metaTags.SEMANTICS;
   const [wordID, setWordID] = useState<string | null>(null);
-  const [isLoading, toggleLoading] = useState<boolean | null>(null);
   const [words, setWords] = useState<WordType[]>([]);
+  const [isLoading, toggleLoading] = useState<boolean | null>(true);
   const [currentWord, setCurrentWord] = useState<WordType | null>(null);
   const [synonyms, setSynonyms] = useState<WordType[]>([]);
   const [isSynonymsDisabled, setIsSynonymsDisabled] = useState<boolean>(false);
@@ -33,9 +36,16 @@ export default function Semantics() {
   const [showConfetti, setShowConfetti] = useState(false);
   const synonymsText = text('SYNONYMS');
   const antonymsText = text('ANTONYMS');
-  // Create a ref to store the reference to the HTML element
   const jumpBoxRef = useRef<any>(null);
-  // fetch word from state using wordId
+  
+  useEffect(() => {
+    let semanticIds = currentWord?.synonyms?.map((synonym) => synonym.id) ?? [];
+    semanticIds = semanticIds?.concat(currentWord?.antonyms?.map((antonym) => antonym.id) ?? []);
+    semanticIds = semanticIds.filter((id) => id !== undefined);
+
+    const semiWords = semanticWords.filter((word) => semanticIds.includes(word.id));
+    setWords(semiWords);
+  }, [currentWord]);
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -51,28 +61,21 @@ export default function Semantics() {
       setAntonyms,
     );
   };
+
   useEffect(() => {
     const synonymIds = new Set(synonyms.map((synonym) => synonym.id));
     const antonymIds = new Set(antonyms.map((antonym) => antonym.id));
     if (!currentWord?.synonyms) {
       return;
     }
-    const synonymFound = currentWord.synonyms.map((synonym) => {
-      return synonym.id ? synonymIds.has(synonym.id) : false;
-    });
-
+    const synonymFound = currentWord.synonyms.map((synonym) => synonym.id && synonymIds.has(synonym.id));
     if (!currentWord.antonyms) {
       return;
     }
-
-    const antonymFound = currentWord.antonyms.map((antonym) => {
-      return antonym.id ? antonymIds.has(antonym.id) : false;
-    });
-
+    const antonymFound = currentWord.antonyms.map((antonym) => antonym.id && antonymIds.has(antonym.id));
     const allWords = [...synonymFound, ...antonymFound];
-    // if all words are found, show confetti
-    if (allWords.every((wordFound) => wordFound)) {
-      // setShowConfetti(true);
+    if (allWords.every(Boolean)) {
+      setShowConfetti(true);
     } else {
       setShowConfetti(false);
     }
@@ -80,7 +83,6 @@ export default function Semantics() {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    console.log(searchParams.get('id'));
     setWordID(searchParams.get('id'));
   }, [location.search]);
 
@@ -92,18 +94,16 @@ export default function Semantics() {
       }
       toggleLoading(true);
       const wordData = await getWordById(wordID, true);
-      if (!wordData) {
+      if (wordData) {
+        setCurrentWord(wordData);
+      } else {
         setCurrentWord(null);
       }
-      setCurrentWord(wordData);
       toggleLoading(false);
     };
 
-    if (location.state?.data) {
-      setCurrentWord(location.state.data);
-    } else {
-      fetchData();
-    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    location.state?.data ? setCurrentWord(location.state.data) : fetchData();
   }, [wordID]);
 
   useEffect(() => {
@@ -117,8 +117,10 @@ export default function Semantics() {
 
   useEffect(() => {
     if (!currentWord) {
+      toggleLoading(false);
       return;
     }
+    toggleLoading(true);
     processWords(
       synonyms,
       text('SYNONYMS'),
@@ -143,11 +145,16 @@ export default function Semantics() {
       setSynonyms,
       setAntonyms,
     );
+    toggleLoading(false);
   }, [synonyms, antonyms, words, currentWord]);
 
   if (!currentWord) {
     // Handle case when word is not found
     return <div>{text('WORD_NOT_FOUND')}</div>;
+  }
+
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (
@@ -203,15 +210,15 @@ export default function Semantics() {
                 isDropDisabled={isSynonymsDisabled}
               >
                 {(provided) =>
-                  createSemanticDraggables(
-                    provided,
-                    synonyms,
-                    synonymsText.toLowerCase(),
-                    text,
-                    currentWord.synonyms as (string | number)[],
-                    setIsSynonymsDisabled,
-                    jumpBoxRef,
-                  )
+                  <SemanticDraggables
+                    provided={provided}
+                    wordList={synonyms}
+                    type={synonymsText.toLowerCase()}
+                    text={text}
+                    originalSemantics={currentWord.synonyms as (string | number)[]}
+                    disableDroppable={setIsSynonymsDisabled}
+                    boxRef={jumpBoxRef}
+                  />
                 }
               </Droppable>
               <Droppable
@@ -220,15 +227,15 @@ export default function Semantics() {
                 isDropDisabled={isAntonymsDisabled}
               >
                 {(provided) =>
-                  createSemanticDraggables(
-                    provided,
-                    antonyms,
-                    antonymsText.toLowerCase(),
-                    text,
-                    currentWord.antonyms as (string | number)[],
-                    setIsAntonymsDisabled,
-                    jumpBoxRef,
-                  )
+                  <SemanticDraggables
+                    provided={provided}
+                    wordList={antonyms}
+                    type={antonymsText.toLowerCase()}
+                    text={text}
+                    originalSemantics={currentWord.antonyms as (string | number)[]}
+                    disableDroppable={setIsAntonymsDisabled}
+                    boxRef={jumpBoxRef}
+                  />
                 }
               </Droppable>
             </div>

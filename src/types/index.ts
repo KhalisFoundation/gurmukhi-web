@@ -85,6 +85,13 @@ export interface MiniWord {
   is_for_support?: boolean;
 }
 
+export interface Semantic {
+  id: string;
+  word_id: string;
+  word: string;
+  translation: string;
+}
+
 export interface Status {
   [key: string]: string;
 }
