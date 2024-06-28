@@ -2,12 +2,17 @@ import React from 'react';
 import { gameAlgo } from 'pages/dashboard/utils';
 import { useUserAuth } from 'auth';
 import { User } from 'types';
+import { commitBatch, getBatch } from 'database/shabadavalidb';
 
 function ResetGame() {
   const user = useUserAuth().user as User;
   const resetGame = async () => {
-    const { gameArray } = await gameAlgo(user);
-    console.log(gameArray);
+    const batch = getBatch();
+    const { gameArray } = await gameAlgo(user, batch);
+    await commitBatch(batch);
+    if (!gameArray) {
+      console.log(gameArray);
+    }
   };
   return (
     <div>

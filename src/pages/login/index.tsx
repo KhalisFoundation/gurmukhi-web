@@ -1,8 +1,8 @@
-import React from 'react';
-import Gurfateh from 'components/gurfateh/Gurfateh';
-import SignIn from 'components/signin/SignIn';
+import React, { lazy } from 'react';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
+const Gurfateh = lazy(() => import('components/gurfateh/Gurfateh'));
+const SignIn = lazy(() => import('components/signin/SignIn'));
 
 export default function Login() {
   const { title, description } = metaTags.LOGIN;

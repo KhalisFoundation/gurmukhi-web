@@ -80,7 +80,7 @@ export default function Information() {
   }
 
   return (
-    <div className='flex flex-col items-center w-full lg:h-full justify-between gap-5'>
+    <div className='flex flex-col items-center w-full xl:h-full justify-between gap-5'>
       <Meta title={title} description={description} />
       <div className='flex flex-col h-full justify-between items-center'>
         <img
@@ -90,13 +90,15 @@ export default function Information() {
           width={200}
           height={200}
         />
-        <div className='flex flex-col items-center justify-between h-full gap-10 w-full py-10 overflow-y-auto xl:flex-row'>
+        <div className='flex flex-col items-center justify-between h-full gap-10 w-full py-5 overflow-y-auto xl:flex-row'>
           <div className='flex flex-col items-left justify-evenly w-3/4 h-full xl:w-1/2'>
             <div>
               <div className='flex flex-row items-center justify-between w-4/5'>
                 <div className='flex flex-col gap-5'>
-                  <h1 className={'text-5xl gurmukhi text-black'}>{currentWord?.word}</h1>
-                  <h2 className='text-2xl brandon-grotesque italic text-gray-4e4'>
+                  <h1 className={'xl:text-5xl text-3xl gurmukhi text-black'}>
+                    {currentWord?.word}
+                  </h1>
+                  <h2 className='xl:text-2xl text-xl brandon-grotesque italic text-gray-4e4'>
                     {currentWord?.translation}
                   </h2>
                 </div>
@@ -126,8 +128,8 @@ export default function Information() {
               className='object-cover rounded-xl'
             />
           </div>
-          <div className='flex flex-col items-left justify-evenly w-3/4 h-full gap-5'>
-            <div className='flex flex-col items-left text-justify justify-between gap-6'>
+          <div className='flex flex-col items-left justify-evenly w-3/4 h-full gap-2'>
+            <div className='flex flex-col items-left text-justify justify-between gap-2'>
               <span className='tracking-widest text-center xl:text-left'>
                 {text('EXAMPLES').toUpperCase()}
               </span>
@@ -139,7 +141,7 @@ export default function Information() {
                     'gurmukhi',
                   );
                   return (
-                    <div key={index} className='flex flex-col text-xl'>
+                    <div key={index} className='flex flex-col text-lg'>
                       <span className='text-black-111'>
                         {highlightedSentence}
                         {sentence && sentence.sentence && (
@@ -160,9 +162,13 @@ export default function Information() {
                   );
                 })}
             </div>
-            <div className='flex items-center justify-around gap-5 w-full h-1/2'>
-              <SemanticsBox text={text('SYNONYMS').toUpperCase()} semantics={currentWord?.synonyms ?? []} />
-              <SemanticsBox text={text('ANTONYMS').toUpperCase()} semantics={currentWord?.antonyms ?? []} />
+            <div className='flex items-center gap-5'>
+              {currentWord?.synonyms && currentWord.synonyms.length !== 0 && (
+                <SemanticsBox title='SYNONYMS' semantics={currentWord.synonyms} />
+              )}
+              {currentWord?.antonyms && currentWord.antonyms.length !== 0 && (
+                <SemanticsBox title='ANTONYMS' semantics={currentWord.antonyms} />
+              )}
             </div>
           </div>
         </div>

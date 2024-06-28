@@ -1,13 +1,13 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, lazy, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'auth';
 import { ROUTES } from 'constants/routes';
-import SignUp from './SignUp';
-import InputWithIcon from '../input/InputWithIcon';
 import { SignError } from 'types';
 import { ToastContainer, toast } from 'react-toastify';
 import { bugsnagErrorHandler, showToastMessage } from 'utils';
+const SignUp = lazy(() => import('./SignUp'));
+const InputWithIcon = lazy(() => import('../input/InputWithIcon'));
 
 export default function SignIn() {
   const { t: text } = useTranslation();
@@ -18,7 +18,13 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState<SignError | null>(null);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
-  const { logIn, signUp, signInWithGoogle } = useUserAuth();
+  const { logIn, signUp, signInWithGoogle, user } = useUserAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate(ROUTES.DASHBOARD);
+    }
+  }, [user]);
 
   const displayToast = (textMsg: string, error = true) => {
     showToastMessage(textMsg, toast.POSITION.BOTTOM_RIGHT, true, error);

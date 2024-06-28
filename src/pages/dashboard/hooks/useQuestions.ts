@@ -1,14 +1,16 @@
-import { getQuestions } from 'database/default';
+import { getOptions, getQuestions } from 'database/default';
 import { addQuestionsBatch, getWords } from 'database/shabadavalidb';
 import ALL_CONSTANT from 'constants/constant';
 import { QuestionData, User, GameScreen, WordShabadavaliDB } from 'types';
 import { createGameScreen, shuffleArray } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
+import { WriteBatch } from 'firebase/firestore';
 
 const getRandomQuestions = async (
   user: User,
   count: number,
   isLearnt: boolean,
+  batch: WriteBatch,
   questionIds?: string[],
 ) => {
   const gameArray: GameScreen[] = [];
@@ -19,9 +21,9 @@ const getRandomQuestions = async (
     }
     let questionsPromises;
     if (isLearnt && questionIds) {
-      questionsPromises = words.map((word) => getQuestions(word.word_id, questionIds));
+      questionsPromises = words.map((word) => getQuestions(word.word_id, questionIds, false));
     } else {
-      questionsPromises = words.map((word) => getQuestions(word.word_id, word.questionIds));
+      questionsPromises = words.map((word) => getQuestions(word.word_id, word.questionIds, false));
     }
     const questionsResults: QuestionData[][] = await Promise.all(questionsPromises);
     const questions: QuestionData[] = shuffleArray(questionsResults.flat());
@@ -38,6 +40,7 @@ const getRandomQuestions = async (
           question.image = foundWord.image;
         }
       }
+      question.options = await getOptions(question.options);
       gameArray.push(
         createGameScreen(
           `${ALL_CONSTANT.QUESTIONS_SMALL}-${question.word_id}-${question.id}`,
@@ -45,7 +48,7 @@ const getRandomQuestions = async (
         ),
       );
     }
-    await addQuestionsBatch(user.uid, wordToQuestionMap);
+    addQuestionsBatch(user.uid, wordToQuestionMap, batch);
     return gameArray;
   } catch (error) {
     bugsnagErrorHandler(error, 'pages/dashboard/hooks/useQuestions.ts/getRandomQuestions', {

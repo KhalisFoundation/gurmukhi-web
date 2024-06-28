@@ -1,5 +1,5 @@
 import { GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
-import { getQuestions, getSemanticsByIds } from 'database/default';
+import { getQuestions, getWordById, getSemanticsByIds } from 'database/default';
 import { MiniWord, Semantic, WordType } from 'types';
 import { createGameScreen } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
@@ -21,6 +21,7 @@ const addWordIfNotExists = (
       word: word.word,
       image: word.images ? word.images[0] : '',
       questionIds: questionIds,
+      id: word.id,
     };
     learningWords.push(learningWord);
   }
@@ -55,70 +56,86 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
   }
 
   const usedWordIds = [];
-  for (let i = 0; i < count; ) {
-    const word = (await getNewWords(uid)) as WordType;
-    if (word?.id) {
-      usedWordIds.push(word.id);
-      const questions = await getQuestions(word.id, usedWordIds);
-      const questionIds = questions
-        .map((question) => question.id)
-        .filter((id) => id !== undefined) as string[];
-      addWordIfNotExists(word, learningWords, questionIds);
-      delete word.created_at;
-      delete word.updated_at;
-      game.push(createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, word));
-      game.push(createGameScreen(`${ALL_CONSTANT.SENTENCES}-${word.id}`, word));
-      game.push(createGameScreen(`${ALL_CONSTANT.SEMANTICS}-${word.id}`, word));
+  const words: WordShabadavaliDB[] | null = await getNewWords(uid, count);
+  if (!words) {
+    return { game: seed0, learningWords };
+  }
+  let questionCount = 0;
+  for (const word of words) {
+    if (questionCount >= count) {
+      break;
+    }
+    const wordDefinition: WordType | null = await getWordById(word.word_id, true);
+    usedWordIds.push(word.word_id);
+    const questions = await getQuestions(word.word_id, usedWordIds);
+    if (questions.length === 0) {
+      continue;
+    }
+    const questionIds = questions
+      .map((question) => question.id)
+      .filter((id) => id !== undefined) as string[];
+    if (wordDefinition === null) {
+      continue;
+    }
+    addWordIfNotExists(wordDefinition, learningWords, questionIds);
+    delete wordDefinition.created_at;
+    delete wordDefinition.updated_at;
+    game.push(createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, wordDefinition));
+    game.push(createGameScreen(`${ALL_CONSTANT.SENTENCES}-${word.id}`, wordDefinition));
+    game.push(createGameScreen(`${ALL_CONSTANT.SEMANTICS}-${word.id}`, wordDefinition));
+        
+    let wordSemantics: (string | MiniWord)[] = [];
+    if (wordDefinition?.synonyms) wordSemantics = wordDefinition?.synonyms;
+    if (wordDefinition?.antonyms) wordSemantics = wordSemantics.concat(wordDefinition?.antonyms);
 
-      let wordSemantics: (string | MiniWord)[] = [];
-      if (word?.synonyms) wordSemantics = word?.synonyms;
-      if (word?.antonyms) wordSemantics = wordSemantics.concat(word?.antonyms);
-
-      wordSemantics.map((semantic) => {
-        if (word.id) {
-          if (typeof semantic === 'string') {
-            const wordId = word.id.toString();
-            const semanticId = semanticIds.find((obj) => obj[wordId] !== undefined);
-            if (semanticId) {
-              semanticId[wordId].push(semantic);
-            } else {
-              const newEntry = { [wordId]: [semantic] };
-              semanticIds.push(newEntry);
-            } 
+    wordSemantics.map((semantic) => {
+      if (word.id) {
+        if (typeof semantic === 'string') {
+          const wordId = word.id.toString();
+          const semanticId = semanticIds.find((obj) => obj[wordId] !== undefined);
+          if (semanticId) {
+            semanticId[wordId].push(semantic);
           } else {
-            if (semantic.id && semantic.word && semantic.translation) {
-              const semanticWord: Semantic = {
-                id: semantic.id,
-                word_id: word.id,
-                word: semantic.word,
-                translation: semantic.translation,
-              };
-              semantics.push(semanticWord);
-            }
+            const newEntry = { [wordId]: [semantic] };
+            semanticIds.push(newEntry);
+          } 
+        } else {
+          if (semantic.id && semantic.word && semantic.translation) {
+            const semanticWord: Semantic = {
+              id: semantic.id,
+              word_id: word.id,
+              word: semantic.word,
+              translation: semantic.translation,
+            };
+            semantics.push(semanticWord);
           }
         }
-      });
-    
-      if (questions.length === 0) i++;
-      for (const question of questions) {
-        if (word.word) {
-          question.word = word.word;
-        }
-        if (question.type === 'image' && !question.image && word.images) {
-          question.image = word.images[0];
-        }
-        if (i < count) {
-          game.push(
-            createGameScreen(`${ALL_CONSTANT.QUESTIONS_SMALL}-${word.id}-${question.id}`, question),
-          );
-          i++;
-        }
+      }
+    });
+
+    for (const question of questions) {
+      if (word.word) {
+        question.word = word.word;
+      }
+      if (question.type === 'image' && !question.image && wordDefinition.images) {
+        question.image = wordDefinition.images[0];
+      }
+      if (questionCount < count) {
+        game.push(
+          createGameScreen(`${ALL_CONSTANT.QUESTIONS_SMALL}-${word.id}-${question.id}`, question),
+        );
+        questionCount++;
+      } else {
+        break;
       }
 
       const semanticsData = await getSemanticsByIds(semanticIds, []);
 
       semanticsData.synonyms.forEach((semantic) => {
-        const wordId = word.id;
+        const wordId = word?.id;
+        if (!wordId) {
+          return;
+        }
         const wordEntry = semanticIds.find((obj) => obj[wordId] !== undefined);
         if (wordEntry && semantic.id && semantic.word && semantic.translation) {
           const semanticWord: Semantic = {

@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Anvaad from 'anvaad-js';
+import { unicode } from 'anvaad-js';
 
 interface Props {
   number: number;
@@ -15,7 +15,7 @@ export default function LevelHexagon({ ...props }: Props) {
         <div className='flex justify-center items-center drop-shadow-[0_4px_15px_#fbbc054d] level-completed hover:relative hover:bottom-2'>
           <img src={'/icons/doneLevel.svg'} alt='level' className={dimensions} />
           <div className='absolute flex justify-center items-center'>
-            <p className='text-zinc-950/40 text-xl'>{Anvaad.unicode(props.number.toString())}</p>
+            <p className='text-zinc-950/40 text-xl'>{unicode(props.number.toString())}</p>
           </div>
         </div>
       );

@@ -24,9 +24,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-export const userStateListener = (
-  callback:NextOrObserver<User>,
-) => onAuthStateChanged(auth, callback);
+export const userStateListener = (callback: NextOrObserver<User>) =>
+  onAuthStateChanged(auth, callback);
 
 export const logOut = async () => signOut(auth);
 

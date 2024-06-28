@@ -119,7 +119,7 @@ export default function MultipleChoiceQuestion({
                 ? questionData?.image
                 : 'https://images.pexels.com/photos/3942924/pexels-photo-3942924.jpeg'
             }
-            className='w-2/5 lg:w-1/2 m-auto object-contain rounded-xl'
+            className='w-2/5 m-auto object-contain rounded-xl'
           />
         </div>
       )}
