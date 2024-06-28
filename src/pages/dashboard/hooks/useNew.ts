@@ -1,6 +1,6 @@
 import { GameScreen, WordShabadavaliDB } from 'types/shabadavalidb';
-import { getQuestions, getWordById } from 'database/default';
-import { WordType } from 'types';
+import { getQuestions, getWordById, getSemanticsByIds } from 'database/default';
+import { MiniWord, Semantic, WordType } from 'types';
 import { createGameScreen } from '../utils';
 import ALL_CONSTANT from 'constants/constant';
 import seed0 from 'data/seed0.json';
@@ -29,7 +29,10 @@ const addWordIfNotExists = (
 
 const getNewQuestions = async (count: number, local = false, uid: string = '') => {
   const learningWords: WordShabadavaliDB[] = [];
+  const semanticIds: { [key: string]: string[] }[] = [];
+  const semantics: Semantic[] = [];
   const game: GameScreen[] = [];
+
   if (local) {
     seed0.map((word) => {
       if (word.key.includes(ALL_CONSTANT.DEFINITION)) {
@@ -51,6 +54,7 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
 
     return { game: seed0, learningWords };
   }
+
   const usedWordIds = [];
   const words: WordShabadavaliDB[] | null = await getNewWords(uid, count);
   if (!words) {
@@ -78,6 +82,36 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
     delete wordDefinition.updated_at;
     game.push(createGameScreen(`${ALL_CONSTANT.DEFINITION}-${word.id}`, wordDefinition));
     game.push(createGameScreen(`${ALL_CONSTANT.SENTENCES}-${word.id}`, wordDefinition));
+    game.push(createGameScreen(`${ALL_CONSTANT.SEMANTICS}-${word.id}`, wordDefinition));
+        
+    let wordSemantics: (string | MiniWord)[] = [];
+    if (wordDefinition?.synonyms) wordSemantics = wordDefinition?.synonyms;
+    if (wordDefinition?.antonyms) wordSemantics = wordSemantics.concat(wordDefinition?.antonyms);
+
+    wordSemantics.map((semantic) => {
+      if (word.id) {
+        if (typeof semantic === 'string') {
+          const wordId = word.id.toString();
+          const semanticId = semanticIds.find((obj) => obj[wordId] !== undefined);
+          if (semanticId) {
+            semanticId[wordId].push(semantic);
+          } else {
+            const newEntry = { [wordId]: [semantic] };
+            semanticIds.push(newEntry);
+          } 
+        } else {
+          if (semantic.id && semantic.word && semantic.translation) {
+            const semanticWord: Semantic = {
+              id: semantic.id,
+              word_id: word.id,
+              word: semantic.word,
+              translation: semantic.translation,
+            };
+            semantics.push(semanticWord);
+          }
+        }
+      }
+    });
 
     for (const question of questions) {
       if (word.word) {
@@ -94,10 +128,29 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
       } else {
         break;
       }
+
+      const semanticsData = await getSemanticsByIds(semanticIds, []);
+
+      semanticsData.synonyms.forEach((semantic) => {
+        const wordId = word?.id;
+        if (!wordId) {
+          return;
+        }
+        const wordEntry = semanticIds.find((obj) => obj[wordId] !== undefined);
+        if (wordEntry && semantic.id && semantic.word && semantic.translation) {
+          const semanticWord: Semantic = {
+            id: semantic.id,
+            word_id: wordId,
+            word: semantic.word,
+            translation: semantic.translation,
+          };
+          semantics.push(semanticWord);
+        }
+      });
     }
   }
 
-  return { game, learningWords };
+  return { game, learningWords, semantics };
 };
 
 export default getNewQuestions;

@@ -8,6 +8,25 @@
       "meaning_punjabi": "ਬੱਚੇ ਅਤੇ ਵੱਡੇ ਹੋਣ ਦੇ ਵਿੱਚ ਦਾ ਸਮਾਂ",
       "images": [
         "https://images.pexels.com/photos/764681/pexels-photo-764681.jpeg?auto=compress&cs=tinysrgb&w=300"
+      ],
+      "synonyms": [
+        {
+          "id": "8Yu9gCNyvM5s7WlS0K9z",
+          "word": "ਜੋਬਨ",
+          "translation": "youth"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "VLdf8S9KRWsC2X047ywt",
+          "word": "ਬੁਢਾਪਾ",
+          "translation": "old age"
+        },
+        {
+          "id": "VvvzDuu0918AvUPIBF4Q",
+          "word": "ਬਜ਼ੁਰਗੀ",
+          "translation": "old age"
+        }
       ]
     }
   },
@@ -34,6 +53,32 @@
           "word_id": "XhqQ5qkJ5AhRvOwdre1x",
           "sentence": "ਵਡੇ ਸਾਹਿਬਜ਼ਾਦਿਆਂ ਨੇ ਆਪਣੀ ਜਵਾਨੀ ਵਿੱਚ ਸ਼ਹੀਦੀ ਦਿੱਤੀ ਸੀ।",
           "translation": "The elder Sahibzaade gave Shaheedi when they were in their youth."
+        }
+      ]
+    }
+  },
+  {
+    "key": "semantics-XhqQ5qkJ5AhRvOwdre1x",
+    "data": {
+      "word": "ਜਵਾਨੀ",
+      "translation": "youth",
+      "synonyms": [
+        {
+          "id": "8Yu9gCNyvM5s7WlS0K9z",
+          "word": "ਜੋਬਨ",
+          "translation": "youth"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "VLdf8S9KRWsC2X047ywt",
+          "word": "ਬੁਢਾਪਾ",
+          "translation": "old age"
+        },
+        {
+          "id": "VvvzDuu0918AvUPIBF4Q",
+          "word": "ਬਜ਼ੁਰਗੀ",
+          "translation": "old age"
         }
       ]
     }
@@ -81,6 +126,35 @@
       "meaning_punjabi": "ਕਿਸੇ ਸੰਸਥਾ ਯਾਂ ਮੁਲਕ ਦਾ ਮੁਖੀ",
       "images": [
         "https://cdn.pixabay.com/photo/2014/05/28/01/37/obama-356133_1280.jpg"
+      ],
+      "synonyms": [
+        {
+          "id": "I5o2oGhmeKSfsWtp2Kcg",
+          "word": "ਸਰਪੰਚ",
+          "translation": "leader"
+        },
+        {
+          "id": "YAV5ukOVrqArtUNT7Ytu",
+          "word": "ਜੱਥੇਦਾਰ",
+          "translation": "head of a group"
+        },
+        {
+          "id": "xYpJX17vmgcACOeFiW74",
+          "word": "ਮੁਖੀ",
+          "translation": "head"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "7tJ6e3aAxuB9q9fOMmZg",
+          "word": "ਆਮ ਆਦਮੀ",
+          "translation": "common man"
+        },
+        {
+          "id": "KeQIriY7ZOsFQtDmDq9D",
+          "word": "ਗੁਲਾਮ",
+          "translation": "slave"
+        }
       ]
     }
   },
@@ -107,6 +181,42 @@
           "word_id": "iZFSTZxuQbnMSXd40xEV",
           "sentence": "ਪ੍ਰਿੰਸੀਪਲ ਸਕੂਲ ਦਾ ਪ੍ਰਧਾਨ ਹੁੰਦਾ ਹੈ।",
           "translation": "The principal is the head of school."
+        }
+      ]
+    }
+  },
+  {
+    "key": "semantics-iZFSTZxuQbnMSXd40xEV",
+    "data": {
+      "word": "ਪ੍ਰਧਾਨ",
+      "translation": "Head",
+      "synonyms": [
+        {
+          "id": "I5o2oGhmeKSfsWtp2Kcg",
+          "word": "ਸਰਪੰਚ",
+          "translation": "leader"
+        },
+        {
+          "id": "YAV5ukOVrqArtUNT7Ytu",
+          "word": "ਜੱਥੇਦਾਰ",
+          "translation": "head of a group"
+        },
+        {
+          "id": "xYpJX17vmgcACOeFiW74",
+          "word": "ਮੁਖੀ",
+          "translation": "head"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "7tJ6e3aAxuB9q9fOMmZg",
+          "word": "ਆਮ ਆਦਮੀ",
+          "translation": "common man"
+        },
+        {
+          "id": "KeQIriY7ZOsFQtDmDq9D",
+          "word": "ਗੁਲਾਮ",
+          "translation": "slave"
         }
       ]
     }
@@ -189,6 +299,30 @@
       "meaning_punjabi": "ਜਿਹੜਾ ਉੱਦਮ ਨਾ ਕਰੇ",
       "images": [
         "https://images.pexels.com/photos/164446/pexels-photo-164446.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+      ],
+      "synonyms": [
+        {
+          "id": "3785jAcd1zhFlwlRRrXa",
+          "word": "ਦਲਿੱਦਰੀ",
+          "translation": "dull"
+        },
+        {
+          "id": "uUknaiDV636kEy4Lifve",
+          "word": "ਆਲਸੀ",
+          "translation": "lazy"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "385ncMOVIb9UGnqg3iQ6",
+          "word": "ਉੱਦਮੀ",
+          "translation": "hard working"
+        },
+        {
+          "id": "wFoyKvJ5Us5LDyfHuvBh",
+          "word": "ਮਿਹਨਤੀ",
+          "translation": "hard working"
+        }
       ]
     }
   },
@@ -215,6 +349,37 @@
           "word_id": "mSDg6oZH3zJ9aIIvwddr",
           "translation": "I feel lazy on weekends and like to relax.",
           "sentence": "ਮੈਂ ਹਫਤੇ ਦੇ ਆਖਰੀ ਦਿਨ ਸੁਸਤ ਮਹਿਸੂਸ ਕਰਦਾ ਹਾਂ ਅਤੇ ਆਰਾਮ ਕਰਨਾ ਪਸੰਦ ਕਰਦਾ ਹਾਂ।  "
+        }
+      ]
+    }
+  },
+  {
+    "key": "semantics-mSDg6oZH3zJ9aIIvwddr",
+    "data": {
+      "word": "ਸੁਸਤ",
+      "translation": "lazy",
+      "synonyms": [
+        {
+          "id": "3785jAcd1zhFlwlRRrXa",
+          "word": "ਦਲਿੱਦਰੀ",
+          "translation": "dull"
+        },
+        {
+          "id": "uUknaiDV636kEy4Lifve",
+          "word": "ਆਲਸੀ",
+          "translation": "lazy"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "385ncMOVIb9UGnqg3iQ6",
+          "word": "ਉੱਦਮੀ",
+          "translation": "hard working"
+        },
+        {
+          "id": "wFoyKvJ5Us5LDyfHuvBh",
+          "word": "ਮਿਹਨਤੀ",
+          "translation": "hard working"
         }
       ]
     }
@@ -262,6 +427,35 @@
       "meaning_punjabi": "ਜਿਸ ਕੋਲ ਬਹੁਤੀ ਤਾਕਤ ਨਾ ਹੋਵੇ",
       "images": [
         "https://images.pexels.com/photos/12442151/pexels-photo-12442151.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+      ],
+      "synonyms": [
+        {
+          "id": "4GZMM2etAY3AnpleRmtx",
+          "word": "ਨਾਜ਼ੁਕ",
+          "translation": "weak"
+        },
+        {
+          "id": "yRbeTdwGl3ypMSbz2J25",
+          "word": "ਲਿੱਸਾ",
+          "translation": "weak"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "awegsB9MQ65RxCNfpblK",
+          "word": "ਮਜ਼ਬੂਤ",
+          "translation": "strong"
+        },
+        {
+          "id": "emZfo2W5D65Bws4NJ9mE",
+          "word": "ਤਕੜਾ",
+          "translation": "strong"
+        },
+        {
+          "id": "g8gdb7Yo0ijiFwIJQLd3",
+          "word": "ਤਾਕਤਵਰ",
+          "translation": "strong"
+        }
       ]
     }
   },
@@ -288,6 +482,42 @@
           "word_id": "nsbu0GTy9cwOh0b1jPkK",
           "translation": "The body becomes weak due to lack of exercise.",
           "sentence": "ਕਸਰਤ ਤੋ ਬਿਨਾਂ ਸਰੀਰ ਕਮਜ਼ੋਰ ਹੋ ਜਾਂਦਾ ਹੈ।"
+        }
+      ]
+    }
+  },
+  {
+    "key": "semantics-nsbu0GTy9cwOh0b1jPkK",
+    "data": {
+      "word": "ਕਮਜ਼ੋਰ",
+      "translation": "Weak",
+      "synonyms": [
+        {
+          "id": "4GZMM2etAY3AnpleRmtx",
+          "word": "ਨਾਜ਼ੁਕ",
+          "translation": "weak"
+        },
+        {
+          "id": "yRbeTdwGl3ypMSbz2J25",
+          "word": "ਲਿੱਸਾ",
+          "translation": "weak"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "awegsB9MQ65RxCNfpblK",
+          "word": "ਮਜ਼ਬੂਤ",
+          "translation": "strong"
+        },
+        {
+          "id": "emZfo2W5D65Bws4NJ9mE",
+          "word": "ਤਕੜਾ",
+          "translation": "strong"
+        },
+        {
+          "id": "g8gdb7Yo0ijiFwIJQLd3",
+          "word": "ਤਾਕਤਵਰ",
+          "translation": "strong"
         }
       ]
     }
@@ -335,6 +565,25 @@
       "meaning_punjabi": "ਪਰਦਾ ਕਰਣਾ",
       "images": [
         "https://images.pexels.com/photos/2029239/pexels-photo-2029239.jpeg"
+      ],
+      "synonyms": [
+        {
+          "id": "02w7eMlXEkdMfpJDPeAC",
+          "word": "ਕੱਜਣਾ",
+          "translation": "cover"
+        },
+        {
+          "id": "gwMIXVp5rFutt5pRif19",
+          "word": "ਲਕੋਣਾ",
+          "translation": "to hide something"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "eY7NHFIm1snVWxoFrycn",
+          "word": "ਖੋਲਣਾ",
+          "translation": "to open"
+        }
       ]
     }
   },
@@ -361,6 +610,32 @@
           "word_id": "52f90leYZnZyc4klgvpq",
           "sentence": "ਮੀਂਹ ਤੋਂ ਬੱਚਣ ਲਈ ਮੈਂ ਛਤਰੀ ਨਾਲ ਆਪਣੇ ਆਪ ਨੂੰ ਢਕਦਾ ਹਾਂ।",
           "translation": "I use an umbrella to cover myself from the rain."
+        }
+      ]
+    }
+  },
+  {
+    "key": "semantics-52f90leYZnZyc4klgvpq",
+    "data": {
+      "word": "ਢਕਣਾ",
+      "translation": "to cover",
+      "synonyms": [
+        {
+          "id": "02w7eMlXEkdMfpJDPeAC",
+          "word": "ਕੱਜਣਾ",
+          "translation": "cover"
+        },
+        {
+          "id": "gwMIXVp5rFutt5pRif19",
+          "word": "ਲਕੋਣਾ",
+          "translation": "to hide something"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "eY7NHFIm1snVWxoFrycn",
+          "word": "ਖੋਲਣਾ",
+          "translation": "to open"
         }
       ]
     }
@@ -409,6 +684,20 @@
       "meaning_punjabi": "ਆਰਾਮ ਦੀ ਹਾਲਤ ਵਿੱਚ ਜਾਣਾ",
       "images": [
         "https://images.pexels.com/photos/1442005/pexels-photo-1442005.jpeg"
+      ],
+      "synonyms": [
+        {
+          "id": "DRO8DCOBrq80iIR64RZa",
+          "word": "ਨੀਂਦ ਲੈਣੀ",
+          "translation": "slumber"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "eGtgcLyWAjDPIKBmsAK9",
+          "word": "ਜਾਗਣਾ",
+          "translation": "to wake"
+        }
       ]
     }
   },
@@ -435,6 +724,27 @@
           "word_id": "rhnpyCwmnp5neQ71WC8U",
           "translation": "I need to sleep early to have energy for school.",
           "sentence": "ਸਕੂਲ ਵਾਸਤੇ ਹਿੰਮਤ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਮੈਨੂੰ ਜਲਦੀ ਸੌਣ ਦੀ ਲੋੜ ਹੈ।"
+        }
+      ]
+    }
+  },
+  {
+    "key": "semantics-rhnpyCwmnp5neQ71WC8U",
+    "data": {
+      "word": "ਸੌਣਾ",
+      "translation": "To sleep",
+      "synonyms": [
+        {
+          "id": "DRO8DCOBrq80iIR64RZa",
+          "word": "ਨੀਂਦ ਲੈਣੀ",
+          "translation": "slumber"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "eGtgcLyWAjDPIKBmsAK9",
+          "word": "ਜਾਗਣਾ",
+          "translation": "to wake"
         }
       ]
     }
@@ -516,6 +826,20 @@
       "meaning_punjabi": "ਜਾਣ ਕੇ ਧੋਖਾ ਦੇਨਾ",
       "images": [
         "https://images.pexels.com/photos/3768723/pexels-photo-3768723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+      ],
+      "synonyms": [
+        {
+          "id": "K0hQxTsAMNBf6lsejAqy",
+          "word": "ਮਿਥਿਆ",
+          "translation": "false"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "QDy7Z1uZfBIXCXPjHbp3",
+          "word": "ਸੱਚ",
+          "translation": "truth"
+        }
       ]
     }
   },
@@ -542,6 +866,27 @@
           "word_id": "bm2uhrLufbY77GgZe9md",
           "sentence": "ਮੈਂ ਸਿੱਖਿਆ ਕਿ ਮੁਸੀਬਤ ਤੋਂ ਬਚਣ ਲਈ ਝੂਠ ਨਹੀਂ ਬੋਲੋ।",
           "translation": "I learned that to avoid trouble, do not lie."
+        }
+      ]
+    }
+  },
+  {
+    "key": "semantics-bm2uhrLufbY77GgZe9md",
+    "data": {
+      "word": "ਝੂਠ",
+      "translation": "lie",
+      "synonyms": [
+        {
+          "id": "K0hQxTsAMNBf6lsejAqy",
+          "word": "ਮਿਥਿਆ",
+          "translation": "false"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "QDy7Z1uZfBIXCXPjHbp3",
+          "word": "ਸੱਚ",
+          "translation": "truth"
         }
       ]
     }
@@ -623,6 +968,40 @@
       "meaning_punjabi": "ਕਿਸੇ ਉੱਤੇ ਬੇਇਨਸਾਫੀ ਕਰਨੀ",
       "images": [
         "https://wallpapers.com/images/featured/darth-vader-4k-spxbi8jmroon9uht.jpg"
+      ],
+      "synonyms": [
+        {
+          "id": "5jABrmMAUTjvavgdXuSO",
+          "word": "ਅਤਿਆਚਾਰ",
+          "translation": "persecution"
+        },
+        {
+          "id": "7XVM84gtHd6kUDajBjk5",
+          "word": "ਬੇਇਨਸਾਫੀ",
+          "translation": "injustice"
+        },
+        {
+          "id": "uaFN7M2ESAkR8sdHC5ZB",
+          "word": "ਅਨਿਆਇ",
+          "translation": "unjust"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "0kzKLyLI52p67Vc4fxPp",
+          "word": "ਇਨਸਾਫ",
+          "translation": "justice"
+        },
+        {
+          "id": "OnpblwO13W0PajXdaAWi",
+          "word": "ਆਜ਼ਾਦੀ",
+          "translation": "freedom"
+        },
+        {
+          "id": "mL0mdjOOimCyqf7b2gRX",
+          "word": "ਲੋਕ ਤੰਤਰ",
+          "translation": "democracy"
+        }
       ]
     }
   },
@@ -649,6 +1028,47 @@
           "word_id": "MPjhrzg09ZksfH0U0t5r",
           "translation": "During the reign of Maharaja Ranjit Singh, people were not subjected to oppression.",
           "sentence": "ਮਹਾਰਾਜਾ ਰਣਜੀਤ ਸਿੰਘ ਦੇ ਰਾਜ ਵਿੱਚ ਲੋਕਾਂ ਉੱਤੇ ਜ਼ੁਲਮ ਨਹੀਂ ਹੁੰਦਾ ਸੀ"
+        }
+      ]
+    }
+  },
+  {
+    "key": "semantics-MPjhrzg09ZksfH0U0t5r",
+    "data": {
+      "word": "ਜ਼ੁਲਮ",
+      "translation": "oppression",
+      "synonyms": [
+        {
+          "id": "5jABrmMAUTjvavgdXuSO",
+          "word": "ਅਤਿਆਚਾਰ",
+          "translation": "persecution"
+        },
+        {
+          "id": "7XVM84gtHd6kUDajBjk5",
+          "word": "ਬੇਇਨਸਾਫੀ",
+          "translation": "injustice"
+        },
+        {
+          "id": "uaFN7M2ESAkR8sdHC5ZB",
+          "word": "ਅਨਿਆਇ",
+          "translation": "unjust"
+        }
+      ],
+      "antonyms": [
+        {
+          "id": "0kzKLyLI52p67Vc4fxPp",
+          "word": "ਇਨਸਾਫ",
+          "translation": "justice"
+        },
+        {
+          "id": "OnpblwO13W0PajXdaAWi",
+          "word": "ਆਜ਼ਾਦੀ",
+          "translation": "freedom"
+        },
+        {
+          "id": "mL0mdjOOimCyqf7b2gRX",
+          "word": "ਲੋਕ ਤੰਤਰ",
+          "translation": "democracy"
         }
       ]
     }

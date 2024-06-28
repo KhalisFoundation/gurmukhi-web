@@ -18,6 +18,7 @@ const navigateTo = (
   const routeMap = {
     [ALL_CONSTANT.DEFINITION]: `${ROUTES.WORD + ROUTES.DEFINITION}?id=${wordID}`,
     [ALL_CONSTANT.SENTENCES]: `${ROUTES.WORD + ROUTES.EXAMPLES}?id=${wordID}`,
+    [ALL_CONSTANT.SEMANTICS]: `${ROUTES.WORD + ROUTES.SEMANTICS}?id=${wordID}`,
     [ALL_CONSTANT.QUESTIONS_SMALL]: `${ROUTES.QUESTION}?id=${wordID}&qid=${questionID}`,
   };
   navigate(routeMap[key], { state: { data: data } });

@@ -7,6 +7,7 @@ import nanakCoin from './features/nanakCoin';
 import webWorkerReducer from './features/webWorkerSlice';
 import learntWordIdsReducer from './features/learntWordIdsSlice';
 import nextSessionReducer from './features/nextSessionSlice';
+import semanticsArraySlice from './features/semanticsArraySlice';
 
 export const rootReducer = combineReducers({
   currentGamePosition: currentGamePositionReducer,
@@ -16,6 +17,7 @@ export const rootReducer = combineReducers({
   gameArray: gameArrayReducer,
   nextSession: nextSessionReducer,
   nanakCoin: nanakCoin,
+  semanticsArray: semanticsArraySlice,
   webWorker: webWorkerReducer,
 });
 
