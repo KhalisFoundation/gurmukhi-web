@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import { WordType } from 'types';
 import { highlightWord } from 'utils';
@@ -13,6 +12,7 @@ import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
 import SemanticsBox from './components/semantics';
+const TextToSpeechBtn = lazy(() => import('components/buttons/TextToSpeechBtn'));
 
 export default function Information() {
   const { t: text } = useTranslation();
@@ -57,6 +57,7 @@ export default function Information() {
       fetchData();
     }
   }, [wordID]);
+
   const renderFooter = () => {
     const operation = isRandom ? ALL_CONSTANT.START_QUESTION : ALL_CONSTANT.NEXT;
     const nextText = isRandom ? ALL_CONSTANT.START_LEARNING : 'Next';

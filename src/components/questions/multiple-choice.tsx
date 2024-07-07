@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { lazy, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Option, QuestionData, User } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
-import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
 import { addLearntWordIds } from 'store/features/learntWordIdsSlice';
+const TextToSpeechBtn = lazy(() => import('components/buttons/TextToSpeechBtn'));
 
 export default function MultipleChoiceQuestion({
   questionData,

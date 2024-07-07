@@ -23,6 +23,7 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
   size = CONSTANTS.TEXT_TO_SPEECH_BTN_SIZE,
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string>(audioURL || '');
   const [slow, setSlow] = useState<boolean>(true);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -30,58 +31,76 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
   const ttsClassname = backgroundColor
     ? `${backgroundColor} rounded-full p-2 md:p-3`
     : 'rounded-full p-2 md:p-3 ';
-  const betterText = text.trim().replace(/_+/g, 'ਡੈਸ਼');
+  const betterText = text.replace(/_+/g, 'ਡੈਸ਼');
 
   useEffect(() => {
     const generateAudio = async () => {
-      if (!audioURL) {
-        setLoading?.(true);
-        setIsLoading(true);
-        try {
+      try {
+        let audioNotWorking = false;
+        if (audioUrl) {
+          const decodedAudioUrl = decodeURIComponent(audioUrl);
+          const audioText = decodedAudioUrl.split('/')[5].split('.mp3')[0];
+          const currentText = betterText.replace(/[\s ]/g, '_');
+
+          if (audioText !== currentText) {
+            audioNotWorking = true;
+            setAudioUrl('');
+          } else {
+            const audio = new Audio(audioUrl);
+            audio.oncanplay = () => {
+              audioNotWorking = false;
+            };
+            audio.onerror = () => {
+              audioNotWorking = true;
+            };
+          }
+        } else if (audioNotWorking) {
+          setLoading?.(true);
+          setIsLoading(true);
           await generateNarakeetAudio(betterText, type, setAudioUrl, id ?? undefined);
-        } catch (error) {
-          console.error('Error generating audio:', error);
-        } finally {
-          setIsLoading(false);
-          setLoading?.(false);
         }
+      } catch (error) {
+        console.error('Error generating audio:', error);
+      } finally {
+        setIsLoading(false);
+        setLoading?.(false);
       }
     };
     generateAudio();
-  }, [text, audioURL, betterText, type, id, setLoading]);
+  }, [text]);
 
   const onBtnClick = async () => {
     console.log('TTS button clicked!');
     console.log('audioUrl:', audioUrl);
     console.log('isLoading:', isLoading);
     console.log('audioURL:', audioURL);
-
-    if (audioUrl && !isLoading) {
-      try {
-        await audioRef.current?.play();
-        setSlow(!slow);
-      } catch (error) {
-        console.error('Error playing audio:', error);
-      }
-      return;
-    }
-
-    setIsLoading(true);
+    let justSetAudioUrl = false;
     try {
-      await generateNarakeetAudio(betterText, type, setAudioUrl, id ?? undefined);
+      if (audioURL && !audioUrl) {
+        setAudioUrl(audioURL);
+        justSetAudioUrl = true;
+      } else if (!audioUrl || !audioURL) {
+        setIsLoading(true);
+        await generateNarakeetAudio(betterText, type, setAudioUrl, id ?? undefined);
+        justSetAudioUrl = true;
+      }
     } catch (error) {
       console.error('Error generating audio:', error);
     } finally {
       setIsLoading(false);
-      if (audioUrl) {
-        try {
-          await audioRef.current?.play();
-        } catch (error) {
-          console.error('Error playing audio:', error);
-        }
+      if (justSetAudioUrl || !isPlaying) {
+        audioRef.current?.play();
+        if (audioUrl) setSlow(!slow);
       }
     }
   };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.onplaying = () => setIsPlaying(true);
+      audioRef.current.onpause = () => setIsPlaying(false);
+    }
+  }, [audioRef.current]);
 
   useEffect(() => {
     if (audioRef.current) {

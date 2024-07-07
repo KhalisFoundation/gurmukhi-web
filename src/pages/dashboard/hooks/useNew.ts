@@ -54,7 +54,9 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
   }
   const usedWordIds = [];
   const words: WordShabadavaliDB[] | null = await getNewWords(uid, count);
+  console.log('words:', words);
   if (!words) {
+    console.log('No new words found', words);
     return { game: seed0, learningWords };
   }
   let questionCount = 0;

@@ -4,7 +4,7 @@ import { PAGES } from 'constants/routes';
 import Login from 'pages/login';
 import Dashboard from 'pages/dashboard';
 import Profile from 'pages/profile';
-import Defintion from 'pages/word/definition';
+import Definition from 'pages/word/definition';
 import Examples from 'pages/word/examples';
 import WordsPageLayout from 'pages/word/layout';
 import NotFound from 'pages/not-found';
@@ -32,7 +32,7 @@ export function AppRouter() {
         <Route path={PAGES.WIN} element={requireAuth(<Win />)} />
         <Route path={PAGES.WINCOIN} element={requireAuth(<WinCoin />)} />
         <Route path={PAGES.WORDS} element={requireAuth(<WordsPageLayout />)}>
-          <Route path={PAGES.DEFINITION} element={<Defintion />} />
+          <Route path={PAGES.DEFINITION} element={<Definition />} />
           <Route path={PAGES.EXAMPLES} element={<Examples />} />
           {/* <Route path={PAGES.SEMANTICS} element={<Semantics />} /> */}
           <Route path={PAGES.INFORMATION} element={<Information />} />
