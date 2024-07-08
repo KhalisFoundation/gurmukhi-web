@@ -6,6 +6,7 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - main
+      - production
 
 defaults:
   run:
@@ -13,6 +14,7 @@ defaults:
 
 jobs:
   dev:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: dev
     env:
@@ -37,6 +39,7 @@ jobs:
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
 
   staging:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: staging
     env:
@@ -61,6 +64,7 @@ jobs:
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
 
   prod:
+    if: github.ref == 'refs/heads/production'
     runs-on: ubuntu-latest
     environment: prod
     env:
