@@ -20,10 +20,16 @@ import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
 import PageLoading from 'components/pageLoading';
+import { useAppDispatch } from 'store/hooks';
+import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
+import { setCurrentLevel } from 'store/features/currentLevelSlice';
+import { setNanakCoin } from 'store/features/nanakCoin';
+import { addScreens } from 'store/features/gameArraySlice';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthContextProvider = ({ children }: { children: ReactElement }) => {
+  const dispatch = useAppDispatch();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { t: translate } = useTranslation();
@@ -61,55 +67,57 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
   const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
     try {
       const provider = new GoogleAuthProvider();
-      const userCredential = await signInWithPopup(auth, provider);
-      const { uid, email, displayName } = userCredential.user;
+      signInWithPopup(auth, provider).then(async (result) => {
+        const { uid, email, displayName } = result.user;
+        const found = await checkUser(uid, email ?? '');
 
-      const found = await checkUser(uid, email ?? '');
+        if (!found) {
+          const localUser = doc(shabadavaliDB, `users/${uid}`);
+          const userDataForState = {
+            uid,
+            email,
+            role: roles.student,
+            username: email?.split('@')[0],
+            displayName: displayName ?? email?.split('@')[0],
+            wordIds: [],
+            coins: 0,
+            progress: {
+              currentProgress: 0,
+              gameSession: [],
+              currentLevel: 0,
+            },
+            created_at: Timestamp.now(),
+            updated_at: Timestamp.now(),
+            lastLogInAt: Timestamp.now(),
+            user: null as FirebaseUser | null,
+          };
+          await setDoc(localUser, {
+            ...userDataForState,
+          });
+        }
 
-      if (!found) {
-        const localUser = doc(shabadavaliDB, `users/${uid}`);
-        const userDataForState = {
-          uid,
-          email,
+        const userDetails = await getUserData(uid);
+
+        if (!userDetails) {
+          return false;
+        }
+
+        const userData = {
+          ...result.user,
           role: roles.student,
-          username: email?.split('@')[0],
-          displayName: displayName ?? email?.split('@')[0],
-          wordIds: [],
-          coins: 0,
-          progress: {
-            currentProgress: 0,
-            gameSession: [],
-            currentLevel: 0,
-          },
+          coins: userDetails.coins,
+          progress: userDetails.progress,
+          wordIds: userDetails.wordIds ?? [],
+          user: result.user,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           lastLogInAt: Timestamp.now(),
-          user: null as FirebaseUser | null,
-        };
-        await setDoc(localUser, {
-          ...userDataForState,
-        });
-      }
-      const userDetails = await getUserData(uid);
-      if (!userDetails) {
-        return false;
-      }
-
-      const userData = {
-        ...userCredential.user,
-        role: roles.student,
-        coins: userDetails.coins,
-        progress: userDetails.progress,
-        wordIds: userDetails.wordIds ?? [],
-        user: userCredential.user,
-        created_at: Timestamp.now(),
-        updated_at: Timestamp.now(),
-        lastLogInAt: Timestamp.now(),
-      } as User;
-      if (uid) await setWordIds(uid);
-      setUser(userData);
-      setLoading(false);
-      return true;
+        } as User;
+        if (uid) await setWordIds(uid);
+        setUser(userData);
+        setLoading(false);
+        return true;
+      });
     } catch (error) {
       if (error instanceof Error) {
         if (Object.keys(errors).includes(error.message)) {
@@ -200,6 +208,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       if (currentUser !== null) {
         const { uid, emailVerified, metadata } = currentUser as FirebaseUser;
         const userDetails = await getUserData(uid);
+        console.log('UserDetails2inHook', userDetails);
         if (!userDetails) {
           return null;
         }
@@ -220,6 +229,10 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           lastLogInAt: metadata.lastSignInTime,
           wordIds: userDetails.wordIds || [],
         } as User;
+        dispatch(setCurrentGamePosition(usr.progress.currentProgress));
+        dispatch(setCurrentLevel(usr.progress.currentLevel));
+        dispatch(setNanakCoin(usr.coins));
+        dispatch(addScreens(usr.progress.gameSession));
         setUser(usr);
         setLoading(false);
       } else {
