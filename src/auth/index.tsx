@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
-import { checkIfUsernameUnique, checkUser, getUserData } from 'database/shabadavalidb';
+import { checkIfUsernameUnique, checkUser, getUserData, setWordIds } from 'database/shabadavalidb';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
@@ -42,6 +42,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       if (!userDetails) {
         return null;
       }
+      if (userData.user.uid) await setWordIds(userData.user.uid);
       setUser(userDetails);
       setLoading(false);
       return userData;
@@ -67,18 +68,26 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
 
       if (!found) {
         const localUser = doc(shabadavaliDB, `users/${uid}`);
-        await setDoc(localUser, {
-          role: roles.student,
+        const userDataForState = {
+          uid,
           email,
+          role: roles.student,
+          username: email?.split('@')[0],
+          displayName: displayName ?? email?.split('@')[0],
+          wordIds: [],
           coins: 0,
           progress: {
             currentProgress: 0,
             gameSession: [],
             currentLevel: 0,
           },
-          displayName: displayName ?? email?.split('@')[0],
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
+          lastLogInAt: Timestamp.now(),
+          user: null as FirebaseUser | null,
+        };
+        await setDoc(localUser, {
+          ...userDataForState,
         });
       }
       const userDetails = await getUserData(uid);
@@ -91,12 +100,13 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         role: roles.student,
         coins: userDetails.coins,
         progress: userDetails.progress,
-        wordIds: userDetails.wordIds,
+        wordIds: userDetails.wordIds ?? [],
         user: userCredential.user,
         created_at: Timestamp.now(),
         updated_at: Timestamp.now(),
         lastLogInAt: Timestamp.now(),
       } as User;
+      if (uid) await setWordIds(uid);
       setUser(userData);
       setLoading(false);
       return true;
@@ -157,6 +167,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       await setDoc(localUser, userDataForState);
 
       userDataForState = { ...userDataForState, user: userData };
+      if (uid) await setWordIds(uid);
       setUser(userDataForState);
       setLoading(false);
 
