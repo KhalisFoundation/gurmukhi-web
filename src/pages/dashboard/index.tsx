@@ -4,7 +4,7 @@ import metaTags from 'constants/meta';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import useGamePlay from './hooks/useGamePlay1';
+import useGamePlay from './hooks/useGamePlay';
 import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
 import { User, WordShabadavaliDB, WordType } from 'types';

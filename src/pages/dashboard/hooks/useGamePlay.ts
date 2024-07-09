@@ -49,7 +49,7 @@ const useGamePlay = (
           await commitBatch(batch);
           dispatch(addScreens(gameArray));
         } catch (error) {
-          bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay1.ts/useGamePlay', {
+          bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay.ts/useGamePlay', {
             ...user,
           });
         }

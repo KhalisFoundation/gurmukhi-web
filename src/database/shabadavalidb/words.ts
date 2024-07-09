@@ -49,8 +49,6 @@ export const addWordsToSubCollection = async (uid: string, data: WordShabadavali
 export const getWords = async (uid: string, isLearnt: boolean) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
-    console.log('uid:', uid);
-    console.log('isLearnt:', isLearnt);
     const q = query(
       wordsCollectionRef,
       where('isLearnt', '==', isLearnt),

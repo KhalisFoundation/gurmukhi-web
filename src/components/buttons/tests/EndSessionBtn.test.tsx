@@ -36,20 +36,6 @@ describe('End Session Button', () => {
     nextSession: [],
   };
 
-  // it('navigates to dashboard when clicked', () => {
-  //   render(<EndSessionButton uid='user1234' currentData={mockCurrentData} className='' />);
-  //   const endSessionButton = screen.getByRole('button');
-  //   fireEvent.click(endSessionButton);
-  //   expect(mockedNavigate).toHaveBeenCalledWith('/dashboard');
-  // });
-
-  // it('calls updateUserDocument with correct arguments', () => {
-  //   render(<EndSessionButton uid='user1234' currentData={mockCurrentData} className='' />);
-  //   const endSessionButton = screen.getByRole('button');
-  //   fireEvent.click(endSessionButton);
-  //   expect(mockedUpdater).toHaveBeenCalledWith('user1234', mockCurrentData);
-  // });
-
   it('displays the end button with correct text and icon', () => {
     render(<EndSessionButton uid='user1234' currentData={mockCurrentData} className='' />);
     expect(screen.getByText(CONSTANTS.END_SESSION)).toBeInTheDocument(); // Checks that the button text is rendered

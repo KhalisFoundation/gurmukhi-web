@@ -25,6 +25,7 @@ import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice'
 import { setCurrentLevel } from 'store/features/currentLevelSlice';
 import { setNanakCoin } from 'store/features/nanakCoin';
 import { addScreens } from 'store/features/gameArraySlice';
+import { addNextScreens, resetNextSession } from 'store/features/nextSessionSlice';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -107,13 +108,25 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           role: roles.student,
           coins: userDetails.coins,
           progress: userDetails.progress,
+          nextSession: userDetails.nextSession ?? [],
           wordIds: userDetails.wordIds ?? [],
           user: result.user,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           lastLogInAt: Timestamp.now(),
         } as User;
+        console.log('sign in with google', userData);
         if (uid) await setWordIds(uid);
+        dispatch(setCurrentGamePosition(userData.progress.currentProgress));
+        dispatch(setCurrentLevel(userData.progress.currentLevel));
+        dispatch(setNanakCoin(userData.coins));
+        dispatch(addScreens(userData.progress.gameSession));
+        dispatch(addNextScreens(userData.nextSession ?? []));
+        // if nextSession has some value and gameSession is empty then add nextSession to gameSession
+        if (userData.nextSession && userData.progress.gameSession.length === 0 && userData.nextSession.length > 0) {
+          dispatch(addScreens(userData.nextSession));
+          dispatch(resetNextSession());
+        }
         setUser(userData);
         setLoading(false);
         return true;
@@ -233,6 +246,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         dispatch(setCurrentLevel(usr.progress.currentLevel));
         dispatch(setNanakCoin(usr.coins));
         dispatch(addScreens(usr.progress.gameSession));
+        dispatch(addNextScreens(usr.nextSession ?? []));
         setUser(usr);
         setLoading(false);
       } else {
