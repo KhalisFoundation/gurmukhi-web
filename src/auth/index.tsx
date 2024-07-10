@@ -115,7 +115,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           updated_at: Timestamp.now(),
           lastLogInAt: Timestamp.now(),
         } as User;
-        console.log('sign in with google', userData);
         if (uid) await setWordIds(uid);
         dispatch(setCurrentGamePosition(userData.progress.currentProgress));
         dispatch(setCurrentLevel(userData.progress.currentLevel));
@@ -221,7 +220,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       if (currentUser !== null) {
         const { uid, emailVerified, metadata } = currentUser as FirebaseUser;
         const userDetails = await getUserData(uid);
-        console.log('UserDetails2inHook', userDetails);
         if (!userDetails) {
           return null;
         }
@@ -247,6 +245,11 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         dispatch(setNanakCoin(usr.coins));
         dispatch(addScreens(usr.progress.gameSession));
         dispatch(addNextScreens(usr.nextSession ?? []));
+        // if nextSession has some value and gameSession is empty then add nextSession to gameSession
+        if (usr.nextSession && usr.progress.gameSession.length === 0 && usr.nextSession.length > 0) {
+          dispatch(addScreens(usr.nextSession));
+          dispatch(resetNextSession());
+        }
         setUser(usr);
         setLoading(false);
       } else {

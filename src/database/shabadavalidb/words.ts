@@ -56,18 +56,14 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
       limit(CONSTANTS.GET_WORD_LIMIT),
     );
     const querySnapshot = await getDocs(q);
-    console.log('querySnapshot:', querySnapshot);
     if (querySnapshot.empty) {
-      console.log('querySnapshot empty');
       return [];
     }
     const documents = querySnapshot.docs.map((document) => ({
       id: document.id,
       ...document.data(),
     }));
-    console.log('documents:', documents);
     const shuffledDocuments = shuffleArray(documents);
-    console.log('shuffledDocuments:', shuffledDocuments);
     return shuffledDocuments;
   } catch (error) {
     bugsnagErrorHandler(error, 'database/shabadavalidb/words.ts/getWords', {
@@ -245,7 +241,6 @@ export const setWordIds = async (uid: string) => {
     const wordsCollectionRef = getWordCollectionRef(uid);
 
     const isWordCollectionExists = await checkIfWordCollectionExists(uid);
-    console.log('isWordCollectionExists:', isWordCollectionExists);
     if (isWordCollectionExists) {
       return null;
     }
