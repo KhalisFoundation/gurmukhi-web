@@ -215,6 +215,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           updated_at: Timestamp.now(),
           lastLogInAt: metadata.lastSignInTime,
           wordIds: userDetails.wordIds || [],
+          nextSession: userDetails.nextSession,
         } as User;
         dispatch(setCurrentGamePosition(usr.progress.currentProgress));
         dispatch(setCurrentLevel(usr.progress.currentLevel));
