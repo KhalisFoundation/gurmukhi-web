@@ -11,12 +11,12 @@ import { store, persistor } from 'store/store';
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <BrowserRouter>
-    <AuthContextProvider>
-      <Provider store={store}>
+    <Provider store={store}>
+      <AuthContextProvider>
         <PersistGate loading={null} persistor={persistor}>
           <App />
         </PersistGate>
-      </Provider>
-    </AuthContextProvider>
+      </AuthContextProvider>
+    </Provider>
   </BrowserRouter>,
 );

@@ -17,16 +17,24 @@ const useGamePlay = (
   const dispatch = useAppDispatch();
 
   const gamePlay = async (batch: WriteBatch) => {
-    const userData = await getUserData(user.uid);
+    let userData = null;
+    if (!user.progress) {
+      userData = await getUserData(user.uid);
+    } else {
+      userData = user;
+    }
+    
     if (!userData) {
       const gameArray: GameScreen[] = [];
       return { gameArray };
     }
+
     const progress: GameScreen[] | null = fetchProgress(userData);
     if (progress && progress.length > 0) {
       const gameArray: GameScreen[] = progress;
       return { gameArray };
     }
+
     const { gameArray } = await gameAlgo(user, batch);
     return { gameArray };
   };
@@ -41,7 +49,7 @@ const useGamePlay = (
           await commitBatch(batch);
           dispatch(addScreens(gameArray));
         } catch (error) {
-          bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay1.ts/useGamePlay', {
+          bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay.ts/useGamePlay', {
             ...user,
           });
         }
