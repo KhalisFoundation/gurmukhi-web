@@ -167,35 +167,44 @@ export const updateLevelProgress = async (
 };
 
 export const getUserData = async (uid: string) => {
-  try {
-    const userRef = doc(usersCollection, uid);
-    const userDoc = await getDoc(userRef);
-    if (!userDoc.exists()) {
-      return;
+  let retries = 0;
+  const maxRetries = 3;
+  while (retries < maxRetries) {
+    try {
+      const userRef = doc(usersCollection, uid);
+      const userDoc = await getDoc(userRef);
+      if (!userDoc.exists()) {
+        return;
+      }
+      const data = userDoc.data();
+      const user: User = {
+        displayName: data.displayName,
+        role: data.role,
+        photoURL: data.photoURL,
+        uid: data.uid,
+        coins: data.coins,
+        email: data.email,
+        emailVerified: data.emailVerified,
+        progress: data.progress,
+        nextSession: data.nextSession,
+        wordIds: data.wordIds,
+        user: null,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+        lastLogInAt: data.lastLogInAt,
+        username: data.username,
+      };
+      return user;
+    } catch (error) {
+      retries++;
+      console.error(`Attempt ${retries} failed: ${error}`);
+      if (retries >= maxRetries) {
+        bugsnagErrorHandler(error, 'getUserData', {
+          uid: uid,
+          location: 'database/shabadavalidb/user.tsx/',
+        });
+        throw new Error(`Failed to retrieve user after ${maxRetries} attempts`);
+      }
     }
-    const data = userDoc.data();
-    const user: User = {
-      displayName: data.displayName,
-      role: data.role,
-      photoURL: data.photoURL,
-      uid: data.uid,
-      coins: data.coins,
-      email: data.email,
-      emailVerified: data.emailVerified,
-      progress: data.progress,
-      nextSession: data.nextSession,
-      wordIds: data.wordIds,
-      user: null,
-      created_at: data.created_at,
-      updated_at: data.updated_at,
-      lastLogInAt: data.lastLogInAt,
-      username: data.username,
-    };
-    return user;
-  } catch (error) {
-    bugsnagErrorHandler(error, 'getUserData', {
-      uid: uid,
-      location: 'database/shabadavalidb/user.tsx/',
-    });
   }
 };

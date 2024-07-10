@@ -63,7 +63,8 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
       id: document.id,
       ...document.data(),
     }));
-    return shuffleArray(documents);
+    const shuffledDocuments = shuffleArray(documents);
+    return shuffledDocuments;
   } catch (error) {
     bugsnagErrorHandler(error, 'database/shabadavalidb/words.ts/getWords', {
       isLearnt: isLearnt,

@@ -15,15 +15,22 @@ import {
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
-import { checkIfUsernameUnique, checkUser, getUserData } from 'database/shabadavalidb';
+import { checkIfUsernameUnique, checkUser, getUserData, setWordIds } from 'database/shabadavalidb';
 import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
 import PageLoading from 'components/pageLoading';
+import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
+import { setCurrentLevel } from 'store/features/currentLevelSlice';
+import { setNanakCoin } from 'store/features/nanakCoin';
+import { addScreens } from 'store/features/gameArraySlice';
+import { addNextScreens, resetNextSession } from 'store/features/nextSessionSlice';
+import { useAppDispatch } from 'store/hooks';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthContextProvider = ({ children }: { children: ReactElement }) => {
+  const dispatch = useAppDispatch();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { t: translate } = useTranslation();
@@ -39,9 +46,8 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         return null;
       }
       const userDetails = await getUserData(userData.user.uid);
-      if (!userDetails) {
-        return null;
-      }
+      if (!userDetails) return null;
+      if (userData.user.uid) await setWordIds(userData.user.uid);
       setUser(userDetails);
       setLoading(false);
       return userData;
@@ -82,9 +88,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         });
       }
       const userDetails = await getUserData(uid);
-      if (!userDetails) {
-        return false;
-      }
+      if (!userDetails) return false;
 
       const userData = {
         ...userCredential.user,
@@ -97,6 +101,8 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         updated_at: Timestamp.now(),
         lastLogInAt: Timestamp.now(),
       } as User;
+
+      if (userData.uid) await setWordIds(userData.uid);
       setUser(userData);
       setLoading(false);
       return true;
@@ -209,6 +215,16 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           lastLogInAt: metadata.lastSignInTime,
           wordIds: userDetails.wordIds || [],
         } as User;
+        dispatch(setCurrentGamePosition(usr.progress.currentProgress));
+        dispatch(setCurrentLevel(usr.progress.currentLevel));
+        dispatch(setNanakCoin(usr.coins));
+        dispatch(addScreens(usr.progress.gameSession));
+        dispatch(addNextScreens(usr.nextSession ?? []));
+        // if nextSession has some value and gameSession is empty then add nextSession to gameSession
+        if (usr.nextSession && usr.progress.gameSession.length === 0 && usr.nextSession.length > 0) {
+          dispatch(addScreens(usr.nextSession));
+          dispatch(resetNextSession());
+        }
         setUser(usr);
         setLoading(false);
       } else {
