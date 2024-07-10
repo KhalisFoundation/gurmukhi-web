@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Option, QuestionData, User } from 'types';
+import { Option, QuestionData } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
 import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
-import { addLearntWordIds } from 'store/features/learntWordIdsSlice';
 
 export default function MultipleChoiceQuestion({
   questionData,
@@ -27,7 +25,6 @@ export default function MultipleChoiceQuestion({
   const [selectedOption, setSelectedOption] = React.useState<Option | null>(null);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const dispatch = useAppDispatch();
-  const user = useUserAuth().user as User;
 
   useEffect(() => {
     setSelectedOption(null);
@@ -53,21 +50,6 @@ export default function MultipleChoiceQuestion({
 
     updateOptions();
   }, [selectedOption]);
-
-  useEffect(() => {
-    const storeData = async () => {
-      if (
-        user &&
-        user.uid &&
-        questionData &&
-        questionData.id &&
-        selectedOption === questionData.options[questionData.answer]
-      ) {
-        dispatch(addLearntWordIds(questionData.word_id));
-      }
-    };
-    storeData();
-  }, [questionData, user, selectedOption]);
 
   const optionsClass = `flex flex-col text-lg grid ${
     hasImage ? 'grid-cols-2' : 'grid-cols-1'

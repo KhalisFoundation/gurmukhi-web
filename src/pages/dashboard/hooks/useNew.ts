@@ -15,7 +15,7 @@ const addWordIfNotExists = (
   if (word.id && word.word && !exists) {
     const learningWord: WordShabadavaliDB = {
       isLearnt: false,
-      progress: 0,
+      progress: questionIds.length,
       isWordRead: true,
       word_id: word.id,
       word: word.word,

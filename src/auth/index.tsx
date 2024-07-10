@@ -163,6 +163,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       await setDoc(localUser, userDataForState);
 
       userDataForState = { ...userDataForState, user: userData };
+      if (userData.uid) await setWordIds(userData.uid);
       setUser(userDataForState);
       setLoading(false);
 
