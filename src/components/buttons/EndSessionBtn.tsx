@@ -11,7 +11,6 @@ const EndSessionButton = ({ uid, currentData, className = '' }: { uid: string, c
   
   const endSession = async (route: string) => {
     toggleSaving(true);
-    console.log('Current Data: ', currentData);
     await updateUserDocument(uid, currentData);
     toggleSaving(false);
     navigate(route);
