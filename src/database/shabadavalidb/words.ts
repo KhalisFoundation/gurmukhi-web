@@ -13,7 +13,7 @@ import {
   WriteBatch,
 } from 'firebase/firestore';
 import { shabadavaliDB } from '../../firebase';
-import { ProgressData, WordShabadavaliDB } from 'types';
+import { ProgressData, WordQuestionMap, WordShabadavaliDB } from 'types';
 import ALL_CONSTANT from 'constants/constant';
 import { usersCollection } from './users';
 import { shuffleArray } from 'pages/dashboard/utils';
@@ -63,7 +63,8 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
       id: document.id,
       ...document.data(),
     }));
-    return shuffleArray(documents);
+    const shuffledDocuments = shuffleArray(documents);
+    return shuffledDocuments;
   } catch (error) {
     bugsnagErrorHandler(error, 'database/shabadavalidb/words.ts/getWords', {
       isLearnt: isLearnt,
@@ -74,15 +75,17 @@ export const getWords = async (uid: string, isLearnt: boolean) => {
 
 export const addQuestionsBatch = (
   uid: string,
-  wordToQuestionIdsMap: Map<string, string[]>,
+  wordToQuestionIdsMap: Map<string, WordQuestionMap>,
   batch: WriteBatch,
 ) => {
   try {
     const wordsCollectionRef = getWordCollectionRef(uid);
-    wordToQuestionIdsMap.forEach((questionIds, wordId) => {
+    wordToQuestionIdsMap.forEach((data, wordId) => {
       const documentRef = doc(wordsCollectionRef, wordId);
       batch.update(documentRef, {
-        questionIds: arrayUnion(...questionIds),
+        isLearnt: data.progress >= CONSTANTS.DEFAULT_FOUR,
+        progress: data.progress,
+        questionIds: arrayUnion(...data.questionIds),
       });
     });
   } catch (error) {
@@ -111,6 +114,8 @@ export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[], bat
           isWordRead: wordData.isWordRead,
           questionIds: wordData.questionIds,
           lastReviewed: wordData.lastReviewed,
+          progress: wordData.progress,
+          isLearnt: wordData.progress >= CONSTANTS.DEFAULT_FOUR,
         });
       }
     }
@@ -123,43 +128,16 @@ export const addWordsBatch = async (uid: string, words: WordShabadavaliDB[], bat
   }
 };
 
-export const updateUserWithWords = async (
-  uid: string,
-  updateData: ProgressData,
-  learntWordIds: string[],
-) => {
+export const updateUserWithWords = async (uid: string, updateData: ProgressData) => {
   const userRef = doc(usersCollection, uid);
-  const wordsCollectionRef = getWordCollectionRef(uid);
   const batch = writeBatch(shabadavaliDB);
   batch.update(userRef, {
     ...updateData,
   });
   try {
-    for (const wordID of learntWordIds) {
-      const q = query(wordsCollectionRef, where('word_id', '==', wordID));
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        const wordDoc = querySnapshot.docs[0];
-        const wordData = wordDoc.data() as WordShabadavaliDB;
-        const currentProgress = wordData.progress;
-        let isLearnt = wordData.isLearnt;
-        if (currentProgress + CONSTANTS.DEFAULT_ONE >= CONSTANTS.LEARNT_THRESHOLD && !isLearnt) {
-          batch.update(userRef, {
-            wordIds: arrayUnion(wordID),
-          });
-          isLearnt = true;
-        }
-        const documentRef = doc(wordsCollectionRef, querySnapshot.docs[0].id);
-        batch.update(documentRef, {
-          progress: currentProgress + CONSTANTS.DEFAULT_ONE,
-          isLearnt: isLearnt,
-          lastReviewed: Timestamp.fromDate(new Date()),
-        });
-      }
-    }
     await batch.commit();
   } catch (error) {
-    bugsnagErrorHandler(error, 'updateUserWithWords', { uid, updateData, learntWordIds });
+    bugsnagErrorHandler(error, 'updateUserWithWords', { uid, updateData });
   }
 };
 

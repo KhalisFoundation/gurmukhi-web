@@ -4,8 +4,7 @@ import metaTags from 'constants/meta';
 import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import useFetchWords from './hooks/useFetchWords';
-import useGamePlay from './hooks/useGamePlay1';
+import useGamePlay from './hooks/useGamePlay';
 import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
 import { User, WordShabadavaliDB, WordType } from 'types';
@@ -26,13 +25,11 @@ export default function Dashboard() {
   const user = useUserAuth().user as User;
   const [userData, setUserData] = useState<User>(user);
   const [isLoading, toggleLoading] = useState<boolean>(true);
-  const [isFetchWordsLoading, toggleFetchWords] = useState<boolean>(true);
   const [isGamePlayLoading, toggleGamePlayLoading] = useState<boolean>(true);
   const [isLearntWords, toggleLearntWords] = useState<boolean>(true);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const gameArray = useAppSelector((state) => state.gameArray);
-  useFetchWords(user, toggleFetchWords);
   useGamePlay(user, currentGamePosition, currentLevel, toggleGamePlayLoading);
   const randomWord: WordType | null = getRandomWord(gameArray);
   const learntWords: WordShabadavaliDB[] | null = useLearntWords(user, toggleLearntWords);
@@ -51,10 +48,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     // Update overall loading state based on individual states
-    if (!isFetchWordsLoading && !isGamePlayLoading && !isLearntWords) {
+    if (!isGamePlayLoading && !isLearntWords) {
       toggleLoading(false);
     }
-  }, [isFetchWordsLoading, isGamePlayLoading, isLearntWords]);
+  }, [isGamePlayLoading, isLearntWords]);
 
   return (
     <div className='h-full lg:overflow-hidden flex flex-col justify-between'>
