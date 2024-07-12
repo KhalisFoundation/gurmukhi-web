@@ -6,7 +6,6 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - main
-      - production
 
 defaults:
   run:
@@ -14,7 +13,6 @@ defaults:
 
 jobs:
   dev:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: dev
     env:
@@ -39,7 +37,6 @@ jobs:
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
 
   staging:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: staging
     env:
@@ -60,30 +57,5 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_STAGING }}'
-          channelId: live
-          projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
-
-  prod:
-    if: github.ref == 'refs/heads/production'
-    runs-on: ubuntu-latest
-    environment: prod
-    env:
-      REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
-      REACT_APP_AUTH_DOMAIN: ${{ secrets.REACT_APP_AUTH_DOMAIN }}
-      REACT_APP_PROJECT_ID: ${{ secrets.REACT_APP_PROJECT_ID }}
-      REACT_APP_STORAGE_BUCKET: ${{ secrets.REACT_APP_STORAGE_BUCKET }}
-      REACT_APP_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_MESSAGING_SENDER_ID }}
-      REACT_APP_APP_ID: ${{ secrets.REACT_APP_APP_ID }}
-      REACT_APP_MEASUREMENT_ID: ${{ secrets.REACT_APP_MEASUREMENT_ID }}
-      REACT_APP_BACKEND_API_URL: ${{ secrets.REACT_APP_BACKEND_API_URL }}
-      NARAKEET_TTS_API_KEY: ${{ secrets.NARAKEET_TTS_API_KEY }}
-      REACT_APP_BUGSNAG_API_KEY: ${{ secrets.REACT_APP_BUGSNAG_API_KEY }}
-    steps:
-      - uses: actions/checkout@v3
-      - run: yarn install --frozen-lockfile && yarn run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GURMUKHI_5F8F5 }}'
           channelId: live
           projectId: '${{ secrets.REACT_APP_PROJECT_ID }}'
