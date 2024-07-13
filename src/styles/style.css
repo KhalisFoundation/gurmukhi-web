@@ -1410,11 +1410,11 @@ video {
   --tw-ordinal: ordinal;
   font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
+.\!leading-snug {
+  line-height: 1.375 !important;
+}
 .leading-none {
   line-height: 1;
-}
-.leading-snug {
-  line-height: 1.375;
 }
 .tracking-\[\.25rem\] {
   letter-spacing: .25rem;
