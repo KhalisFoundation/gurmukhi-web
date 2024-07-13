@@ -20,7 +20,7 @@ function CoinBox({ commonStyle }: { commonStyle: string }) {
         <div>
           <img
             className='mx-auto my-2'
-            src='/images/nanakCoinlg.png'
+            src='/images/nanakcoinlg.png'
             alt='Nanak Coin'
             width={65}
             height={65}
