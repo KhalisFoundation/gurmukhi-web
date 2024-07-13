@@ -22,7 +22,9 @@ import { resetNextSession } from 'store/features/nextSessionSlice';
 
 function WinCoin() {
   const navigate = useNavigate();
-  const user = useUserAuth().user as User;
+  let user = useUserAuth().user as User;
+  const userData = useAppSelector((state) => state.userData) as User;
+  if (!user && userData !== undefined && userData.uid) user = userData;
   const { t: text } = useTranslation();
   const dispatch = useAppDispatch();
   const { title, description } = metaTags.WIN;

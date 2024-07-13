@@ -6,7 +6,6 @@ import { useAppSelector, useAppDispatch } from 'store/hooks';
 import LevelHexagon from '../levels/LevelHexagon';
 import { setWebWorker } from 'store/features/webWorkerSlice';
 import StartQuestionBtn from '../buttons/StartQuestionBtn';
-import { getUserData } from 'database/shabadavalidb';
 import CONSTANTS from 'constants/constant';
 import { User } from 'types';
 import { bugsnagErrorHandler } from 'utils';
@@ -41,20 +40,17 @@ export default function LevelsFooter({
   const numQuestionsLeft = totalNumQuestions - currentLevel;
   const footerClass =
     'gap-1 flex flex-col lg:flex-row w-full inset-x-0 bottom-0 bg-white/[.1] items-center justify-between z-10 box-border h-auto py-2 lg:py-4 ';
-  const user = useUserAuth().user as User;
+  let user = useUserAuth().user as User;
+  const userDataFromState = useAppSelector((state) => state.userData) as User;
+  if (!user && userDataFromState !== undefined) user = userDataFromState;
   if (!user) {
     bugsnagErrorHandler(new Error('User not found'), 'LevelsFooter.tsx', {}, user);
   }
 
   useEffect(() => {
     const callWorker = async () => {
-      const userData = await getUserData(user.uid);
       dispatch(setWebWorker(true));
-      if (!userData) {
-        await worker.fetchNextSessionData(user, nextSession, dispatch);
-        return;
-      }
-      await worker.fetchNextSessionData(userData, nextSession, dispatch);
+      await worker.fetchNextSessionData(user, nextSession, dispatch);
     };
     if (currentLevel === CONSTANTS.WEB_WORKER_LEVEL && user.uid && !webWorker) {
       callWorker();

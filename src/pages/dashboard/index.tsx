@@ -22,7 +22,9 @@ export default function Dashboard() {
   const commonStyle =
     'w-[167px] h-[134px] md:w-[255px] md:h-[204px] xl:w-[380px] xl:h-[304px] md:grow-0 cardImage bg-cover bg-sky-100 bg-blend-soft-light hover:bg-sky-50 border-2 border-sky-200';
   const { title, description } = metaTags.DASHBOARD;
-  const user = useUserAuth().user as User;
+  let user = useUserAuth().user as User;
+  const userDataFromState = useAppSelector((state) => state.userData) as User;
+  if (!user && userDataFromState !== undefined && userDataFromState.uid) user = userDataFromState;
   const [userData, setUserData] = useState<User>(user);
   const [isLoading, toggleLoading] = useState<boolean>(true);
   const [isGamePlayLoading, toggleGamePlayLoading] = useState<boolean>(true);

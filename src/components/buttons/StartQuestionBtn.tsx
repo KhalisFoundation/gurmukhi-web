@@ -35,7 +35,9 @@ const StartQuestionBtn = ({
   const gameArray = useAppSelector((state) => state.gameArray);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const user = useUserAuth().user as User;
+  let user = useUserAuth().user as User;
+  const userData = useAppSelector((state) => state.userData) as User;
+  if (!user && userData !== undefined) user = userData;
 
   return (
     <button

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { GameScreen, User } from 'types';
 import { useAppDispatch } from 'store/hooks';
-import { commitBatch, getBatch, getUserData, updateProgress } from 'database/shabadavalidb';
+import { commitBatch, getBatch, updateProgress } from 'database/shabadavalidb';
 import { addScreens } from 'store/features/gameArraySlice';
 import { fetchProgress, gameAlgo } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
@@ -17,14 +17,7 @@ const useGamePlay = (
   const dispatch = useAppDispatch();
 
   const gamePlay = async (batch: WriteBatch) => {
-    let userData = null;
-    if (!user.progress) {
-      userData = await getUserData(user.uid);
-    } else {
-      userData = user;
-    }
-
-    const progress: GameScreen[] | null = fetchProgress(userData);
+    const progress: GameScreen[] | null = fetchProgress(user);
     if (progress && progress.length > 0) {
       const gameArray: GameScreen[] = progress;
       return { gameArray };

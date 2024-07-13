@@ -26,6 +26,7 @@ import { setNanakCoin } from 'store/features/nanakCoin';
 import { addScreens } from 'store/features/gameArraySlice';
 import { addNextScreens, resetNextSession } from 'store/features/nextSessionSlice';
 import { useAppDispatch } from 'store/hooks';
+import { setUserData } from 'store/features/userDataSlice';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -217,6 +218,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           wordIds: userDetails.wordIds || [],
           nextSession: userDetails.nextSession,
         } as User;
+        dispatch(setUserData(usr));
         dispatch(setCurrentGamePosition(usr.progress.currentProgress));
         dispatch(setCurrentLevel(usr.progress.currentLevel));
         dispatch(setNanakCoin(usr.coins));
