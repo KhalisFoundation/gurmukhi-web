@@ -22,19 +22,6 @@ export default function Header({ ...props }: PropTypes) {
   const location = useLocation();
   const navigate = useNavigate();
   const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
-  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
-  const currentLevel = useAppSelector((state) => state.currentLevel);
-  const gameArray = useAppSelector((state) => state.gameArray);
-  const nextSession = useAppSelector((state) => state.nextSession);
-  const currentData = {
-    coins: nanakCoin,
-    progress: {
-      currentProgress: currentGamePosition,
-      gameSession: gameArray,
-      currentLevel: currentLevel,
-    },
-    nextSession: nextSession,
-  };
   const loggedIn = props.loggedIn ?? false;
   const buttonComonStyle = 'block w-24 px-3 py-2 hover:bg-gray-200';
 
@@ -118,7 +105,7 @@ export default function Header({ ...props }: PropTypes) {
       {(location.pathname.includes(ROUTES.WORD) || location.pathname === ROUTES.QUESTION) && (
         <div className=' flex-row flex justify-between mx-3'>
           {location.pathname !== ROUTES.QUESTION && <BackBtn navlink={-1} />}
-          <EndSessionButton uid={user.uid} currentData={currentData} className='ml-auto' />
+          <EndSessionButton uid={user.uid} className='ml-auto' />
         </div>
       )}
     </header>
