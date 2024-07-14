@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ALL_CONSTANT from 'constants/constant';
 import { ROUTES } from 'constants/routes';
 import { updateUserDocument } from 'database/shabadavalidb';
 import { ProgressData } from 'types';
+import { useAppSelector } from 'store/hooks';
 
-const EndSessionButton = ({ uid, currentData, className = '' }: { uid: string, currentData: ProgressData, className: string }) => {
+const EndSessionButton = ({ uid, className = '' }: { uid: string, className: string }) => {
   const navigate = useNavigate();
-  const [saving, setSaving] = React.useState(false);
+  const [saving, setSaving] = useState(false);
+  const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
+  const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
+  const currentLevel = useAppSelector((state) => state.currentLevel);
+  const gameArray = useAppSelector((state) => state.gameArray);
+  const nextSession = useAppSelector((state) => state.nextSession);
+  const currentData = {
+    coins: nanakCoin,
+    progress: {
+      currentProgress: currentGamePosition,
+      gameSession: gameArray,
+      currentLevel: currentLevel,
+    },
+    nextSession: nextSession,
+  } as ProgressData;
 
   const endSession = async () => {
     setSaving(true);

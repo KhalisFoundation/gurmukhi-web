@@ -13,22 +13,18 @@ jest.mock('react-router-dom', () => ({
   useNavigate: (): jest.Mock => mockedNavigate,
 }));
 
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
+  useDispatch: jest.fn(() => jest.fn()), // mock dispatch as a function that returns a function
+}));
+
 describe('End Session Button', () => {
   afterEach(() => {
     mockedNavigate.mockClear();
   });
-  const mockCurrentData = {
-    coins: 0,
-    progress: {
-      currentProgress: 0,
-      gameSession: [],
-      currentLevel: 0,
-    },
-    nextSession: [],
-  };
 
   it('displays the end button with correct text and icon', () => {
-    render(<EndSessionButton uid='user1234' currentData={mockCurrentData} className='' />);
+    render(<EndSessionButton uid='user1234' className='' />);
     expect(screen.getByText(CONSTANTS.END_SESSION)).toBeInTheDocument(); // Checks that the button text is rendered
   });
 });
