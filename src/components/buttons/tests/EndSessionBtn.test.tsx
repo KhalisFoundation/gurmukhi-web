@@ -25,7 +25,6 @@ describe('End Session Button', () => {
     mockedNavigate.mockClear();
     mockedUpdater.mockClear();
   });
-
   const mockCurrentData = {
     coins: 0,
     progress: {

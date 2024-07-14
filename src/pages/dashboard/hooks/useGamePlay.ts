@@ -23,18 +23,13 @@ const useGamePlay = (
     } else {
       userData = user;
     }
-    
-    if (!userData) {
-      const gameArray: GameScreen[] = [];
-      return { gameArray };
-    }
 
     const progress: GameScreen[] | null = fetchProgress(userData);
     if (progress && progress.length > 0) {
       const gameArray: GameScreen[] = progress;
       return { gameArray };
     }
-
+    
     const { gameArray } = await gameAlgo(user, batch);
     return { gameArray };
   };

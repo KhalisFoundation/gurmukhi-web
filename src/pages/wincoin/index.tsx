@@ -28,7 +28,6 @@ function WinCoin() {
   const { title, description } = metaTags.WIN;
   const nanakCoin = useAppSelector((state) => state.nanakCoin);
   const currentLevel = useAppSelector((state) => state.currentLevel);
-  const learntWordIds = useAppSelector((state) => state.learntWordIds);
   const nextSession = useAppSelector((state) => state.nextSession);
   const gameArray = useAppSelector((state) => state.gameArray);
   const [isLoading, toggleIsLoading] = useState<boolean>(true);
@@ -51,7 +50,7 @@ function WinCoin() {
             gameSession: nextSession,
           },
           nextSession: [],
-        }, learntWordIds);
+        });
       }
       toggleIsLoading(false);
     };

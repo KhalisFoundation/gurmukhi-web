@@ -20,12 +20,12 @@ import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
 import PageLoading from 'components/pageLoading';
-import { useAppDispatch } from 'store/hooks';
 import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice';
 import { setCurrentLevel } from 'store/features/currentLevelSlice';
 import { setNanakCoin } from 'store/features/nanakCoin';
 import { addScreens } from 'store/features/gameArraySlice';
 import { addNextScreens, resetNextSession } from 'store/features/nextSessionSlice';
+import { useAppDispatch } from 'store/hooks';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -46,9 +46,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         return null;
       }
       const userDetails = await getUserData(userData.user.uid);
-      if (!userDetails) {
-        return null;
-      }
+      if (!userDetails) return null;
       if (userData.user.uid) await setWordIds(userData.user.uid);
       setUser(userDetails);
       setLoading(false);
@@ -98,34 +96,21 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         }
 
         const userDetails = await getUserData(uid);
-
-        if (!userDetails) {
-          return false;
-        }
-
+        if (!userDetails) return false;
+        
         const userData = {
           ...result.user,
           role: roles.student,
           coins: userDetails.coins,
           progress: userDetails.progress,
-          nextSession: userDetails.nextSession ?? [],
-          wordIds: userDetails.wordIds ?? [],
+          wordIds: userDetails.wordIds,
           user: result.user,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           lastLogInAt: Timestamp.now(),
         } as User;
-        if (uid) await setWordIds(uid);
-        dispatch(setCurrentGamePosition(userData.progress.currentProgress));
-        dispatch(setCurrentLevel(userData.progress.currentLevel));
-        dispatch(setNanakCoin(userData.coins));
-        dispatch(addScreens(userData.progress.gameSession));
-        dispatch(addNextScreens(userData.nextSession ?? []));
-        // if nextSession has some value and gameSession is empty then add nextSession to gameSession
-        if (userData.nextSession && userData.progress.gameSession.length === 0 && userData.nextSession.length > 0) {
-          dispatch(addScreens(userData.nextSession));
-          dispatch(resetNextSession());
-        }
+        
+        if (userData.uid) await setWordIds(userData.uid);
         setUser(userData);
         setLoading(false);
         return true;
@@ -239,6 +224,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           updated_at: Timestamp.now(),
           lastLogInAt: metadata.lastSignInTime,
           wordIds: userDetails.wordIds || [],
+          nextSession: userDetails.nextSession,
         } as User;
         dispatch(setCurrentGamePosition(usr.progress.currentProgress));
         dispatch(setCurrentLevel(usr.progress.currentLevel));

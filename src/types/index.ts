@@ -125,4 +125,10 @@ export interface SentenceWord {
   sentences: Sentences[];
 }
 
+export interface WordQuestionMap {
+  wordID: string;
+  progress: number;
+  questionIds: string[];
+}
+
 export * from './shabadavalidb';
