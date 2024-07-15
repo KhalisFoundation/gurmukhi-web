@@ -8,6 +8,7 @@ import { useAppSelector } from 'store/hooks';
 
 const EndSessionButton = ({ uid, className = '' }: { uid: string, className: string }) => {
   const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
   const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
   const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
   const currentLevel = useAppSelector((state) => state.currentLevel);
@@ -22,7 +23,6 @@ const EndSessionButton = ({ uid, className = '' }: { uid: string, className: str
     },
     nextSession: nextSession,
   } as ProgressData;
-  const [saving, setSaving] = useState(false);
 
   const endSession = async () => {
     setSaving(true);
