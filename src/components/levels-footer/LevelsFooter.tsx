@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useUserAuth } from 'auth';
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import LevelHexagon from '../levels/LevelHexagon';
@@ -40,9 +39,7 @@ export default function LevelsFooter({
   const numQuestionsLeft = totalNumQuestions - currentLevel;
   const footerClass =
     'gap-1 flex flex-col lg:flex-row w-full inset-x-0 bottom-0 bg-white/[.1] items-center justify-between z-10 box-border h-auto py-2 lg:py-4 ';
-  let user = useUserAuth().user as User;
-  const userDataFromState = useAppSelector((state) => state.userData) as User;
-  if (!user && userDataFromState !== undefined) user = userDataFromState;
+  const user = useAppSelector((state) => state.userData) as User;
   if (!user) {
     bugsnagErrorHandler(new Error('User not found'), 'LevelsFooter.tsx', {}, user);
   }

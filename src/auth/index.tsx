@@ -25,14 +25,14 @@ import { setCurrentLevel } from 'store/features/currentLevelSlice';
 import { setNanakCoin } from 'store/features/nanakCoin';
 import { addScreens } from 'store/features/gameArraySlice';
 import { addNextScreens, resetNextSession } from 'store/features/nextSessionSlice';
-import { useAppDispatch } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { setUserData } from 'store/features/userDataSlice';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthContextProvider = ({ children }: { children: ReactElement }) => {
   const dispatch = useAppDispatch();
-  const [user, setUser] = useState<User | null>(null);
+  const user = useAppSelector((state) => state.userData) as User;
   const [loading, setLoading] = useState<boolean>(true);
   const { t: translate } = useTranslation();
 
@@ -49,7 +49,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const userDetails = await getUserData(userData.user.uid);
       if (!userDetails) return null;
       if (userData.user.uid) await setWordIds(userData.user.uid);
-      setUser(userDetails);
+      dispatch(setUserData(userDetails));
       setLoading(false);
       return userData;
     } catch (error) {
@@ -69,12 +69,16 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const { uid, email, displayName } = userCredential.user;
+      if (!email) {
+        showToastMessage('Email is missing.', true);
+        return false;
+      }
 
-      const found = await checkUser(uid, email ?? '');
+      const found = await checkUser(uid, email);
 
       if (!found) {
         const localUser = doc(shabadavaliDB, `users/${uid}`);
-        await setDoc(localUser, {
+        const userData = {
           role: roles.student,
           email,
           coins: 0,
@@ -86,27 +90,53 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           displayName: displayName ?? email?.split('@')[0],
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
-        });
+          emailVerified: userCredential.user.emailVerified,
+          photoURL: userCredential.user.photoURL || '',
+          uid: uid,
+          wordIds: [],
+          lastLogInAt: Timestamp.now(),
+        };
+        await setDoc(localUser, userData);
+        const userDetails: User = {
+          ...userData,
+          user: userCredential.user,
+        };
+        if (uid) await setWordIds(uid);
+        dispatch(setCurrentGamePosition(0));
+        dispatch(setCurrentLevel(0));
+        dispatch(setNanakCoin(0));
+        dispatch(addScreens([]));
+        dispatch(resetNextSession());
+
+        dispatch(setUserData(userDetails));
+        setLoading(false);
+        return true;
+      } else {
+        const userDetails = await getUserData(uid);
+        if (!userDetails) {
+          showToastMessage('Failed to retrieve existing user data', true);
+          return false;
+        }
+
+        const userData = {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email,
+          displayName: userCredential.user.displayName,
+          role: roles.student,
+          coins: userDetails.coins,
+          progress: userDetails.progress,
+          wordIds: userDetails.wordIds,
+          user: userCredential.user,
+          created_at: Timestamp.now(),
+          updated_at: Timestamp.now(),
+          lastLogInAt: Timestamp.now(),
+        } as User;
+
+        if (userData.uid) await setWordIds(userData.uid);
+        dispatch(setUserData(userData));
+        setLoading(false);
+        return true;
       }
-      const userDetails = await getUserData(uid);
-      if (!userDetails) return false;
-
-      const userData = {
-        ...userCredential.user,
-        role: roles.student,
-        coins: userDetails.coins,
-        progress: userDetails.progress,
-        wordIds: userDetails.wordIds,
-        user: userCredential.user,
-        created_at: Timestamp.now(),
-        updated_at: Timestamp.now(),
-        lastLogInAt: Timestamp.now(),
-      } as User;
-
-      if (userData.uid) await setWordIds(userData.uid);
-      setUser(userData);
-      setLoading(false);
-      return true;
     } catch (error) {
       if (error instanceof Error) {
         if (Object.keys(errors).includes(error.message)) {
@@ -165,7 +195,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
 
       userDataForState = { ...userDataForState, user: userData };
       if (userData.uid) await setWordIds(userData.uid);
-      setUser(userDataForState);
+      dispatch(setUserData(userDataForState));
       setLoading(false);
 
       sendEmailVerification(auth.currentUser ?? userData).then(() => {
@@ -186,7 +216,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
 
   const logOut = async () => {
     await signOut(auth);
-    setUser(null);
+    dispatch(setUserData(null));
     setLoading(false);
   };
 
@@ -218,7 +248,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           wordIds: userDetails.wordIds || [],
           nextSession: userDetails.nextSession,
         } as User;
-        dispatch(setUserData(usr));
+        dispatch(setUserData(usr as User));
         dispatch(setCurrentGamePosition(usr.progress.currentProgress));
         dispatch(setCurrentLevel(usr.progress.currentLevel));
         dispatch(setNanakCoin(usr.coins));
@@ -229,10 +259,9 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           dispatch(addScreens(usr.nextSession));
           dispatch(resetNextSession());
         }
-        setUser(usr);
         setLoading(false);
       } else {
-        setUser(null);
+        dispatch(setUserData(null));
         setLoading(false);
       }
     });

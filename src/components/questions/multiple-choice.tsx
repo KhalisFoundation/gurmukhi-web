@@ -7,6 +7,7 @@ import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import ALL_CONSTANT from 'constants/constant';
+import { setUserData } from 'store/features/userDataSlice';
 
 export default function MultipleChoiceQuestion({
   questionData,
@@ -23,6 +24,7 @@ export default function MultipleChoiceQuestion({
 }) {
   const { t: text } = useTranslation();
   const [selectedOption, setSelectedOption] = React.useState<Option | null>(null);
+  const user = useAppSelector((state) => state.userData);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const dispatch = useAppDispatch();
 
@@ -39,6 +41,7 @@ export default function MultipleChoiceQuestion({
           if (currentLevel + ALL_CONSTANT.DEFAULT_ONE <= ALL_CONSTANT.LEVELS_COUNT) {
             toggleLoading(true);
             dispatch(increment());
+            if (user) dispatch(setUserData({ ...user, progress: { ...user.progress, currentLevel: currentLevel + ALL_CONSTANT.DEFAULT_ONE } }));
             toggleLoading(false);
           }
           setIsCorrectOption(true);

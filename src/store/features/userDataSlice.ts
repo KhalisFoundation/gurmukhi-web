@@ -3,13 +3,13 @@ import { User } from 'types';
 
 const userDataSlice = createSlice({
   name: 'userData',
-  initialState: {} as object | User,
+  initialState: null as User | null,
   reducers: {
-    setUserData: (state, action: PayloadAction<User>) => {
+    setUserData: (state, action: PayloadAction<User | null>) => {
       return action.payload;
     },
     resetUserData: () => {
-      return {};
+      return null;
     },
   },
 });

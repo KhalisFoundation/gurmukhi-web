@@ -1,10 +1,10 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
-import { useUserAuth } from 'auth';
+import { useAppSelector } from 'store/hooks';
 
 export default function RequireAuth({ children }: { children: JSX.Element }) {
-  const user = useUserAuth().user;
+  const user = useAppSelector((state) => state.userData);
   const location = useLocation();
 
   if (user === null) {

@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiamond } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer, toast } from 'react-toastify';
-import { useUserAuth } from 'auth';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { checkIfUsernameUnique, updateUserDocument } from 'database/shabadavalidb';
@@ -14,11 +13,12 @@ import { uploadImage } from 'utils/storage';
 import CONSTANTS from 'constants/constant';
 import { User } from 'types';
 import { Timestamp } from 'firebase/firestore';
+import { useAppSelector } from 'store/hooks';
 
 export default function Profile() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.PROFILE;
-  const user = useUserAuth().user as User;
+  const user = useAppSelector((state) => state.userData) as User;
 
   const currentUser = user?.user || auth.currentUser || null;
 

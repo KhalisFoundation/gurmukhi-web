@@ -9,7 +9,6 @@ import { increment } from 'store/features/nanakCoin';
 import convertNumber from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
-import { useUserAuth } from 'auth';
 import { updateUserWithWords } from 'database/shabadavalidb';
 import { resetGameArray } from 'store/features/gameArraySlice';
 import ALL_CONSTANT from 'constants/constant';
@@ -19,12 +18,11 @@ import { addScreens } from 'store/features/gameArraySlice';
 import { User } from 'types';
 import CONSTANTS from 'constants/constant';
 import { resetNextSession } from 'store/features/nextSessionSlice';
+import { setUserData } from 'store/features/userDataSlice';
 
 function WinCoin() {
   const navigate = useNavigate();
-  let user = useUserAuth().user as User;
-  const userData = useAppSelector((state) => state.userData) as User;
-  if (!user && userData !== undefined && userData.uid) user = userData;
+  const user = useAppSelector((state) => state.userData) as User;
   const { t: text } = useTranslation();
   const dispatch = useAppDispatch();
   const { title, description } = metaTags.WIN;
@@ -44,6 +42,16 @@ function WinCoin() {
         dispatch(increment());
         dispatch(addScreens(nextSession || []));
         dispatch(resetNextSession());
+        dispatch(setUserData({
+          ...user,
+          coins: nanakCoin + CONSTANTS.DEFAULT_ONE,
+          progress: {
+            currentLevel: 0,
+            currentProgress: 0,
+            gameSession: nextSession,
+          },
+          nextSession: [],
+        }));
         await updateUserWithWords(user.uid, {
           coins: nanakCoin + CONSTANTS.DEFAULT_ONE,
           progress: {

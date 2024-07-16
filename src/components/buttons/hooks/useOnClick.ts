@@ -7,6 +7,7 @@ import { bugsnagErrorHandler } from 'utils';
 import { DefineWord, QuestionData, SentenceWord, WordType } from 'types';
 import { NavigateFunction } from 'react-router-dom';
 import { AppDispatch } from 'store/store';
+import { setUserData } from 'store/features/userDataSlice';
 
 const navigateTo = (
   navigate: NavigateFunction,
@@ -71,6 +72,10 @@ const handleClick = async (
         if (currentGamePosition) {
           try {
             dispatch(setCurrentGamePosition(currentGamePosition));
+            dispatch(setUserData({ ...user, progress: {
+              ...user.progress,
+              currentProgress: currentGamePosition,
+            } }));
           } catch (error) {
             bugsnagErrorHandler(error, 'handleClick in useOnClick.ts', { uid: user.uid }, user);
           }
