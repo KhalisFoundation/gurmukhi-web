@@ -70,8 +70,8 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const { uid, email, displayName } = userCredential.user;
-      if (!email || !displayName) {
-        showToastMessage('Email or display name is missing.', true);
+      if (!email) {
+        showToastMessage('Email is missing.', true);
         return false;
       }
 
@@ -88,7 +88,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
             gameSession: [],
             currentLevel: 0,
           },
-          displayName: displayName || email?.split('@')[0],
+          displayName: displayName ?? email?.split('@')[0],
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           emailVerified: userCredential.user.emailVerified,
