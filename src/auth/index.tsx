@@ -11,7 +11,9 @@ import {
   User as FirebaseUser,
 } from 'firebase/auth';
 import {
-  Timestamp, doc, setDoc, // query, where, documentId, getDocs,
+  Timestamp,
+  doc,
+  setDoc, // query, where, documentId, getDocs,
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
@@ -69,10 +71,11 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const userCredential = await signInWithPopup(auth, provider);
       const { uid, email, displayName } = userCredential.user;
       if (!email || !displayName) {
+        showToastMessage('Email or display name is missing.', true);
         return false;
       }
 
-      const found = await checkUser(uid, email ?? '');
+      const found = await checkUser(uid, email);
 
       if (!found) {
         const localUser = doc(shabadavaliDB, `users/${uid}`);
@@ -88,16 +91,16 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           displayName: displayName ?? (email?.split('@')[0] || ''),
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
+          emailVerified: userCredential.user.emailVerified,
+          photoURL: userCredential.user.photoURL || '',
+          uid: uid,
+          wordIds: [],
+          lastLogInAt: Timestamp.now(),
         };
         await setDoc(localUser, userData);
         const userDetails: User = {
           ...userData,
           user: userCredential.user,
-          emailVerified: userCredential.user.emailVerified,
-          photoURL: '',
-          uid: uid,
-          wordIds: [],
-          lastLogInAt: Timestamp.now(),
         };
         if (uid) await setWordIds(uid);
         dispatch(setCurrentGamePosition(0));
@@ -105,16 +108,21 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         dispatch(setNanakCoin(0));
         dispatch(addScreens([]));
         dispatch(resetNextSession());
-        
+
         setUser(userDetails);
         setLoading(false);
         return true;
       } else {
         const userDetails = await getUserData(uid);
-        if (!userDetails) return false;
+        if (!userDetails) {
+          showToastMessage('Failed to retrieve existing user data', true);
+          return false;
+        }
 
         const userData = {
-          ...userCredential.user,
+          uid: userCredential.user.uid,
+          email: userCredential.user.email,
+          displayName: userCredential.user.displayName,
           role: roles.student,
           coins: userDetails.coins,
           progress: userDetails.progress,
@@ -125,13 +133,13 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           lastLogInAt: Timestamp.now(),
         } as User;
 
-        if (userData.uid) await setWordIds(userData.uid);
+        if (userData.uid) {
+          await setWordIds(userData.uid);
+        }
         setUser(userData);
         setLoading(false);
         return true;
       }
-
-    
     } catch (error) {
       if (error instanceof Error) {
         if (Object.keys(errors).includes(error.message)) {
@@ -249,7 +257,11 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         dispatch(addScreens(usr.progress.gameSession));
         dispatch(addNextScreens(usr.nextSession ?? []));
         // if nextSession has some value and gameSession is empty then add nextSession to gameSession
-        if (usr.nextSession && usr.progress.gameSession.length === 0 && usr.nextSession.length > 0) {
+        if (
+          usr.nextSession &&
+          usr.progress.gameSession.length === 0 &&
+          usr.nextSession.length > 0
+        ) {
           dispatch(addScreens(usr.nextSession));
           dispatch(resetNextSession());
         }
