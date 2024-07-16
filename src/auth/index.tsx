@@ -68,12 +68,15 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const { uid, email, displayName } = userCredential.user;
+      if (!email || !displayName) {
+        return false;
+      }
 
       const found = await checkUser(uid, email ?? '');
 
       if (!found) {
         const localUser = doc(shabadavaliDB, `users/${uid}`);
-        await setDoc(localUser, {
+        const userData = {
           role: roles.student,
           email,
           coins: 0,
@@ -82,30 +85,47 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
             gameSession: [],
             currentLevel: 0,
           },
-          displayName: displayName ?? email?.split('@')[0],
+          displayName: displayName ?? (email?.split('@')[0] || ''),
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
-        });
+        };
+        await setDoc(localUser, userData);
+        const userDetails: User = {
+          ...userData,
+          user: userCredential.user,
+          emailVerified: userCredential.user.emailVerified,
+          photoURL: '',
+          uid: uid,
+          wordIds: [],
+          lastLogInAt: Timestamp.now(),
+        };
+        if (uid) await setWordIds(uid);
+        setUser(userDetails);
+        setLoading(false);
+        return true;
+      } else {
+        const userDetails = await getUserData(uid);
+        if (!userDetails) return false;
+
+        const userData = {
+          ...userCredential.user,
+          role: roles.student,
+          coins: userDetails.coins,
+          progress: userDetails.progress,
+          wordIds: userDetails.wordIds,
+          user: userCredential.user,
+          created_at: Timestamp.now(),
+          updated_at: Timestamp.now(),
+          lastLogInAt: Timestamp.now(),
+        } as User;
+
+        if (userData.uid) await setWordIds(userData.uid);
+        setUser(userData);
+        setLoading(false);
+        return true;
       }
-      const userDetails = await getUserData(uid);
-      if (!userDetails) return false;
 
-      const userData = {
-        ...userCredential.user,
-        role: roles.student,
-        coins: userDetails.coins,
-        progress: userDetails.progress,
-        wordIds: userDetails.wordIds,
-        user: userCredential.user,
-        created_at: Timestamp.now(),
-        updated_at: Timestamp.now(),
-        lastLogInAt: Timestamp.now(),
-      } as User;
-
-      if (userData.uid) await setWordIds(userData.uid);
-      setUser(userData);
-      setLoading(false);
-      return true;
+    
     } catch (error) {
       if (error instanceof Error) {
         if (Object.keys(errors).includes(error.message)) {
