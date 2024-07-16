@@ -88,7 +88,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
             gameSession: [],
             currentLevel: 0,
           },
-          displayName: displayName ?? (email?.split('@')[0] || ''),
+          displayName: displayName || email?.split('@')[0],
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           emailVerified: userCredential.user.emailVerified,
