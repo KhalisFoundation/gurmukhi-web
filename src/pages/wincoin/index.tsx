@@ -41,7 +41,6 @@ function WinCoin() {
         dispatch(resetLevel());
         dispatch(increment());
         dispatch(addScreens(nextSession || []));
-        dispatch(resetNextSession());
         await updateUserWithWords(user.uid, {
           coins: nanakCoin + CONSTANTS.DEFAULT_ONE,
           progress: {
@@ -52,6 +51,7 @@ function WinCoin() {
           nextSession: [],
         });
       }
+      dispatch(resetNextSession());
       toggleIsLoading(false);
     };
     storeData();
