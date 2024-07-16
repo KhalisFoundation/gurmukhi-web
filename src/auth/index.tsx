@@ -100,6 +100,12 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           lastLogInAt: Timestamp.now(),
         };
         if (uid) await setWordIds(uid);
+        dispatch(setCurrentGamePosition(0));
+        dispatch(setCurrentLevel(0));
+        dispatch(setNanakCoin(0));
+        dispatch(addScreens([]));
+        dispatch(resetNextSession());
+        
         setUser(userDetails);
         setLoading(false);
         return true;
