@@ -8,7 +8,7 @@ import Bugsnag from '@bugsnag/js';
 import { setWebWorker } from 'store/features/webWorkerSlice';
 import { User, WordShabadavaliDB, WordType } from 'types';
 import useLearntWords from './hooks/useLearntWords';
-import { checkIsFirstTime, getRandomWord } from './utils';
+import { getRandomWord } from './utils';
 
 const Ssa = lazy(() => import('components/ssa'));
 const WordBox = lazy(() => import('./components/wordBox'));
@@ -28,8 +28,7 @@ export default function Dashboard() {
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
   const gameArray = useAppSelector((state) => state.gameArray);
-  const isFirstTime = checkIsFirstTime(user);
-  useGamePlay(user, currentGamePosition, currentLevel, gameArray, toggleGamePlayLoading, isFirstTime);
+  useGamePlay(user, currentGamePosition, currentLevel, gameArray, toggleGamePlayLoading);
   const randomWord: WordType | null = getRandomWord(gameArray);
   const learntWords: WordShabadavaliDB[] | null = useLearntWords(user, toggleLearntWords);
   const webWorker: boolean = useAppSelector((state) => state.webWorker);

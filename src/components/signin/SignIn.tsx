@@ -19,7 +19,7 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState<SignError | null>(null);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
-  const { logIn, signUp, signInWithGoogle } = useUserAuth();
+  const { logIn, signUp, signInWithGoogle, logOut } = useUserAuth();
   const user = useAppSelector((state) => state.userData);
 
   useEffect(() => {
@@ -127,8 +127,11 @@ export default function SignIn() {
       const success = await signInWithGoogle(displayToast);
       if (success) {
         navigate(ROUTES.DASHBOARD);
+      } else {
+        await logOut();
       }
     } catch (error) {
+      await logOut();
       if (error instanceof Error) {
         displayToast(error.message);
       }

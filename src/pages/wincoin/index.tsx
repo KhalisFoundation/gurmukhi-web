@@ -42,16 +42,18 @@ function WinCoin() {
         dispatch(increment());
         dispatch(addScreens(nextSession || []));
         dispatch(resetNextSession());
-        dispatch(setUserData({
-          ...user,
-          coins: nanakCoin + CONSTANTS.DEFAULT_ONE,
-          progress: {
-            currentLevel: 0,
-            currentProgress: 0,
-            gameSession: nextSession,
-          },
-          nextSession: [],
-        }));
+        dispatch(
+          setUserData({
+            ...user,
+            coins: nanakCoin + CONSTANTS.DEFAULT_ONE,
+            progress: {
+              currentLevel: 0,
+              currentProgress: 0,
+              gameSession: nextSession,
+            },
+            nextSession: [],
+          }),
+        );
         await updateUserWithWords(user.uid, {
           coins: nanakCoin + CONSTANTS.DEFAULT_ONE,
           progress: {

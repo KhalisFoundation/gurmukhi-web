@@ -1,9 +1,8 @@
-import React, { ReactElement, createContext, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, createContext, useContext, useState } from 'react';
 import {
   signOut,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   sendEmailVerification,
   signInWithPopup,
   GoogleAuthProvider,
@@ -11,7 +10,9 @@ import {
   User as FirebaseUser,
 } from 'firebase/auth';
 import {
-  Timestamp, doc, setDoc, // query, where, documentId, getDocs,
+  Timestamp,
+  doc,
+  setDoc, // query, where, documentId, getDocs,
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
@@ -24,17 +25,25 @@ import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice'
 import { setCurrentLevel } from 'store/features/currentLevelSlice';
 import { setNanakCoin } from 'store/features/nanakCoin';
 import { addScreens } from 'store/features/gameArraySlice';
-import { addNextScreens, resetNextSession } from 'store/features/nextSessionSlice';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { addNextScreens } from 'store/features/nextSessionSlice';
+import { useAppDispatch } from 'store/hooks';
 import { setUserData } from 'store/features/userDataSlice';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthContextProvider = ({ children }: { children: ReactElement }) => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.userData) as User;
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const { t: translate } = useTranslation();
+
+  const dispatchActions = (userDetails: User) => {
+    dispatch(setCurrentGamePosition(userDetails.progress.currentProgress));
+    dispatch(setCurrentLevel(userDetails.progress.currentLevel));
+    dispatch(setNanakCoin(userDetails.coins));
+    dispatch(addScreens(userDetails.progress.gameSession));
+    dispatch(addNextScreens(userDetails.nextSession ?? []));
+    dispatch(setUserData(userDetails));
+  };
 
   const logIn = async (
     email: string,
@@ -42,14 +51,16 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
     showToastMessage: (text: string, error?: boolean) => void,
   ) => {
     try {
+      setLoading(true);
       const userData = await signInWithEmailAndPassword(auth, email, password);
       if (!userData.user.uid) {
+        setLoading(false);
         return null;
       }
       const userDetails = await getUserData(userData.user.uid);
       if (!userDetails) return null;
       if (userData.user.uid) await setWordIds(userData.user.uid);
-      dispatch(setUserData(userDetails));
+      dispatchActions(userDetails);
       setLoading(false);
       return userData;
     } catch (error) {
@@ -66,11 +77,13 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
 
   const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
     try {
+      setLoading(true);
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const { uid, email, displayName } = userCredential.user;
       if (!email) {
         showToastMessage('Email is missing.', true);
+        setLoading(false);
         return false;
       }
 
@@ -102,16 +115,9 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           user: userCredential.user,
         };
         if (uid) await setWordIds(uid);
-        dispatch(setCurrentGamePosition(0));
-        dispatch(setCurrentLevel(0));
-        dispatch(setNanakCoin(0));
-        dispatch(addScreens([]));
-        dispatch(resetNextSession());
-
-        dispatch(setUserData(userDetails));
-        setLoading(false);
-        return true;
+        dispatchActions(userDetails);
       } else {
+        console.log('UID', uid);
         const userDetails = await getUserData(uid);
         if (!userDetails) {
           showToastMessage('Failed to retrieve existing user data', true);
@@ -126,23 +132,19 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           coins: userDetails.coins,
           progress: userDetails.progress,
           wordIds: userDetails.wordIds,
-          user: userCredential.user,
+          // user: userCredential.user,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           lastLogInAt: Timestamp.now(),
         } as User;
 
         if (userData.uid) await setWordIds(userData.uid);
-        dispatch(setUserData(userData));
-        dispatch(setCurrentGamePosition(userData.progress.currentProgress));
-        dispatch(setCurrentLevel(userData.progress.currentLevel));
-        dispatch(setNanakCoin(userData.coins));
-        dispatch(addScreens(userData.progress.gameSession));
-        dispatch(addNextScreens(userData.nextSession ?? []));
-        setLoading(false);
-        return true;
+        dispatchActions(userData);
       }
+      setLoading(false);
+      return true;
     } catch (error) {
+      setLoading(false);
       if (error instanceof Error) {
         if (Object.keys(errors).includes(error.message)) {
           showToastMessage(errors[error.message]);
@@ -200,7 +202,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
 
       userDataForState = { ...userDataForState, user: userData };
       if (userData.uid) await setWordIds(userData.uid);
-      dispatch(setUserData(userDataForState));
+      dispatchActions(userDataForState);
       setLoading(false);
 
       sendEmailVerification(auth.currentUser ?? userData).then(() => {
@@ -220,61 +222,13 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
   };
 
   const logOut = async () => {
+    setLoading(true);
     await signOut(auth);
     dispatch(setUserData(null));
     setLoading(false);
   };
 
   const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser: FirebaseUser | null) => {
-      if (currentUser !== null) {
-        const { uid, emailVerified, metadata } = currentUser as FirebaseUser;
-        const userDetails = await getUserData(uid);
-        if (!userDetails) {
-          return null;
-        }
-        const usr = {
-          user: currentUser,
-          uid,
-          // name: userDetails?.name,
-          coins: userDetails.coins,
-          progress: userDetails.progress,
-          email: userDetails.email,
-          emailVerified: emailVerified ?? false,
-          displayName: userDetails.displayName,
-          photoURL: userDetails.photoURL,
-          role: userDetails.role,
-          username: userDetails.username,
-          created_at: metadata.creationTime,
-          updated_at: Timestamp.now(),
-          lastLogInAt: metadata.lastSignInTime,
-          wordIds: userDetails.wordIds || [],
-          nextSession: userDetails.nextSession,
-        } as User;
-        dispatch(setUserData(usr as User));
-        dispatch(setCurrentGamePosition(usr.progress.currentProgress));
-        dispatch(setCurrentLevel(usr.progress.currentLevel));
-        dispatch(setNanakCoin(usr.coins));
-        dispatch(addScreens(usr.progress.gameSession));
-        dispatch(addNextScreens(usr.nextSession ?? []));
-        // if nextSession has some value and gameSession is empty then add nextSession to gameSession
-        if (usr.nextSession && usr.progress.gameSession.length === 0 && usr.nextSession.length > 0) {
-          dispatch(addScreens(usr.nextSession));
-          dispatch(resetNextSession());
-        }
-        setLoading(false);
-      } else {
-        dispatch(setUserData(null));
-        setLoading(false);
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
   if (loading) {
     return <PageLoading />;
@@ -283,7 +237,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
   return (
     <AuthContext.Provider
       value={{
-        user,
         logIn,
         signUp,
         logOut,

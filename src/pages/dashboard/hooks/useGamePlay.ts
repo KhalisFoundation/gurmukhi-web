@@ -7,6 +7,7 @@ import { gameAlgo } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
 import { WriteBatch } from 'firebase/firestore';
 import { setUserProgress } from 'store/features/userDataSlice';
+import { fetchProgress } from '../utils';
 
 const useGamePlay = (
   user: User,
@@ -19,8 +20,10 @@ const useGamePlay = (
   const dispatch = useAppDispatch();
 
   const gamePlay = async (batch: WriteBatch) => {
-    if (gameSession && gameSession.length > 0) {
-      return { gameArray: gameSession };
+    const progress: GameScreen[] | null = fetchProgress(user);
+    if (progress && progress.length > 0) {
+      const gameArray: GameScreen[] = progress;
+      return { gameArray };
     }
     const { gameArray } = await gameAlgo(user, batch);
     return { gameArray };
@@ -28,33 +31,33 @@ const useGamePlay = (
 
   useEffect(() => {
     const fetchGamePlay = async () => {
-      if (gameSession && resetGame) {
-        try {
-          const batch = getBatch();
-          const { gameArray = [] } = await gamePlay(batch);
-          await updateProgress(user.uid, currentProgress, gameArray, currentLevel, batch);
-          await commitBatch(batch);
-          dispatch(addScreens(gameArray));
-          dispatch(setUserProgress({
+      try {
+        const batch = getBatch();
+        const { gameArray = [] } = await gamePlay(batch);
+        await updateProgress(user.uid, currentProgress, gameArray, currentLevel, batch);
+        await commitBatch(batch);
+        dispatch(addScreens(gameArray));
+        dispatch(
+          setUserProgress({
             ...user,
             progress: {
               currentLevel,
               currentProgress,
               gameSession: gameArray,
             },
-          } as ProgressData));
-        } catch (error) {
-          bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay.ts/useGamePlay', {
-            ...user,
-          });
-        } finally {
-          toggleLoading(false);
-        }
-      } else {
+          } as ProgressData),
+        );
+      } catch (error) {
+        bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay.ts/useGamePlay', {
+          ...user,
+        });
+      } finally {
         toggleLoading(false);
       }
     };
-    fetchGamePlay();
+    if (resetGame === true) {
+      fetchGamePlay();
+    }
   }, [resetGame]);
 };
 
