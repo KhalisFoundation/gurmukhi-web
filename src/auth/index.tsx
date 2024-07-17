@@ -134,6 +134,11 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
 
         if (userData.uid) await setWordIds(userData.uid);
         dispatch(setUserData(userData));
+        dispatch(setCurrentGamePosition(userData.progress.currentProgress));
+        dispatch(setCurrentLevel(userData.progress.currentLevel));
+        dispatch(setNanakCoin(userData.coins));
+        dispatch(addScreens(userData.progress.gameSession));
+        dispatch(addNextScreens(userData.nextSession ?? []));
         setLoading(false);
         return true;
       }

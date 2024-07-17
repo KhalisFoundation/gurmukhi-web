@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import { GameScreen, User } from 'types';
+import { GameScreen, ProgressData, User } from 'types';
 import { useAppDispatch } from 'store/hooks';
 import { commitBatch, getBatch, updateProgress } from 'database/shabadavalidb';
 import { addScreens } from 'store/features/gameArraySlice';
 import { gameAlgo } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
 import { WriteBatch } from 'firebase/firestore';
-import { setUserData } from 'store/features/userDataSlice';
+import { setUserProgress } from 'store/features/userDataSlice';
 
 const useGamePlay = (
   user: User,
@@ -28,29 +28,33 @@ const useGamePlay = (
 
   useEffect(() => {
     const fetchGamePlay = async () => {
-      if (gameSession) {
+      if (gameSession && resetGame) {
         try {
           const batch = getBatch();
           const { gameArray = [] } = await gamePlay(batch);
-          updateProgress(user.uid, currentProgress, gameArray, currentLevel, batch);
+          await updateProgress(user.uid, currentProgress, gameArray, currentLevel, batch);
           await commitBatch(batch);
           dispatch(addScreens(gameArray));
-          dispatch(
-            setUserData({ ...user, progress: { ...user.progress, gameSession: gameArray } }),
-          );
+          dispatch(setUserProgress({
+            ...user,
+            progress: {
+              currentLevel,
+              currentProgress,
+              gameSession: gameArray,
+            },
+          } as ProgressData));
         } catch (error) {
           bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay.ts/useGamePlay', {
             ...user,
           });
+        } finally {
+          toggleLoading(false);
         }
+      } else {
+        toggleLoading(false);
       }
-      toggleLoading(false);
     };
-    if (resetGame === true) {
-      fetchGamePlay();
-    } else {
-      toggleLoading(false);
-    }
+    fetchGamePlay();
   }, [resetGame]);
 };
 
