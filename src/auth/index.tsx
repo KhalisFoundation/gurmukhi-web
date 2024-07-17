@@ -112,7 +112,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         await setDoc(localUser, userData);
         const userDetails: User = {
           ...userData,
-          user: userCredential.user,
+          user: null,
         };
         if (uid) await setWordIds(uid);
         dispatchActions(userDetails);
