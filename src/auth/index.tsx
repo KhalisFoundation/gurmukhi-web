@@ -117,7 +117,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         if (uid) await setWordIds(uid);
         dispatchActions(userDetails);
       } else {
-        console.log('UID', uid);
         const userDetails = await getUserData(uid);
         if (!userDetails) {
           showToastMessage('Failed to retrieve existing user data', true);
