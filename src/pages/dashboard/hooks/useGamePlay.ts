@@ -35,7 +35,9 @@ const useGamePlay = (
           updateProgress(user.uid, currentProgress, gameArray, currentLevel, batch);
           await commitBatch(batch);
           dispatch(addScreens(gameArray));
-          dispatch(setUserData({ ...user, progress: { ...user.progress, gameSession: gameArray } }));
+          dispatch(
+            setUserData({ ...user, progress: { ...user.progress, gameSession: gameArray } }),
+          );
         } catch (error) {
           bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay.ts/useGamePlay', {
             ...user,
@@ -49,7 +51,7 @@ const useGamePlay = (
     } else {
       toggleLoading(false);
     }
-  }, [gamePlay, resetGame]);
+  }, [resetGame]);
 };
 
 export default useGamePlay;
