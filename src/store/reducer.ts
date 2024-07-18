@@ -5,6 +5,7 @@ import gameArrayReducer from './features/gameArraySlice';
 import nanakCoin from './features/nanakCoin';
 import webWorkerReducer from './features/webWorkerSlice';
 import nextSessionReducer from './features/nextSessionSlice';
+import userDataSlice from './features/userDataSlice';
 
 export const rootReducer = combineReducers({
   currentGamePosition: currentGamePositionReducer,
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
   nextSession: nextSessionReducer,
   nanakCoin: nanakCoin,
   webWorker: webWorkerReducer,
+  userData: userDataSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

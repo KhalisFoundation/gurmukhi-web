@@ -6,6 +6,7 @@ import { ROUTES } from 'constants/routes';
 import { SignError } from 'types';
 import { ToastContainer, toast } from 'react-toastify';
 import { bugsnagErrorHandler, showToastMessage } from 'utils';
+import { useAppSelector } from 'store/hooks';
 const SignUp = lazy(() => import('./SignUp'));
 const InputWithIcon = lazy(() => import('../input/InputWithIcon'));
 
@@ -18,7 +19,8 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState<SignError | null>(null);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
-  const { logIn, signUp, signInWithGoogle, user } = useUserAuth();
+  const { logIn, signUp, signInWithGoogle, logOut } = useUserAuth();
+  const user = useAppSelector((state) => state.userData);
 
   useEffect(() => {
     if (user) {
@@ -125,8 +127,11 @@ export default function SignIn() {
       const success = await signInWithGoogle(displayToast);
       if (success) {
         navigate(ROUTES.DASHBOARD);
+      } else {
+        await logOut();
       }
     } catch (error) {
+      await logOut();
       if (error instanceof Error) {
         displayToast(error.message);
       }

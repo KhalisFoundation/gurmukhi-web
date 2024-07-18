@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useUserAuth } from 'auth';
 import { useTranslation } from 'react-i18next';
 import InputWithIcon from 'components/input/InputWithIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,11 +6,12 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import ALL_CONSTANT from 'constants/constant';
 import RadioBtn from 'components/buttons/RadioBtn';
 import CONSTANTS from 'constants/constant';
-import { SignError, User } from 'types';
+import { SignError } from 'types';
+import { useAppSelector } from 'store/hooks';
 
 function FeedbackForm({ setShowModal }: { setShowModal: (value: boolean) => void }) {
   const { t: text } = useTranslation();
-  const user = useUserAuth().user as User;
+  const user = useAppSelector((state) => state.userData);
   const [action, setAction] = useState('');
   const [name, setName] = useState(user ? user.displayName : '');
   const [email, setEmail] = useState(user ? user.email : '');

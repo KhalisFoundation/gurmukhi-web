@@ -1,60 +1,64 @@
 import { useEffect } from 'react';
-import { GameScreen, User } from 'types';
+import { GameScreen, ProgressData, User } from 'types';
 import { useAppDispatch } from 'store/hooks';
-import { commitBatch, getBatch, getUserData, updateProgress } from 'database/shabadavalidb';
+import { commitBatch, getBatch, updateProgress } from 'database/shabadavalidb';
 import { addScreens } from 'store/features/gameArraySlice';
-import { fetchProgress, gameAlgo } from '../utils';
+import { gameAlgo } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
 import { WriteBatch } from 'firebase/firestore';
+import { setUserProgress } from 'store/features/userDataSlice';
+import { fetchProgress } from '../utils';
 
 const useGamePlay = (
   user: User,
   currentProgress: number,
   currentLevel: number,
+  gameSession: GameScreen[],
   toggleLoading: (value: boolean) => void,
   resetGame = true,
 ) => {
   const dispatch = useAppDispatch();
 
   const gamePlay = async (batch: WriteBatch) => {
-    let userData = null;
-    if (!user.progress) {
-      userData = await getUserData(user.uid);
-    } else {
-      userData = user;
-    }
-
-    const progress: GameScreen[] | null = fetchProgress(userData);
+    const progress: GameScreen[] | null = fetchProgress(user);
     if (progress && progress.length > 0) {
       const gameArray: GameScreen[] = progress;
       return { gameArray };
     }
-    
     const { gameArray } = await gameAlgo(user, batch);
     return { gameArray };
   };
 
   useEffect(() => {
     const fetchGamePlay = async () => {
-      if (user.progress) {
-        try {
-          const batch = getBatch();
-          const { gameArray = [] } = await gamePlay(batch);
-          updateProgress(user.uid, currentProgress, gameArray, currentLevel, batch);
-          await commitBatch(batch);
-          dispatch(addScreens(gameArray));
-        } catch (error) {
-          bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay.ts/useGamePlay', {
+      try {
+        const batch = getBatch();
+        const { gameArray = [] } = await gamePlay(batch);
+        await updateProgress(user.uid, currentProgress, gameArray, currentLevel, batch);
+        await commitBatch(batch);
+        dispatch(addScreens(gameArray));
+        dispatch(
+          setUserProgress({
             ...user,
-          });
-        }
+            progress: {
+              currentLevel,
+              currentProgress,
+              gameSession: gameArray,
+            },
+          } as ProgressData),
+        );
+      } catch (error) {
+        bugsnagErrorHandler(error, 'pages/dashboard/hooks/useGamePlay.ts/useGamePlay', {
+          ...user,
+        });
+      } finally {
+        toggleLoading(false);
       }
-      toggleLoading(false);
     };
     if (resetGame === true) {
       fetchGamePlay();
     }
-  }, [user.progress, resetGame]);
+  }, [resetGame]);
 };
 
 export default useGamePlay;

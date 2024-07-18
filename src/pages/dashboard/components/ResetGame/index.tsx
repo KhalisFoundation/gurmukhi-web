@@ -1,11 +1,11 @@
 import React from 'react';
 import { gameAlgo } from 'pages/dashboard/utils';
-import { useUserAuth } from 'auth';
 import { User } from 'types';
 import { commitBatch, getBatch } from 'database/shabadavalidb';
+import { useAppSelector } from 'store/hooks';
 
 function ResetGame() {
-  const user = useUserAuth().user as User;
+  const user = useAppSelector((state) => state.userData) as User;
   const resetGame = async () => {
     const batch = getBatch();
     const { gameArray } = await gameAlgo(user, batch);

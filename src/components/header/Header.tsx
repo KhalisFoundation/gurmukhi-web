@@ -8,7 +8,6 @@ import Shabadavali from 'assets/icons/Shabadavali';
 import { ROUTES } from 'constants/routes';
 import { useAppSelector } from 'store/hooks';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useUserAuth } from 'auth';
 import { User } from 'types';
 
 interface PropTypes {
@@ -17,11 +16,11 @@ interface PropTypes {
 
 export default function Header({ ...props }: PropTypes) {
   const { t: text } = useTranslation();
-  const user = useUserAuth().user as User;
+  const user = useAppSelector((state) => state.userData) as User;
+  const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
   const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
   const location = useLocation();
   const navigate = useNavigate();
-  const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
   const loggedIn = props.loggedIn ?? false;
   const buttonComonStyle = 'block w-24 px-3 py-2 hover:bg-gray-200';
 

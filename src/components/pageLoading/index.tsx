@@ -8,6 +8,7 @@ function PageLoading() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setReloadPrompt(true);
+      window.location.reload();
     }, CONSTANTS.TIMEOUT_NUM);
 
     return () => {
