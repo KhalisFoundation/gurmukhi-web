@@ -41,6 +41,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
     dispatch(setCurrentLevel(userDetails.progress.currentLevel));
     dispatch(setNanakCoin(userDetails.coins));
     dispatch(addScreens(userDetails.progress.gameSession));
+    console.log('next session from user: ', userDetails.nextSession);
     dispatch(addNextScreens(userDetails.nextSession ?? []));
     dispatch(setUserData(userDetails));
   };
@@ -131,7 +132,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           coins: userDetails.coins,
           progress: userDetails.progress,
           wordIds: userDetails.wordIds,
-          // user: userCredential.user,
+          nextSession: userDetails.nextSession || [],
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           lastLogInAt: Timestamp.now(),
