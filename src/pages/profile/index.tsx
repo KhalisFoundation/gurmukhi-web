@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { sendEmailVerification, updateProfile } from 'firebase/auth';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDiamond } from '@fortawesome/free-solid-svg-icons';
+import { updateProfile } from 'firebase/auth';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer, toast } from 'react-toastify';
 import Meta from 'components/meta';
@@ -14,47 +12,65 @@ import CONSTANTS from 'constants/constant';
 import { User } from 'types';
 import { Timestamp } from 'firebase/firestore';
 import { useAppSelector } from 'store/hooks';
+import EmailVerificationSection from './components/EmailVerification';
+import renderButton from './components/RenderButton';
+import getTabData from './components/GetTabData';
+import Loading from 'components/loading';
 
 export default function Profile() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.PROFILE;
   const user = useAppSelector((state) => state.userData) as User;
-
-  const currentUser = user?.user || auth.currentUser || null;
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [editMode, setEditMode] = useState(false);
-  const [name, setName] = useState(user?.displayName);
-  const [username, setUsername] = useState(user.username ?? user.email?.split('@')[0]);
+  const authUser = auth.currentUser;
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [name, setName] = useState<string>(user.displayName);
+  const [username, setUsername] = useState<string>(user.username ?? user.email?.split('@')[0]);
   const [usernameError, setUsernameError] = useState('');
   const [photo, setPhoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | undefined>(undefined);
-  const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
+  const [photoURL, setPhotoURL] = useState(
+    user.displayName && user.displayName !== '' ? user.displayName : '/images/profile.jpeg',
+  );
   const [verifiable, setVerifiable] = useState(true);
+
+  useEffect(() => {
+    if (user?.uid) {
+      setIsLoading(false);
+      setVerifiable(!(user?.emailVerified || true));
+    }
+  }, [user.uid]);
+
+  useEffect(() => {
+    if (!photo) {
+      setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(photo);
+    setPreview(objectUrl);
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [photo]);
 
   const formatDate = (date: string | Timestamp) => {
     if (!date) return 'not defined';
-    return (typeof date === 'string' ? new Date(date) : date.toDate()).toLocaleString();
+
+    // Check if 'date' is an instance of Timestamp
+    if (date instanceof Timestamp) {
+      return date.toDate().toLocaleString();
+    } else if (typeof date === 'string') {
+      // It's a string, so convert it to Date
+      return new Date(date).toLocaleString();
+    } else {
+      // Log an error if the date is neither a Timestamp nor a string
+      return 'Invalid date';
+    }
   };
 
-  const formattedCreatedAt = formatDate(user.created_at);
-  const formattedLastLoginAt = formatDate(user.lastLogInAt);
-
-  const getTabData = (heading: string, info: string, children?: JSX.Element) => {
-    return (
-      <div className='flex'>
-        <div className=''>
-          <h3 className='text-lg font-bold pr-3'>{heading}</h3>
-        </div>
-        <div className={editMode ? 'col-span-4' : 'col-span-6'}>
-          <h4 className='text-lg'>
-            {info}
-            {children}
-          </h4>
-        </div>
-      </div>
-    );
-  };
+  const formattedCreatedAt = user.created_at ? formatDate(user.created_at) : '';
+  const formattedLastLoginAt = user.lastLogInAt ? formatDate(user.lastLogInAt) : '';
 
   const handlePhotoChange = (e: any) => {
     if (e.target.files[0]) {
@@ -101,8 +117,8 @@ export default function Profile() {
 
     await updateUserDocument(user.uid, updatedUserData);
 
-    if (currentUser) {
-      await updateProfile(currentUser, { displayName, photoURL });
+    if (authUser) {
+      await updateProfile(authUser, { displayName, photoURL });
     }
   }
 
@@ -144,108 +160,32 @@ export default function Profile() {
     }
   };
 
-  const linkClass = 'flex flex-row items-center justify-between gap-2 min-w-26';
   const gridColSpan = editMode ? '6' : '8';
 
-  const renderButton = (
-    textValue: string,
-    onClick: () => void,
-    disabled: boolean,
-    sides: boolean,
-  ) => {
-    const disabledClass = disabled ? 'opacity-50 cursor-not-allowed' : '';
-    return (
-      <button
-        onClick={onClick}
-        className={linkClass}
-        disabled={disabled}
-        color='secondary'
-        style={{
-          fontFamily:
-            "HvDTrial Brandon Grotesque, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif",
-          letterSpacing: '.1rem',
-        }}
-      >
-        {sides && (
-          <FontAwesomeIcon
-            icon={faDiamond}
-            className='w-2 h-2 text-lightAzure border border-darkBlue rotate-45'
-          />
-        )}
-        <p
-          className={
-            'bg-lightAzure text-darkBlue rounded-lg px-2 py-1 w-26 text-center border border-darkBlue' +
-            disabledClass
-          }
-        >
-          {textValue}
-        </p>
-        {sides && (
-          <FontAwesomeIcon
-            icon={faDiamond}
-            className='w-2 h-2 text-lightAzure border border-darkBlue rotate-45'
-          />
-        )}
-      </button>
+  const buttonSelector = () => {
+    if (editMode) {
+      return renderButton(
+        text('SAVE'),
+        () => {
+          setEditMode(!editMode);
+          handleSubmit();
+        },
+        false,
+        false,
+      );
+    }
+    return renderButton(
+      text('EDIT'),
+      () => {
+        setEditMode(!editMode);
+      },
+      false,
+      false,
     );
   };
-
-  const renderLoader = () => {
-    return (
-      <span>
-        <svg
-          className='animate-spin h-5 w-5 m-auto'
-          viewBox='0 0 24 24'
-          style={{
-            display: 'inline',
-            marginInlineEnd: '0.5rem',
-          }}
-        >
-          <circle
-            cx='12'
-            cy='12'
-            r='10'
-            stroke='#1F4860'
-            strokeWidth='2'
-            fill='none'
-            strokeDasharray='31.4 31.4'
-          />
-        </svg>
-        <span>{text('LOADING')}</span>
-      </span>
-    );
-  };
-
-  useEffect(() => {
-    const userDetails = user.user;
-
-    if (userDetails?.photoURL) {
-      setPhotoURL(userDetails.photoURL);
-    }
-
-    if (user?.uid) {
-      setIsLoading(false);
-      setName(user?.displayName || '');
-      setUsername(user?.username || '');
-      setVerifiable(!(user?.emailVerified || true));
-    }
-  }, [user.uid]);
-
-  useEffect(() => {
-    if (!photo) {
-      setPreview(undefined);
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(photo);
-    setPreview(objectUrl);
-
-    // free memory when ever this component is unmounted
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [photo]);
 
   if (isLoading) {
-    return renderLoader();
+    return <Loading />;
   }
 
   return (
@@ -274,6 +214,7 @@ export default function Profile() {
               {getTabData(
                 text('NAME'),
                 '',
+                editMode,
                 editMode ? (
                   <div className='h-10 w-full'>
                     <input
@@ -289,6 +230,7 @@ export default function Profile() {
               {getTabData(
                 text('USERNAME'),
                 '',
+                editMode,
                 editMode ? (
                   <div className='h-10 w-full'>
                     <input
@@ -307,60 +249,22 @@ export default function Profile() {
                 ),
               )}
               {editMode &&
-                getTabData('', '', <span className='text-red-500'>{usernameError}</span>)}
-              {user ? getTabData(text('EMAIL'), user.email) : null}
-              {user?.emailVerified ?? false
-                ? getTabData(text('EMAIL_VALIDATED'), text('YES'))
-                : getTabData(
-                  text('EMAIL_VALIDATED'),
-                  '',
-                  renderButton(
-                    text('VERIFY'),
-                    () => {
-                      if (currentUser) {
-                        sendEmailVerification(currentUser).then(() => {
-                          showToastMessage(
-                            text('EMAIL_VERIFICATION_SENT'),
-                            toast.POSITION.TOP_CENTER,
-                            true,
-                          );
-                          setVerifiable(false);
-                        });
-                      }
-                    },
-                    !verifiable,
-                    false,
-                  ),
-                )}
-              {getTabData(text('CREATED_AT'), formattedCreatedAt)}
-              {getTabData(text('LAST_LOGIN_AT'), formattedLastLoginAt)}
+                getTabData('', '', editMode, <span className='text-red-500'>{usernameError}</span>)}
+              {user ? getTabData(text('EMAIL'), user.email, editMode) : null}
+              <EmailVerificationSection
+                currentUser={authUser}
+                verifiable={verifiable}
+                setVerifiable={setVerifiable}
+                editMode={editMode}
+              />
+              {getTabData(text('CREATED_AT'), formattedCreatedAt, editMode)}
+              {getTabData(text('LAST_LOGIN_AT'), formattedLastLoginAt, editMode)}
 
               <div className={`col-span-${gridColSpan} py-2`}>
                 <div className={`grid grid-cols-${gridColSpan} py-1`}>
-                  <div className='col-span-2'>
-                    {editMode
-                      ? renderButton(
-                        text('SAVE'),
-                        () => {
-                          setEditMode(!editMode);
-                          handleSubmit();
-                        },
-                        false,
-                        false,
-                      )
-                      : renderButton(
-                        text('EDIT'),
-                        () => {
-                          setEditMode(!editMode);
-                        },
-                        false,
-                        false,
-                      )}
-                  </div>
+                  <div className='col-span-2'>{buttonSelector()}</div>
                 </div>
               </div>
-
-              {/* We can add preferences here like confetti disable and others */}
             </div>
           </div>
         </div>
