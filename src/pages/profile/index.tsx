@@ -31,15 +31,13 @@ export default function Profile() {
   const [usernameError, setUsernameError] = useState('');
   const [photo, setPhoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | undefined>(undefined);
-  const [photoURL, setPhotoURL] = useState<string>(
-    user.photoURL && user.photoURL !== '' ? user.photoURL : '/images/profile.jpeg',
-  );
+  const [photoURL, setPhotoURL] = useState<string>(user.photoURL || '/images/profile.jpeg');
   const [verifiable, setVerifiable] = useState(true);
 
   useEffect(() => {
     if (user?.uid) {
       setIsLoading(false);
-      setVerifiable(!(user?.emailVerified || true));
+      setVerifiable(!(user.emailVerified || true));
     }
   }, [user.uid]);
 
