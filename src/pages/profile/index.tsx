@@ -11,15 +11,17 @@ import { uploadImage } from 'utils/storage';
 import CONSTANTS from 'constants/constant';
 import { User } from 'types';
 import { Timestamp } from 'firebase/firestore';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import EmailVerificationSection from './components/EmailVerification';
 import renderButton from './components/RenderButton';
 import getTabData from './components/GetTabData';
 import Loading from 'components/loading';
+import { setUserData } from 'store/features/userDataSlice';
 
 export default function Profile() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.PROFILE;
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.userData) as User;
   const authUser = auth.currentUser;
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -29,8 +31,8 @@ export default function Profile() {
   const [usernameError, setUsernameError] = useState('');
   const [photo, setPhoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | undefined>(undefined);
-  const [photoURL, setPhotoURL] = useState(
-    user.displayName && user.displayName !== '' ? user.displayName : '/images/profile.jpeg',
+  const [photoURL, setPhotoURL] = useState<string>(
+    user.photoURL && user.photoURL !== '' ? user.photoURL : '/images/profile.jpeg',
   );
   const [verifiable, setVerifiable] = useState(true);
 
@@ -78,10 +80,13 @@ export default function Profile() {
     }
   };
 
-  const handleUpload = () => {
-    if (photo && user) {
-      uploadImage(photo, user, setIsLoading, setPhotoURL);
+  const handleUpload = async () => {
+    if (photo && authUser) {
+      const imageURL = await uploadImage(photo, authUser, setIsLoading);
+      setPhotoURL(imageURL);
+      return imageURL;
     }
+    return '';
   };
 
   const handleUsernameChange = async (e: any) => {
@@ -106,19 +111,23 @@ export default function Profile() {
     }
   };
 
-  async function updateUserAndProfile(displayName: string) {
+  async function updateUserAndProfile(data: { name: string; photoURL: string }) {
     const updatedUserData = {
       ...user,
-      displayName,
-      photoURL,
+      displayName: data.name !== '' ? data.name : user.displayName,
+      photoURL: data.photoURL !== '' ? data.photoURL : user.photoURL,
       username: username !== user.username ? username : user.username,
       user: null,
     };
 
     await updateUserDocument(user.uid, updatedUserData);
+    dispatch(setUserData(updatedUserData));
 
     if (authUser) {
-      await updateProfile(authUser, { displayName, photoURL });
+      await updateProfile(authUser, {
+        photoURL: updatedUserData.photoURL,
+        displayName: updatedUserData.displayName,
+      });
     }
   }
 
@@ -128,15 +137,26 @@ export default function Profile() {
       const isUnchanged =
         name === user.displayName &&
         username === user.username &&
-        photoURL === user.user?.photoURL &&
         photoURL === user.photoURL &&
         !photo;
       if (isUnchanged) {
         return;
       }
       try {
+        const data = {
+          photoURL: '',
+          name: '',
+        };
         setIsLoading(true);
-        handleUpload();
+
+        if (photoURL !== user.photoURL) {
+          const imageURL = await handleUpload();
+          data.photoURL = imageURL;
+        }
+
+        if (name !== user.displayName) {
+          data.name = name;
+        }
 
         if (username !== user.username) {
           const isUnique = await checkIfUsernameUnique(username);
@@ -146,7 +166,7 @@ export default function Profile() {
           }
         }
 
-        await updateUserAndProfile(name);
+        await updateUserAndProfile(data);
       } catch (error) {
         console.error(error);
         if (error instanceof Error) {
