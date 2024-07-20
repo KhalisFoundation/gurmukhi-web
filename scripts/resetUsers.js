@@ -1,14 +1,14 @@
 const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore, query, getDocs, where } = require('firebase-admin/firestore');
+const { getFirestore } = require('firebase-admin/firestore');
 
-const serviceAccount = require('../gurmukhi-dev.json');
+const projectId = 'gurmukhi-dev';
+const serviceAccount = require(`./${projectId}.json`);
 
 initializeApp({
   credential: cert(serviceAccount),
-  projectId: 'gurmukhi-dev',
+  projectId,
 });
 
-const db = getFirestore();
 const shabadavaliDB = getFirestore('shabadavali');
 
 async function resetUsers() {
@@ -23,17 +23,20 @@ async function resetUsers() {
     console.log(`Found ${usersSnapshot.docs.length} users. Updating documents...`);
     const batch = shabadavaliDB.batch();
     const updatePromises = usersSnapshot.docs.map(async (userDoc) => {
+        const user = userDoc.data();
         const userDocRef = shabadavaliDB.collection('users').doc(userDoc.id);
-        const wordCollection = userRef.collection('words');
-        if (!wordCollection.empty) {
-            const wordsSnapshot = await wordCollection.get();
+        const wordCollection = userDocRef.collection('words');
+        const wordsSnapshot = await wordCollection.get();
+        if (!wordsSnapshot.empty) {
             wordsSnapshot.docs.forEach(async (wordDoc) => {
-                console.log(`Deleting word ${wordDoc.id} from user ${userDoc.id}`);
-                await wordCollectionInUserDoc.doc(wordDoc.id).delete();
+                console.log(`Deleting word ${wordDoc.id} from user ${user.uid}`);
+                await wordCollection.doc(wordDoc.id).delete();
             });
+        } else {
+            console.log(`No words found for user ${user.uid}`);
         }
 
-        console.log(`Updating document with ${userDoc.uid ?? null}`);
+        console.log(`Updating document with ${user.uid ?? null}`);
         const updatedData = {
             progress: {
                 currentProgress: 0,
