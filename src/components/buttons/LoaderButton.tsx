@@ -2,9 +2,10 @@ import React from 'react';
 import ALL_CONSTANT from 'constants/constant';
 
 interface Props {
-  theme:string
+  theme: string;
+  text: string;
 }
-const LoaderButton = ({ theme }: Props) => {
+const LoaderButton = ({ theme, text }: Props) => {
   return (
     <span>
       <svg
@@ -25,8 +26,8 @@ const LoaderButton = ({ theme }: Props) => {
           strokeDasharray='31.4 31.4'
         />
       </svg>
-      <span>{ALL_CONSTANT.FETCHING}</span>
-      <span className='loader'></span>
+      <span>{text}</span>
+      <span className={theme === ALL_CONSTANT.DARK ? 'loader-dark' : 'loader-light'}></span>
     </span>
   );
 };

@@ -17,7 +17,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
 import { checkIfUsernameUnique, checkUser, getUserData, setWordIds } from 'database/shabadavalidb';
-import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
 import PageLoading from 'components/pageLoading';
@@ -28,6 +27,7 @@ import { addScreens } from 'store/features/gameArraySlice';
 import { addNextScreens } from 'store/features/nextSessionSlice';
 import { useAppDispatch } from 'store/hooks';
 import { setUserData } from 'store/features/userDataSlice';
+import firebaseErrorHandler from 'utils/firebaseErrorHandler';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -44,6 +44,22 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
     dispatch(addNextScreens(userDetails.nextSession ?? []));
     dispatch(setUserData(userDetails));
   };
+  const handleError = (
+    error: unknown,
+    showToastMessage: (text: string, error?: boolean) => void,
+  ) => {
+    if (error instanceof Error && 'code' in error) {
+      // error is now recognized as an object with a 'code' property, typically from Firebase
+      const code = (error as { code: string }).code; // Safely extract the code
+      showToastMessage(firebaseErrorHandler(code), true);
+    } else if (error instanceof Error) {
+      // Handle general errors that are not auth-specific
+      showToastMessage(translate('GENERIC_ERROR') + ': ' + error.message, true);
+    } else {
+      // Fallback for other types of errors (not an instance of Error)
+      showToastMessage(translate('UNKNOWN_ERROR'), true);
+    }
+  };
 
   const logIn = async (
     email: string,
@@ -51,39 +67,28 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
     showToastMessage: (text: string, error?: boolean) => void,
   ) => {
     try {
-      setLoading(true);
       const userData = await signInWithEmailAndPassword(auth, email, password);
       if (!userData.user.uid) {
-        setLoading(false);
         return null;
       }
       const userDetails = await getUserData(userData.user.uid);
       if (!userDetails) return null;
       if (userData.user.uid) await setWordIds(userData.user.uid);
       dispatchActions(userDetails);
-      setLoading(false);
       return userData;
-    } catch (error) {
-      if (error instanceof Error) {
-        if (Object.keys(errors).includes(error.name)) {
-          showToastMessage(errors[error.name]);
-        } else {
-          showToastMessage(translate('ERROR') + error.name + error.message);
-        }
-      }
+    } catch (error: unknown) {
+      handleError(error, showToastMessage);
       return null;
     }
   };
 
   const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
     try {
-      setLoading(true);
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const { uid, email, displayName } = userCredential.user;
       if (!email) {
         showToastMessage('Email is missing.', true);
-        setLoading(false);
         return false;
       }
 
@@ -140,15 +145,9 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         if (userData.uid) await setWordIds(userData.uid);
         dispatchActions(userData);
       }
-      setLoading(false);
       return true;
     } catch (error) {
-      setLoading(false);
-      if (error instanceof Error) {
-        if (Object.keys(errors).includes(error.message)) {
-          showToastMessage(errors[error.message]);
-        }
-      }
+      handleError(error, showToastMessage);
       return false;
     }
   };
@@ -171,8 +170,8 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         showToastMessage(translate('USERNAME_TAKEN'));
         return false;
       }
-      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      setLoading(true);
       const userData = userCredential.user;
       const { uid, displayName } = userData;
       const localUser = doc(shabadavaliDB, `users/${uid}`);
@@ -209,13 +208,8 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       });
       return true;
     } catch (error) {
-      if (typeof error === 'object' && error !== null && 'code' in error) {
-        const errorCode = (error as { code: string }).code;
-
-        if (Object.keys(errors).includes(errorCode)) {
-          showToastMessage(errors[errorCode]);
-        }
-      }
+      setLoading(false);
+      handleError(error, showToastMessage);
       return false;
     }
   };
