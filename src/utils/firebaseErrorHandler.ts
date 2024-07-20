@@ -1,4 +1,5 @@
 import CONSTANTS from 'constants/index';
+
 const firebaseErrorHandler = (code: string) => {
   const codeMessagesMap: { [key: string]: string } = {
     'auth/invalid-email': CONSTANTS.INVALID_EMAIL,
@@ -17,4 +18,5 @@ const firebaseErrorHandler = (code: string) => {
     codeMessagesMap[code] || codeMessagesMap[code] || 'An unexpected authentication error occurred'
   );
 };
+
 export default firebaseErrorHandler;
