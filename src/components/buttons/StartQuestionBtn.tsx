@@ -60,7 +60,11 @@ const StartQuestionBtn = ({
     >
       <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure' />
       <p className='bg-lightAzure text-darkBlue rounded-lg p-3 w-52 text-center'>
-        {isLoading ? <LoaderButton theme={ALL_CONSTANT.DARK} /> : text?.toUpperCase()}
+        {isLoading ? (
+          <LoaderButton theme={ALL_CONSTANT.DARK} text={ALL_CONSTANT.FETCHING} />
+        ) : (
+          text?.toUpperCase()
+        )}
       </p>
       <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure' />
     </button>
