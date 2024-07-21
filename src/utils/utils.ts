@@ -1,23 +1,27 @@
 import { localeData } from 'moment';
-import crypto from 'crypto';
-import CONSTANTS from '../constants/constant';
 import { checkIfUsernameUnique } from 'database/shabadavalidb';
+import CONSTANTS from 'constants/constant';
 
 export const convertNumber = (num: number) => {
   return `You got your ${localeData().ordinal(num)} Nanak Coin!`;
 };
+const getRandomInt = (min: number, max: number) =>
+  ((Math.random() * ((max | 0) - (min | 0) + CONSTANTS.DEFAULT_ONE)) + (min | 0)) | 0;
+
+function generateFromEmail(email: string) {
+  const nameParts = email.replace(/@.+/, '');
+  const name = nameParts.replace(/[&/\\#,+()$~%._@'":*?<>{}]/g, '');
+  const randomNum = getRandomInt(CONSTANTS.DEFAULT_THOUSAND, CONSTANTS.DEFAULT_FOUR_NINES);
+  const randomNumber = Math.floor(randomNum).toString();
+  return name + randomNumber;
+}
 
 export async function generateRandomUsername(email: string) {
-  let username = email.split('@')[0];
+  let username = generateFromEmail(email);
   let unique = false;
 
   while (!unique) {
-    const randomBytes = crypto.randomBytes(CONSTANTS.DEFAULT_FOUR);
-    let randomNum = randomBytes.readUInt32BE(0);
-    const max = CONSTANTS.DEFAULT_HUNDRED + CONSTANTS.DEFAULT_ONE;
-    randomNum = randomNum % max; // Limit randomNum within [0, max)
-
-    username = `${username}${randomNum}`;
+    username = generateFromEmail(email);
     unique = await checkIfUsernameUnique(username);
   }
 

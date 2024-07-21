@@ -107,7 +107,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
             currentLevel: 0,
           },
           displayName: displayName ?? email?.split('@')[0],
-          username,
+          username: username ?? email,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           emailVerified: userCredential.user.emailVerified,
