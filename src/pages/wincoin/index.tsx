@@ -6,7 +6,7 @@ import metaTags from 'constants/meta';
 import { resetLevel } from 'store/features/currentLevelSlice';
 import { resetGamePosition } from 'store/features/currentGamePositionSlice';
 import { increment } from 'store/features/nanakCoin';
-import convertNumber from 'utils/utils';
+import { convertNumber } from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'constants/routes';
 import { updateUserWithWords } from 'database/shabadavalidb';

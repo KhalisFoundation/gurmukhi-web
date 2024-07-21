@@ -16,7 +16,7 @@ import {
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
-import { checkIfUsernameUnique, checkUser, getUserData, setWordIds } from 'database/shabadavalidb';
+import { checkUser, getUserData, setWordIds } from 'database/shabadavalidb';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
 import PageLoading from 'components/pageLoading';
@@ -28,7 +28,7 @@ import { addNextScreens } from 'store/features/nextSessionSlice';
 import { useAppDispatch } from 'store/hooks';
 import { setUserData } from 'store/features/userDataSlice';
 import firebaseErrorHandler from 'utils/firebaseErrorHandler';
-import CONSTANTS from 'constants/constant';
+import { generateRandomUsername } from 'utils/utils';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -94,17 +94,9 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       }
 
       const found = await checkUser(uid, email);
-
       if (!found) {
         const localUser = doc(shabadavaliDB, `users/${uid}`);
-        let randomNum = Math.floor(Math.random() * (CONSTANTS.DEFAULT_HUNDRED + CONSTANTS.DEFAULT_ONE));
-        let username = email.split('@')[0] + randomNum.toString();
-        let unique = await checkIfUsernameUnique(username);
-        while (!unique) {
-          randomNum = Math.floor(Math.random() * (CONSTANTS.DEFAULT_HUNDRED + CONSTANTS.DEFAULT_ONE));
-          username = email.split('@')[0] + randomNum.toString();
-          unique = await checkIfUsernameUnique(username);
-        }
+        const username = await generateRandomUsername(email);
         const userData = {
           role: roles.student,
           email,
@@ -124,11 +116,13 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           wordIds: [],
           lastLogInAt: Timestamp.now(),
         };
+        
         await setDoc(localUser, userData);
         const userDetails: User = {
           ...userData,
           user: null,
         };
+
         if (uid) await setWordIds(uid);
         dispatchActions(userDetails);
       } else {
@@ -175,18 +169,12 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         showToastMessage(translate('PASSWORDS_DONT_MATCH'));
         return false;
       }
-      const randomNum = Math.floor(Math.random() * (CONSTANTS.DEFAULT_HUNDRED + CONSTANTS.DEFAULT_ONE));
-      const username = email.split('@')[0] + randomNum.toString();
-      const unique = await checkIfUsernameUnique(username);
-      if (!unique) {
-        showToastMessage(translate('USERNAME_TAKEN'));
-        return false;
-      }
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       setLoading(true);
       const userData = userCredential.user;
       const { uid, displayName } = userData;
       const localUser = doc(shabadavaliDB, `users/${uid}`);
+      const username = await generateRandomUsername(email);
       let userDataForState = {
         uid,
         name,

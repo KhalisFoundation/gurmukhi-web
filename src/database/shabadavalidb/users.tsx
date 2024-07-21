@@ -58,6 +58,7 @@ export const checkIfUsernameUnique = async (username: string) => {
     return usersSnapshot.empty;
   } catch (error) {
     bugsnagErrorHandler(error, 'checkIfUserNameUnique', { username });
+    return false;
   }
 };
 
