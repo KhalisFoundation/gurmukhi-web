@@ -28,6 +28,7 @@ import { addNextScreens } from 'store/features/nextSessionSlice';
 import { useAppDispatch } from 'store/hooks';
 import { setUserData } from 'store/features/userDataSlice';
 import firebaseErrorHandler from 'utils/firebaseErrorHandler';
+import CONSTANTS from 'constants/constant';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -96,6 +97,14 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
 
       if (!found) {
         const localUser = doc(shabadavaliDB, `users/${uid}`);
+        let randomNum = Math.floor(Math.random() * (CONSTANTS.DEFAULT_HUNDRED + CONSTANTS.DEFAULT_ONE));
+        let username = email.split('@')[0] + randomNum.toString();
+        let unique = await checkIfUsernameUnique(username);
+        while (!unique) {
+          randomNum = Math.floor(Math.random() * (CONSTANTS.DEFAULT_HUNDRED + CONSTANTS.DEFAULT_ONE));
+          username = email.split('@')[0] + randomNum.toString();
+          unique = await checkIfUsernameUnique(username);
+        }
         const userData = {
           role: roles.student,
           email,
@@ -106,6 +115,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
             currentLevel: 0,
           },
           displayName: displayName ?? email?.split('@')[0],
+          username,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           emailVerified: userCredential.user.emailVerified,
@@ -132,6 +142,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           uid: userCredential.user.uid,
           email: userCredential.user.email,
           displayName: userCredential.user.displayName,
+          username: userDetails.username,
           role: roles.student,
           coins: userDetails.coins,
           progress: userDetails.progress,
@@ -154,7 +165,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
 
   const signUp = async (
     name: string,
-    username: string,
     email: string,
     password: string,
     confirmPassword: string,
@@ -165,6 +175,8 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         showToastMessage(translate('PASSWORDS_DONT_MATCH'));
         return false;
       }
+      const randomNum = Math.floor(Math.random() * (CONSTANTS.DEFAULT_HUNDRED + CONSTANTS.DEFAULT_ONE));
+      const username = email.split('@')[0] + randomNum.toString();
       const unique = await checkIfUsernameUnique(username);
       if (!unique) {
         showToastMessage(translate('USERNAME_TAKEN'));

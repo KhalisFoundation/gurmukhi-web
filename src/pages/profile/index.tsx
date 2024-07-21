@@ -49,6 +49,7 @@ export default function Profile() {
 
     const objectUrl = URL.createObjectURL(photo);
     setPreview(objectUrl);
+    setPhotoURL(objectUrl);
 
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
@@ -116,7 +117,7 @@ export default function Profile() {
       photoURL: data.photoURL !== '' ? data.photoURL : user.photoURL,
       username: username !== user.username ? username : user.username,
       user: null,
-    };
+    } as User;
 
     await updateUserDocument(user.uid, updatedUserData);
     dispatch(setUserData(updatedUserData));

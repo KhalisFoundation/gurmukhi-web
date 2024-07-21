@@ -9,7 +9,6 @@ export interface AuthContextValue {
   ) => Promise<UserCredential | null>;
   signUp: (
     name: string,
-    username: string,
     email: string,
     password: string,
     confirmPassword: string,
