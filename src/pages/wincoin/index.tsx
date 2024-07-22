@@ -99,7 +99,11 @@ function WinCoin() {
               }
               className='bg-sky-900 text-xs text-white p-3  tracking-widest font-light '
             >
-              {isLoading ? <LoaderButton theme={ALL_CONSTANT.LIGHT} /> : ALL_CONSTANT.GET_ONE_MORE}
+              {isLoading ? (
+                <LoaderButton theme={ALL_CONSTANT.LIGHT} text={ALL_CONSTANT.FETCHING} />
+              ) : (
+                ALL_CONSTANT.GET_ONE_MORE
+              )}
             </button>
             <button
               onClick={() => navigate(ROUTES.DASHBOARD)}

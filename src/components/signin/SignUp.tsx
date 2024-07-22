@@ -2,6 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import InputWithIcon from 'components/input/InputWithIcon';
 import { SignError } from 'types';
+import LoaderButton from 'components/buttons/LoaderButton';
+import ALL_CONSTANT from 'constants/constant';
 
 interface SignUpProps {
   nameChange: React.Dispatch<React.SetStateAction<string>>;
@@ -10,6 +12,7 @@ interface SignUpProps {
   cpasswordChange: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: SignError | null;
   setErrorMessage: React.Dispatch<React.SetStateAction<SignError | null>>;
+  loading: boolean;
 }
 
 export default function SignUp({ ...props }: SignUpProps) {
@@ -30,8 +33,8 @@ export default function SignUp({ ...props }: SignUpProps) {
         placeholder={text('NAME')}
         type='text'
         icon='name'
-        onChange={
-          (event: React.ChangeEvent<HTMLInputElement>) => props.nameChange(event.target.value)
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          props.nameChange(event.target.value)
         }
       />
       <InputWithIcon
@@ -39,8 +42,8 @@ export default function SignUp({ ...props }: SignUpProps) {
         placeholder={text('EMAIL')}
         type='email'
         icon='email'
-        onChange={
-          (event: React.ChangeEvent<HTMLInputElement>) =>  props.emailChange(event.target.value)
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          props.emailChange(event.target.value)
         }
       />
       <InputWithIcon
@@ -48,8 +51,8 @@ export default function SignUp({ ...props }: SignUpProps) {
         placeholder={text('PASSWORD')}
         type='password'
         border={getErrorColor() ?? text('RED')}
-        onChange={
-          (event: React.ChangeEvent<HTMLInputElement>) =>  props.passwordChange(event.target.value)
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          props.passwordChange(event.target.value)
         }
       />
       <InputWithIcon
@@ -57,12 +60,23 @@ export default function SignUp({ ...props }: SignUpProps) {
         placeholder={text('CONFIRM_PASSWORD')}
         type='password'
         border={getErrorColor()}
-        onChange={
-          (event: React.ChangeEvent<HTMLInputElement>) =>  props.cpasswordChange(event.target.value)
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          props.cpasswordChange(event.target.value)
         }
       />
-      {props.errorMessage && <div className={'text-red-500 text-sm'}>{props.errorMessage.message}</div>}
-      <button type='submit' className='w-full p-4 rounded-lg bg-gradient-to-r from-brightBlue to-softBlue text-white text-lg'>{text('SIGN_UP')}</button>
+      {props.errorMessage && (
+        <div className={'text-red-500 text-sm'}>{props.errorMessage.message}</div>
+      )}
+      <button
+        type='submit'
+        className='w-full p-4 rounded-lg bg-gradient-to-r from-brightBlue to-softBlue text-white text-lg'
+      >
+        {props.loading ? (
+          <LoaderButton theme={ALL_CONSTANT.LIGHT} text={ALL_CONSTANT.SIGNING_IN} />
+        ) : (
+          text('SIGN_UP')
+        )}
+      </button>
     </div>
   );
 }
