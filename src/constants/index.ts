@@ -77,6 +77,16 @@ const CONSTANTS = {
   WORDS_YOU_LEARNT: 'Words you learnt',
   YES: 'Yes',
   YOUR_DETAILS: 'Your Details',
+  INVALID_EMAIL: 'Invalid email address.',
+  USER_DISABLED: 'User account is disabled.',
+  USER_NOT_FOUND: 'No user found with this email.',
+  INCORRECT_PASSWORD: 'Incorrect Password.',
+  EMAIL_ALREADY_EXISTS: 'An account with this email already exists.',
+  INTERNAL_ERROR: 'An internal error occurred. Please try again later.',
+  DISPLAY_NAME_INVALID: 'The display name entered is invalid.',
+  TOO_MANY_REQUESTS: 'Too many requests. Please try again later after some time.',
+  OPERATION_NOT_ALLOWED: 'The email/password accounts are not enabled.',
+  WEAK_PASSWORD: 'The password is too weak.',
 };
 
 export default CONSTANTS;

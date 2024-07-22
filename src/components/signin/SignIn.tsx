@@ -7,7 +7,9 @@ import { SignError } from 'types';
 import { ToastContainer, toast } from 'react-toastify';
 import { bugsnagErrorHandler, showToastMessage } from 'utils';
 import { useAppSelector } from 'store/hooks';
-const SignUp = lazy(() => import('./SignUp'));
+import SignUp from './SignUp';
+import LoaderButton from 'components/buttons/LoaderButton';
+import ALL_CONSTANT from 'constants/constant';
 const InputWithIcon = lazy(() => import('../input/InputWithIcon'));
 
 export default function SignIn() {
@@ -16,6 +18,8 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [cpassword, setCPassword] = useState('');
+  const [loginLoading, setLoginLoading] = useState<boolean>(false);
+  const [googleLoading, setGoogleLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<SignError | null>(null);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
@@ -47,6 +51,7 @@ export default function SignIn() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
+      setLoginLoading(true);
       const username = email.split('@')[0];
       let valid = true;
       if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
@@ -83,8 +88,12 @@ export default function SignIn() {
           });
         }
 
-        if (valid) setErrorMessage(null);
-        else return;
+        if (valid) {
+          setErrorMessage(null);
+        } else {
+          setLoginLoading(false);
+          return;
+        }
 
         if (password === cpassword) {
           const success = await signUp(name, username, email, password, cpassword, displayToast);
@@ -106,15 +115,21 @@ export default function SignIn() {
           });
         }
 
-        if (valid) setErrorMessage(null);
-        else return;
+        if (valid) {
+          setErrorMessage(null);
+        } else {
+          setLoginLoading(false);
+          return;
+        }
 
         const success = await logIn(email, password, displayToast);
         if (success) {
           navigate(ROUTES.DASHBOARD);
         }
       }
+      setLoginLoading(false);
     } catch (error) {
+      setLoginLoading(false);
       if (error instanceof Error) {
         displayToast(error.message);
       }
@@ -124,13 +139,16 @@ export default function SignIn() {
   const handleGoogleSignIn = async (event: React.MouseEvent) => {
     event.preventDefault();
     try {
+      setGoogleLoading(true);
       const success = await signInWithGoogle(displayToast);
       if (success) {
         navigate(ROUTES.DASHBOARD);
       } else {
         await logOut();
       }
+      setGoogleLoading(false);
     } catch (error) {
+      setGoogleLoading(false);
       await logOut();
       if (error instanceof Error) {
         displayToast(error.message);
@@ -172,6 +190,7 @@ export default function SignIn() {
           >
             {isNewUser ? (
               <SignUp
+                loading={loginLoading}
                 nameChange={setName}
                 emailChange={setEmail}
                 passwordChange={setPassword}
@@ -200,8 +219,13 @@ export default function SignIn() {
                 <button
                   className='w-full p-4 rounded-lg bg-gradient-to-r from-brightBlue to-softBlue text-white text-lg'
                   type='submit'
+                  disabled={loginLoading}
                 >
-                  {text('SIGN_IN')}
+                  {loginLoading ? (
+                    <LoaderButton theme={ALL_CONSTANT.LIGHT} text={ALL_CONSTANT.SIGNING_IN} />
+                  ) : (
+                    text('SIGN_IN')
+                  )}
                 </button>
               </div>
             )}
@@ -216,7 +240,11 @@ export default function SignIn() {
                 onClick={(e) => handleGoogleSignIn(e)}
               >
                 <img className='w-6 h-6' src='/icons/google.svg' alt='google' />
-                {text('SIGN_IN_WITH_GOOGLE')}
+                {googleLoading ? (
+                  <LoaderButton theme={ALL_CONSTANT.DARK} text={ALL_CONSTANT.SIGNING_IN} />
+                ) : (
+                  text('SIGN_IN_WITH_GOOGLE')
+                )}
               </button>
             </div>
           </form>
