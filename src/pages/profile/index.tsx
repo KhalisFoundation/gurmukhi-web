@@ -112,7 +112,6 @@ export default function Profile() {
 
   async function updateUserAndProfile(data: { name: string; photoURL: string }) {
     const updatedUserData = {
-      ...user,
       displayName: data.name !== '' ? data.name : user.displayName,
       photoURL: data.photoURL !== '' ? data.photoURL : user.photoURL,
       username: username !== user.username ? username : user.username,
@@ -120,7 +119,7 @@ export default function Profile() {
     } as User;
 
     await updateUserDocument(user.uid, updatedUserData);
-    dispatch(setUserData(updatedUserData));
+    dispatch(setUserData({ ...user, ...updatedUserData }));
 
     if (authUser) {
       await updateProfile(authUser, {

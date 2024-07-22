@@ -12,7 +12,7 @@ import {
 import {
   Timestamp,
   doc,
-  setDoc, // query, where, documentId, getDocs,
+  setDoc,
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
@@ -28,7 +28,6 @@ import { addNextScreens } from 'store/features/nextSessionSlice';
 import { useAppDispatch } from 'store/hooks';
 import { setUserData } from 'store/features/userDataSlice';
 import firebaseErrorHandler from 'utils/firebaseErrorHandler';
-import { generateRandomUsername } from 'utils/utils';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -45,6 +44,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
     dispatch(addNextScreens(userDetails.nextSession ?? []));
     dispatch(setUserData(userDetails));
   };
+  
   const handleError = (
     error: unknown,
     showToastMessage: (text: string, error?: boolean) => void,
@@ -96,7 +96,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const found = await checkUser(uid, email);
       if (!found) {
         const localUser = doc(shabadavaliDB, `users/${uid}`);
-        const username = await generateRandomUsername(email);
+        const username = email.replace(/[&/\\#,+()$~%._@'":*?<>{}]/g, '');
         const userData = {
           role: roles.student,
           email,
@@ -107,7 +107,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
             currentLevel: 0,
           },
           displayName: displayName ?? email?.split('@')[0],
-          username: username ?? email,
+          username: username,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           emailVerified: userCredential.user.emailVerified,
@@ -174,7 +174,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const userData = userCredential.user;
       const { uid, displayName } = userData;
       const localUser = doc(shabadavaliDB, `users/${uid}`);
-      const username = await generateRandomUsername(email);
+      const username = email.replace(/[&/\\#,+()$~%._@'":*?<>{}]/g, '');
       let userDataForState = {
         uid,
         name,
