@@ -8,7 +8,6 @@ export interface GameScreen {
 }
 export interface User {
   user: FirebaseUser | null;
-  username?: string;
   displayName: string;
   role: string;
   photoURL: string;
@@ -30,7 +29,6 @@ export interface User {
 
 export interface PartialUser {
   user?: FirebaseUser | null;
-  username?: string;
   displayName?: string;
   role?: string;
   photoURL?: string;

@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { ToastContainer, toast } from 'react-toastify';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
-import { checkIfUsernameUnique, updateUserDocument } from 'database/shabadavalidb';
+import { updateUserDocument } from 'database/shabadavalidb';
 import { auth } from '../../firebase';
 import { showToastMessage } from 'utils';
 import { uploadImage } from 'utils/storage';
-import CONSTANTS from 'constants/constant';
 import { User } from 'types';
 import { Timestamp } from 'firebase/firestore';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -26,8 +25,6 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [name, setName] = useState<string>(user.displayName);
-  const [username, setUsername] = useState<string>(user.username ?? user.email?.split('@')[0]);
-  const [usernameError, setUsernameError] = useState('');
   const [photo, setPhoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | undefined>(undefined);
   const [photoURL, setPhotoURL] = useState<string>(user.photoURL || '/images/profile.jpeg');
@@ -85,33 +82,10 @@ export default function Profile() {
     return '';
   };
 
-  const handleUsernameChange = async (e: any) => {
-    setUsername(e.target.value);
-    if (e.target.value === user.username) {
-      setUsernameError('');
-      return;
-    }
-    if (e.target.value.length < CONSTANTS.USERNAME_MIN_LENGTH) {
-      setUsernameError(text('USERNAME_TOO_SHORT'));
-      return;
-    }
-    if (e.target.value.length > CONSTANTS.USERNAME_MAX_LENGTH) {
-      setUsernameError(text('USERNAME_TOO_LONG'));
-      return;
-    }
-    const unique = await checkIfUsernameUnique(e.target.value);
-    if (!unique) {
-      setUsernameError(text('USERNAME_TAKEN'));
-    } else {
-      setUsernameError('');
-    }
-  };
-
   async function updateUserAndProfile(data: { name: string; photoURL: string }) {
     const updatedUserData = {
       displayName: data.name !== '' ? data.name : user.displayName,
       photoURL: data.photoURL !== '' ? data.photoURL : user.photoURL,
-      username: username !== user.username ? username : user.username,
       user: null,
     };
 
@@ -127,11 +101,10 @@ export default function Profile() {
   }
 
   const handleSubmit = async () => {
-    if (user && usernameError === '') {
+    if (user) {
       // check if anything has changed
       const isUnchanged =
         name === user.displayName &&
-        username === user.username &&
         photoURL === user.photoURL &&
         !photo;
       if (isUnchanged) {
@@ -151,14 +124,6 @@ export default function Profile() {
 
         if (name !== user.displayName) {
           data.name = name;
-        }
-
-        if (username !== user.username) {
-          const isUnique = await checkIfUsernameUnique(username);
-          if (!isUnique) {
-            showToastMessage(text('USERNAME_TAKEN'), toast.POSITION.TOP_CENTER, false);
-            return;
-          }
         }
 
         await updateUserAndProfile(data);
@@ -242,29 +207,6 @@ export default function Profile() {
                   <span>{name}</span>
                 ),
               )}
-              {getTabData(
-                text('USERNAME'),
-                '',
-                editMode,
-                editMode ? (
-                  <div className='h-10 w-full'>
-                    <input
-                      className={
-                        'h-full w-full rounded-lg border-2 focus:outline-none focus:ring-2 focus:border-transparent px-2' +
-                        (usernameError
-                          ? ' border-red-500 focus:ring-red-500'
-                          : ' border-darkBlue focus:ring-darkBlue')
-                      }
-                      value={username}
-                      onChange={handleUsernameChange}
-                    />
-                  </div>
-                ) : (
-                  <span>{username}</span>
-                ),
-              )}
-              {editMode &&
-                getTabData('', '', editMode, <span className='text-red-500'>{usernameError}</span>)}
               {user ? getTabData(text('EMAIL'), user.email, editMode) : null}
               {getTabData(text('CREATED_AT'), formattedCreatedAt, editMode)}
               {getTabData(text('LAST_LOGIN_AT'), formattedLastLoginAt, editMode)}

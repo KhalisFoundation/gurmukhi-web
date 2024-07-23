@@ -200,7 +200,7 @@ export default function SignIn() {
             ) : (
               <div className='appear-from-below'>
                 <InputWithIcon
-                  id='username'
+                  id='email'
                   placeholder={text('EMAIL')}
                   type='text'
                   icon='user'

@@ -51,17 +51,6 @@ export const checkUser = async (uid: string, email: string) => {
   }
 };
 
-export const checkIfUsernameUnique = async (username: string) => {
-  try {
-    const queryStatement = query(usersCollection, where('username', '==', username));
-    const usersSnapshot = await getDocs(queryStatement);
-    return usersSnapshot.empty;
-  } catch (error) {
-    bugsnagErrorHandler(error, 'checkIfUserNameUnique', { username });
-    return false;
-  }
-};
-
 export const checkIfEmailUnique = async (email: string) => {
   try {
     const queryStatement = query(usersCollection, where('email', '==', email));
@@ -69,19 +58,6 @@ export const checkIfEmailUnique = async (email: string) => {
     return usersSnapshot.empty;
   } catch (error) {
     bugsnagErrorHandler(error, 'checkIfEmailUnique', { email });
-  }
-};
-
-export const getEmailFromUsername = async (username: string) => {
-  try {
-    const queryStatement = query(usersCollection, where('username', '==', username));
-    const usersSnapshot = await getDocs(queryStatement);
-    if (!usersSnapshot.empty) {
-      return usersSnapshot.docs[0].data().email;
-    }
-    return null;
-  } catch (error) {
-    bugsnagErrorHandler(error, 'getEmailFromUsername', { username });
   }
 };
 
@@ -193,7 +169,6 @@ export const getUserData = async (uid: string) => {
         created_at: data.created_at,
         updated_at: data.updated_at,
         lastLogInAt: data.lastLogInAt,
-        username: data.username,
       };
       return user;
     } catch (error) {

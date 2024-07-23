@@ -96,7 +96,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const found = await checkUser(uid, email);
       if (!found) {
         const localUser = doc(shabadavaliDB, `users/${uid}`);
-        const username = email.replace(/[&/\\#,+()$~%._@'":*?<>{}]/g, '');
         const userData = {
           role: roles.student,
           email,
@@ -107,7 +106,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
             currentLevel: 0,
           },
           displayName: displayName ?? email?.split('@')[0],
-          username: username,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           emailVerified: userCredential.user.emailVerified,
@@ -136,7 +134,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           uid: userCredential.user.uid,
           email: userCredential.user.email,
           displayName: userCredential.user.displayName,
-          username: userDetails.username,
           role: roles.student,
           coins: userDetails.coins,
           progress: userDetails.progress,
@@ -174,14 +171,12 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const userData = userCredential.user;
       const { uid, displayName } = userData;
       const localUser = doc(shabadavaliDB, `users/${uid}`);
-      const username = email.replace(/[&/\\#,+()$~%._@'":*?<>{}]/g, '');
       let userDataForState = {
         uid,
         name,
         role: roles.student,
         email,
         emailVerified: false,
-        username,
         displayName: displayName || name,
         wordIds: [],
         photoURL: '',
