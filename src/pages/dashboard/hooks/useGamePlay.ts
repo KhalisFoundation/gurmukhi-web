@@ -35,7 +35,7 @@ const useGamePlay = (
       await commitBatch(batch);
       dispatch(addScreens(gameArray));
       dispatch(
-        setUserProgress({
+        updateUserData({
           ...user,
           progress: {
             currentLevel,
