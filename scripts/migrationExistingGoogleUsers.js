@@ -1,27 +1,15 @@
-// missing fields:
-// - emailVerified
-// - lastLoginAt
-// - uid (same as document id)
-// write a script to migrate existing users to the new schema
-// 1. get all users
-// 2. for each user, check if it has fields from the new schema
-// 3. if not, update the document with the missing fields
-// 4. if the document already has the missing fields, skip it
-// 5. log the document ids of updated documents
-// 6. log the document ids of skipped documents
-
 const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore, query, getDocs, where } = require('firebase-admin/firestore');
+const { getFirestore } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
 
-const serviceAccount = require('../gurmukhi-dev.json');
+const projectId = 'gurmukhi-dev';
+const serviceAccount = require(`./${projectId}.json`);
 
 initializeApp({
   credential: cert(serviceAccount),
-  projectId: 'gurmukhi-dev',
+  projectId,
 });
 
-const db = getFirestore();
 const auth = getAuth();
 const shabadavaliDB = getFirestore('shabadavali');
 
