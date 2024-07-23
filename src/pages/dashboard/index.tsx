@@ -27,8 +27,8 @@ export default function Dashboard() {
   const [isLearntWords, toggleLearntWords] = useState<boolean>(true);
   const currentGamePosition: number = useAppSelector((state) => state.currentGamePosition);
   const currentLevel: number = useAppSelector((state) => state.currentLevel);
-  useGamePlay(user, currentGamePosition, currentLevel, toggleGamePlayLoading);
   const gameArray = useAppSelector((state) => state.gameArray);
+  useGamePlay(user, currentGamePosition, currentLevel, gameArray, toggleGamePlayLoading);
   const randomWord: WordType | null = getRandomWord(gameArray);
   const learntWords: WordShabadavaliDB[] | null = useLearntWords(user, toggleLearntWords);
   const webWorker: boolean = useAppSelector((state) => state.webWorker);
