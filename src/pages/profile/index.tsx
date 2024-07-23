@@ -12,11 +12,10 @@ import CONSTANTS from 'constants/constant';
 import { User } from 'types';
 import { Timestamp } from 'firebase/firestore';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import EmailVerificationSection from './components/EmailVerification';
 import renderButton from './components/RenderButton';
 import getTabData from './components/GetTabData';
 import Loading from 'components/loading';
-import { setUserData } from 'store/features/userDataSlice';
+import { updateUserData } from 'store/features/userDataSlice';
 
 export default function Profile() {
   const { t: text } = useTranslation();
@@ -32,12 +31,10 @@ export default function Profile() {
   const [photo, setPhoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | undefined>(undefined);
   const [photoURL, setPhotoURL] = useState<string>(user.photoURL || '/images/profile.jpeg');
-  const [verifiable, setVerifiable] = useState(true);
 
   useEffect(() => {
     if (user?.uid) {
       setIsLoading(false);
-      setVerifiable(!(user.emailVerified || true));
     }
   }, [user.uid]);
 
@@ -116,10 +113,10 @@ export default function Profile() {
       photoURL: data.photoURL !== '' ? data.photoURL : user.photoURL,
       username: username !== user.username ? username : user.username,
       user: null,
-    } as User;
+    };
 
     await updateUserDocument(user.uid, updatedUserData);
-    dispatch(setUserData({ ...user, ...updatedUserData }));
+    dispatch(updateUserData({ ...updatedUserData }));
 
     if (authUser) {
       await updateProfile(authUser, {
@@ -269,12 +266,6 @@ export default function Profile() {
               {editMode &&
                 getTabData('', '', editMode, <span className='text-red-500'>{usernameError}</span>)}
               {user ? getTabData(text('EMAIL'), user.email, editMode) : null}
-              <EmailVerificationSection
-                currentUser={authUser}
-                verifiable={verifiable}
-                setVerifiable={setVerifiable}
-                editMode={editMode}
-              />
               {getTabData(text('CREATED_AT'), formattedCreatedAt, editMode)}
               {getTabData(text('LAST_LOGIN_AT'), formattedLastLoginAt, editMode)}
 

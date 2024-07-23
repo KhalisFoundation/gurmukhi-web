@@ -28,6 +28,28 @@ export interface User {
   lastLogInAt: Timestamp | string;
 }
 
+export interface PartialUser {
+  user?: FirebaseUser | null;
+  username?: string;
+  displayName?: string;
+  role?: string;
+  photoURL?: string;
+  uid?: string;
+  coins?: number;
+  email?: string;
+  emailVerified?: boolean;
+  progress?: {
+    gameSession: GameScreen[];
+    currentLevel: number;
+    currentProgress: number;
+  };
+  nextSession?: GameScreen[];
+  wordIds?: string[];
+  created_at?: Timestamp | string;
+  updated_at?: Timestamp;
+  lastLogInAt?: Timestamp | string;
+}
+
 export interface WordShabadavaliDB {
   isLearnt: boolean;
   progress: number;
