@@ -38,28 +38,28 @@ export default function OptionBtn({
     return null;
   } else {
     return (
-      <div className={optionClassname}>
-        <button
-          className={'h-full w-full'}
-          onClick={() => {
-            selector(option);
-            setOptionSelected(true);
-          }}
-          disabled={disabled}
-        >
+      <button
+        className={optionClassname}
+        onClick={() => {
+          selector(option);
+          setOptionSelected(true);
+        }}
+        disabled={disabled}
+      >
+        <div className={'h-full w-full'}>
           <span className={textClassname}>
             {
               addEndingPunctuation(optionValue, text('GURMUKHI'))
             }
           </span>
-        </button>
+        </div>
         <TextToSpeechBtn
           backgroundColor='bg-white-175'
           text={optionValue}
           type={ALL_CONSTANT.OPTION}
           id={option.id}
         />
-      </div>
+      </button>
     );
   }
 }

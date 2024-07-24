@@ -76,7 +76,7 @@ describe('OptionBtn', () => {
         disabled={false}
       />,
     );
-    expect(screen.getByRole('button').parentNode).toHaveClass('bg-lightGreen');
+    expect(screen.getByRole('button')).toHaveClass('bg-lightGreen');
   });
 
   it('is disabled when the disabled prop is true', () => {
