@@ -34,7 +34,12 @@ export default function Profile() {
 
   const formatDate = (date: string | Timestamp) => {
     if (!date) return 'not defined';
-    return (typeof date === 'string' ? new Date(date) : date.toDate()).toLocaleString();
+    if (typeof date === 'string') {
+      return new Date(date).toLocaleString();
+    } else {
+      const timestamp = new Timestamp(date.seconds, date.nanoseconds);
+      return timestamp.toDate().toLocaleString();
+    }
   };
 
   const formattedCreatedAt = formatDate(user.created_at);
