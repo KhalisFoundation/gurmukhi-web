@@ -207,7 +207,7 @@ export default function Profile() {
                   <span>{name}</span>
                 ),
               )}
-              {user && user.email ? getTabData(text('EMAIL'), user.email, editMode) : null}
+              {user.email ? getTabData(text('EMAIL'), user.email, editMode) : null}
               {getTabData(text('CREATED_AT'), formattedCreatedAt, editMode)}
               {getTabData(text('LAST_LOGIN_AT'), formattedLastLoginAt, editMode)}
 
