@@ -1786,11 +1786,20 @@ body #sortbox:checked ~ #sortboxmenu {
 body .fade-to-complete {
     animation: fadeIn 0.5s ease-in-out;
   }
-body .loader {
+body .loader-dark {
     width: 15px;
     display: inline-block;
     aspect-ratio: 4;
     background: radial-gradient(circle closest-side, #1f4860 90%, #0000) 0 / calc(100% / 3) 100%
+      space;
+    clip-path: inset(0 100% 0 0);
+    animation: loading 1s steps(4) infinite;
+  }
+body .loader-light{
+    width: 15px;
+    display: inline-block;
+    aspect-ratio: 4;
+    background: radial-gradient(circle closest-side, #ecf0f1 90%, #fff) 0 / calc(100% / 3) 100%
       space;
     clip-path: inset(0 100% 0 0);
     animation: loading 1s steps(4) infinite;

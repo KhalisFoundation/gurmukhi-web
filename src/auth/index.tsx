@@ -175,7 +175,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const userData = userCredential.user;
       const { uid, displayName } = userData;
       const localUser = doc(shabadavaliDB, `users/${uid}`);
-      let userDataForState = {
+      const userDataForState = {
         uid,
         name,
         role: roles.student,
@@ -197,8 +197,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         user: null as FirebaseUser | null,
       };
       await setDoc(localUser, userDataForState);
-
-      userDataForState = { ...userDataForState, user: userData };
       if (userData.uid) await setWordIds(userData.uid);
       dispatchActions(userDataForState);
       setLoading(false);
