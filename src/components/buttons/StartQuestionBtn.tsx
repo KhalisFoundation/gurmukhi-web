@@ -6,7 +6,6 @@ import LoaderButton from './LoaderButton';
 import ALL_CONSTANT from 'constants/constant';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useNavigate } from 'react-router-dom';
-import { useUserAuth } from 'auth';
 import { User } from 'types';
 
 interface Props {
@@ -33,9 +32,9 @@ const StartQuestionBtn = ({
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const coins = useAppSelector((state) => state.nanakCoin);
   const gameArray = useAppSelector((state) => state.gameArray);
+  const user = useAppSelector((state) => state.userData) as User;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const user = useUserAuth().user as User;
 
   return (
     <button
@@ -61,7 +60,11 @@ const StartQuestionBtn = ({
     >
       <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure' />
       <p className='bg-lightAzure text-darkBlue rounded-lg p-3 w-52 text-center'>
-        {isLoading ? <LoaderButton theme={ALL_CONSTANT.DARK} /> : text?.toUpperCase()}
+        {isLoading ? (
+          <LoaderButton theme={ALL_CONSTANT.DARK} text={ALL_CONSTANT.FETCHING} />
+        ) : (
+          text?.toUpperCase()
+        )}
       </p>
       <FontAwesomeIcon icon={faDiamond} className='w-2 h-2 text-lightAzure' />
     </button>

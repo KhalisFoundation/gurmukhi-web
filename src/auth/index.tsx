@@ -1,9 +1,8 @@
-import React, { ReactElement, createContext, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, createContext, useContext, useState } from 'react';
 import {
   signOut,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   sendEmailVerification,
   signInWithPopup,
   GoogleAuthProvider,
@@ -11,12 +10,13 @@ import {
   User as FirebaseUser,
 } from 'firebase/auth';
 import {
-  Timestamp, doc, setDoc, // query, where, documentId, getDocs,
+  Timestamp,
+  doc,
+  setDoc, // query, where, documentId, getDocs,
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
 import { checkIfUsernameUnique, checkUser, getUserData, setWordIds } from 'database/shabadavalidb';
-import { firebaseErrorCodes as errors } from 'constants/errors';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
 import PageLoading from 'components/pageLoading';
@@ -24,16 +24,42 @@ import { setCurrentGamePosition } from 'store/features/currentGamePositionSlice'
 import { setCurrentLevel } from 'store/features/currentLevelSlice';
 import { setNanakCoin } from 'store/features/nanakCoin';
 import { addScreens } from 'store/features/gameArraySlice';
-import { addNextScreens, resetNextSession } from 'store/features/nextSessionSlice';
+import { addNextScreens } from 'store/features/nextSessionSlice';
 import { useAppDispatch } from 'store/hooks';
+import { setUserData } from 'store/features/userDataSlice';
+import firebaseErrorHandler from 'utils/firebaseErrorHandler';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthContextProvider = ({ children }: { children: ReactElement }) => {
   const dispatch = useAppDispatch();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const { t: translate } = useTranslation();
+
+  const dispatchActions = (userDetails: User) => {
+    dispatch(setCurrentGamePosition(userDetails.progress.currentProgress));
+    dispatch(setCurrentLevel(userDetails.progress.currentLevel));
+    dispatch(setNanakCoin(userDetails.coins));
+    dispatch(addScreens(userDetails.progress.gameSession));
+    dispatch(addNextScreens(userDetails.nextSession ?? []));
+    dispatch(setUserData(userDetails));
+  };
+  const handleError = (
+    error: unknown,
+    showToastMessage: (text: string, error?: boolean) => void,
+  ) => {
+    if (error instanceof Error && 'code' in error) {
+      // error is now recognized as an object with a 'code' property, typically from Firebase
+      const code = (error as { code: string }).code; // Safely extract the code
+      showToastMessage(firebaseErrorHandler(code), true);
+    } else if (error instanceof Error) {
+      // Handle general errors that are not auth-specific
+      showToastMessage(translate('GENERIC_ERROR') + ': ' + error.message, true);
+    } else {
+      // Fallback for other types of errors (not an instance of Error)
+      showToastMessage(translate('UNKNOWN_ERROR'), true);
+    }
+  };
 
   const logIn = async (
     email: string,
@@ -48,17 +74,10 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       const userDetails = await getUserData(userData.user.uid);
       if (!userDetails) return null;
       if (userData.user.uid) await setWordIds(userData.user.uid);
-      setUser(userDetails);
-      setLoading(false);
+      dispatchActions(userDetails);
       return userData;
-    } catch (error) {
-      if (error instanceof Error) {
-        if (Object.keys(errors).includes(error.name)) {
-          showToastMessage(errors[error.name]);
-        } else {
-          showToastMessage(translate('ERROR') + error.name + error.message);
-        }
-      }
+    } catch (error: unknown) {
+      handleError(error, showToastMessage);
       return null;
     }
   };
@@ -66,40 +85,18 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
   const signInWithGoogle = async (showToastMessage: (text: string, error?: boolean) => void) => {
     try {
       const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider).then(async (result) => {
-        const { uid, email, displayName } = result.user;
-        const found = await checkUser(uid, email ?? '');
+      const userCredential = await signInWithPopup(auth, provider);
+      const { uid, email, displayName } = userCredential.user;
+      if (!email) {
+        showToastMessage('Email is missing.', true);
+        return false;
+      }
 
-        if (!found) {
-          const localUser = doc(shabadavaliDB, `users/${uid}`);
-          const userDataForState = {
-            uid,
-            email,
-            role: roles.student,
-            username: email?.split('@')[0],
-            displayName: displayName ?? email?.split('@')[0],
-            wordIds: [],
-            coins: 0,
-            progress: {
-              currentProgress: 0,
-              gameSession: [],
-              currentLevel: 0,
-            },
-            created_at: Timestamp.now(),
-            updated_at: Timestamp.now(),
-            lastLogInAt: Timestamp.now(),
-            user: null as FirebaseUser | null,
-          };
-          await setDoc(localUser, {
-            ...userDataForState,
-          });
-        }
+      const found = await checkUser(uid, email);
 
-        const userDetails = await getUserData(uid);
-        if (!userDetails) return false;
-        
+      if (!found) {
+        const localUser = doc(shabadavaliDB, `users/${uid}`);
         const userData = {
-          ...result.user,
           role: roles.student,
           coins: userDetails.coins,
           progress: userDetails.progress,
@@ -107,20 +104,46 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           user: result.user,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
+          emailVerified: userCredential.user.emailVerified,
+          photoURL: userCredential.user.photoURL || '',
+          uid: uid,
+          wordIds: [],
+          lastLogInAt: Timestamp.now(),
+        };
+        await setDoc(localUser, userData);
+        const userDetails: User = {
+          ...userData,
+          user: null,
+        };
+        if (uid) await setWordIds(uid);
+        dispatchActions(userDetails);
+      } else {
+        const userDetails = await getUserData(uid);
+        if (!userDetails) {
+          showToastMessage('Failed to retrieve existing user data', true);
+          return false;
+        }
+
+        const userData = {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email,
+          displayName: userCredential.user.displayName,
+          role: roles.student,
+          coins: userDetails.coins,
+          progress: userDetails.progress,
+          wordIds: userDetails.wordIds,
+          nextSession: userDetails.nextSession || [],
+          created_at: Timestamp.now(),
+          updated_at: Timestamp.now(),
           lastLogInAt: Timestamp.now(),
         } as User;
-        
+
         if (userData.uid) await setWordIds(userData.uid);
-        setUser(userData);
-        setLoading(false);
-        return true;
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        if (Object.keys(errors).includes(error.message)) {
-          showToastMessage(errors[error.message]);
-        }
+        dispatchActions(userData);
       }
+      return true;
+    } catch (error) {
+      handleError(error, showToastMessage);
       return false;
     }
   };
@@ -143,12 +166,12 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         showToastMessage(translate('USERNAME_TAKEN'));
         return false;
       }
-      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      setLoading(true);
       const userData = userCredential.user;
       const { uid, displayName } = userData;
       const localUser = doc(shabadavaliDB, `users/${uid}`);
-      let userDataForState = {
+      const userDataForState = {
         uid,
         name,
         role: roles.student,
@@ -170,10 +193,8 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         user: null as FirebaseUser | null,
       };
       await setDoc(localUser, userDataForState);
-
-      userDataForState = { ...userDataForState, user: userData };
-      if (uid) await setWordIds(uid);
-      setUser(userDataForState);
+      if (userData.uid) await setWordIds(userData.uid);
+      dispatchActions(userDataForState);
       setLoading(false);
 
       sendEmailVerification(auth.currentUser ?? userData).then(() => {
@@ -181,73 +202,20 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       });
       return true;
     } catch (error) {
-      if (typeof error === 'object' && error !== null && 'code' in error) {
-        const errorCode = (error as { code: string }).code;
-
-        if (Object.keys(errors).includes(errorCode)) {
-          showToastMessage(errors[errorCode]);
-        }
-      }
+      setLoading(false);
+      handleError(error, showToastMessage);
       return false;
     }
   };
 
   const logOut = async () => {
+    setLoading(true);
     await signOut(auth);
-    setUser(null);
+    dispatch(setUserData(null));
     setLoading(false);
   };
 
   const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser: FirebaseUser | null) => {
-      if (currentUser !== null) {
-        const { uid, emailVerified, metadata } = currentUser as FirebaseUser;
-        const userDetails = await getUserData(uid);
-        if (!userDetails) {
-          return null;
-        }
-        const usr = {
-          user: currentUser,
-          uid,
-          // name: userDetails?.name,
-          coins: userDetails.coins,
-          progress: userDetails.progress,
-          email: userDetails.email,
-          emailVerified: emailVerified ?? false,
-          displayName: userDetails.displayName,
-          photoURL: userDetails.photoURL,
-          role: userDetails.role,
-          username: userDetails.username,
-          created_at: metadata.creationTime,
-          updated_at: Timestamp.now(),
-          lastLogInAt: metadata.lastSignInTime,
-          wordIds: userDetails.wordIds || [],
-          nextSession: userDetails.nextSession,
-        } as User;
-        dispatch(setCurrentGamePosition(usr.progress.currentProgress));
-        dispatch(setCurrentLevel(usr.progress.currentLevel));
-        dispatch(setNanakCoin(usr.coins));
-        dispatch(addScreens(usr.progress.gameSession));
-        dispatch(addNextScreens(usr.nextSession ?? []));
-        // if nextSession has some value and gameSession is empty then add nextSession to gameSession
-        if (usr.nextSession && usr.progress.gameSession.length === 0 && usr.nextSession.length > 0) {
-          dispatch(addScreens(usr.nextSession));
-          dispatch(resetNextSession());
-        }
-        setUser(usr);
-        setLoading(false);
-      } else {
-        setUser(null);
-        setLoading(false);
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
   if (loading) {
     return <PageLoading />;
@@ -256,7 +224,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
   return (
     <AuthContext.Provider
       value={{
-        user,
         logIn,
         signUp,
         logOut,
