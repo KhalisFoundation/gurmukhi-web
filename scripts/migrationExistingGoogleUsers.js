@@ -1,8 +1,8 @@
 const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
+const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
 
-const projectId = 'gurmukhi-dev';
+const projectId = 'gurmukhi-5f8f5';
 const serviceAccount = require(`./${projectId}.json`);
 
 initializeApp({
@@ -28,13 +28,23 @@ async function migrateExistingGoogleUsers() {
     const updatePromises = usersSnapshot.docs.map(async (userDoc) => {
         const data = userDoc.data();
         const userDocRef = shabadavaliDB.collection('users').doc(userDoc.id);
+        let dateIsNotTimestamp = false;
+        if ((data.created_at && typeof data.created_at === 'string') || data.created_at === undefined) {
+            dateIsNotTimestamp = true;
+        }
+        if ((data.lastLoginAt && typeof data.lastLoginAt === 'string') || data.lastLoginAt === undefined) {
+            dateIsNotTimestamp = true;
+        }
     
-        if (!data.emailVerified && !data.lastLoginAt && !data.uid) {
+        if (!data.uid || data.emailVerified === undefined || dateIsNotTimestamp) {
             const userRecord = await auth.getUser(userDoc.id);
-            console.log(`Updating document ${userDoc.uid ?? null} which has emailVerified: ${userDoc.emailVerified  ?? null} and lastLoginAt: ${userDoc.lastLoginAt ?? null}...`);
+            const createdAt = Timestamp.fromDate(new Date(userRecord.metadata.creationTime));
+            const lastLoginAt = Timestamp.fromDate(new Date(userRecord.metadata.lastSignInTime));
+            console.log(`Updating document ${data.uid ?? null} which has emailVerified: ${data.emailVerified  ?? null}, lastLoginAt: ${JSON.stringify(lastLoginAt) ?? null} and created_at: ${JSON.stringify(createdAt)}...`);
             const updatedData = {
                 emailVerified: userRecord.emailVerified || false,
-                lastLoginAt: userRecord.metadata.lastSignInTime || data.created_at,
+                created_at: createdAt || data.created_at,
+                lastLoginAt: lastLoginAt || data.created_at,
                 uid: userRecord.uid,
             };
             console.log(updatedData);

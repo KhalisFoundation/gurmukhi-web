@@ -23,9 +23,9 @@ export interface User {
   };
   nextSession?: GameScreen[];
   wordIds: string[];
-  created_at: Timestamp | string;
+  created_at: Timestamp;
   updated_at: Timestamp;
-  lastLogInAt: Timestamp | string;
+  lastLogInAt: Timestamp;
 }
 
 export interface WordShabadavaliDB {
