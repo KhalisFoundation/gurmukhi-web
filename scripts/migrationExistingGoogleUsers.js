@@ -29,25 +29,19 @@ async function migrateExistingGoogleUsers() {
         const data = userDoc.data();
         const userDocRef = shabadavaliDB.collection('users').doc(userDoc.id);
         let dateIsNotTimestamp = false;
-        if ((data.created_at && typeof data.created_at === 'string') || data.created_at === undefined) {
-            dateIsNotTimestamp = true;
-        }
         if ((data.lastLoginAt && typeof data.lastLoginAt === 'string') || data.lastLoginAt === undefined) {
             dateIsNotTimestamp = true;
         }
     
         if (!data.uid || data.emailVerified === undefined || dateIsNotTimestamp) {
             const userRecord = await auth.getUser(userDoc.id);
-            const createdAt = Timestamp.fromDate(new Date(userRecord.metadata.creationTime));
             const lastLoginAt = Timestamp.fromDate(new Date(userRecord.metadata.lastSignInTime));
-            console.log(`Updating document ${data.uid ?? null} which has emailVerified: ${data.emailVerified  ?? null}, lastLoginAt: ${JSON.stringify(lastLoginAt) ?? null} and created_at: ${JSON.stringify(createdAt)}...`);
+            console.log(`Updating document ${data.uid ?? null} which has emailVerified: ${data.emailVerified  ?? null}, lastLoginAt: ${JSON.stringify(lastLoginAt) ?? null}...`);
             const updatedData = {
                 emailVerified: userRecord.emailVerified || false,
-                created_at: createdAt || data.created_at,
                 lastLoginAt: lastLoginAt || data.created_at,
                 uid: userRecord.uid,
             };
-            console.log(updatedData);
             batch.set(userDocRef, updatedData, { merge: true });
             documentsUpdated.push(userDoc.id);
         } else {
