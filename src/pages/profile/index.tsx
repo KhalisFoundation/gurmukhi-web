@@ -49,23 +49,14 @@ export default function Profile() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [photo]);
 
-  const formatDate = (date: string | Timestamp) => {
+  const formatDate = (date: Timestamp) => {
     if (!date) return 'not defined';
-
-    // Check if 'date' is an instance of Timestamp
-    if (date instanceof Timestamp) {
-      return date.toDate().toLocaleString();
-    } else if (typeof date === 'string') {
-      // It's a string, so convert it to Date
-      return new Date(date).toLocaleString();
-    } else {
-      // Log an error if the date is neither a Timestamp nor a string
-      return 'Invalid date';
-    }
+    const timestamp = new Timestamp(date.seconds, date.nanoseconds);
+    return timestamp.toDate().toLocaleString();
   };
 
-  const formattedCreatedAt = user.created_at ? formatDate(user.created_at) : '';
-  const formattedLastLoginAt = user.lastLogInAt ? formatDate(user.lastLogInAt) : '';
+  const formattedCreatedAt = formatDate(user.created_at);
+  const formattedLastLoginAt = formatDate(user.lastLogInAt);
 
   const handlePhotoChange = (e: any) => {
     if (e.target.files[0]) {
