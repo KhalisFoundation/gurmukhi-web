@@ -1,8 +1,10 @@
+// This script can be run to update schema of existing users in the database by checking is users have uid, emailVerified and lastLoginAt fields.
+// It runs across all users and checks the above conditions and updates the document if required.
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
 
-const projectId = 'gurmukhi-5f8f5';
+const projectId = 'gurmukhi-dev';
 const serviceAccount = require(`./${projectId}.json`);
 
 initializeApp({
