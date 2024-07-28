@@ -210,11 +210,9 @@ body {
     font-size: 2rem;
   }
 
-  header {
-    .title {
-      font-family: 'Recoleta' !important;
-      color: #1f4860;
-    }
+  .title {
+    font-family: 'Recoleta' !important;
+    color: #1f4860;
   }
 
   #sortbox:checked ~ #sortboxmenu {

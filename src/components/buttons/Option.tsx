@@ -24,7 +24,7 @@ export default function OptionBtn({
   disabled,
 }: OptionProps) {
   const optionValue = getOptionValue(option);
-  const optionClassname = `flex flex-row items-center justify-between gap-2 rounded-lg p-3 xl:ps-6 ${
+  const optionClassname = `flex flex-row items-center justify-between rounded-lg ${
     isCorrect
       ? 'bg-lightGreen shadow-sm shadow-green-500'
       : isCorrect === false ? 'bg-lightRed shadow-sm shadow-maroon' : `bg-white-125 shadow-sm shadow-skyBlue ${!disabled ? 'hover:bg-white-150' : ''}`
@@ -38,28 +38,30 @@ export default function OptionBtn({
     return null;
   } else {
     return (
-      <button
-        className={optionClassname}
-        onClick={() => {
-          selector(option);
-          setOptionSelected(true);
-        }}
-        disabled={disabled}
-      >
-        <div className={'h-full w-full'}>
+      <div className={optionClassname}>
+        <button className={'h-full w-full p-3 xl:ps-6'}
+          onClick={() => {
+            selector(option);
+            setOptionSelected(true);
+          }}
+          disabled={disabled}
+        >
           <span className={textClassname}>
             {
               addEndingPunctuation(optionValue, text('GURMUKHI'))
             }
           </span>
-        </div>
+        </button>
         <TextToSpeechBtn
-          backgroundColor='bg-white-175'
           text={optionValue}
           type={ALL_CONSTANT.OPTION}
           id={option.id}
+          audioURL={option.audioURL}
+          classname='h-full title'
+          divider={text('DIVIDER')}
+          rounded={false}
         />
-      </button>
+      </div>
     );
   }
 }

@@ -10,7 +10,10 @@ interface TextToSpeechBtnProps {
   type: string;
   audioURL?: string;
   id?: string;
+  classname?: string;
   backgroundColor?: string;
+  divider?: string;
+  rounded?: boolean;
   setLoading?: Dispatch<boolean>;
   size?: number;
 }
@@ -20,12 +23,15 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
   type,
   audioURL,
   id,
-  backgroundColor,
+  classname = '',
+  rounded = true,
+  backgroundColor = '',
+  divider = '',
   setLoading,
   size = CONSTANTS.TEXT_TO_SPEECH_BTN_SIZE,
 }) => {
   if (!text) {
-    console.log(text, type, audioURL, id, backgroundColor, setLoading, size);
+    console.log(text, type, audioURL, id, classname, rounded, backgroundColor, divider, setLoading, size);
   }
   return <></>;
 };
@@ -35,7 +41,10 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
 //   type,
 //   audioURL,
 //   id,
-//   backgroundColor,
+//   classname = '',
+//   rounded = true,
+//   backgroundColor = '',
+//   divider = '',
 //   setLoading,
 //   size = CONSTANTS.TEXT_TO_SPEECH_BTN_SIZE,
 // }) => {
@@ -45,9 +54,8 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
 //   const [slow, setSlow] = useState<boolean>(true);
 //   const audioRef = useRef<HTMLAudioElement>(null);
 
-//   const ttsClassname = backgroundColor
-//     ? `${backgroundColor} rounded-full p-2 md:p-3`
-//     : 'rounded-full p-2 md:p-3 ';
+//   const ttsClassname = `${backgroundColor} ${rounded ? 'rounded-full' : ''} ${classname}`;
+  
 //   const betterText = text.replace(/_+/g, 'ਡੈਸ਼');
 
 //   useEffect(() => {
@@ -126,14 +134,17 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
 //       {isLoading ? (
 //         <Loading size={'5'} />
 //       ) : (
-//         <>
-//           {slow ? (
-//             <img src={'/icons/fast.svg'} alt='Fast' width={size} height={size} />
-//           ) : (
-//             <img src={'/icons/slow.svg'} alt='Slow' width={size} height={size} />
-//           )}
-//           {audioUrl && <audio ref={audioRef} src={audioUrl} />}
-//         </>
+//         <span className='flex flex-row items-center'>
+//           {divider}
+//           <span className='p-3'>
+//             {slow ? (
+//               <img src={'/icons/fast.svg'} alt='Fast' width={size} height={size} />
+//             ) : (
+//               <img src={'/icons/slow.svg'} alt='Slow' width={size} height={size} />
+//             )}
+//             {audioUrl && <audio ref={audioRef} src={audioUrl} />}
+//           </span>
+//         </span>
 //       )}
 //     </button>
 //   );
