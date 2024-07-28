@@ -32,9 +32,10 @@ export default function Profile() {
   const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
   const [verifiable, setVerifiable] = useState(true);
 
-  const formatDate = (date: string | Timestamp) => {
+  const formatDate = (date: Timestamp) => {
     if (!date) return 'not defined';
-    return (typeof date === 'string' ? new Date(date) : date.toDate()).toLocaleString();
+    const timestamp = new Timestamp(date.seconds, date.nanoseconds);
+    return timestamp.toDate().toLocaleString();
   };
 
   const formattedCreatedAt = formatDate(user.created_at);
@@ -43,9 +44,7 @@ export default function Profile() {
   const getTabData = (heading: string, info: string, children?: JSX.Element) => {
     return (
       <div className='flex'>
-        <div className=''>
-          <h3 className='text-lg font-bold pr-3'>{heading}</h3>
-        </div>
+        <h3 className='text-lg font-bold pr-3'>{heading}</h3>
         <div className={editMode ? 'col-span-4' : 'col-span-6'}>
           <h4 className='text-lg'>
             {info}
