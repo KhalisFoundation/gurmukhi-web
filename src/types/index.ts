@@ -27,6 +27,7 @@ export interface Option {
   option?: string;
   label?: string;
   translation?: string;
+  audioURL?: string;
   word: string;
 }
 

@@ -1776,10 +1776,10 @@ body .fs-125 {
 body .fs-rem-2 {
     font-size: 2rem;
   }
-body header .title {
-      font-family: 'Recoleta' !important;
-      color: #1f4860;
-    }
+body .title {
+    font-family: 'Recoleta' !important;
+    color: #1f4860;
+  }
 body #sortbox:checked ~ #sortboxmenu {
     opacity: 1;
   }
@@ -2033,10 +2033,6 @@ body {
 
   .md\:p-10 {
     padding: 2.5rem;
-  }
-
-  .md\:p-3 {
-    padding: 0.75rem;
   }
 
   .md\:p-8 {
