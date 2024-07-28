@@ -142,6 +142,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           lastLogInAt: Timestamp.now(),
+          photoURL: userDetails.photoURL,
         } as User;
 
         if (userData.uid) await setWordIds(userData.uid);
