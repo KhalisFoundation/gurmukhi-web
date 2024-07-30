@@ -8,7 +8,10 @@ interface TextToSpeechBtnProps {
   type: string;
   audioURL?: string;
   id?: string;
+  classname?: string;
   backgroundColor?: string;
+  divider?: string;
+  rounded?: boolean;
   setLoading?: Dispatch<boolean>;
   size?: number;
 }
@@ -18,7 +21,10 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
   type,
   audioURL,
   id,
-  backgroundColor,
+  classname = '',
+  rounded = true,
+  backgroundColor = '',
+  divider = '',
   setLoading,
   size = CONSTANTS.TEXT_TO_SPEECH_BTN_SIZE,
 }) => {
@@ -90,22 +96,25 @@ const TextToSpeechBtn: FC<TextToSpeechBtnProps> = ({
     }
   }, [slow]);
 
-  return (
-    <button className={ttsClassname} onClick={onBtnClick} disabled={isLoading}>
-      {isLoading ? (
-        <Loading size={'5'} />
-      ) : (
-        <>
-          {slow ? (
-            <img src={'/icons/fast.svg'} alt='Fast' width={size} height={size} />
-          ) : (
-            <img src={'/icons/slow.svg'} alt='Slow' width={size} height={size} />
-          )}
-          {audioUrl && <audio ref={audioRef} src={audioUrl} />}
-        </>
-      )}
-    </button>
-  );
-};
+   return (
+     <button className={ttsClassname} onClick={onBtnClick} disabled={isLoading}>
+       {isLoading ? (
+         <Loading size={'5'} />
+       ) : (
+         <span className='flex flex-row items-center'>
+           {divider}
+           <span className='p-3'>
+             {slow ? (
+               <img src={'/icons/fast.svg'} alt='Fast' width={size} height={size} />
+             ) : (
+               <img src={'/icons/slow.svg'} alt='Slow' width={size} height={size} />
+             )}
+             {audioUrl && <audio ref={audioRef} src={audioUrl} />}
+           </span>
+         </span>
+       )}
+     </button>
+   );
+ };
 
 export default TextToSpeechBtn;

@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getPerformance } from 'firebase/performance';
 import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 import {
@@ -22,6 +23,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+getPerformance(app);
 export const auth = getAuth(app);
 
 export const userStateListener = (callback: NextOrObserver<User>) =>

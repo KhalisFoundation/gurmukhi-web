@@ -1,14 +1,14 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Option, QuestionData, User } from 'types';
+import { Option, QuestionData } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { useUserAuth } from 'auth';
 import ALL_CONSTANT from 'constants/constant';
 import { addLearntWordIds } from 'store/features/learntWordIdsSlice';
 const TextToSpeechBtn = lazy(() => import('components/buttons/TextToSpeechBtn'));
+import { setUserData } from 'store/features/userDataSlice';
 
 export default function MultipleChoiceQuestion({
   questionData,
@@ -25,9 +25,9 @@ export default function MultipleChoiceQuestion({
 }) {
   const { t: text } = useTranslation();
   const [selectedOption, setSelectedOption] = React.useState<Option | null>(null);
+  const user = useAppSelector((state) => state.userData);
   const currentLevel = useAppSelector((state) => state.currentLevel);
   const dispatch = useAppDispatch();
-  const user = useUserAuth().user as User;
 
   useEffect(() => {
     setSelectedOption(null);
@@ -42,6 +42,7 @@ export default function MultipleChoiceQuestion({
           if (currentLevel + ALL_CONSTANT.DEFAULT_ONE <= ALL_CONSTANT.LEVELS_COUNT) {
             toggleLoading(true);
             dispatch(increment());
+            if (user) dispatch(setUserData({ ...user, progress: { ...user.progress, currentLevel: currentLevel + ALL_CONSTANT.DEFAULT_ONE } }));
             toggleLoading(false);
           }
           setIsCorrectOption(true);
@@ -53,21 +54,6 @@ export default function MultipleChoiceQuestion({
 
     updateOptions();
   }, [selectedOption]);
-
-  useEffect(() => {
-    const storeData = async () => {
-      if (
-        user &&
-        user.uid &&
-        questionData &&
-        questionData.id &&
-        selectedOption === questionData.options[questionData.answer]
-      ) {
-        dispatch(addLearntWordIds(questionData.word_id));
-      }
-    };
-    storeData();
-  }, [questionData, user, selectedOption]);
 
   const optionsClass = `flex flex-col text-lg grid ${
     hasImage ? 'grid-cols-2' : 'grid-cols-1'

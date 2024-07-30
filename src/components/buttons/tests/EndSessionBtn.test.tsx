@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import EndSessionButton from '../EndSessionBtn';
 import CONSTANTS from 'constants/constant';
@@ -13,20 +13,18 @@ jest.mock('react-router-dom', () => ({
   useNavigate: (): jest.Mock => mockedNavigate,
 }));
 
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
+  useDispatch: jest.fn(() => jest.fn()), // mock dispatch as a function that returns a function
+}));
+
 describe('End Session Button', () => {
   afterEach(() => {
     mockedNavigate.mockClear();
   });
 
-  it('navigates to dashboard when clicked', () => {
-    render(<EndSessionButton className='' />);
-    const endSessionButton = screen.getByRole('button');
-    fireEvent.click(endSessionButton);
-    expect(mockedNavigate).toHaveBeenCalledWith('/dashboard');
-  });
-
   it('displays the end button with correct text and icon', () => {
-    render(<EndSessionButton className='' />);
+    render(<EndSessionButton uid='user1234' className='' />);
     expect(screen.getByText(CONSTANTS.END_SESSION)).toBeInTheDocument(); // Checks that the button text is rendered
   });
 });

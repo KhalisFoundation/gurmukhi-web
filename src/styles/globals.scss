@@ -210,11 +210,9 @@ body {
     font-size: 2rem;
   }
 
-  header {
-    .title {
-      font-family: 'Recoleta' !important;
-      color: #1f4860;
-    }
+  .title {
+    font-family: 'Recoleta' !important;
+    color: #1f4860;
   }
 
   #sortbox:checked ~ #sortboxmenu {
@@ -225,11 +223,20 @@ body {
     animation: fadeIn 0.5s ease-in-out;
   }
 
-  .loader {
+  .loader-dark {
     width: 15px;
     display: inline-block;
     aspect-ratio: 4;
     background: radial-gradient(circle closest-side, #1f4860 90%, #0000) 0 / calc(100% / 3) 100%
+      space;
+    clip-path: inset(0 100% 0 0);
+    animation: loading 1s steps(4) infinite;
+  }
+  .loader-light{
+    width: 15px;
+    display: inline-block;
+    aspect-ratio: 4;
+    background: radial-gradient(circle closest-side, #ecf0f1 90%, #fff) 0 / calc(100% / 3) 100%
       space;
     clip-path: inset(0 100% 0 0);
     animation: loading 1s steps(4) infinite;

@@ -5,6 +5,7 @@ import { QuestionData, User, GameScreen, WordShabadavaliDB } from 'types';
 import { createGameScreen, shuffleArray } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
 import { WriteBatch } from 'firebase/firestore';
+import { WordQuestionMap } from 'types';
 
 const getRandomQuestions = async (
   user: User,
@@ -28,12 +29,22 @@ const getRandomQuestions = async (
     const questionsResults: QuestionData[][] = await Promise.all(questionsPromises);
     const questions: QuestionData[] = shuffleArray(questionsResults.flat());
     const finalCount = Math.min(questions.length, count);
-    const wordToQuestionMap = new Map<string, string[]>();
+    const wordToQuestionMap = new Map<string, WordQuestionMap>();
     for (let i = 0; i < finalCount; i++) {
       const question = questions[i];
-      const wordQuestions = wordToQuestionMap.get(question.word_id) || [];
-      wordQuestions.push(question.id ?? '');
-      wordToQuestionMap.set(question.word_id, wordQuestions);
+      let wordQuestions = wordToQuestionMap.get(question.word_id);
+      if (!wordQuestions) {
+        const wordData = words.find((word) => word.word_id === question.word_id);
+        wordQuestions = {
+          wordID: question.word_id,
+          progress: wordData?.progress || 0,
+          questionIds: [],
+        };
+        wordToQuestionMap.set(question.word_id, wordQuestions);
+      }
+      wordQuestions.questionIds.push(question.id ?? '');
+      wordQuestions.progress += 1;
+
       if (question.type === 'image') {
         const foundWord = words.find((wordObj) => wordObj.word_id === question.word_id);
         if (foundWord) {

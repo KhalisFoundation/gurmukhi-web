@@ -1,13 +1,11 @@
 import { DocumentReference } from 'firebase/firestore';
-import { User } from './shabadavalidb';
 import { UserCredential } from 'firebase/auth';
 
 export interface AuthContextValue {
-  user: User | null | object;
   logIn: (
     email: string,
     password: string,
-    showToastMessage: (text: string, error?: boolean) => void
+    showToastMessage: (text: string, error?: boolean) => void,
   ) => Promise<UserCredential | null>;
   signUp: (
     name: string,
@@ -15,11 +13,11 @@ export interface AuthContextValue {
     email: string,
     password: string,
     confirmPassword: string,
-    showToastMessage: (text: string, error?: boolean) => void
+    showToastMessage: (text: string, error?: boolean) => void,
   ) => Promise<boolean>;
   logOut: () => Promise<void>;
   signInWithGoogle: (
-    showToastMessage: (text: string, error?: boolean) => void
+    showToastMessage: (text: string, error?: boolean) => void,
   ) => Promise<boolean | undefined>;
   resetPassword: (email: string) => Promise<void>;
 }
@@ -97,8 +95,8 @@ export interface TimestampType {
 }
 
 export interface SignError {
-  code: string,
-  message: string
+  code: string;
+  message: string;
 }
 
 export interface SentenceType {
@@ -125,6 +123,12 @@ export interface SentenceWord {
   word: string;
   translation: string;
   sentences: Sentences[];
+}
+
+export interface WordQuestionMap {
+  wordID: string;
+  progress: number;
+  questionIds: string[];
 }
 
 export * from './shabadavalidb';

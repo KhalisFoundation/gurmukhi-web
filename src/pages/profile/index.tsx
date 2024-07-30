@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiamond } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer, toast } from 'react-toastify';
-import { useUserAuth } from 'auth';
 import Meta from 'components/meta';
 import metaTags from 'constants/meta';
 import { checkIfUsernameUnique, updateUserDocument } from 'database/shabadavalidb';
@@ -14,11 +13,12 @@ import { uploadImage } from 'utils/storage';
 import CONSTANTS from 'constants/constant';
 import { User } from 'types';
 import { Timestamp } from 'firebase/firestore';
+import { useAppSelector } from 'store/hooks';
 
 export default function Profile() {
   const { t: text } = useTranslation();
   const { title, description } = metaTags.PROFILE;
-  const user = useUserAuth().user as User;
+  const user = useAppSelector((state) => state.userData) as User;
 
   const currentUser = user?.user || auth.currentUser || null;
 
@@ -32,9 +32,10 @@ export default function Profile() {
   const [photoURL, setPhotoURL] = useState('/images/profile.jpeg');
   const [verifiable, setVerifiable] = useState(true);
 
-  const formatDate = (date: string | Timestamp) => {
+  const formatDate = (date: Timestamp) => {
     if (!date) return 'not defined';
-    return (typeof date === 'string' ? new Date(date) : date.toDate()).toLocaleString();
+    const timestamp = new Timestamp(date.seconds, date.nanoseconds);
+    return timestamp.toDate().toLocaleString();
   };
 
   const formattedCreatedAt = formatDate(user.created_at);
@@ -43,9 +44,7 @@ export default function Profile() {
   const getTabData = (heading: string, info: string, children?: JSX.Element) => {
     return (
       <div className='flex'>
-        <div className=''>
-          <h3 className='text-lg font-bold pr-3'>{heading}</h3>
-        </div>
+        <h3 className='text-lg font-bold pr-3'>{heading}</h3>
         <div className={editMode ? 'col-span-4' : 'col-span-6'}>
           <h4 className='text-lg'>
             {info}

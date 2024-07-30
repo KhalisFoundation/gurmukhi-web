@@ -19,6 +19,7 @@ const ALL_CONSTANT = {
   LIGHT: 'LIGHT',
   DARK: 'DARK',
   INFORMATION: 'information',
+  SAVING: 'Saving...',
   START_LEARNING: 'START LEARNING',
   SENTENCE: 'sentence',
   SENTENCE_TITLECASE: 'Sentence',
@@ -59,6 +60,7 @@ const ALL_CONSTANT = {
   NORMAL_SPEED: 1,
   SHOW_MODAL_TIMEOUT: 1000,
   TEXT_TO_SPEECH_BTN_SIZE: 27,
+  SIGNING_IN: 'Signing you in',
 };
 
 export default ALL_CONSTANT;

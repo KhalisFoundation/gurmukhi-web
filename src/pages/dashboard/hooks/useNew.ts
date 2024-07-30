@@ -15,7 +15,7 @@ const addWordIfNotExists = (
   if (word.id && word.word && !exists) {
     const learningWord: WordShabadavaliDB = {
       isLearnt: false,
-      progress: 0,
+      progress: questionIds.length,
       isWordRead: true,
       word_id: word.id,
       word: word.word,
@@ -56,8 +56,7 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
   const words: WordShabadavaliDB[] | null = await getNewWords(uid, count);
   console.log('words:', words);
   if (!words) {
-    console.log('No new words found', words);
-    return { game: seed0, learningWords };
+    return { game: seed0.slice(0, count), learningWords };
   }
   let questionCount = 0;
   for (const word of words) {
