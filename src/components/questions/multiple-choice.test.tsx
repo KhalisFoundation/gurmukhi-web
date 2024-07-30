@@ -4,7 +4,16 @@
 import React from 'react';
 import MultipleChoiceQuestion from './multiple-choice';
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, act, render } from '@testing-library/react';
+import Bugsnag from '@bugsnag/js';
+
+jest.mock('@bugsnag/js', () => ({
+  __esModule: true,
+  default: {
+    start: jest.fn(),
+    notify: jest.fn(),
+  },
+}));
 
 jest.mock('react-redux', () => ({
   useSelector: jest.fn(),
@@ -38,12 +47,14 @@ const defaultProps = {
   toggleLoading: jest.fn(),
 };
 
-const renderComponent = (props = {}) =>
-  render(<MultipleChoiceQuestion {...defaultProps} {...props} />);
-
 describe('MultipleChoiceQuestion Component', () => {
-  test('renders the question and options correctly', () => {
-    renderComponent();
+  beforeAll(() => {
+    Bugsnag.start({ apiKey: 'YOUR_API_KEY' });
+  });
+  test('renders the question and options correctly', async () => {
+    await act(async () => {
+      render(<MultipleChoiceQuestion {...defaultProps} />);
+    });
 
     // Check if the question is displayed
     expect(screen.getByText('ਜਸਮੀਤ ਦੇ ਚੰਗੇ ਨੰਬਰ ਆਉਣ ਤੇ ਸਭ ਨੇ ਉਸਦੀ ___ ਕੀਤੀ ।')).toBeInTheDocument();
@@ -54,8 +65,10 @@ describe('MultipleChoiceQuestion Component', () => {
     });
   });
 
-  test('handles option selection correctly', () => {
-    renderComponent();
+  test('handles option selection correctly', async () => {
+    await act(async () => {
+      render(<MultipleChoiceQuestion {...defaultProps} />);
+    });
     const optionButton = screen.getByText('ਉਸਤਤ');
     fireEvent.click(optionButton);
 

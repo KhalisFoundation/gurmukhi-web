@@ -6,7 +6,6 @@ import { highlightWord } from 'utils';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import ALL_CONSTANT from 'constants/constant';
-import { addLearntWordIds } from 'store/features/learntWordIdsSlice';
 const TextToSpeechBtn = lazy(() => import('components/buttons/TextToSpeechBtn'));
 import { setUserData } from 'store/features/userDataSlice';
 
