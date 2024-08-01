@@ -1,13 +1,12 @@
-import React, { ReactNode } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 interface TabDataProps {
   heading: string;
   info: string;
   editMode: boolean;
-  children?: ReactNode;
 }
 
-const TabData = ({ heading, info, editMode, children }: TabDataProps) => {
+const TabData = ({ heading, info, editMode, children }: PropsWithChildren<TabDataProps>) => {
   return (
     <div className='flex'>
       <div className=''>
