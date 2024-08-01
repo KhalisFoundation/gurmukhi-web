@@ -1,5 +1,13 @@
-import React from 'react';
-const getTabData = (heading: string, info: string, editMode: boolean, children?: JSX.Element) => {
+import React, { ReactNode } from 'react';
+
+interface TabDataProps {
+  heading: string;
+  info: string;
+  editMode: boolean;
+  children?: ReactNode;
+}
+
+const TabData = ({ heading, info, editMode, children }: TabDataProps) => {
   return (
     <div className='flex'>
       <div className=''>
@@ -14,4 +22,4 @@ const getTabData = (heading: string, info: string, editMode: boolean, children?:
     </div>
   );
 };
-export default getTabData;
+export default TabData;

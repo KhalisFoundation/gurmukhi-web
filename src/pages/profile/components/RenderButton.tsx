@@ -1,12 +1,15 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiamond } from '@fortawesome/free-solid-svg-icons';
-const renderButton = (
-  textValue: string,
+
+interface RenderButtonProps {
+  text: string,
   onClick: () => void,
   disabled: boolean,
   sides: boolean,
-) => {
+}
+
+const RenderButton = ({ text, onClick, disabled, sides } : RenderButtonProps) => {
   const linkClass = 'flex flex-row items-center justify-between gap-2 min-w-26';
   const disabledClass = disabled ? 'opacity-50 cursor-not-allowed' : '';
   return (
@@ -33,7 +36,7 @@ const renderButton = (
           disabledClass
         }
       >
-        {textValue}
+        {text}
       </p>
       {sides && (
         <FontAwesomeIcon
@@ -45,4 +48,4 @@ const renderButton = (
   );
 };
 
-export default renderButton;
+export default RenderButton;

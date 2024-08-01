@@ -11,8 +11,8 @@ import { uploadImage } from 'utils/storage';
 import { User } from 'types';
 import { Timestamp } from 'firebase/firestore';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import renderButton from './components/RenderButton';
-import getTabData from './components/GetTabData';
+import RenderButton from './components/RenderButton';
+import TabData from './components/TabData';
 import Loading from 'components/loading';
 import { updateUserData } from 'store/features/userDataSlice';
 
@@ -133,28 +133,6 @@ export default function Profile() {
 
   const gridColSpan = editMode ? '6' : '8';
 
-  const buttonSelector = () => {
-    if (editMode) {
-      return renderButton(
-        text('SAVE'),
-        () => {
-          setEditMode(!editMode);
-          handleSubmit();
-        },
-        false,
-        false,
-      );
-    }
-    return renderButton(
-      text('EDIT'),
-      () => {
-        setEditMode(!editMode);
-      },
-      false,
-      false,
-    );
-  };
-
   if (isLoading) {
     return <Loading />;
   }
@@ -182,11 +160,8 @@ export default function Profile() {
               ) : null}
             </div>
             <div className=''>
-              {getTabData(
-                text('NAME'),
-                '',
-                editMode,
-                editMode ? (
+              <TabData heading={text('NAME')} info={''} editMode>
+                {editMode ? (
                   <div className='h-10 w-full'>
                     <input
                       className='h-full w-full rounded-lg border-2 border-darkBlue focus:outline-none focus:ring-2 focus:ring-darkBlue focus:border-transparent px-2'
@@ -196,15 +171,29 @@ export default function Profile() {
                   </div>
                 ) : (
                   <span>{name}</span>
-                ),
-              )}
-              {user.email ? getTabData(text('EMAIL'), user.email, editMode) : null}
-              {getTabData(text('CREATED_AT'), formattedCreatedAt, editMode)}
-              {getTabData(text('LAST_LOGIN_AT'), formattedLastLoginAt, editMode)}
-
+                )}
+              </TabData>
+              {user.email && <TabData heading={text('EMAIL')} info={user.email} editMode={false} />}
+              <TabData heading={text('CREATED_AT')} info={formattedCreatedAt} editMode />
+              <TabData heading={text('LAST_LOGIN_AT')} info={formattedLastLoginAt} editMode />
               <div className={`col-span-${gridColSpan} py-2`}>
                 <div className={`grid grid-cols-${gridColSpan} py-1`}>
-                  <div className='col-span-2'>{buttonSelector()}</div>
+                  <div className='col-span-2'>
+                    <RenderButton
+                      text={editMode ? text('SAVE') : text('EDIT')}
+                      onClick={editMode
+                        ? () => {
+                          setEditMode(!editMode);
+                          handleSubmit();
+                        }
+                        : () => {
+                          setEditMode(!editMode);
+                        }
+                      }
+                      disabled={false}
+                      sides={false}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
