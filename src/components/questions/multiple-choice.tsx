@@ -85,7 +85,7 @@ export default function MultipleChoiceQuestion({
   return (
     <div className='flex flex-col items-left justify-evenly text-center'>
       <div className='flex flex-row items-center justify-center gap-2 rounded-lg p-4'>
-        <h1 className='gurmukhi text-black font-semibold leading-snug md:text-5xl text-xl'>
+        <h1 className='gurmukhi text-black font-semibold !leading-snug md:text-5xl text-xl'>
           {highlightWord(questionData.question, questionData.word)}
         </h1>
         <TextToSpeechBtn
