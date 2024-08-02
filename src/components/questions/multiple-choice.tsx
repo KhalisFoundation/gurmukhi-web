@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Option, QuestionData } from 'types';
 import OptionBtn from 'components/buttons/Option';
 import { highlightWord } from 'utils';
-import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import ALL_CONSTANT from 'constants/constant';
@@ -88,12 +87,15 @@ export default function MultipleChoiceQuestion({
         <h1 className='gurmukhi text-black font-semibold leading-snug md:text-5xl text-xl'>
           {highlightWord(questionData.question, questionData.word)}
         </h1>
-        <TextToSpeechBtn
-          backgroundColor='bg-white-175'
-          text={questionData.question}
-          type={ALL_CONSTANT.QUESTION}
-          id={questionData.id}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <TextToSpeechBtn
+            backgroundColor='bg-white-175'
+            text={questionData.question}
+            type={ALL_CONSTANT.QUESTION}
+            audioURL={questionData.audioURL}
+            id={questionData.id}
+          />
+        </Suspense>
       </div>
       {hasImage && (
         <div className='w-full h-full'>

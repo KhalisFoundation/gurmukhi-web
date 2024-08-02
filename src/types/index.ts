@@ -41,6 +41,7 @@ export interface QuestionData {
   answer: number;
   word_id: string;
   word: string;
+  audioURL?: string;
 }
 
 export interface Translation {

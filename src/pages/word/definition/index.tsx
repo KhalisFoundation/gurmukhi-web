@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import TextToSpeechBtn from 'components/buttons/TextToSpeechBtn';
 import LevelsFooter from 'components/levels-footer/LevelsFooter';
 import { WordType } from 'types';
 import metaTags from 'constants/meta';
@@ -10,8 +9,9 @@ import ALL_CONSTANT from 'constants/constant';
 import { useAppSelector } from 'store/hooks';
 import Loading from 'components/loading';
 import CONSTANTS from 'constants/constant';
+const TextToSpeechBtn = lazy(() => import('components/buttons/TextToSpeechBtn'));
 
-export default function Defintion() {
+export default function Definition() {
   // Use useLocation to get the search parameters from the URL
   const location = useLocation();
   const { title, description } = metaTags.DEFINITION;
@@ -118,5 +118,3 @@ export default function Defintion() {
     </div>
   );
 }
-
-Defintion.propTypes = {};

@@ -1,10 +1,10 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, Suspense, lazy } from 'react';
 import { TFunction } from 'i18next';
-import TextToSpeechBtn from './TextToSpeechBtn';
 import { Option } from 'types';
 import { addEndingPunctuation } from 'utils';
 import ALL_CONSTANT from 'constants/constant';
 import { getOptionValue } from 'pages/questions/hooks/useQuestionData';
+const TextToSpeechBtn = lazy(() => import('./TextToSpeechBtn'));
 
 interface OptionProps {
   option: Option;
@@ -52,15 +52,17 @@ export default function OptionBtn({
             }
           </span>
         </button>
-        <TextToSpeechBtn
-          text={optionValue}
-          type={ALL_CONSTANT.OPTION}
-          id={option.id}
-          audioURL={option.audioURL}
-          classname='h-full title'
-          divider={text('DIVIDER')}
-          rounded={false}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <TextToSpeechBtn
+            text={optionValue}
+            type={ALL_CONSTANT.OPTION}
+            id={option.id}
+            audioURL={option.audioURL}
+            classname='h-full title'
+            divider={text('DIVIDER')}
+            rounded={false}
+          />
+        </Suspense>
       </div>
     );
   }

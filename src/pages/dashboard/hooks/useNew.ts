@@ -19,6 +19,7 @@ const addWordIfNotExists = (
       isWordRead: true,
       word_id: word.id,
       word: word.word,
+      audioURL: word.audioURL,
       image: word.images ? word.images[0] : '',
       questionIds: questionIds,
       id: word.id,
@@ -53,6 +54,7 @@ const getNewQuestions = async (count: number, local = false, uid: string = '') =
   }
   const usedWordIds = [];
   const words: WordShabadavaliDB[] | null = await getNewWords(uid, count);
+  console.log('words:', words);
   if (!words) {
     return { game: seed0.slice(0, count), learningWords };
   }
