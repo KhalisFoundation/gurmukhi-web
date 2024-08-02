@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ProgressData, User } from 'types';
+import { PartialUser, User } from 'types';
 
 const userDataSlice = createSlice({
   name: 'userData',
@@ -8,7 +8,7 @@ const userDataSlice = createSlice({
     setUserData: (state, action: PayloadAction<User | null>) => {
       return action.payload;
     },
-    setUserProgress: (state, action: PayloadAction<ProgressData | null>) => {
+    updateUserData: (state, action: PayloadAction<PartialUser | null>) => {
       return {
         ...state,
         ...action.payload,
@@ -19,5 +19,5 @@ const userDataSlice = createSlice({
     },
   },
 });
-export const { setUserData, setUserProgress, resetUserData } = userDataSlice.actions;
+export const { setUserData, updateUserData, resetUserData } = userDataSlice.actions;
 export default userDataSlice.reducer;

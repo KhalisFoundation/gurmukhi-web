@@ -1,15 +1,10 @@
 
-import React, { ReactNode } from 'react';
+import React, { PropsWithChildren } from 'react';
 import Bugsnag from '@bugsnag/js';
 import BugsnagPluginReact, { BugsnagPluginReactResult } from '@bugsnag/plugin-react';
 import BugsnagPerformance from '@bugsnag/browser-performance';
 
-
-type ErrorBoundaryProps = {
-  children: ReactNode;
-};
-
-const ErrorBoundary = (props: ErrorBoundaryProps) => {
+const ErrorBoundary = (props: PropsWithChildren) => {
   const BugSnagAPIKey = process.env.REACT_APP_BUGSNAG_API_KEY || '';
 
   BugsnagPerformance.start({ apiKey: BugSnagAPIKey });

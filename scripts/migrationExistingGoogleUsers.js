@@ -1,5 +1,7 @@
+// This script can be run to update schema of existing users in the database by checking is users have uid, emailVerified and lastLoginAt fields.
+// It runs across all users and checks the above conditions and updates the document if required.
 const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
+const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
 
 const projectId = 'gurmukhi-dev';
@@ -28,16 +30,20 @@ async function migrateExistingGoogleUsers() {
     const updatePromises = usersSnapshot.docs.map(async (userDoc) => {
         const data = userDoc.data();
         const userDocRef = shabadavaliDB.collection('users').doc(userDoc.id);
+        let dateIsNotTimestamp = false;
+        if ((data.lastLoginAt && typeof data.lastLoginAt === 'string') || data.lastLoginAt === undefined) {
+            dateIsNotTimestamp = true;
+        }
     
-        if (!data.emailVerified && !data.lastLoginAt && !data.uid) {
+        if (!data.uid || data.emailVerified === undefined || dateIsNotTimestamp) {
             const userRecord = await auth.getUser(userDoc.id);
-            console.log(`Updating document ${userDoc.uid ?? null} which has emailVerified: ${userDoc.emailVerified  ?? null} and lastLoginAt: ${userDoc.lastLoginAt ?? null}...`);
+            const lastLoginAt = Timestamp.fromDate(new Date(userRecord.metadata.lastSignInTime));
+            console.log(`Updating document ${data.uid ?? null} which has emailVerified: ${data.emailVerified  ?? null}, lastLoginAt: ${JSON.stringify(lastLoginAt) ?? null}...`);
             const updatedData = {
                 emailVerified: userRecord.emailVerified || false,
-                lastLoginAt: userRecord.metadata.lastSignInTime || data.created_at,
+                lastLoginAt: lastLoginAt || data.created_at,
                 uid: userRecord.uid,
             };
-            console.log(updatedData);
             batch.set(userDocRef, updatedData, { merge: true });
             documentsUpdated.push(userDoc.id);
         } else {

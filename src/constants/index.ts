@@ -11,6 +11,7 @@ const CONSTANTS = {
   DASHBOARD: 'Dashboard',
   DESCRIBE_YOUR_FEEDBACK: 'Describe your feedback',
   DESCRIPTION: 'Made by Khalis Foundation',
+  DIVIDER: '|',
   EDIT: 'Edit',
   EMAIL: 'Email',
   EMAIL_VALIDATED: 'Email validated',
