@@ -183,4 +183,5 @@ export const getUserData = async (uid: string) => {
       }
     }
   }
+
 };

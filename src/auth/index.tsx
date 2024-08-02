@@ -98,14 +98,10 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         const localUser = doc(shabadavaliDB, `users/${uid}`);
         const userData = {
           role: roles.student,
-          email,
-          coins: 0,
-          progress: {
-            currentProgress: 0,
-            gameSession: [],
-            currentLevel: 0,
-          },
-          displayName: displayName ?? email?.split('@')[0],
+          coins: userDetails.coins,
+          progress: userDetails.progress,
+          wordIds: userDetails.wordIds,
+          user: result.user,
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           emailVerified: userCredential.user.emailVerified,

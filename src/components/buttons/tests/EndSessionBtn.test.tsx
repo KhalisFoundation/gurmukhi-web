@@ -21,6 +21,7 @@ jest.mock('react-redux', () => ({
 describe('End Session Button', () => {
   afterEach(() => {
     mockedNavigate.mockClear();
+    mockedUpdater.mockClear();
   });
 
   it('displays the end button with correct text and icon', () => {
