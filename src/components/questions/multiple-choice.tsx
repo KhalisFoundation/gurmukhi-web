@@ -6,8 +6,7 @@ import { highlightWord } from 'utils';
 import { increment } from 'store/features/currentLevelSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import ALL_CONSTANT from 'constants/constant';
-const TextToSpeechBtn = lazy(() => import('components/buttons/TextToSpeechBtn'));
-import { setUserData } from 'store/features/userDataSlice';
+import { updateUserData } from 'store/features/userDataSlice';
 
 export default function MultipleChoiceQuestion({
   questionData,
@@ -41,7 +40,7 @@ export default function MultipleChoiceQuestion({
           if (currentLevel + ALL_CONSTANT.DEFAULT_ONE <= ALL_CONSTANT.LEVELS_COUNT) {
             toggleLoading(true);
             dispatch(increment());
-            if (user) dispatch(setUserData({ ...user, progress: { ...user.progress, currentLevel: currentLevel + ALL_CONSTANT.DEFAULT_ONE } }));
+            if (user) dispatch(updateUserData({ progress: { ...user.progress, currentLevel: currentLevel + ALL_CONSTANT.DEFAULT_ONE } }));
             toggleLoading(false);
           }
           setIsCorrectOption(true);

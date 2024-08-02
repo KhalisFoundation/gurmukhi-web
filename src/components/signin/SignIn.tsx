@@ -52,7 +52,6 @@ export default function SignIn() {
     event.preventDefault();
     try {
       setLoginLoading(true);
-      const username = email.split('@')[0];
       let valid = true;
       if (!email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
         valid = false;
@@ -80,7 +79,7 @@ export default function SignIn() {
           });
         }
 
-        if (name === '' || username == '' || email === '' || password === '') {
+        if (name === '' || email === '' || password === '') {
           valid = false;
           setErrorMessage({
             code: text('ERROR'),
@@ -96,7 +95,7 @@ export default function SignIn() {
         }
 
         if (password === cpassword) {
-          const success = await signUp(name, username, email, password, cpassword, displayToast);
+          const success = await signUp(name, email, password, cpassword, displayToast);
           if (success) {
             navigate(ROUTES.DASHBOARD);
           }
@@ -201,7 +200,7 @@ export default function SignIn() {
             ) : (
               <div className='appear-from-below'>
                 <InputWithIcon
-                  id='username'
+                  id='email'
                   placeholder={text('EMAIL')}
                   type='text'
                   icon='user'

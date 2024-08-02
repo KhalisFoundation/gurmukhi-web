@@ -1,20 +1,21 @@
 /**
  * @jest-environment jsdom
  */
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FeedbackBtn from '../OpenFeedbackBtn';
 
-// Mocking the imported components
 // Mocking the FeedbackForm component
 jest.mock('components/feedback', () => {
   const MockFeedbackForm = () => <div data-testid='mock-feedback-form'>Feedback Form</div>;
   MockFeedbackForm.displayName = 'MockFeedbackForm'; // Setting the displayName
   return MockFeedbackForm;
 });
+
+// Mocking the imported components
 jest.mock('components/modal', () => {
-  const MockModal = ({ children }: { children: React.ReactNode }) => (
+  const MockModal = ({ children }: PropsWithChildren) => (
     <div data-testid='mock-modal'>{children}</div>
   );
   MockModal.displayName = 'MockModal';
