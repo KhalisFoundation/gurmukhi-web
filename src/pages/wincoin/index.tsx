@@ -63,6 +63,7 @@ function WinCoin() {
           nextSession: [],
         });
       }
+      dispatch(resetNextSession());
       toggleIsLoading(false);
     };
     storeData();
