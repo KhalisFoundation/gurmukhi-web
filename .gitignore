@@ -33,3 +33,4 @@ functions
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
+src/styles/style.css

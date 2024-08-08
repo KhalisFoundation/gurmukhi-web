@@ -18,7 +18,7 @@ import { addScreens } from 'store/features/gameArraySlice';
 import { User } from 'types';
 import CONSTANTS from 'constants/constant';
 import { resetNextSession } from 'store/features/nextSessionSlice';
-import { setUserData } from 'store/features/userDataSlice';
+import { updateUserData } from 'store/features/userDataSlice';
 
 function WinCoin() {
   const navigate = useNavigate();
@@ -43,8 +43,7 @@ function WinCoin() {
         dispatch(addScreens(nextSession || []));
         dispatch(resetNextSession());
         dispatch(
-          setUserData({
-            ...user,
+          updateUserData({
             coins: nanakCoin + CONSTANTS.DEFAULT_ONE,
             progress: {
               currentLevel: 0,

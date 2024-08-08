@@ -6,7 +6,7 @@ import { addScreens } from 'store/features/gameArraySlice';
 import { gameAlgo } from '../utils';
 import { bugsnagErrorHandler } from 'utils';
 import { WriteBatch } from 'firebase/firestore';
-import { setUserProgress } from 'store/features/userDataSlice';
+import { updateUserData } from 'store/features/userDataSlice';
 import { fetchProgress } from '../utils';
 
 const useGamePlay = (
@@ -35,7 +35,7 @@ const useGamePlay = (
       await commitBatch(batch);
       dispatch(addScreens(gameArray));
       dispatch(
-        setUserProgress({
+        updateUserData({
           ...user,
           progress: {
             currentLevel,

@@ -12,11 +12,11 @@ import {
 import {
   Timestamp,
   doc,
-  setDoc, // query, where, documentId, getDocs,
+  setDoc,
 } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import { auth, shabadavaliDB } from '../firebase';
-import { checkIfUsernameUnique, checkUser, getUserData, setWordIds } from 'database/shabadavalidb';
+import { checkUser, getUserData, setWordIds } from 'database/shabadavalidb';
 import roles from 'constants/roles';
 import { AuthContextValue, User } from 'types';
 import PageLoading from 'components/pageLoading';
@@ -44,6 +44,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
     dispatch(addNextScreens(userDetails.nextSession ?? []));
     dispatch(setUserData(userDetails));
   };
+  
   const handleError = (
     error: unknown,
     showToastMessage: (text: string, error?: boolean) => void,
@@ -93,7 +94,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
       }
 
       const found = await checkUser(uid, email);
-
       if (!found) {
         const localUser = doc(shabadavaliDB, `users/${uid}`);
         const userData = {
@@ -114,11 +114,13 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           wordIds: [],
           lastLogInAt: Timestamp.now(),
         };
+        
         await setDoc(localUser, userData);
         const userDetails: User = {
           ...userData,
           user: null,
         };
+
         if (uid) await setWordIds(uid);
         dispatchActions(userDetails);
       } else {
@@ -140,6 +142,7 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
           created_at: Timestamp.now(),
           updated_at: Timestamp.now(),
           lastLogInAt: Timestamp.now(),
+          photoURL: userDetails.photoURL,
         } as User;
 
         if (userData.uid) await setWordIds(userData.uid);
@@ -154,7 +157,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
 
   const signUp = async (
     name: string,
-    username: string,
     email: string,
     password: string,
     confirmPassword: string,
@@ -163,11 +165,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
     try {
       if (password !== confirmPassword) {
         showToastMessage(translate('PASSWORDS_DONT_MATCH'));
-        return false;
-      }
-      const unique = await checkIfUsernameUnique(username);
-      if (!unique) {
-        showToastMessage(translate('USERNAME_TAKEN'));
         return false;
       }
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -181,7 +178,6 @@ export const AuthContextProvider = ({ children }: { children: ReactElement }) =>
         role: roles.student,
         email,
         emailVerified: false,
-        username,
         displayName: displayName || name,
         wordIds: [],
         photoURL: '',

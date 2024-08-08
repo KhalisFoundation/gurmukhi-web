@@ -9,7 +9,6 @@ export interface AuthContextValue {
   ) => Promise<UserCredential | null>;
   signUp: (
     name: string,
-    username: string,
     email: string,
     password: string,
     confirmPassword: string,
@@ -28,6 +27,7 @@ export interface Option {
   option?: string;
   label?: string;
   translation?: string;
+  audioURL?: string;
   word: string;
 }
 

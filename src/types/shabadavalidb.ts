@@ -8,7 +8,6 @@ export interface GameScreen {
 }
 export interface User {
   user: FirebaseUser | null;
-  username?: string;
   displayName: string;
   role: string;
   photoURL: string;
@@ -23,9 +22,30 @@ export interface User {
   };
   nextSession?: GameScreen[];
   wordIds: string[];
-  created_at: Timestamp | string;
+  created_at: Timestamp;
   updated_at: Timestamp;
-  lastLogInAt: Timestamp | string;
+  lastLogInAt: Timestamp;
+}
+
+export interface PartialUser {
+  user?: FirebaseUser | null;
+  displayName?: string;
+  role?: string;
+  photoURL?: string;
+  uid?: string;
+  coins?: number;
+  email?: string;
+  emailVerified?: boolean;
+  progress?: {
+    gameSession: GameScreen[];
+    currentLevel: number;
+    currentProgress: number;
+  };
+  nextSession?: GameScreen[];
+  wordIds?: string[];
+  created_at?: Timestamp;
+  updated_at?: Timestamp;
+  lastLogInAt?: Timestamp;
 }
 
 export interface WordShabadavaliDB {

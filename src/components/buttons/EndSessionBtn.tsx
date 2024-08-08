@@ -4,10 +4,12 @@ import ALL_CONSTANT from 'constants/constant';
 import { ROUTES } from 'constants/routes';
 import { updateUserDocument } from 'database/shabadavalidb';
 import { ProgressData } from 'types';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { updateUserData } from 'store/features/userDataSlice';
 
 const EndSessionButton = ({ uid, className = '' }: { uid: string, className: string }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [saving, setSaving] = useState(false);
   const nanakCoin: number = useAppSelector((state) => state.nanakCoin);
   const currentGamePosition = useAppSelector((state) => state.currentGamePosition);
@@ -27,6 +29,7 @@ const EndSessionButton = ({ uid, className = '' }: { uid: string, className: str
   const endSession = async () => {
     setSaving(true);
     await updateUserDocument(uid, currentData);
+    dispatch(updateUserData(currentData));
     setSaving(false);
     navigate(ROUTES.DASHBOARD);
   };
